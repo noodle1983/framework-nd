@@ -35,6 +35,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
         printf("Client disconnected.\n");
         close(theFd);
         event_del(&readEvtM);
+        delete this;
         return;
     }
     else if (buffer->lenM < 0) 
@@ -43,6 +44,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
             strerror(errno));
         close(theFd);
         event_del(&readEvtM);
+        delete this;
         return;
     }
 	
