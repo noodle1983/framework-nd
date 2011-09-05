@@ -142,9 +142,8 @@ int TcpServer::start()
 		err(1, "failed to set server socket to non-blocking");
 
 	//add event
-	struct event acceptEvent;
-	event_set(&acceptEvent, fdM, EV_READ|EV_PERSIST, 
+	event_set(&acceptEvtM, fdM, EV_READ|EV_PERSIST, 
 			on_accept, this);
-	event_add(&acceptEvent, NULL);
+	event_add(&acceptEvtM, NULL);
 }
 

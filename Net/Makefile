@@ -1,12 +1,13 @@
 PROJBASE=/data/workdir/framework-nd/
 
 INC= -I. \
-	 -I./include \
-	 -I./Connection \
+     -I./include \
+     -I./Connection \
+     -I./Server \
      -I$(PROJBASE)/libevent/include
 
 LIB= \
-	/data/workdir/framework-nd/libevent/lib/libevent.a \
+    /data/workdir/framework-nd/libevent/lib/libevent.a \
 
 CC=g++
 cc=gcc
@@ -18,12 +19,14 @@ LDFLAGS=-lrt
 
 
 
-TARGET=libNet.a
 OUTDIR=.lib
+
+#########################################
+#                Target                 #
+#########################################
+TARGET=libNet.a
 SUBDIR=Connection \
-		Server 
-
-
+        Server 
 CFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.c))
 CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp))
 TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \
@@ -31,11 +34,30 @@ TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \
 OUTSUBDIR=$(addprefix $(OUTDIR)/, $(SUBDIR))
 OBJECTS=$(addprefix $(OUTDIR)/, $(TMPOBJECTS))
 
+#########################################
+#        Test    Target                 #
+#########################################
+TESTTARGET=test
+TESTDIR=UnitTest
+TESTCPPFILES=$(foreach DIR, $(TESTDIR), $(wildcard $(DIR)/*.cpp))
+TMPTESTOBJECTS=$(patsubst %.cpp, %.o, $(TESTCPPFILES))
+TESTOUTDIR=$(addprefix $(OUTDIR)/, $(TESTDIR))
+TESTOBJECTS=$(addprefix $(OUTDIR)/, $(TMPTESTOBJECTS))
+
+#########################################
+#               Rules                   #
+#########################################
 $(TARGET):$(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
-	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS) $(LIB)
+	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS)
+
+$(TESTTARGET):$(OUTDIR) $(TESTOUTDIR) $(TESTOBJECTS)
+	$(CC) $(CXXFLAGS) -o $(OUTDIR)/$(TESTTARGET) $(TESTOBJECTS) $(OUTDIR)/$(TARGET) $(LIB) $(LDFLAGS)
 
 $(OUTDIR):
-	@if [ ! -d $(OUTDIR) ]; then mkdir $(OUTDIR); fi;
+	@if [ ! -d $@ ]; then mkdir $@; fi;
+
+$(TESTOUTDIR):
+	@if [ ! -d $@ ]; then mkdir $@; fi;
 
 $(OUTSUBDIR):
 	@if [ ! -d $@ ]; then mkdir $@; fi;
@@ -46,6 +68,7 @@ $(OUTDIR)/%.o:%.cpp
 $(OUTDIR)/%.o:%.c
 	$(CC) $(CXXFLAGS) -o $@ -c $<
 
+
 clean:
-	rm -rf $(OUTDIR)
+	@rm -rf $(OUTDIR)
 

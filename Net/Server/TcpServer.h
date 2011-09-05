@@ -1,5 +1,6 @@
 #ifndef TCPSERVER_H
 #define TCPSERVER_H
+#include <event.h>
 
 #include "Protocol.h"
 
@@ -18,7 +19,7 @@ namespace Server{
         void onAccept(int theFd, short theEvent);
 
     private:
-
+        struct event acceptEvtM;
         int portM;
         int fdM;
     };
