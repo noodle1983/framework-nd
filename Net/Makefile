@@ -7,14 +7,14 @@ INC= -I. \
      -I$(PROJBASE)/libevent/include
 
 LIB= \
-    /data/workdir/framework-nd/libevent/lib/libevent.a \
+    $(PROJBASE)/libevent/lib/libevent.a \
 
 CC=g++
 cc=gcc
 AR=ar
 ARFLAGS=-rc
-CXXFLAGS=-g $(INC)
-CFLAGs=-g $(INC)
+CXXFLAGS=-Wall -g $(INC) 
+CFLAGs=-Wall -g $(INC)
 LDFLAGS=-lrt
 
 
@@ -50,7 +50,7 @@ TESTOBJECTS=$(addprefix $(OUTDIR)/, $(TMPTESTOBJECTS))
 $(TARGET):$(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
 	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS)
 
-$(TESTTARGET):$(OUTDIR) $(TESTOUTDIR) $(TESTOBJECTS)
+$(TESTTARGET):$(TARGET) $(TESTOUTDIR) $(TESTOBJECTS)
 	$(CC) $(CXXFLAGS) -o $(OUTDIR)/$(TESTTARGET) $(TESTOBJECTS) $(OUTDIR)/$(TARGET) $(LIB) $(LDFLAGS)
 
 $(OUTDIR):
