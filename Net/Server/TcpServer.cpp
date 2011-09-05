@@ -95,7 +95,7 @@ void TcpServer::onAccept(int theFd, short theEvt)
     SocketConnection* connection = new SocketConnection(clientFd);
     event_set(&connection->readEvtM, clientFd, EV_READ|EV_PERSIST, on_read, connection);
     event_add(&connection->readEvtM, NULL);
-    event_set(&connection->writeEvtM, clientFd, EV_WRITE, on_write, connection);
+    event_set(&connection->writeEvtM, clientFd, EV_WRITE|EV_PERSIST, on_write, connection);
 
     printf("Accepted connection from %s\n", 
         inet_ntoa(clientAddr.sin_addr));
