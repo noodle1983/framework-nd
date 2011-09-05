@@ -1,4 +1,4 @@
-PROJBASE=/data/workdir/framework-nd/
+PROJBASE=$(PWD)/..
 
 INC= -I. \
      -I./include \
