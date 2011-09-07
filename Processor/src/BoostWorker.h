@@ -2,13 +2,13 @@
 #define BOOSTWORKER_H
 
 #include <boost/function.hpp>
-#include <boost/mutex.hpp>
+#include <boost/thread.hpp>
 #include <list>
 
 namespace Processor
 {
-    typedef boost::function<void()> Job;
-    typedef std:list<Job*> JobQueue;
+    typedef boost::function<void ()> Job;
+    typedef std::list<Job*> JobQueue;
     class BoostWorker
     {
     public:
@@ -17,9 +17,10 @@ namespace Processor
 
         void stop();
 
-        int processJob(Job* theJob);
-    private:
+        int process(Job* theJob);
+
         void run();
+    private:
 
         JobQueue jobQueueM;
         boost::mutex queueMutexM;

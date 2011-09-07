@@ -25,7 +25,7 @@ void BoostWorker::stop()
 //-----------------------------------------------------------------------------
 
 
-int BoostWorker::processJob(Job* theJob)
+int BoostWorker::process(Job* theJob)
 {
     bool jobQueueEmpty = jobQueueM.empty();
     {
@@ -36,7 +36,7 @@ int BoostWorker::processJob(Job* theJob)
     {
         queueCondM.notify_one();
     }
-
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -50,12 +50,13 @@ void BoostWorker::run()
             boost::unique_lock<boost::mutex> lock(queueMutexM);
             if (jobQueueM.empty())
             {
-                queueMutexM.wait(lock);
+                queueCondM.wait(lock);
                 if (jobQueueM.empty())
                     return;
             }
 
-            job = jobQueueM.pop_front();
+            job = jobQueueM.front();
+            jobQueueM.pop_front();
         }
         (*job)();
         delete job;
