@@ -1,4 +1,6 @@
 #include "SocketConnection.h"
+#include "BoostProcessor.h"
+
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
@@ -21,6 +23,7 @@ SocketConnection::~SocketConnection()
     {
         delete *it;
     }
+    close(fdM);
 }
 
 //-----------------------------------------------------------------------------
@@ -33,25 +36,19 @@ void SocketConnection::onRead(int theFd, short theEvt)
     if (buffer->lenM == 0) 
     {
         printf("Client disconnected.\n");
-        close(theFd);
-        event_del(&readEvtM);
-        event_del(&writeEvtM);
-        delete this;
+        asynClose();
         return;
     }
     else if (buffer->lenM < 0) 
     {
         printf("Socket failure, disconnecting client: %s",
             strerror(errno));
-        close(theFd);
-        event_del(&readEvtM);
-        event_del(&writeEvtM);
-        delete this;
+        asynClose();
         return;
     }
     
     outputQueueM.push_back(buffer);
-    event_add(&writeEvtM, NULL);
+    asynAddEvent(&writeEvtM, NULL);
 }
 
 //-----------------------------------------------------------------------------
@@ -59,9 +56,9 @@ void SocketConnection::onRead(int theFd, short theEvt)
 void SocketConnection::onWrite(int theFd, short theEvt)
 {
 
-    if (outputQueueM.begin() == outputQueueM.end())
+    if (outputQueueM.empty())
     {
-        event_del(&writeEvtM);
+        asynDelEvent(&writeEvtM);
         return;
     }
 
@@ -96,11 +93,48 @@ void SocketConnection::onWrite(int theFd, short theEvt)
     outputQueueM.pop_front();
     delete buffer;
 
-    if (outputQueueM.begin() == outputQueueM.end())
+    if (outputQueueM.empty())
     {
-        event_del(&writeEvtM);
+        asynDelEvent(&writeEvtM);
     }
     
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::release()
+{
+    delete this;
+}
+
+//-----------------------------------------------------------------------------
+
+int SocketConnection::asynAddEvent(struct event* theEvt, const struct timeval* theTimeout)
+{
+    return processorM->process(0, new Processor::Job(boost::bind(event_add, theEvt, theTimeout)));
+}
+
+//-----------------------------------------------------------------------------
+
+int SocketConnection::asynDelEvent(struct event* theEvt)
+{
+    return processorM->process(0, new Processor::Job(boost::bind(event_del, theEvt)));
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::asynClose()
+{
+    return processorM->process(0, new Processor::Job(boost::bind(&SocketConnection::close, this)));
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::close()
+{
+    event_del(&readEvtM);
+    event_del(&writeEvtM);
+    processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::release, this)));
 }
 
 //-----------------------------------------------------------------------------

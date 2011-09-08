@@ -4,6 +4,13 @@
 
 #include "Protocol.h"
 
+
+struct timeval;
+namespace Processor
+{
+    class BoostProcessor;
+}
+
 namespace Net
 {
 namespace Server{
@@ -12,13 +19,18 @@ namespace Server{
     class TcpServer
     {
     public:
-        TcpServer(const int thePort);
+        TcpServer(Processor::BoostProcessor* theProcessor);
         virtual ~TcpServer();
 
-        int start();
+        int startAt(const int thePort);
+        void stop();
         void onAccept(int theFd, short theEvent);
 
+        int asynAddEvent(struct event* theEvt, const struct timeval* theTimeout);
+        int asynDelEvent(struct event* theEvt);
+
     private:
+        Processor::BoostProcessor* processorM;
         struct event acceptEvtM;
         int portM;
         int fdM;

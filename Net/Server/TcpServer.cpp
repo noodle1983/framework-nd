@@ -9,6 +9,7 @@
 
 #include "TcpServer.h"
 #include "SocketConnection.h"
+#include "BoostProcessor.h"
 using namespace Net::Server;
 using namespace Net::Connection;
 
@@ -58,8 +59,10 @@ int setnonblock(int theFd)
 //-----------------------------------------------------------------------------
 
 //template <typename Protocol>
-TcpServer::TcpServer(const int thePort)
-    :portM(thePort)
+TcpServer::TcpServer(Processor::BoostProcessor* theProcessor)
+    : processorM(theProcessor)
+    , portM(0)
+    , fdM(0)
 {
 }
 
@@ -68,6 +71,7 @@ TcpServer::TcpServer(const int thePort)
 //template <typename Protocol>
 TcpServer::~TcpServer()
 {
+    stop();
 }
 
 //-----------------------------------------------------------------------------
@@ -94,8 +98,8 @@ void TcpServer::onAccept(int theFd, short theEvt)
 
     SocketConnection* connection = new SocketConnection(clientFd);
     event_set(&connection->readEvtM, clientFd, EV_READ|EV_PERSIST, on_read, connection);
-    event_add(&connection->readEvtM, NULL);
     event_set(&connection->writeEvtM, clientFd, EV_WRITE|EV_PERSIST, on_write, connection);
+    asynAddEvent(&connection->readEvtM, NULL);
 
     printf("Accepted connection from %s\n", 
         inet_ntoa(clientAddr.sin_addr));
@@ -104,8 +108,10 @@ void TcpServer::onAccept(int theFd, short theEvt)
 //-----------------------------------------------------------------------------
 
 //template <typename Protocol>
-int TcpServer::start()
+int TcpServer::startAt(const int thePort)
 {
+    portM = thePort;
+
     //new a socket
     fdM = socket(AF_INET, SOCK_STREAM, 0);
     if (fdM < 0)
@@ -143,7 +149,34 @@ int TcpServer::start()
     //add event
     event_set(&acceptEvtM, fdM, EV_READ|EV_PERSIST, 
             on_accept, this);
-    event_add(&acceptEvtM, NULL);
+    asynAddEvent(&acceptEvtM, NULL);
     return 0;    
+}
+
+//-----------------------------------------------------------------------------
+
+void TcpServer::stop()
+{
+    if (fdM)
+    {
+        close(fdM);
+        event_del(&acceptEvtM);
+        fdM = 0;
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+
+int TcpServer::asynAddEvent(struct event* theEvt, const struct timeval* theTimeout)
+{
+    return processorM->process(0, new Processor::Job(boost::bind(event_add, theEvt, theTimeout)));
+}
+
+//-----------------------------------------------------------------------------
+
+int TcpServer::asynDelEvent(struct event* theEvt)
+{
+    return processorM->process(0, new Processor::Job(boost::bind(event_del, theEvt)));
 }
 

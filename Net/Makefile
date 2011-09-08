@@ -4,6 +4,8 @@ INC= -I. \
      -I./include \
      -I./Connection \
      -I./Server \
+     -I$(PROJBASE)/boost/include \
+     -I$(PROJBASE)/Processor/include \
      -I$(PROJBASE)/libevent/include
 
 LIB= \

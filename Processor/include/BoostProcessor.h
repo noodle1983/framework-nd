@@ -3,11 +3,10 @@
 
 #include <boost/thread.hpp>
 
-#include <BoostWorker.h>
-
 namespace Processor
 {
     class BoostWorker;
+    typedef boost::function<void ()> Job;
     class BoostProcessor
     {
     public:
