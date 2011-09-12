@@ -4,12 +4,16 @@ INC= -I. \
      -I./include \
      -I./Connection \
      -I./Server \
+     -I./Reactor \
      -I$(PROJBASE)/boost/include \
      -I$(PROJBASE)/Processor/include \
      -I$(PROJBASE)/libevent/include
 
 LIB= \
     $(PROJBASE)/libevent/lib/libevent.a \
+    $(PROJBASE)/Processor/.lib/libProcessor.a \
+    $(PROJBASE)/boost/lib/libboost_thread.a \
+
 
 CC=g++
 cc=gcc
@@ -28,7 +32,9 @@ OUTDIR=.lib
 #########################################
 TARGET=libNet.a
 SUBDIR=Connection \
-        Server 
+        Server  \
+	Reactor
+
 CFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.c))
 CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp))
 TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \

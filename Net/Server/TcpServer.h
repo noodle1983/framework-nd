@@ -13,27 +13,35 @@ namespace Processor
 
 namespace Net
 {
+namespace Reactor
+{
+    class Reactor;
+}
 namespace Server{
 
 //    template <typename Protocol>
     class TcpServer
     {
     public:
-        TcpServer(Processor::BoostProcessor* theProcessor);
+        TcpServer(
+            Reactor::Reactor* theReactor, 
+            Processor::BoostProcessor* theProcessor);
         virtual ~TcpServer();
 
         int startAt(const int thePort);
         void stop();
-        void onAccept(int theFd, short theEvent);
 
-        int asynAddEvent(struct event* theEvt, const struct timeval* theTimeout);
-        int asynDelEvent(struct event* theEvt);
+        //make sure the job executed in processor[fd]
+        int asynAccept(int theFd, short theEvt);
+        void onAccept(int theFd, short theEvt);
 
     private:
+        Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
-        struct event acceptEvtM;
+        
+        struct event* acceptEvtM;
         int portM;
-        int fdM;
+        evutil_socket_t fdM;
     };
 
 } /* Server */

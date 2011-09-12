@@ -10,6 +10,12 @@ namespace Processor
 }
 
 namespace Net{
+
+namespace Reactor
+{
+    class Reactor;
+}
+
 namespace Connection{
 
     struct Buffer 
@@ -24,27 +30,29 @@ namespace Connection{
     class SocketConnection
     {
     public:
-        SocketConnection(Processor::BoostProcessor* theProcessor, const int theFd);
+        SocketConnection(
+            Reactor::Reactor* theReactor, 
+            Processor::BoostProcessor* theProcessor, 
+            evutil_socket_t theFd);
         ~SocketConnection();
+
         
-        //executed in processor[fd]
+        int asynRead(int theFd, short theEvt);
+        int asynWrite(int theFd, short theEvt);
+        void release();
         void onRead(int theFd, short theEvt);
         void onWrite(int theFd, short theEvt);
-        void release();
 
-        //executed in processor[0]
-        int asynAddEvent(struct event* theEvt, const struct timeval* theTimeout);
-        int asynDelEvent(struct event* theEvt);
-        void asynClose();
         void close();
 
     public:
-        struct event readEvtM;
-        struct event writeEvtM;
+        struct event* readEvtM;
+        struct event* writeEvtM;
         
     private:
+        Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
-        int fdM;
+        evutil_socket_t fdM;
         std::list<Buffer*> outputQueueM;
 
     };
