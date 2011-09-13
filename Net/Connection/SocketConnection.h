@@ -55,6 +55,8 @@ namespace Connection{
         evutil_socket_t fdM;
         std::list<Buffer*> outputQueueM;
 
+        enum Status{ActiveE, CloseE};
+        mutable int statusM;
     };
     
 }

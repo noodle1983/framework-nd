@@ -33,6 +33,7 @@ SocketConnection::SocketConnection(
     : reactorM(theReactor)
     , processorM(theProcessor)
     , fdM(theFd)
+    , statusM(ActiveE)
 {
 	readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
 	writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
@@ -101,6 +102,8 @@ void SocketConnection::onRead(int theFd, short theEvt)
 
 int SocketConnection::asynWrite(int theFd, short theEvt)
 {
+    if (CloseE == statusM)
+        return -1;
     return processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::onWrite, this, theFd, theEvt)));
 }
 
@@ -109,7 +112,7 @@ int SocketConnection::asynWrite(int theFd, short theEvt)
 
 void SocketConnection::onWrite(int theFd, short theEvt)
 {
-    while (!outputQueueM.empty())
+    while (CloseE != statusM && !outputQueueM.empty())
     {
         Buffer* buffer = outputQueueM.front();
 
@@ -125,6 +128,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
             else 
             {
                 printf("Socket write failure");
+                statusM = CloseE;
                 return;
             }
         }
@@ -137,13 +141,14 @@ void SocketConnection::onWrite(int theFd, short theEvt)
         else if ((buffer->offsetM + len) > buffer->lenM)
         {
             printf("Socket write failure");
+            statusM = CloseE;
             return;
         }
         outputQueueM.pop_front();
         delete buffer;
     }
 
-    if (!outputQueueM.empty())
+    if (CloseE != statusM && !outputQueueM.empty())
     {
 		event_add(writeEvtM, NULL);
     }
@@ -161,6 +166,7 @@ void SocketConnection::release()
 
 void SocketConnection::close()
 {
+    statusM = CloseE;
 	reactorM->delEvent(readEvtM);
 	reactorM->delEvent(writeEvtM);
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::release, this)));
