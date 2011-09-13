@@ -11,6 +11,7 @@ INC= -I. \
 
 LIB= \
     $(PROJBASE)/libevent/lib/libevent.a \
+    $(PROJBASE)/libevent/lib/libevent_pthreads.a \
     $(PROJBASE)/Processor/.lib/libProcessor.a \
     $(PROJBASE)/boost/lib/libboost_thread.a \
 

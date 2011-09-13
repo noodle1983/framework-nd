@@ -22,8 +22,8 @@ namespace Connection{
     {
         Buffer(): lenM(0), offsetM(0)
         {}
-        unsigned lenM;
-        unsigned offsetM;
+        int lenM;
+        int offsetM;
         char rawM[1024];
     };
 

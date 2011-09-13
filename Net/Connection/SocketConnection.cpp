@@ -49,8 +49,7 @@ SocketConnection::~SocketConnection()
         delete *it;
     }
     evutil_closesocket(fdM);
-	reactorM->delEvent(readEvtM);
-	reactorM->delEvent(writeEvtM);
+    printf ("close fd:%d\n", fdM);
 }
 
 //-----------------------------------------------------------------------------
@@ -67,23 +66,34 @@ void SocketConnection::onRead(int theFd, short theEvt)
     Buffer* buffer = new Buffer;
 
     buffer->lenM = read(theFd, buffer->rawM, sizeof(buffer->rawM));
-    if (buffer->lenM == 0) 
+    if (buffer->lenM <= 0) 
     {
+        delete buffer;
         printf("Client disconnected.\n");
         close();
         return;
     }
     else if (buffer->lenM > SSIZE_MAX) 
     {
+        delete buffer;
         printf("Socket failure, disconnecting client: %s",
             strerror(errno));
         close();
         return;
     }
-    
     outputQueueM.push_back(buffer);
+
+    while(outputQueueM.size()<100){
+        buffer = new Buffer;
+        buffer->lenM = read(theFd, buffer->rawM, sizeof(buffer->rawM));
+        if (buffer->lenM <= 0 || buffer->lenM > SSIZE_MAX)
+        {
+            delete buffer;
+            break;
+        }
+        outputQueueM.push_back(buffer);
+    }
     event_add(writeEvtM, NULL);
-	
 	event_add(readEvtM, NULL);
 }
 
@@ -99,47 +109,40 @@ int SocketConnection::asynWrite(int theFd, short theEvt)
 
 void SocketConnection::onWrite(int theFd, short theEvt)
 {
-    if (outputQueueM.empty())
+    while (!outputQueueM.empty())
     {
-        //asynDelEvent(&writeEvtM);
-        return;
-    }
-    Buffer* buffer = outputQueueM.front();
+        Buffer* buffer = outputQueueM.front();
 
-    int len = buffer->lenM - buffer->offsetM;
-    len = write(theFd, buffer->rawM + buffer->offsetM, len);
-    if (len == -1) 
-    {
-        if (errno == EINTR || errno == EAGAIN) 
+        int len = buffer->lenM - buffer->offsetM;
+        len = write(theFd, buffer->rawM + buffer->offsetM, len);
+        if (len == -1) 
         {
+            if (errno == EINTR || errno == EAGAIN) 
+            {
+                event_add(writeEvtM, NULL);
+                return;
+            }
+            else 
+            {
+                printf("Socket write failure");
+                return;
+            }
+        }
+        else if ((buffer->offsetM + len) < buffer->lenM) 
+        {
+            buffer->offsetM += len;
+            event_add(writeEvtM, NULL);
             return;
         }
-        else 
+        else if ((buffer->offsetM + len) > buffer->lenM)
         {
             printf("Socket write failure");
-            //err(1, "write");
             return;
         }
+        outputQueueM.pop_front();
+        delete buffer;
     }
-    else if ((buffer->offsetM + len) < buffer->lenM) 
-    {
-        buffer->offsetM += len;
-        return;
-    }
-    else if ((buffer->offsetM + len) > buffer->lenM)
-    {
-        printf("Socket write failure");
-        //err(1, "write");
-        return;
-    }
-    outputQueueM.pop_front();
-    delete buffer;
 
-    /*if (outputQueueM.empty())
-    {
-        asynDelEvent(&writeEvtM);
-    }
-    */
     if (!outputQueueM.empty())
     {
 		event_add(writeEvtM, NULL);
@@ -158,9 +161,8 @@ void SocketConnection::release()
 
 void SocketConnection::close()
 {
-	evutil_closesocket(fdM);
-    event_del(readEvtM);
-    event_del(writeEvtM);
+	reactorM->delEvent(readEvtM);
+	reactorM->delEvent(writeEvtM);
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::release, this)));
 }
 

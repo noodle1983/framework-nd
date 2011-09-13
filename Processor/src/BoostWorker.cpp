@@ -27,9 +27,10 @@ void BoostWorker::stop()
 
 int BoostWorker::process(Job* theJob)
 {
-    bool jobQueueEmpty = jobQueueM.empty();
+    bool jobQueueEmpty = false;
     {
         boost::lock_guard<boost::mutex> lock(queueMutexM);
+        jobQueueEmpty = jobQueueM.empty();
         jobQueueM.push_back(theJob);
     }
     if (jobQueueEmpty)

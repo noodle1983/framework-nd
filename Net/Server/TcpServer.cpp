@@ -76,8 +76,8 @@ void TcpServer::onAccept(int theFd, short theEvt)
 
     SocketConnection* connection = new SocketConnection(reactorM, processorM, clientFd);
 
-    printf("Accepted connection from %s\n", 
-        inet_ntoa(clientAddr.sin_addr));
+    printf("Accepted connection from %s, fd:%d\n", 
+        inet_ntoa(clientAddr.sin_addr), clientFd);
 }
 
 //-----------------------------------------------------------------------------
@@ -94,6 +94,11 @@ int TcpServer::startAt(const int thePort)
         err(1, "listen failed");
         return -1;
     }
+    //set socket option
+    if (evutil_make_listen_socket_reuseable(fdM) < 0)
+		err(1, "failed to set server socket to reuseable");
+    if (evutil_make_socket_nonblocking(fdM) < 0)
+        err(1, "failed to set server socket to non-blocking");
 
     //bind local addr
     struct sockaddr_in listenAddr;
@@ -114,12 +119,6 @@ int TcpServer::startAt(const int thePort)
         err(1, "listen failed");
         return -1;
     }
-
-    //set socket option
-    if (evutil_make_listen_socket_reuseable(fdM) < 0)
-		err(1, "failed to set server socket to reuseable");
-    if (evutil_make_socket_nonblocking(fdM) < 0)
-        err(1, "failed to set server socket to non-blocking");
 
 	acceptEvtM = reactorM->newEvent(fdM, EV_READ|EV_PERSIST, on_accept, this);
     event_add(acceptEvtM, NULL);
