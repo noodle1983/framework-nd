@@ -27,9 +27,12 @@ void on_accept(int theFd, short theEvt, void *theArg)
 //TcpServer
 //-----------------------------------------------------------------------------
 
-//template <typename Protocol>
-TcpServer::TcpServer(Reactor::Reactor* theReactor, Processor::BoostProcessor* theProcessor)
-    : reactorM(theReactor)
+TcpServer::TcpServer(
+		Protocol* theProtocol,
+		Reactor::Reactor* theReactor, 
+		Processor::BoostProcessor* theProcessor)
+    : protocolM(theProtocol)
+    , reactorM(theReactor)
     , processorM(theProcessor)
     , acceptEvtM(NULL)
     , portM(0)
@@ -39,7 +42,7 @@ TcpServer::TcpServer(Reactor::Reactor* theReactor, Processor::BoostProcessor* th
 
 //-----------------------------------------------------------------------------
 
-//template <typename Protocol>
+
 TcpServer::~TcpServer()
 {
     stop();
@@ -54,7 +57,7 @@ int TcpServer::asynAccept(int theFd, short theEvt)
 
 //-----------------------------------------------------------------------------
 
-//template <typename Protocol>
+
 void TcpServer::onAccept(int theFd, short theEvt)
 {
     evutil_socket_t clientFd;
@@ -82,7 +85,7 @@ void TcpServer::onAccept(int theFd, short theEvt)
 
 //-----------------------------------------------------------------------------
 
-//template <typename Protocol>
+
 int TcpServer::startAt(const int thePort)
 {
     portM = thePort;

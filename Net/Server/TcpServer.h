@@ -13,17 +13,18 @@ namespace Processor
 
 namespace Net
 {
+class Protocol;
 namespace Reactor
 {
     class Reactor;
 }
 namespace Server{
 
-//    template <typename Protocol>
     class TcpServer
     {
     public:
         TcpServer(
+            Protocol* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor);
         virtual ~TcpServer();
@@ -31,13 +32,13 @@ namespace Server{
         int startAt(const int thePort);
         void stop();
 
-        //make sure the job executed in processor[fd]
         int asynAccept(int theFd, short theEvt);
         void onAccept(int theFd, short theEvt);
 
     private:
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
+        Protocol* protocolM;
         
         struct event* acceptEvtM;
         int portM;

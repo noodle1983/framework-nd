@@ -27,10 +27,12 @@ void on_write(int theFd, short theEvt, void *theArg)
 
 //-----------------------------------------------------------------------------
 SocketConnection::SocketConnection(
+			Protocol* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor, 
             evutil_socket_t theFd)
-    : reactorM(theReactor)
+    : protocolM(theProtocol)
+    , reactorM(theReactor)
     , processorM(theProcessor)
     , fdM(theFd)
     , statusM(ActiveE)

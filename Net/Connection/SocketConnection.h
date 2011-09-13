@@ -31,6 +31,7 @@ namespace Connection{
     {
     public:
         SocketConnection(
+            Protocol* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor, 
             evutil_socket_t theFd);
@@ -50,6 +51,7 @@ namespace Connection{
         struct event* writeEvtM;
         
     private:
+        Protocol* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
         evutil_socket_t fdM;
