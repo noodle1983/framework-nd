@@ -1,6 +1,8 @@
 #ifndef SOCKETCONNECTION_H
 #define SOCKETCONNECTION_H
-#include <list>
+
+#include <Buffer/KfifoBuffer.h>
+
 #include <event.h>
 
 struct timeval;
@@ -59,8 +61,8 @@ namespace Connection{
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
         evutil_socket_t fdM;
-        std::list<Buffer*> inputQueueM;
-        std::list<Buffer*> outputQueueM;
+        Buffer::KfifoBuffer inputQueueM;
+        Buffer::KfifoBuffer outputQueueM;
 
         enum Status{ActiveE, CloseE};
         mutable int statusM;

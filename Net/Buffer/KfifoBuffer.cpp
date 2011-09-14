@@ -40,48 +40,61 @@ void KfifoBuffer::release()
 
 //-----------------------------------------------------------------------------
 
-BufferStatus KfifoBuffer::put(const char* const theBuffer, const size_t theLen)
+BufferStatus KfifoBuffer::getStatus()
+{
+	return (writeIndexM - readIndexM > highWaterMarkM) ? BufferHighE : BufferOkE;
+}
+
+//-----------------------------------------------------------------------------
+
+size_t KfifoBuffer::put(const char* const theBuffer, const size_t theLen)
 {
     size_t leftSize = sizeM - writeIndexM + readIndexM;
-    if (theLen > leftSize)
-        return BufferNotEnoughE;
+	size_t putLen = (theLen < leftSize) ? theLen : leftSize;
     
     size_t leftEnd = sizeM - (writeIndexM & maskM);
-    size_t firstPartLen = (theLen < leftEnd) ? theLen : leftEnd;
+    size_t firstPartLen = (putLen < leftEnd) ? putLen : leftEnd;
     memcpy(rawM + (writeIndexM & maskM), theBuffer, firstPartLen);
-    memcpy(rawM, theBuffer + firstPartLen, theLen - firstPartLen);
-    writeIndexM += theLen;
-    return (writeIndexM - readIndexM > highWaterMarkM) ? BufferHighE : BufferOkE;
+    memcpy(rawM, theBuffer + firstPartLen, putLen - firstPartLen);
+    writeIndexM += putLen;
+    return putLen;
 }
 
 //-----------------------------------------------------------------------------
 
-BufferStatus KfifoBuffer::get(char* const theBuffer, const size_t theLen)
+size_t KfifoBuffer::get(char* const theBuffer, const size_t theLen)
 {
     size_t usedSize = writeIndexM - readIndexM;
-    if (theLen > usedSize)
-        return BufferNotEnoughE;
+	size_t getLen = (theLen < usedSize) ? theLen : usedSize;
     
     size_t readIndexToEnd = sizeM - (readIndexM & maskM);
-    size_t firstPartLen = (theLen < readIndexToEnd) ? theLen : readIndexToEnd;
+    size_t firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
     memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
-    memcpy(theBuffer + firstPartLen, rawM, theLen - firstPartLen);
-    readIndexToEnd += theLen;
-    return (writeIndexM - readIndexM > highWaterMarkM) ? BufferHighE : BufferOkE;
+    memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
+    readIndexM += getLen;
+    return getLen;
 }
 
 //-----------------------------------------------------------------------------
 
-BufferStatus KfifoBuffer::peek(char* const theBuffer, const size_t theLen)
+size_t KfifoBuffer::peek(char* const theBuffer, const size_t theLen)
 {
     size_t usedSize = writeIndexM - readIndexM;
-    if (theLen > usedSize)
-        return BufferNotEnoughE;
+	size_t getLen = (theLen < usedSize) ? theLen : usedSize;
     
     size_t readIndexToEnd = sizeM - (readIndexM & maskM);
-    size_t firstPartLen = (theLen < readIndexToEnd) ? theLen : readIndexToEnd;
+    size_t firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
     memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
-    memcpy(theBuffer + firstPartLen, rawM, theLen - firstPartLen);
-    return (writeIndexM - readIndexM > highWaterMarkM) ? BufferHighE : BufferOkE;
+    memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
+    return getLen;
 }
+
+//-----------------------------------------------------------------------------
+
+size_t KfifoBuffer::commitRead(const size_t theLen)
+{
+    readIndexM += theLen;
+    return theLen;
+}
+
 

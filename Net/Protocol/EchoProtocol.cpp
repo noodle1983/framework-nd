@@ -32,12 +32,14 @@ int EchoProtocol::asynHandleInput(int theFd, Connection::SocketConnection* conne
 
 int EchoProtocol::handleInput(Connection::SocketConnection* connection)
 {
-    Net::Connection::Buffer *buffer = NULL;
-    connection->getInput(buffer);
-    while (buffer)
+	char buffer[1024];
+    Net::Buffer::BufferStatus iBufferStatus = connection->getInput(buffer, sizeof(buffer));
+    Net::Buffer::BufferStatus oBufferStatus = connection->send(buffer, sizeof(buffer));
+    while (Net::Buffer::BufferOkE == iBufferStatus 
+		&& Net::Buffer::BufferOkE == oBufferStatus)
     {
-        connection->send(buffer);
-        connection->getInput(buffer);
+        iBufferStatus = connection->getInput(buffer, sizeof(buffer));
+		oBufferStatus = connection->send(buffer, sizeof(buffer));
     }
     return 0;
 }

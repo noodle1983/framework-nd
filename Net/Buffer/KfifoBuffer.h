@@ -23,9 +23,11 @@ namespace Buffer
         void init();
         void release();
 
-        BufferStatus put(const char* const theBuffer, const size_t theLen);
-        BufferStatus get(char* const theBuffer, const size_t theLen);
-        BufferStatus peek(char* const theBuffer, const size_t theLen);
+        BufferStatus getStatus();
+        size_t put(const char* const theBuffer, const size_t theLen);
+        size_t get(char* const theBuffer, const size_t theLen);
+        size_t peek(char* const theBuffer, const size_t theLen);
+        size_t commitRead(const size_t theLen);
 
     private:
         char* rawM;

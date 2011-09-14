@@ -68,59 +68,52 @@ int SocketConnection::asynRead(int theFd, short theEvt)
 
 void SocketConnection::onRead(int theFd, short theEvt)
 {
-    Buffer* buffer = new Buffer;
+    char buffer[1024]= {0};
 
-    buffer->lenM = read(theFd, buffer->rawM, sizeof(buffer->rawM));
-    if (buffer->lenM <= 0) 
+    int len = read(theFd, buffer, sizeof(buffer));
+    if (len <= 0) 
     {
-        delete buffer;
         printf("Client disconnected.\n");
         close();
         return;
     }
-    else if (buffer->lenM > SSIZE_MAX) 
+    else if (len > SSIZE_MAX) 
     {
-        delete buffer;
         printf("Socket failure, disconnecting client: %s",
             strerror(errno));
         close();
         return;
     }
-    inputQueueM.push_back(buffer);
+    size_t putLen = inputQueueM.put(buffer, len);
+	assert(putLen == len);
 
-    while(inputQueueM.size()<100){
-        buffer = new Buffer;
-        buffer->lenM = read(theFd, buffer->rawM, sizeof(buffer->rawM));
-        if (buffer->lenM <= 0 || buffer->lenM > SSIZE_MAX)
+    while(Net::Buffer::BufferOkE == inputQueueM.getStatus())
+	{
+        len = read(theFd, buffer, sizeof(buffer));
+        if (len <= 0 || len > SSIZE_MAX)
         {
-            delete buffer;
             break;
         }
-        inputQueueM.push_back(buffer);
+        putLen = inputQueueM.put(buffer, len);
+		assert(putLen == len);
     }
     event_add(readEvtM, NULL);
     protocolM->asynHandleInput(fdM, this);
 }
 //-----------------------------------------------------------------------------
 
-int SocketConnection::getInput(Buffer*& theBuffer)
+size_t SocketConnection::getInput(char* const theBuffer, const size_t theLen)
 {
-    if (inputQueueM.empty()) 
-    {
-        theBuffer = NULL;
-        return 0;
-    }
-    theBuffer = inputQueueM.front();
-    inputQueueM.pop_front();
-    return 0;
+    return inputQueueM.get(theBuffer, theLen);
 }
 //-----------------------------------------------------------------------------
 
-int SocketConnection::send(Buffer* theBuffer)
+Net::Buffer::BufferStatus 
+SocketConnection::send(char* const theBuffer, const size_t theLen)
 {
-    outputQueueM.push_back(theBuffer);
+    Net::Buffer::BufferStatus bufferStatus = outputQueueM.put(theBuffer, theLen);
     event_add(writeEvtM, NULL);
-    return 0;
+    return bufferStatus;
 }
 
 //-----------------------------------------------------------------------------
@@ -137,10 +130,10 @@ int SocketConnection::asynWrite(int theFd, short theEvt)
 
 void SocketConnection::onWrite(int theFd, short theEvt)
 {
-    while (CloseE != statusM && !outputQueueM.empty())
+	char buffer[1024]= {0};
+	Net::Buffer::BufferStatus bufferStatus = outputQueueM.peek(buffer, sizeof(buffer));
+    while (CloseE != statusM && bufferStatus != Net::Buffer::BufferNotEnoughE)
     {
-        Buffer* buffer = outputQueueM.front();
-
         int len = buffer->lenM - buffer->offsetM;
         len = write(theFd, buffer->rawM + buffer->offsetM, len);
         if (len == -1) 
