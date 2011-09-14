@@ -1,3 +1,8 @@
+#include "BoostProcessor.h"
+#include "Server/TcpServer.h"
+#include "Connection/SocketConnection.h"
+#include "Reactor/Reactor.h"
+
 #include <sys/types.h>  
 #include <sys/socket.h>
 #include <unistd.h>
@@ -7,10 +12,6 @@
 #include <arpa/inet.h>
 #include <string.h>
 
-#include "TcpServer.h"
-#include "SocketConnection.h"
-#include "BoostProcessor.h"
-#include "Reactor.h"
 using namespace Net::Server;
 using namespace Net::Connection;
 
@@ -28,7 +29,7 @@ void on_accept(int theFd, short theEvt, void *theArg)
 //-----------------------------------------------------------------------------
 
 TcpServer::TcpServer(
-		Protocol* theProtocol,
+		ProtocolInterface* theProtocol,
 		Reactor::Reactor* theReactor, 
 		Processor::BoostProcessor* theProcessor)
     : protocolM(theProtocol)
@@ -77,7 +78,7 @@ void TcpServer::onAccept(int theFd, short theEvt)
         return;
     }
 
-    SocketConnection* connection = new SocketConnection(reactorM, processorM, clientFd);
+    SocketConnection* connection = new SocketConnection(protocolM, reactorM, processorM, clientFd);
 
     printf("Accepted connection from %s, fd:%d\n", 
         inet_ntoa(clientAddr.sin_addr), clientFd);

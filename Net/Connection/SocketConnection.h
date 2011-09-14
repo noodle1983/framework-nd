@@ -11,6 +11,7 @@ namespace Processor
 
 namespace Net{
 
+class ProtocolInterface;
 namespace Reactor
 {
     class Reactor;
@@ -31,7 +32,7 @@ namespace Connection{
     {
     public:
         SocketConnection(
-            Protocol* theProtocol,
+            ProtocolInterface* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor, 
             evutil_socket_t theFd);
@@ -40,21 +41,25 @@ namespace Connection{
         
         int asynRead(int theFd, short theEvt);
         int asynWrite(int theFd, short theEvt);
-        void release();
         void onRead(int theFd, short theEvt);
         void onWrite(int theFd, short theEvt);
 
         void close();
+        void release();
+
+        int getInput(Buffer*& theBuffer);
+        int send(Buffer* theBuffer);
 
     public:
         struct event* readEvtM;
         struct event* writeEvtM;
         
     private:
-        Protocol* protocolM;
+        ProtocolInterface* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
         evutil_socket_t fdM;
+        std::list<Buffer*> inputQueueM;
         std::list<Buffer*> outputQueueM;
 
         enum Status{ActiveE, CloseE};

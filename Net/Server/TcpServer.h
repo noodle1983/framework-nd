@@ -2,10 +2,7 @@
 #define TCPSERVER_H
 #include <event.h>
 
-#include "Protocol.h"
 
-
-struct timeval;
 namespace Processor
 {
     class BoostProcessor;
@@ -13,7 +10,7 @@ namespace Processor
 
 namespace Net
 {
-class Protocol;
+class ProtocolInterface;
 namespace Reactor
 {
     class Reactor;
@@ -24,7 +21,7 @@ namespace Server{
     {
     public:
         TcpServer(
-            Protocol* theProtocol,
+            ProtocolInterface* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor);
         virtual ~TcpServer();
@@ -36,9 +33,9 @@ namespace Server{
         void onAccept(int theFd, short theEvt);
 
     private:
+        ProtocolInterface* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
-        Protocol* protocolM;
         
         struct event* acceptEvtM;
         int portM;

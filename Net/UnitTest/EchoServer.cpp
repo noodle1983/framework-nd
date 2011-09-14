@@ -1,8 +1,10 @@
+#include <BoostProcessor.h>
+#include <Server/TcpServer.h>
+#include <Reactor/Reactor.h>
+#include <Protocol/EchoProtocol.h>
+
 #include <event.h>
 #include <event2/thread.h>
-#include <TcpServer.h>
-#include <BoostProcessor.h>
-#include <Reactor.h>
 #include <unistd.h>
 #include <signal.h>
 
@@ -14,7 +16,8 @@ int main()
     Processor::BoostProcessor processor(4);
     processor.start();
 	Net::Reactor::Reactor reactor;
-    Net::Server::TcpServer server(&reactor, &processor);
+    Net::Protocol::EchoProtocol echoProtocol(&reactor, &processor);
+    Net::Server::TcpServer server(&echoProtocol, &reactor, &processor);
     server.startAt(5555);
     reactor.start();
 	while(1){sleep(1);};

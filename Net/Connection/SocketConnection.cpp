@@ -1,6 +1,7 @@
-#include "SocketConnection.h"
 #include "BoostProcessor.h"
-#include "Reactor.h"
+#include "Connection/SocketConnection.h"
+#include "Reactor/Reactor.h"
+#include "Protocol.h"
 
 #include <unistd.h>
 #include <errno.h>
@@ -26,8 +27,9 @@ void on_write(int theFd, short theEvt, void *theArg)
 }
 
 //-----------------------------------------------------------------------------
+
 SocketConnection::SocketConnection(
-			Protocol* theProtocol,
+			ProtocolInterface* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor, 
             evutil_socket_t theFd)
@@ -84,9 +86,9 @@ void SocketConnection::onRead(int theFd, short theEvt)
         close();
         return;
     }
-    outputQueueM.push_back(buffer);
+    inputQueueM.push_back(buffer);
 
-    while(outputQueueM.size()<100){
+    while(inputQueueM.size()<100){
         buffer = new Buffer;
         buffer->lenM = read(theFd, buffer->rawM, sizeof(buffer->rawM));
         if (buffer->lenM <= 0 || buffer->lenM > SSIZE_MAX)
@@ -94,10 +96,31 @@ void SocketConnection::onRead(int theFd, short theEvt)
             delete buffer;
             break;
         }
-        outputQueueM.push_back(buffer);
+        inputQueueM.push_back(buffer);
     }
+    event_add(readEvtM, NULL);
+    protocolM->asynHandleInput(fdM, this);
+}
+//-----------------------------------------------------------------------------
+
+int SocketConnection::getInput(Buffer*& theBuffer)
+{
+    if (inputQueueM.empty()) 
+    {
+        theBuffer = NULL;
+        return 0;
+    }
+    theBuffer = inputQueueM.front();
+    inputQueueM.pop_front();
+    return 0;
+}
+//-----------------------------------------------------------------------------
+
+int SocketConnection::send(Buffer* theBuffer)
+{
+    outputQueueM.push_back(theBuffer);
     event_add(writeEvtM, NULL);
-	event_add(readEvtM, NULL);
+    return 0;
 }
 
 //-----------------------------------------------------------------------------

@@ -2,9 +2,6 @@ PROJBASE=$(PWD)/..
 
 INC= -I. \
      -I./include \
-     -I./Connection \
-     -I./Server \
-     -I./Reactor \
      -I$(PROJBASE)/boost/include \
      -I$(PROJBASE)/Processor/include \
      -I$(PROJBASE)/libevent/include
@@ -34,7 +31,8 @@ OUTDIR=.lib
 TARGET=libNet.a
 SUBDIR=Connection \
         Server  \
-	Reactor
+        Reactor \
+		Protocol
 
 CFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.c))
 CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp))
