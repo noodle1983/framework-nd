@@ -32,7 +32,8 @@ TARGET=libNet.a
 SUBDIR=Connection \
         Server  \
         Reactor \
-		Protocol
+        Protocol \
+        Buffer
 
 CFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.c))
 CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp))

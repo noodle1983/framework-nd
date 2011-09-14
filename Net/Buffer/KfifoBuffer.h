@@ -1,6 +1,7 @@
 #ifndef KFIFOBUFFER_H
 #define KFIFOBUFFER_H
 
+#include <sys/types.h>
 
 namespace Net
 {
@@ -29,9 +30,11 @@ namespace Buffer
     private:
         char* rawM;
         size_t sizeM;
+        size_t maskM;
         size_t readIndexM;
         size_t writeIndexM;
-        size_t highWaterMarkM
+        size_t highWaterMarkM;
+        size_t lowWaterMarkM;
     };
 }
 }

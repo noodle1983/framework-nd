@@ -13,6 +13,7 @@ KfifoBuffer::KfifoBuffer()
     readIndexM = 0;
     writeIndexM = 0;
     highWaterMarkM = sizeM *4 / 5; // 80%
+    lowWaterMarkM = sizeM >> 1;    // 50%
 }
 
 //-----------------------------------------------------------------------------
@@ -39,7 +40,7 @@ void KfifoBuffer::release()
 
 //-----------------------------------------------------------------------------
 
-int KfifoBuffer::put(const char* const theBuffer, const size_t theLen)
+BufferStatus KfifoBuffer::put(const char* const theBuffer, const size_t theLen)
 {
     size_t leftSize = sizeM - writeIndexM + readIndexM;
     if (theLen > leftSize)
@@ -55,7 +56,7 @@ int KfifoBuffer::put(const char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-int KfifoBuffer::get(char* const theBuffer, const size_t theLen)
+BufferStatus KfifoBuffer::get(char* const theBuffer, const size_t theLen)
 {
     size_t usedSize = writeIndexM - readIndexM;
     if (theLen > usedSize)
@@ -71,11 +72,11 @@ int KfifoBuffer::get(char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-int KfifoBuffer::peek(char* const theBuffer, const size_t theLen)
+BufferStatus KfifoBuffer::peek(char* const theBuffer, const size_t theLen)
 {
     size_t usedSize = writeIndexM - readIndexM;
     if (theLen > usedSize)
-        return -1;
+        return BufferNotEnoughE;
     
     size_t readIndexToEnd = sizeM - (readIndexM & maskM);
     size_t firstPartLen = (theLen < readIndexToEnd) ? theLen : readIndexToEnd;
