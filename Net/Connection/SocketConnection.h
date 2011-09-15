@@ -2,6 +2,7 @@
 #define SOCKETCONNECTION_H
 
 #include <Buffer/KfifoBuffer.h>
+#include <boost/function.hpp>
 
 #include <event.h>
 
@@ -30,6 +31,9 @@ namespace Connection{
         char rawM[1024];
     };
 
+    class SocketConnection;
+    typedef boost::function<void (int, SocketConnection*)> Watcher;
+
     class SocketConnection
     {
     public:
@@ -49,9 +53,11 @@ namespace Connection{
         void close();
         void release();
 
-        int getInput(Buffer*& theBuffer);
-        int send(Buffer* theBuffer);
+        size_t getInput(char* const theBuffer, const size_t theLen);
+        size_t getnInput(char* const theBuffer, const size_t theLen);
+        Net::Buffer::BufferStatus sendn(char* const theBuffer, const size_t theLen);
 
+        void setLowWaterMarkWatcher(Watcher* theWatcher);
     public:
         struct event* readEvtM;
         struct event* writeEvtM;
@@ -61,11 +67,17 @@ namespace Connection{
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
         evutil_socket_t fdM;
-        Buffer::KfifoBuffer inputQueueM;
-        Buffer::KfifoBuffer outputQueueM;
+        Net::Buffer::KfifoBuffer inputQueueM;
+        Net::Buffer::KfifoBuffer outputQueueM;
 
         enum Status{ActiveE, CloseE};
         mutable int statusM;
+
+        boost::mutex stopReadingMutexM;
+        bool stopReadingM;
+        boost::mutex watcherMutexM;
+        Watcher* watcherM;
+        
     };
     
 }

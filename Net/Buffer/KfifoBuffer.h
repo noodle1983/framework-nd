@@ -11,7 +11,8 @@ namespace Buffer
     {
         BufferNotEnoughE = -1,
         BufferOkE = 0,
-        BufferHighE = 1
+        BufferHighE = 1,
+        BufferLowE = 2
     };
 
     class KfifoBuffer
@@ -23,10 +24,22 @@ namespace Buffer
         void init();
         void release();
 
-        BufferStatus getStatus();
+        inline BufferStatus getStatus()
+        {
+            size_t s = size();
+            return (s > highWaterMarkM) ? BufferHighE 
+                 : (s > lowWaterMarkM)  ? BufferOkE
+                 : BufferLowE;
+        }
+        inline bool empty() {return writeIndexM == readIndexM;}
+        inline size_t size(){return (writeIndexM - readIndexM);}
+
         size_t put(const char* const theBuffer, const size_t theLen);
         size_t get(char* const theBuffer, const size_t theLen);
         size_t peek(char* const theBuffer, const size_t theLen);
+        size_t putn(const char* const theBuffer, const size_t theLen);
+        size_t getn(char* const theBuffer, const size_t theLen);
+        size_t peekn(char* const theBuffer, const size_t theLen);
         size_t commitRead(const size_t theLen);
 
     private:

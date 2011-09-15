@@ -33,13 +33,16 @@ int EchoProtocol::asynHandleInput(int theFd, Connection::SocketConnection* conne
 int EchoProtocol::handleInput(Connection::SocketConnection* connection)
 {
 	char buffer[1024];
-    Net::Buffer::BufferStatus iBufferStatus = connection->getInput(buffer, sizeof(buffer));
-    Net::Buffer::BufferStatus oBufferStatus = connection->send(buffer, sizeof(buffer));
-    while (Net::Buffer::BufferOkE == iBufferStatus 
-		&& Net::Buffer::BufferOkE == oBufferStatus)
+    size_t len = 1;
+    Net::Buffer::BufferStatus oBufferStatus = connection->sendn(NULL, 0);
+    while (len > 0 && (Net::Buffer::BufferOkE == oBufferStatus || Net::Buffer::BufferLowE == oBufferStatus))
     {
-        iBufferStatus = connection->getInput(buffer, sizeof(buffer));
-		oBufferStatus = connection->send(buffer, sizeof(buffer));
+        len = connection->getInput(buffer, sizeof(buffer));
+        oBufferStatus = connection->sendn(buffer, len);
+    }
+    if (Net::Buffer::BufferHighE == oBufferStatus || Net::Buffer::BufferNotEnoughE == oBufferStatus)
+    {
+        connection->setLowWaterMarkWatcher(new Net::Connection::Watcher(boost::bind(&EchoProtocol::asynHandleInput, this, _1, _2)));
     }
     return 0;
 }

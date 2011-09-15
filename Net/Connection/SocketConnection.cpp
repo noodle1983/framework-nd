@@ -38,6 +38,8 @@ SocketConnection::SocketConnection(
     , processorM(theProcessor)
     , fdM(theFd)
     , statusM(ActiveE)
+    , stopReadingM(false)
+    , watcherM(NULL)
 {
 	readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
 	writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
@@ -48,11 +50,6 @@ SocketConnection::SocketConnection(
 
 SocketConnection::~SocketConnection()
 {
-    std::list<Buffer*>::iterator it = outputQueueM.begin();
-    for (; it != outputQueueM.end(); it++)
-    {
-        delete *it;
-    }
     evutil_closesocket(fdM);
     printf ("close fd:%d\n", fdM);
 }
@@ -68,6 +65,7 @@ int SocketConnection::asynRead(int theFd, short theEvt)
 
 void SocketConnection::onRead(int theFd, short theEvt)
 {
+
     char buffer[1024]= {0};
 
     int len = read(theFd, buffer, sizeof(buffer));
@@ -85,9 +83,10 @@ void SocketConnection::onRead(int theFd, short theEvt)
         return;
     }
     size_t putLen = inputQueueM.put(buffer, len);
-	assert(putLen == len);
+	assert(putLen == (size_t)len);
 
-    while(Net::Buffer::BufferOkE == inputQueueM.getStatus())
+    while(Net::Buffer::BufferOkE == inputQueueM.getStatus()
+        || Net::Buffer::BufferLowE == inputQueueM.getStatus() )
 	{
         len = read(theFd, buffer, sizeof(buffer));
         if (len <= 0 || len > SSIZE_MAX)
@@ -95,25 +94,78 @@ void SocketConnection::onRead(int theFd, short theEvt)
             break;
         }
         putLen = inputQueueM.put(buffer, len);
-		assert(putLen == len);
+		assert(putLen == (size_t)len);
     }
-    event_add(readEvtM, NULL);
+
+    if (Net::Buffer::BufferHighE == inputQueueM.getStatus()
+            || Net::Buffer::BufferNotEnoughE == inputQueueM.getStatus())
+    {
+        printf("Flow Control:Socket %d stop reading\n", fdM); 
+        boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
+        stopReadingM = true;
+    }
+    else
+    {
+        event_add(readEvtM, NULL);
+    }
     protocolM->asynHandleInput(fdM, this);
 }
 //-----------------------------------------------------------------------------
 
 size_t SocketConnection::getInput(char* const theBuffer, const size_t theLen)
 {
-    return inputQueueM.get(theBuffer, theLen);
+    size_t len = inputQueueM.get(theBuffer, theLen);
+    if (stopReadingM)
+    {
+        Net::Buffer::BufferStatus postBufferStatus = inputQueueM.getStatus();
+        if (postBufferStatus == Net::Buffer::BufferLowE)
+        {
+            {
+                boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
+                stopReadingM = false;
+            }
+            event_add(readEvtM, NULL);
+        }
+    }
+    return len;
 }
+
+//-----------------------------------------------------------------------------
+
+size_t SocketConnection::getnInput(char* const theBuffer, const size_t theLen)
+{
+    size_t len = inputQueueM.getn(theBuffer, theLen);
+    if (stopReadingM)
+    {
+        Net::Buffer::BufferStatus postBufferStatus = inputQueueM.getStatus();
+        if (postBufferStatus == Net::Buffer::BufferLowE)
+        {
+            {
+                boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
+                stopReadingM = false;
+            }
+            event_add(readEvtM, NULL);
+        }
+    }
+    return len;
+}
+
 //-----------------------------------------------------------------------------
 
 Net::Buffer::BufferStatus 
-SocketConnection::send(char* const theBuffer, const size_t theLen)
+SocketConnection::sendn(char* const theBuffer, const size_t theLen)
 {
-    Net::Buffer::BufferStatus bufferStatus = outputQueueM.put(theBuffer, theLen);
+    if (theLen == 0)
+        return outputQueueM.getStatus();
+
+    size_t len = outputQueueM.putn(theBuffer, theLen);
+    if (0 == len)
+    {
+        event_add(writeEvtM, NULL);
+        return Net::Buffer::BufferNotEnoughE; 
+    }
     event_add(writeEvtM, NULL);
-    return bufferStatus;
+    return outputQueueM.getStatus();
 }
 
 //-----------------------------------------------------------------------------
@@ -125,23 +177,33 @@ int SocketConnection::asynWrite(int theFd, short theEvt)
     return processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::onWrite, this, theFd, theEvt)));
 }
 
+//-----------------------------------------------------------------------------
+
+void SocketConnection::setLowWaterMarkWatcher(Watcher* theWatcher)
+{
+    boost::lock_guard<boost::mutex> lock(watcherMutexM);
+    if (watcherM) 
+    {
+        delete watcherM;
+    }
+    watcherM = theWatcher;
+}
 
 //-----------------------------------------------------------------------------
 
 void SocketConnection::onWrite(int theFd, short theEvt)
 {
 	char buffer[1024]= {0};
-	Net::Buffer::BufferStatus bufferStatus = outputQueueM.peek(buffer, sizeof(buffer));
-    while (CloseE != statusM && bufferStatus != Net::Buffer::BufferNotEnoughE)
+	size_t peekLen = outputQueueM.peek(buffer, sizeof(buffer));
+    int writeLen = 0;
+    while (CloseE != statusM && peekLen > 0)
     {
-        int len = buffer->lenM - buffer->offsetM;
-        len = write(theFd, buffer->rawM + buffer->offsetM, len);
-        if (len == -1) 
+        writeLen = write(theFd, buffer, peekLen);
+        if (writeLen < 0) 
         {
             if (errno == EINTR || errno == EAGAIN) 
             {
-                event_add(writeEvtM, NULL);
-                return;
+                break;
             }
             else 
             {
@@ -150,20 +212,20 @@ void SocketConnection::onWrite(int theFd, short theEvt)
                 return;
             }
         }
-        else if ((buffer->offsetM + len) < buffer->lenM) 
+        outputQueueM.commitRead(writeLen);
+        peekLen = outputQueueM.peek(buffer, sizeof(buffer));
+    }
+
+    Net::Buffer::BufferStatus bufferStatus = outputQueueM.getStatus();
+    if (watcherM && (bufferStatus == Net::Buffer::BufferLowE))
+    {
+        boost::lock_guard<boost::mutex> lock(watcherMutexM);
+        if (watcherM) 
         {
-            buffer->offsetM += len;
-            event_add(writeEvtM, NULL);
-            return;
+            (*watcherM)(fdM, this);
+            delete watcherM;
+            watcherM = NULL;
         }
-        else if ((buffer->offsetM + len) > buffer->lenM)
-        {
-            printf("Socket write failure");
-            statusM = CloseE;
-            return;
-        }
-        outputQueueM.pop_front();
-        delete buffer;
     }
 
     if (CloseE != statusM && !outputQueueM.empty())
