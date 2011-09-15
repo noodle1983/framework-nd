@@ -33,6 +33,7 @@ namespace Buffer
         }
         inline bool empty() {return writeIndexM == readIndexM;}
         inline size_t size(){return (writeIndexM - readIndexM);}
+        inline size_t unusedSize(){return sizeM - (writeIndexM - readIndexM);}
 
         size_t put(const char* const theBuffer, const size_t theLen);
         size_t get(char* const theBuffer, const size_t theLen);

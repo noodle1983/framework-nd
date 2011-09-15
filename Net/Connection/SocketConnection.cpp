@@ -43,7 +43,7 @@ SocketConnection::SocketConnection(
 {
 	readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
 	writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
-    event_add(readEvtM, NULL);
+    addReadEvent();
 }
 
 //-----------------------------------------------------------------------------
@@ -56,6 +56,30 @@ SocketConnection::~SocketConnection()
 
 //-----------------------------------------------------------------------------
 
+void SocketConnection::addReadEvent()
+{
+	if (CloseE == statusM)
+        return;
+	if (-1 == event_add(readEvtM, NULL))
+	{
+		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addReadEvent, this)));
+	}
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::addWriteEvent()
+{
+	if (CloseE == statusM)
+        return;
+	if (-1 == event_add(writeEvtM, NULL))
+	{
+		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, this)));
+	}
+}
+		
+//-----------------------------------------------------------------------------
+
 int SocketConnection::asynRead(int theFd, short theEvt)
 {
     return processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::onRead, this, theFd, theEvt)));
@@ -65,10 +89,21 @@ int SocketConnection::asynRead(int theFd, short theEvt)
 
 void SocketConnection::onRead(int theFd, short theEvt)
 {
-
     char buffer[1024]= {0};
+	size_t readBufferLeft = inputQueueM.unusedSize();
+	size_t readLen = (readBufferLeft < sizeof(buffer)) ? readBufferLeft : sizeof(buffer);
+	if (readLen == 0)
+	{
+		if (!stopReadingM)
+		{
+			boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
+	        stopReadingM = true;
+		}
+		protocolM->asynHandleInput(fdM, this);
+		return;
+	}
 
-    int len = read(theFd, buffer, sizeof(buffer));
+    int len = read(theFd, buffer, readLen);
     if (len <= 0) 
     {
         printf("Client disconnected.\n");
@@ -106,7 +141,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
     }
     else
     {
-        event_add(readEvtM, NULL);
+        addReadEvent();
     }
     protocolM->asynHandleInput(fdM, this);
 }
@@ -124,7 +159,7 @@ size_t SocketConnection::getInput(char* const theBuffer, const size_t theLen)
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            event_add(readEvtM, NULL);
+            addReadEvent();
         }
     }
     return len;
@@ -144,7 +179,7 @@ size_t SocketConnection::getnInput(char* const theBuffer, const size_t theLen)
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            event_add(readEvtM, NULL);
+            addReadEvent();
         }
     }
     return len;
@@ -161,10 +196,10 @@ SocketConnection::sendn(char* const theBuffer, const size_t theLen)
     size_t len = outputQueueM.putn(theBuffer, theLen);
     if (0 == len)
     {
-        event_add(writeEvtM, NULL);
+        addWriteEvent();
         return Net::Buffer::BufferNotEnoughE; 
     }
-    event_add(writeEvtM, NULL);
+    addWriteEvent();
     return outputQueueM.getStatus();
 }
 

@@ -44,6 +44,8 @@ namespace Connection{
             evutil_socket_t theFd);
         ~SocketConnection();
 
+        void addReadEvent();
+        void addWriteEvent();
         
         int asynRead(int theFd, short theEvt);
         int asynWrite(int theFd, short theEvt);
