@@ -74,6 +74,7 @@ void SocketConnection::addWriteEvent()
         return;
 	if (-1 == event_add(writeEvtM, NULL))
 	{
+        printf("add write event failed! fd:%d, con addr:%lx", fdM, (size_t)this);
 		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, this)));
 	}
 }
@@ -135,7 +136,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
     if (Net::Buffer::BufferHighE == inputQueueM.getStatus()
             || Net::Buffer::BufferNotEnoughE == inputQueueM.getStatus())
     {
-        printf("Flow Control:Socket %d stop reading\n", fdM); 
+        //printf("Flow Control:Socket %d stop reading\n", fdM); 
         boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
         stopReadingM = true;
     }
@@ -196,6 +197,7 @@ SocketConnection::sendn(char* const theBuffer, const size_t theLen)
     size_t len = outputQueueM.putn(theBuffer, theLen);
     if (0 == len)
     {
+        err(1, "should not be here!\n");
         addWriteEvent();
         return Net::Buffer::BufferNotEnoughE; 
     }
@@ -265,7 +267,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
 
     if (CloseE != statusM && !outputQueueM.empty())
     {
-		event_add(writeEvtM, NULL);
+		addWriteEvent();
     }
     
 }

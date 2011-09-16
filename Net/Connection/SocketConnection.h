@@ -72,7 +72,7 @@ namespace Connection{
         Net::Buffer::KfifoBuffer inputQueueM;
         Net::Buffer::KfifoBuffer outputQueueM;
 
-        enum Status{ActiveE, CloseE};
+        enum Status{ActiveE = 0, CloseE = 1};
         mutable int statusM;
 
         boost::mutex stopReadingMutexM;

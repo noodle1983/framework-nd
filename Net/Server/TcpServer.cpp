@@ -80,8 +80,8 @@ void TcpServer::onAccept(int theFd, short theEvt)
 
     SocketConnection* connection = new SocketConnection(protocolM, reactorM, processorM, clientFd);
 
-    printf("Accepted connection from %s, fd:%d\n", 
-        inet_ntoa(clientAddr.sin_addr), clientFd);
+    printf("Accepted connection from %s, fd:%d, con addr:%lx\n", 
+        inet_ntoa(clientAddr.sin_addr), clientFd, (size_t)connection);
 }
 
 //-----------------------------------------------------------------------------
