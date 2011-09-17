@@ -49,11 +49,9 @@ void BoostWorker::run()
     {
         {
             boost::unique_lock<boost::mutex> lock(queueMutexM);
-            if (jobQueueM.empty())
+            while (jobQueueM.empty())
             {
                 queueCondM.wait(lock);
-                if (jobQueueM.empty())
-                    return;
             }
 
             job = jobQueueM.front();
