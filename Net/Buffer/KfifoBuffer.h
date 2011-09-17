@@ -47,8 +47,8 @@ namespace Buffer
         char* rawM;
         size_t sizeM;
         size_t maskM;
-        size_t readIndexM;
-        size_t writeIndexM;
+        mutable size_t readIndexM;
+        mutable size_t writeIndexM;
         size_t highWaterMarkM;
         size_t lowWaterMarkM;
     };
