@@ -22,7 +22,6 @@ CFLAGs=-Wall -g $(INC)
 LDFLAGS=-lrt
 
 
-
 OUTDIR=.lib
 
 #########################################
@@ -53,9 +52,17 @@ TESTOUTDIR=$(addprefix $(OUTDIR)/, $(TESTDIR))
 TESTOBJECTS=$(addprefix $(OUTDIR)/, $(TMPTESTOBJECTS))
 
 #########################################
+#               Depend                  #
+#########################################
+DEPENDFILES=$(patsubst %.o, %.d, $(OBJECTS))
+DEPENDTARGET=$(patsubst %.d, %.d.tmp, $(DEPENDFILES))
+
+#########################################
 #               Rules                   #
 #########################################
-$(TARGET):$(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
+all:$(TARGET)
+
+$(TARGET):depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
 	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS)
 
 $(TESTTARGET):$(TARGET) $(TESTOUTDIR) $(TESTOBJECTS)
@@ -70,13 +77,22 @@ $(TESTOUTDIR):
 $(OUTSUBDIR):
 	@if [ ! -d $@ ]; then mkdir $@; fi;
 
+-include $(DEPENDFILES)
+$(OUTDIR)/%.d.tmp:%.cpp
+	@echo "building dependancy for $<..."
+	@set -e; rm -f $@ $(OUTDIR)/$*.d; \
+	$(CC) $(CXXFLAGS) -MM -c $< > $@; \
+	sed 's,\(.*\)\.o[ :]*,$(OUTDIR)/$*.o $@: ,g' <$@ >$(OUTDIR)/$*.d; 
+
 $(OUTDIR)/%.o:%.cpp
 	$(CC) $(CXXFLAGS) -o $@ -c $<
 
 $(OUTDIR)/%.o:%.c
 	$(CC) $(CXXFLAGS) -o $@ -c $<
 
+depend: $(OUTDIR) $(OUTSUBDIR) $(DEPENDTARGET)
 
+.PHONY:clean depend
 clean:
 	@rm -rf $(OUTDIR)
 
