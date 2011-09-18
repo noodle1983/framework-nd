@@ -33,7 +33,8 @@ SocketConnection::SocketConnection(
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor, 
             evutil_socket_t theFd)
-    : protocolM(theProtocol)
+    : selfM(this)
+    , protocolM(theProtocol)
     , reactorM(theReactor)
     , processorM(theProcessor)
     , fdM(theFd)
@@ -99,7 +100,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
 			boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
 	        stopReadingM = true;
 		}
-		protocolM->asynHandleInput(fdM, this);
+		protocolM->asynHandleInput(fdM, selfM);
 		return;
 	}
 
@@ -107,14 +108,14 @@ void SocketConnection::onRead(int theFd, short theEvt)
     if (len <= 0) 
     {
         printf("Client disconnected.\n");
-        close();
+        _close();
         return;
     }
     else if (len > SSIZE_MAX) 
     {
         printf("Socket failure, disconnecting client: %s",
             strerror(errno));
-        close();
+        _close();
         return;
     }
     size_t putLen = inputQueueM.put(buffer, len);
@@ -145,12 +146,15 @@ void SocketConnection::onRead(int theFd, short theEvt)
     {
         addReadEvent();
     }
-    protocolM->asynHandleInput(fdM, this);
+    protocolM->asynHandleInput(fdM, selfM);
 }
 //-----------------------------------------------------------------------------
 
 size_t SocketConnection::getInput(char* const theBuffer, const size_t theLen)
 {
+    if (CloseE == statusM)
+        return 0;
+
     size_t len = inputQueueM.get(theBuffer, theLen);
     if (stopReadingM)
     {
@@ -161,7 +165,7 @@ size_t SocketConnection::getInput(char* const theBuffer, const size_t theLen)
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            addReadEvent();
+            processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addReadEvent, selfM)));
         }
     }
     return len;
@@ -171,6 +175,9 @@ size_t SocketConnection::getInput(char* const theBuffer, const size_t theLen)
 
 size_t SocketConnection::getnInput(char* const theBuffer, const size_t theLen)
 {
+    if (CloseE == statusM)
+        return 0;
+
     size_t len = inputQueueM.getn(theBuffer, theLen);
     if (stopReadingM)
     {
@@ -181,7 +188,7 @@ size_t SocketConnection::getnInput(char* const theBuffer, const size_t theLen)
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            addReadEvent();
+            processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addReadEvent, selfM)));
         }
     }
     return len;
@@ -192,17 +199,24 @@ size_t SocketConnection::getnInput(char* const theBuffer, const size_t theLen)
 Net::Buffer::BufferStatus 
 SocketConnection::sendn(char* const theBuffer, const size_t theLen)
 {
+    if (CloseE == statusM)
+        return Net::Buffer::BufferNotEnoughE;
+
     if (theLen == 0)
         return outputQueueM.getStatus();
 
-    size_t len = outputQueueM.putn(theBuffer, theLen);
+    size_t len = 0;
+    {
+        boost::lock_guard<boost::mutex> lock(outputQueueMutexM);
+        len = outputQueueM.putn(theBuffer, theLen);
+    }
     if (0 == len)
     {
-        err(1, "should not be here!\n");
-        addWriteEvent();
+        printf("failed to put to the write queue!\n");
+		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
         return Net::Buffer::BufferNotEnoughE; 
     }
-    addWriteEvent();
+    processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
     return outputQueueM.getStatus();
 }
 
@@ -246,7 +260,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
             else 
             {
                 printf("Socket write failure");
-                statusM = CloseE;
+                _close();
                 return;
             }
         }
@@ -260,7 +274,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
         boost::lock_guard<boost::mutex> lock(watcherMutexM);
         if (watcherM) 
         {
-            (*watcherM)(fdM, this);
+            (*watcherM)(fdM, selfM);
             delete watcherM;
             watcherM = NULL;
         }
@@ -275,19 +289,30 @@ void SocketConnection::onWrite(int theFd, short theEvt)
 
 //-----------------------------------------------------------------------------
 
-void SocketConnection::release()
+void SocketConnection::close()
 {
-    delete this;
+    if (CloseE == statusM)
+        return;
+    processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::_close, this)));
 }
 
 //-----------------------------------------------------------------------------
 
-void SocketConnection::close()
+void SocketConnection::_release()
 {
+    selfM.reset();
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::_close()
+{
+    if (CloseE == statusM)
+        return;
     statusM = CloseE;
 	reactorM->delEvent(readEvtM);
 	reactorM->delEvent(writeEvtM);
-    processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::release, this)));
+    processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::_release, this)));
 }
 
 //-----------------------------------------------------------------------------

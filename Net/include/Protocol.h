@@ -1,13 +1,15 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#include <boost/bind.hpp>
 
 namespace Net
 {
-namespace Connection
-{
-    class SocketConnection;
-}
+    namespace Connection
+    {
+        class SocketConnection;
+        typedef boost::shared_ptr<SocketConnection> SocketConnectionPtr;
+    }
     enum ProtocolAccept
     {
         REJECTE = -1,
@@ -18,7 +20,7 @@ namespace Connection
     {
     public:
         virtual ~ProtocolInterface() {};
-        virtual int asynHandleInput(int theFd, Connection::SocketConnection* connection) = 0;
+        virtual int asynHandleInput(int theFd, Connection::SocketConnectionPtr connection) = 0;
     };
 
 }

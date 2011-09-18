@@ -3,6 +3,7 @@
 
 #include "Protocol.h"
 
+
 namespace Processor
 {
     class BoostProcessor;
@@ -12,10 +13,6 @@ namespace Net
     namespace Reactor
     {
         class Reactor;
-    }
-    namespace Connection
-    {
-        class SocketConnection;
     }
 namespace Protocol
 {
@@ -28,9 +25,9 @@ namespace Protocol
             Processor::BoostProcessor* theProcessor);
         ~EchoProtocol();
 
-        int asynHandleInput(int theFd, Connection::SocketConnection* connection);
+        int asynHandleInput(int theFd, Connection::SocketConnectionPtr connection);
     private:
-        int handleInput(Connection::SocketConnection* connection);
+        int handleInput(Connection::SocketConnectionPtr connection);
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
     };

@@ -23,14 +23,14 @@ EchoProtocol::~EchoProtocol()
 
 //-----------------------------------------------------------------------------
 
-int EchoProtocol::asynHandleInput(int theFd, Connection::SocketConnection* connection)
+int EchoProtocol::asynHandleInput(int theFd, Connection::SocketConnectionPtr connection)
 {
     return processorM->process(theFd, new Processor::Job(boost::bind(&EchoProtocol::handleInput, this, connection)));
 }
 
 //-----------------------------------------------------------------------------
 
-int EchoProtocol::handleInput(Connection::SocketConnection* connection)
+int EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
 {
 	char buffer[1024];
     size_t len = 1;
