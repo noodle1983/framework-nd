@@ -74,7 +74,6 @@ void SocketConnection::addWriteEvent()
         return;
 	if (-1 == event_add(writeEvtM, NULL))
 	{
-        printf("add write event failed! fd:%d, con addr:%lx", fdM, (size_t)this);
 		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, this)));
 	}
 }
@@ -124,7 +123,9 @@ void SocketConnection::onRead(int theFd, short theEvt)
     while(Net::Buffer::BufferOkE == inputQueueM.getStatus()
         || Net::Buffer::BufferLowE == inputQueueM.getStatus() )
 	{
-        len = read(theFd, buffer, sizeof(buffer));
+        readBufferLeft = inputQueueM.unusedSize();
+        readLen = (readBufferLeft < sizeof(buffer)) ? readBufferLeft : sizeof(buffer);
+        len = read(theFd, buffer, readLen);
         if (len <= 0 || len > SSIZE_MAX)
         {
             break;
