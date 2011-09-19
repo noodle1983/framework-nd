@@ -25,7 +25,7 @@ EchoProtocol::~EchoProtocol()
 
 int EchoProtocol::asynHandleInput(int theFd, Connection::SocketConnectionPtr connection)
 {
-    return processorM->process(theFd, new Processor::Job(boost::bind(&EchoProtocol::handleInput, this, connection)));
+    return processorM->process(theFd + 1, new Processor::Job(boost::bind(&EchoProtocol::handleInput, this, connection)));
 }
 
 //-----------------------------------------------------------------------------
