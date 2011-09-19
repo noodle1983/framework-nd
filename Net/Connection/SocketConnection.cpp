@@ -52,6 +52,11 @@ SocketConnection::SocketConnection(
 SocketConnection::~SocketConnection()
 {
     evutil_closesocket(fdM);
+    if (watcherM)
+    {
+        delete watcherM;
+        watcherM = NULL;
+    }
     printf ("close fd:%d\n", fdM);
 }
 
