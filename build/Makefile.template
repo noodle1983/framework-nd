@@ -6,22 +6,16 @@ PROJBASE=$(PWD)/..
 #########################################
 #                target                 #
 #########################################
-TARGET=libProcessor.a
-SUBDIR=src 
+TARGET=
+SUBDIR=
 
 #########################################
 #      header and lib dependancy        #
 #########################################
-INC_DIR=-I. \
-     -I./include \
-     -I./src \
-     -I$(PROJBASE)/boost/include
-
-STATIC_LIB= \
-		$(PROJBASE)/boost/lib/libboost_thread.a \
-
+INC_DIR= -I. 
+STATIC_LIB= 
 SHARED_LIB_DIR=
-SHARED_LIB= -pthread
+SHARED_LIB=
 
 #########################################
 #              compiler                 #

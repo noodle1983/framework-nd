@@ -1,0 +1,71 @@
+OUTDIR=.lib
+#########################################
+#        TARGET                         #
+#########################################
+CFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.c))
+CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp))
+TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \
+           $(patsubst %.c, %.o, $(CFILES))
+OUTSUBDIR=$(addprefix $(OUTDIR)/, $(SUBDIR))
+OBJECTS=$(addprefix $(OUTDIR)/, $(TMPOBJECTS))
+
+#########################################
+#        Test    Target                 #
+#########################################
+TESTDIR=UnitTest
+TESTCPPFILES=$(foreach DIR, $(TESTDIR), $(wildcard $(DIR)/*.cpp))
+TESTTARGET=$(basename $(notdir $(TESTOBJECTS)))
+TMPTESTOBJECTS=$(patsubst %.cpp, %.o, $(TESTCPPFILES))
+TESTOUTSUBDIR=$(addprefix $(OUTDIR)/, $(TESTDIR))
+TESTOBJECTS=$(addprefix $(OUTDIR)/, $(TMPTESTOBJECTS))
+
+#########################################
+#               Depend                  #
+#########################################
+DEPENDFILES=$(patsubst %.o, %.d, $(OBJECTS))
+DEPENDTARGET=$(patsubst %.d, %.d.tmp, $(DEPENDFILES))
+TESTDEPENDFILES=$(patsubst %.o, %.d, $(TESTOBJECTS))
+TESTDEPENDTARGET=$(patsubst %.d, %.d.tmp, $(TESTDEPENDFILES))
+
+#########################################
+#               Rules                   #
+#########################################
+all:$(TARGET)
+test:$(TESTTARGET)
+
+$(TARGET):depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
+	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS)
+
+$(TESTTARGET):testdepend $(TARGET) $(TESTOUTSUBDIR) $(TESTOBJECTS)
+	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR)/$(TARGET) $(LDFLAGS) -o $(OUTDIR)/$@
+
+$(OUTDIR):
+	@if [ ! -d $@ ]; then mkdir $@; fi;
+
+$(TESTOUTSUBDIR):
+	@if [ ! -d $@ ]; then mkdir $@; fi;
+
+$(OUTSUBDIR):
+	@if [ ! -d $@ ]; then mkdir $@; fi;
+
+-include $(DEPENDFILES)
+$(OUTDIR)/%.d.tmp:%.cpp
+	@echo "building dependancy for $<..."
+	@set -e; rm -f $@ $(OUTDIR)/$*.d; \
+	$(CC) $(CXXFLAGS) -MM -c $< > $@; \
+	sed 's,\(.*\)\.o[ :]*,$(OUTDIR)/$*.o $@: ,g' <$@ >$(OUTDIR)/$*.d; 
+
+$(OUTDIR)/%.o:%.cpp
+	$(CC) $(CXXFLAGS) -c $< -o $@
+
+$(OUTDIR)/%.o:%.c
+	$(CC) $(CXXFLAGS) -c $< -o $@
+
+depend: $(OUTDIR) $(OUTSUBDIR) $(DEPENDTARGET)
+testdepend: $(OUTDIR) $(TESTOUTSUBDIR) $(TESTDEPENDTARGET)
+
+.PHONY:clean depend test testdepend
+clean:
+	@rm -rf $(OUTDIR)
+
+
