@@ -1,0 +1,11 @@
+#########################################
+#      header and lib dependancy        #
+#########################################
+INC_DIR+= -I$(PROJBASE)/3PP/log4cplus/include
+
+STATIC_LIB+= \
+    $(PROJBASE)/3PP/log4cplus/lib/liblog4cplus.a \
+
+SHARED_LIB_DIR+=
+SHARED_LIB+= 
+

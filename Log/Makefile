@@ -15,14 +15,14 @@ SUBDIR=src
 INC_DIR=-I. \
      -I./include \
      -I./src \
-     -I$(PROJBASE)/boost/include \
-     -I$(PROJBASE)/log4cplus/include
 
 STATIC_LIB= \
-		$(PROJBASE)/boost/lib/libboost_thread.a \
 
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread
+
+include $(PROJBASE)/build/makefile.staticlib.boost.linux
+include $(PROJBASE)/build/makefile.staticlib.log4cplus.linux
 
 #########################################
 #              compiler                 #

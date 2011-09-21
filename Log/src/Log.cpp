@@ -11,6 +11,7 @@ using namespace Log;
 
 static boost::mutex logInstanceMutex;
 static boost::shared_ptr<Logger> logInstanceReleaser;
+Logger* Logger::logM;
 
 //-----------------------------------------------------------------------------
 
@@ -49,7 +50,7 @@ void Logger::init()
                                                     10 * 1024 * 1024, // max file size
                                                     10               //max backup index
                                                     ));
-    std::string pattern = "%d{%m/%d/%y %H:%M:%S} %t %p [%l] %m %n";
+    std::string pattern = "%d{%m/%d/%y %H:%M:%S} %t %p [%l] %m%n";
     std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(pattern));
     append->setLayout(layout);
     logImplM = log4cplus::Logger::getInstance("Logger");
