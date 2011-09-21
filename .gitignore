@@ -1,0 +1,14 @@
+3PP/boost/include/
+3PP/boost/lib/
+3PP/libevent/bin/
+3PP/libevent/include/
+3PP/libevent/lib/
+3PP/log4cplus/include/
+3PP/log4cplus/lib/
+*/.lib
+*.swp
+*.log
+*.bz2
+cscope.*
+.gitignore
+*.vim
