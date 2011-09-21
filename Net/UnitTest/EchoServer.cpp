@@ -2,6 +2,7 @@
 #include <Server/TcpServer.h>
 #include <Reactor/Reactor.h>
 #include <Protocol/EchoProtocol.h>
+#include <Log.h>
 
 #include <event.h>
 #include <event2/thread.h>
@@ -13,7 +14,7 @@ static boost::mutex closedMutexM;
 static boost::condition_variable closedCondM;
 void sigint(int)
 {
-    printf("stopping...\n");
+    DEBUG("receive int signal. stopping...");
     boost::lock_guard<boost::mutex> lock(closedMutexM);
     closed = true;
     closedCondM.notify_one();
@@ -53,6 +54,7 @@ int main()
 
     processor.stop();
     reactor.stop();
+    DEBUG("EchoServer stopped.");
     return 0;
 }
 

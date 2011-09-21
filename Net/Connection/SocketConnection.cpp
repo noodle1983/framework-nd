@@ -2,6 +2,7 @@
 #include "Connection/SocketConnection.h"
 #include "Reactor/Reactor.h"
 #include "Protocol.h"
+#include "Log.h"
 
 #include <unistd.h>
 #include <errno.h>
@@ -57,7 +58,7 @@ SocketConnection::~SocketConnection()
         delete watcherM;
         watcherM = NULL;
     }
-    printf ("close fd:%d\n", fdM);
+    DEBUG("close fd:" << fdM);
 }
 
 //-----------------------------------------------------------------------------
@@ -112,14 +113,13 @@ void SocketConnection::onRead(int theFd, short theEvt)
     int len = read(theFd, buffer, readLen);
     if (len <= 0) 
     {
-        printf("Client disconnected.\n");
+        DEBUG("Client disconnected. fd:" << fdM);
         _close();
         return;
     }
     else if (len > SSIZE_MAX) 
     {
-        printf("Socket failure, disconnecting client: %s",
-            strerror(errno));
+        WARN("Socket failure, disconnecting client:" << strerror(errno));
         _close();
         return;
     }
@@ -143,7 +143,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
     if (Net::Buffer::BufferHighE == inputQueueM.getStatus()
             || Net::Buffer::BufferNotEnoughE == inputQueueM.getStatus())
     {
-        //printf("Flow Control:Socket %d stop reading\n", fdM); 
+        //TRACE("Flow Control:Socket " << fdM << " stop reading.", fdM); 
         boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
         stopReadingM = true;
     }
@@ -217,7 +217,7 @@ SocketConnection::sendn(char* const theBuffer, const size_t theLen)
     }
     if (0 == len)
     {
-        printf("failed to put to the write queue!\n");
+        ERROR("outage of the connection's write queue!");
 		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
         return Net::Buffer::BufferNotEnoughE; 
     }
@@ -264,7 +264,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
             }
             else 
             {
-                printf("Socket write failure");
+                DEBUG("Socket write failure.");
                 _close();
                 return;
             }
