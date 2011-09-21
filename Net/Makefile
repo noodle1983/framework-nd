@@ -1,20 +1,5 @@
 PROJBASE=$(PWD)/..
 
-INC_DIR= -I. \
-     -I./include \
-     -I$(PROJBASE)/boost/include \
-     -I$(PROJBASE)/Processor/include \
-     -I$(PROJBASE)/libevent/include
-
-STATIC_LIB= \
-    $(PROJBASE)/libevent/lib/libevent.a \
-    $(PROJBASE)/libevent/lib/libevent_pthreads.a \
-    $(PROJBASE)/Processor/.lib/libProcessor.a \
-    $(PROJBASE)/boost/lib/libboost_thread.a \
-
-SHARED_LIB_DIR=
-SHARED_LIB=-lrt
-
 
 #########################################
 #                Target                 #
@@ -26,6 +11,29 @@ SUBDIR=Connection \
         Protocol \
         Buffer
 
+#########################################
+#      header and lib dependancy        #
+#########################################
+INC_DIR= -I. \
+     -I./include \
+     -I$(PROJBASE)/Processor/include \
+
+STATIC_LIB= \
+    $(PROJBASE)/Processor/.lib/libProcessor.a \
+
+SHARED_LIB_DIR=
+SHARED_LIB=-lrt
+
+include $(PROJBASE)/build/makefile.staticlib.boost.linux
+include $(PROJBASE)/build/makefile.staticlib.libevent.linux
+
+#########################################
+#              compiler                 #
+#########################################
 include $(PROJBASE)/build/makefile.compiler
+
+#########################################
+#              rules                    #
+#########################################
 include $(PROJBASE)/build/makefile.staticlib.rules
 

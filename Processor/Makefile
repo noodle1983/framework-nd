@@ -15,13 +15,12 @@ SUBDIR=src
 INC_DIR=-I. \
      -I./include \
      -I./src \
-     -I$(PROJBASE)/boost/include
 
-STATIC_LIB= \
-		$(PROJBASE)/boost/lib/libboost_thread.a \
-
+STATIC_LIB= 
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread
+
+include $(PROJBASE)/build/makefile.staticlib.boost.linux
 
 #########################################
 #              compiler                 #
