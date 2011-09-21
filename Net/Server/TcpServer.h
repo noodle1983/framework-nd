@@ -26,6 +26,7 @@ namespace Server{
             Processor::BoostProcessor* theProcessor);
         virtual ~TcpServer();
 
+        void addAcceptEvent();
         int startAt(const int thePort);
         void stop();
 

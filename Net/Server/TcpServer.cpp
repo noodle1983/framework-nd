@@ -21,7 +21,7 @@ using namespace Net::Connection;
 void on_accept(int theFd, short theEvt, void *theArg)
 {
     TcpServer* server = (TcpServer*)theArg;
-    server->onAccept(theFd, theEvt);
+    server->asynAccept(theFd, theEvt);
 }
 
 //-----------------------------------------------------------------------------
@@ -51,6 +51,16 @@ TcpServer::~TcpServer()
 
 //-----------------------------------------------------------------------------
 
+void TcpServer::addAcceptEvent()
+{
+	if (-1 == event_add(acceptEvtM, NULL))
+	{
+		processorM->process(fdM, new Processor::Job(boost::bind(&TcpServer::addAcceptEvent, this)));
+	}
+}
+
+//-----------------------------------------------------------------------------
+
 int TcpServer::asynAccept(int theFd, short theEvt)
 {
     return processorM->process(fdM, new Processor::Job(boost::bind(&TcpServer::onAccept, this, theFd, theEvt)));
@@ -71,18 +81,22 @@ void TcpServer::onAccept(int theFd, short theEvt)
         WARN("accept failed");
         return;
     }
-
-    if (evutil_make_socket_nonblocking(clientFd) < 0)
+    while(clientFd >= 0)
     {
-        WARN("failed to set client socket non-blocking");
-        return;
+        if (evutil_make_socket_nonblocking(clientFd) < 0)
+        {
+            WARN("failed to set client socket non-blocking");
+            return;
+        }
+        SocketConnection* connection = new SocketConnection(protocolM, reactorM, processorM, clientFd);
+        DEBUG("Accepted connection from "<< inet_ntoa(clientAddr.sin_addr) 
+                << ", fd:" << clientFd
+                << ", con addr:" << std::hex << (size_t)connection); 
+
+        clientFd = accept(theFd, (struct sockaddr *)&clientAddr, &clientLen);
     }
+    addAcceptEvent();
 
-    SocketConnection* connection = new SocketConnection(protocolM, reactorM, processorM, clientFd);
-
-    DEBUG("Accepted connection from "<< inet_ntoa(clientAddr.sin_addr) 
-            << ", fd:" << clientFd
-            << ", con addr:" << std::hex << (size_t)connection); 
 }
 
 //-----------------------------------------------------------------------------
@@ -131,8 +145,8 @@ int TcpServer::startAt(const int thePort)
         exit(-1);
     }
 
-	acceptEvtM = reactorM->newEvent(fdM, EV_READ|EV_PERSIST, on_accept, this);
-    event_add(acceptEvtM, NULL);
+	acceptEvtM = reactorM->newEvent(fdM, EV_READ, on_accept, this);
+    addAcceptEvent();
 
     DEBUG("Server has been listening at port " << portM);
     return 0;    

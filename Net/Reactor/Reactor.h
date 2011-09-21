@@ -25,8 +25,12 @@ namespace Reactor
                 void* theArg);
         inline void delEvent(struct event*& theEvent);
         
+        inline struct event *newTimer(
+                event_callback_fn theFn, 
+                void* theArg);
     private:
         struct event_base* evtBaseM; 
+        struct event* heartbeatEventM;//to avoid the event loop exit
         boost::thread_group threadsM;
     };
 
@@ -49,6 +53,14 @@ void Reactor::delEvent(struct event*& theEvent)
     theEvent = NULL;
 }
 
+//-----------------------------------------------------------------------------
+struct event* Reactor::newTimer(
+                event_callback_fn theFn, 
+                void* theArg)
+{
+    return evtimer_new(evtBaseM, theFn, theArg);
+}
+//-----------------------------------------------------------------------------
 }
 }
 
