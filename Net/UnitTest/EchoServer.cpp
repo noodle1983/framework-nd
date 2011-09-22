@@ -12,9 +12,9 @@
 static int closed = false;
 static boost::mutex closedMutexM;
 static boost::condition_variable closedCondM;
-void sigint(int)
+void sig_stop(int sig)
 {
-    DEBUG("receive int signal. stopping...");
+    DEBUG("receive signal " << sig << ". stopping...");
     boost::lock_guard<boost::mutex> lock(closedMutexM);
     closed = true;
     closedCondM.notify_one();
@@ -36,7 +36,8 @@ int main()
 
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, SIG_IGN);
-    signal(SIGINT, sigint);
+    signal(SIGTERM, sig_stop);
+    signal(SIGINT, sig_stop);
     evthread_use_pthreads();
     Processor::BoostProcessor processor(4);
     processor.start();
