@@ -33,6 +33,7 @@ int main()
         printf("server start with pid %d.\n", pid);
         return 0;
     }
+    setsid();
 
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, SIG_IGN);
