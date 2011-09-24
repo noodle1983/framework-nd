@@ -20,7 +20,8 @@ STATIC_LIB=
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread
 
-include $(PROJBASE)/build/makefile.staticlib.boost.linux
+include $(PROJBASE)/build/makefile.boost.header
+include $(PROJBASE)/build/makefile.staticlib.boost.thread.linux
 
 #########################################
 #              compiler                 #

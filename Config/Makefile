@@ -21,7 +21,7 @@ STATIC_LIB= \
 SHARED_LIB_DIR=
 SHARED_LIB=
 
-include $(PROJBASE)/build/makefile.staticlib.boost.linux
+include $(PROJBASE)/build/makefile.boost.header
 
 #########################################
 #              compiler                 #
