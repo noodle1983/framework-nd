@@ -12,3 +12,5 @@
 cscope.*
 .gitignore
 *.vim
+*.bak
+*.gz
