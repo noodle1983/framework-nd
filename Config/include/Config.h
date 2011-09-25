@@ -12,14 +12,19 @@ namespace Config
         ~ConfigCenter();
         static ConfigCenter* instance();
 
-        inline int get(const std::string theKey, const int theDefault = 0)
+        template<typename ValueType>
+        inline ValueType get(const std::string& theKey, const ValueType theDefault)
         {
-            return configDataM.get(theKey, theDefault);
+            return configDataM.get<ValueType>(theKey, theDefault);
         }
-        inline std::string get(const std::string theKey, const std::string theDefault = "")
+        template<typename ValueType>
+        inline void set(const std::string& theKey, const ValueType& theValue)
         {
-            return configDataM.get<std::string>(theKey, theDefault);
+            configDataM.put(theKey, theValue);
         }
+
+        void loadXml(const std::string theXmlPath); 
+        void saveXml(const std::string theXmlPath); 
 
     private:
         ConfigCenter();

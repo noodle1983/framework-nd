@@ -1,4 +1,5 @@
 #include "Config.h"
+#include "Log.h"
 
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
@@ -45,10 +46,30 @@ ConfigCenter::~ConfigCenter()
 
 void ConfigCenter::init()
 {
-    boost::property_tree::xml_parser::read_xml("config.xml", configDataM);
+    loadXml("config.xml");
 }
 
 //-----------------------------------------------------------------------------
+
+
+void ConfigCenter::loadXml(const std::string theXmlPath) 
+{
+    try
+    {
+        boost::property_tree::xml_parser::read_xml(theXmlPath, configDataM);
+    }
+    catch (boost::property_tree::xml_parser::xml_parser_error& e)
+    {
+        WARN("config file is not found:" << theXmlPath); 
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::saveXml(const std::string theXmlPath) 
+{
+    boost::property_tree::xml_parser::write_xml(theXmlPath, configDataM);
+}
 
 
 
