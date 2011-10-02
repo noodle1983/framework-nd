@@ -1,0 +1,12 @@
+#########################################
+#      header and lib dependancy        #
+#########################################
+INC_DIR+= -I$(PROJBASE)/3PP/ruby/include/ruby-1.9.1 \
+    -I$(PROJBASE)/3PP/ruby/include/ruby-1.9.1/i686-linux
+
+STATIC_LIB+= \
+    $(PROJBASE)/3PP/ruby/lib/libruby-static.a \
+
+SHARED_LIB_DIR+=
+SHARED_LIB+= 
+
