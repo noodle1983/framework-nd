@@ -7,16 +7,14 @@ PROJBASE=$(CURDIR)/..
 #                target                 #
 #########################################
 TARGET=libScript.a
-SUBDIR=ruby \
-	   swig
+SUBDIR=Ruby 
 
 #########################################
 #      header and lib dependancy        #
 #########################################
 INC_DIR=-I. \
      -I./include \
-     -I./ruby \
-     -I./swig \
+     -I./Ruby 
 
 STATIC_LIB= \
 
