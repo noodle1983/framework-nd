@@ -80,7 +80,7 @@ bool RubyInterpreter::execute(const std::string& theCmd)
 
 bool RubyInterpreter::executeFile(const std::string& theFilePath)
 {
-	int i = INT2FIX(12345);
+	VALUE i = INT2FIX(12345);
 	rb_define_variable("$i", (VALUE*)&i);
     bool error = execute("load '" + theFilePath + "'");
     return error;
