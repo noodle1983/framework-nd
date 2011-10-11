@@ -49,6 +49,7 @@ $(OUTSUBDIR):
 	@if [ ! -d $@ ]; then mkdir $@; fi;
 
 -include $(DEPENDFILES)
+-include $(TESTDEPENDFILES)
 $(OUTDIR)/%.d.tmp:%.cpp
 	@echo "building dependancy for $<..."
 	@set -e; rm -f $@ $(OUTDIR)/$*.d; \
