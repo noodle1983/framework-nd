@@ -28,6 +28,9 @@ MessageList
     InjectSignalingREQ          0x41
     InjectSignalingAck          0x42
 
+SubMessageList
+    Option                     0x1
+
 ##############################################
 #SubMessage Name
 #    FieldName    FieldType    InitValue
@@ -36,6 +39,7 @@ SubMessage Header
     Length           uint32_t    Uint32Codec    M
     TransactionId    uint32_t    Uint32Codec    M
     MessageType      uint32_t    Uint32Codec    M
+    Option      uint32_t    Uint32Codec   O 
 
 ##############################################
 #Message Name
