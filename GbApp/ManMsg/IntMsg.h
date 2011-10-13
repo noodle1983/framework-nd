@@ -13,12 +13,16 @@ namespace MsgCodec
     class Uint32Codec
     {
     public:
-        inline void init(uint32_t& theField)
+        static inline void init(uint32_t& theField)
         {
             theField = 0;
         }
 
-        inline int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex, uint32_t& theField)
+        static inline int decode(
+                const char* theBuffer, 
+                const unsigned theLen, 
+                unsigned& theIndex, 
+                uint32_t& theField)
         {
             if (theIndex + sizeof(uint32_t) > theLen)
                 return -1;
@@ -29,7 +33,11 @@ namespace MsgCodec
             return 0;
         }
 
-        inline int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex, const uint32_t& theField)
+        static inline int encode(
+                char* theBuffer, 
+                const unsigned theLen, 
+                unsigned& theIndex, 
+                const uint32_t& theField)
         {
             if (theIndex + sizeof(uint32_t) > theLen)
                 return -1;
