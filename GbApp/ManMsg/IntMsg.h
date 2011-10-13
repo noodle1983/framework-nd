@@ -1,5 +1,5 @@
-#ifndef INTCODEC_H
-#define INTCODEC_H
+#ifndef INTMSG_H
+#define INTMSG_H
 
 #include <stdint.h>
 #include <string.h>
@@ -7,50 +7,48 @@
 
 namespace GbApp
 {
-namespace MsgCodec
+namespace Msg
 {
 
-    class Uint32Codec
+    class Uint32
     {
     public:
-        static inline void init(uint32_t& theField)
+        Uint32(){}
+        ~Uint32(){}
+
+        void init()
         {
-            theField = 0;
+            valueM = 0;
         }
 
-        static inline int decode(
-                const char* theBuffer, 
-                const unsigned theLen, 
-                unsigned& theIndex, 
-                uint32_t& theField)
+        int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(uint32_t) > theLen)
                 return -1;
 
-            memcpy(&theField, theBuffer + theIndex, sizeof(uint32_t));
-            theField = ntohl(theField);
+            memcpy(&valueM, theBuffer + theIndex, sizeof(uint32_t));
+            valueM = ntohl(valueM);
             theIndex += sizeof(uint32_t);
             return 0;
         }
 
-        static inline int encode(
-                char* theBuffer, 
-                const unsigned theLen, 
-                unsigned& theIndex, 
-                const uint32_t& theField)
+        int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(uint32_t) > theLen)
                 return -1;
 
-            uint32_t netInt = htonl(theField);
+            uint32_t netInt = htonl(valueM);
             memcpy(theBuffer + theIndex, &netInt, sizeof(uint32_t));
             theIndex += sizeof(uint32_t);
 
             return 0;
         }
+
+    public:
+        uint32_t valueM;
     };
 
 }
 }
-#endif  /*INTCODEC_H*/
+#endif  /*INTMSG_H*/
 

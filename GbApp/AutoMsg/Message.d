@@ -29,7 +29,7 @@ MessageList
     InjectSignalingAck          0x42
 
 SubMessageList
-    Option                     0x1
+    OptionString                     0x1
 
 ##############################################
 #SubMessage Name
@@ -39,7 +39,7 @@ SubMessage Header
     Length           Uint32    M
     TransactionId    Uint32    M
     MessageType      Uint32    M
-    Option           Uint32    O 
+    Option           OptionString   O 
 
 ##############################################
 #Message Name

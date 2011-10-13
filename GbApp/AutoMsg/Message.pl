@@ -26,6 +26,7 @@ open CMSG_HANDLE, " > Message.h" or die "failed to open Message.h:$!\n";
         genMsg($msgName, $msgDef);
     }
 
+    genEnd();
     #genRootMsg();
 close CMSG_HANDLE;
 
@@ -38,10 +39,31 @@ sub genHeaders
 {
 print CMSG_HANDLE<<END_OF_HEADER;
 // this file is generate automatically, please don't change it mannually
+#ifndef MESSAGE_H
+#define MESSAGE_H
+
+#include "StrMsg.h"
+#include "IntMsg.h"
+#include "Log.h"
 #include <stdint.h>
-#include "IntCodec.h"
+
+namespace GbApp
+{
+namespace Msg
+{
 
 END_OF_HEADER
+}
+
+sub genEnd
+{
+print CMSG_HANDLE<<END_OF_MESSAGE_E;
+}
+}
+
+#endif /* MESSAGE_H */
+
+END_OF_MESSAGE_E
 }
 
 ################################################################################
@@ -61,6 +83,7 @@ END_OF_MSGDEF_CLASS_B
 
     genInitFunction($msgName, $msgDef);
     genDecodeFunction($msgName, $msgDef);
+    genEncodeFunction($msgName, $msgDef);
     genFieldDef($msgName, $msgDef);
 
 print CMSG_HANDLE<<END_OF_MSGDEF_CLASS_E;
@@ -147,11 +170,10 @@ END_OF_DECODE_BODY
         elsif ($fieldOption eq "O" && $optianlExisted == 0)
         {
             $optianlExisted = 1;
-            my $msgType = $submsgName2Type{ucfirst($fieldName)};
 print  CMSG_HANDLE<<END_OF_DECODE_WOBODY;
             while(theIndex < theLen)
             {
-                if (theBuffer[theIndex] == $msgType) 
+                if (theBuffer[theIndex] == ${fieldType}::TAG) 
                 {
                     if (0 != $fieldName.decode( theBuffer, theLen, theIndex))            
                     {
@@ -163,9 +185,8 @@ END_OF_DECODE_WOBODY
         }
         elsif ($fieldOption eq "O")
         {
-            my $msgType = $submsgName2Type{ucfirst($fieldName)};
 print  CMSG_HANDLE<<END_OF_DECODE_OBODY;
-                else if (theBuffer[theIndex] == $msgType) 
+                else if (theBuffer[theIndex] == ${fieldType}::TAG) 
                 {
                     if (0 != $fieldName.decode( theBuffer, theLen, theIndex))            
                     {
@@ -197,6 +218,61 @@ print CMSG_HANDLE <<END_OF_DECODE_END;
         } /* end of int decode(...) */
 
 END_OF_DECODE_END
+
+}
+################################################################################
+sub genEncodeFunction
+{
+    my $msgName = shift;
+    my $msgDef = shift;
+    my $theMsg = "the$msgName";
+
+print CMSG_HANDLE<<END_OF_ENCODE_BEG;
+        int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
+        {
+END_OF_ENCODE_BEG
+    
+    foreach(@$msgDef)
+    {
+        ($fieldName, $fieldType, $fieldOption) = @$_;
+        if ($fieldOption eq "M")
+        {
+print  CMSG_HANDLE<<END_OF_ENCODE_BODY;
+            if (0 != ${fieldName}.encode(theBuffer, theLen, theIndex))            
+            {
+                DEBUG("failed to encode ${msgName}.${fieldName}");
+                return -1;
+            }
+
+END_OF_ENCODE_BODY
+        }
+        elsif ($fieldOption eq "O")
+        {
+            my $msgType = $submsgName2Type{ucfirst($fieldName)};
+print  CMSG_HANDLE<<END_OF_ENCODE_OBODY;
+            if ($fieldName.availableM) 
+            {
+                if (0 != $fieldName.encode(theBuffer, theLen, theIndex))            
+                {
+                    DEBUG("failed to encode ${msgName}.${fieldName}");
+                    return -1;
+                }
+            }
+END_OF_ENCODE_OBODY
+
+        }
+        else
+        {
+            die "Please set the Optional Flag for ${msgName}.${fieldName}\n";
+        }
+
+    }
+
+print CMSG_HANDLE <<END_OF_ENCODE_END;
+            return 0;
+        } /* end of int encode(...) */
+
+END_OF_ENCODE_END
 
 }
 
