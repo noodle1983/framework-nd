@@ -7,7 +7,7 @@ my %submsgType2Name;
 
 #hash table for all the message defination
 #structure
-#msgName=>[(FieldName, FieldType, FieldCodec, M/O)]
+#msgName=>[(FieldName, FieldType, M/O)]
 my %msgsDef;
 my %submsgsDef;
 
@@ -36,7 +36,7 @@ exit 0;
 ################################################################################
 sub genHeaders
 {
-       print CMSG_HANDLE<<END_OF_HEADER;
+print CMSG_HANDLE<<END_OF_HEADER;
 // this file is generate automatically, please don't change it mannually
 #include <stdint.h>
 #include "IntCodec.h"
@@ -45,13 +45,48 @@ END_OF_HEADER
 }
 
 ################################################################################
+#######################       generate genMsg       #######################
+################################################################################
 sub genMsg
 {
     my $msgName = shift;
     my $msgDef = shift;
     
+print CMSG_HANDLE<<END_OF_MSGDEF_CLASS_B;
+    class ${msgName}
+    {
+    public:
+
+END_OF_MSGDEF_CLASS_B
+
     genInitFunction($msgName, $msgDef);
     genDecodeFunction($msgName, $msgDef);
+    genFieldDef($msgName, $msgDef);
+
+print CMSG_HANDLE<<END_OF_MSGDEF_CLASS_E;
+    }; /* end of class ${msgName} */
+
+END_OF_MSGDEF_CLASS_E
+}
+################################################################################
+sub genFieldDef
+{
+    my $msgName = shift;
+    my $msgDef = shift;
+
+print CMSG_HANDLE<<END_OF_MSGFIELD_B;
+
+    public:
+END_OF_MSGFIELD_B
+
+    foreach(@$msgDef)
+    {
+        ($fieldName, $fieldType, $fieldOption) = @$_;
+print  CMSG_HANDLE<<END_OF_FIELDDEF_BODY;
+        ${fieldType} ${fieldName};           
+END_OF_FIELDDEF_BODY
+    }
+
 }
 ################################################################################
 sub genInitFunction
@@ -66,17 +101,17 @@ END_OF_INIT_BEG
     
     foreach(@$msgDef)
     {
-        ($fieldName, $fieldType, $fieldCodec, $fieldOption) = @$_;
+        ($fieldName, $fieldType, $fieldOption) = @$_;
         if ($fieldOption eq "M")
         {
 print  CMSG_HANDLE<<END_OF_INIT_BODY;
-            ${fieldCodec}::init(${fieldName});            
+            ${fieldName}.init();            
 END_OF_INIT_BODY
         }
     }
 
 print CMSG_HANDLE <<END_OF_INIT_END;
-        }
+        } /* end of void init(...) */
 
 END_OF_INIT_END
 
@@ -87,6 +122,7 @@ sub genDecodeFunction
 {
     my $msgName = shift;
     my $msgDef = shift;
+    my $theMsg = "the$msgName";
     my $optianlExisted = 0;
 
 print CMSG_HANDLE<<END_OF_DECODE_BEG;
@@ -96,12 +132,11 @@ END_OF_DECODE_BEG
     
     foreach(@$msgDef)
     {
-        ($fieldName, $fieldType, $fieldCodec, $fieldOption) = @$_;
+        ($fieldName, $fieldType, $fieldOption) = @$_;
         if ($fieldOption eq "M")
         {
 print  CMSG_HANDLE<<END_OF_DECODE_BODY;
-            if (0 != ${fieldCodec}::decode(
-                    theBuffer, theLen, theIndex, ${fieldName}))            
+            if (0 != ${fieldName}.decode(theBuffer, theLen, theIndex))            
             {
                 DEBUG("failed to parse ${msgName}.${fieldName}");
                 return -1;
@@ -118,8 +153,7 @@ print  CMSG_HANDLE<<END_OF_DECODE_WOBODY;
             {
                 if (theBuffer[theIndex] == $msgType) 
                 {
-                    if (0 != ${fieldCodec}::decode(
-                            theBuffer, theLen, theIndex, ${fieldName}))            
+                    if (0 != $fieldName.decode( theBuffer, theLen, theIndex))            
                     {
                         DEBUG("failed to parse ${msgName}.${fieldName}");
                         return -1;
@@ -133,8 +167,7 @@ END_OF_DECODE_WOBODY
 print  CMSG_HANDLE<<END_OF_DECODE_OBODY;
                 else if (theBuffer[theIndex] == $msgType) 
                 {
-                    if (0 != ${fieldCodec}::decode(
-                            theBuffer, theLen, theIndex, ${fieldName}))            
+                    if (0 != $fieldName.decode( theBuffer, theLen, theIndex))            
                     {
                         DEBUG("failed to parse ${msgName}.${fieldName}");
                         return -1;
@@ -161,7 +194,7 @@ END_OF_DECODE_OBODY_E
 
 print CMSG_HANDLE <<END_OF_DECODE_END;
             return 0;
-        }
+        } /* end of int decode(...) */
 
 END_OF_DECODE_END
 
@@ -211,7 +244,7 @@ sub parseMsgDef
 
         if ($state eq "Message")
         {
-            if ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
+            if ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
             {
                 push @{$msgsDef{$curMsg}}, [lcfirst($1), $2, $3, $4];
             }
@@ -223,7 +256,7 @@ sub parseMsgDef
 
         if ($state eq "SubMessage")
         {
-            if ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
+            if ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
             {
                 push @{$submsgsDef{$curMsg}}, [lcfirst($1), $2, $3, $4];
             }
@@ -287,8 +320,8 @@ sub dumpMsgDef
         print "$key\n";
         foreach(@$value)
         {
-            ($a, $b, $c, $d) = @$_;
-            print "\t$a\t$b\t$c\t$d\n";
+            ($a, $b, $c) = @$_;
+            print "\t$a\t$b\t$c\n";
         }
         
     }
@@ -299,8 +332,8 @@ sub dumpMsgDef
         print "$key\n";
         foreach(@$value)
         {
-            ($a, $b, $c, $d) = @$_;
-            print "\t$a\t$b\t$c\t$d\n";
+            ($a, $b, $c) = @$_;
+            print "\t$a\t$b\t$c\n";
         }
         
     }

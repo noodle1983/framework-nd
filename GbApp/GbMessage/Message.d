@@ -33,13 +33,13 @@ SubMessageList
 
 ##############################################
 #SubMessage Name
-#    FieldName    FieldType    InitValue
+#    FieldName    FieldType    Optional
 ##############################################
 SubMessage Header
-    Length           uint32_t    Uint32Codec    M
-    TransactionId    uint32_t    Uint32Codec    M
-    MessageType      uint32_t    Uint32Codec    M
-    Option      uint32_t    Uint32Codec   O 
+    Length           Uint32    M
+    TransactionId    Uint32    M
+    MessageType      Uint32    M
+    Option           Uint32    O 
 
 ##############################################
 #Message Name
