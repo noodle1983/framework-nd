@@ -36,7 +36,7 @@ SubMessageList
 #    FieldName    FieldType    Optional
 ##############################################
 SubMessage Header
-    Length           Uint32    M
+    Length           Length32    M
     TransactionId    Uint32    M
     MessageType      Uint32    M
     Option           OptionString   O 

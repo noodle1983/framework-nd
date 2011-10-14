@@ -225,7 +225,8 @@ sub genEncodeFunction
 {
     my $msgName = shift;
     my $msgDef = shift;
-    my $theMsg = "the$msgName";
+    my $lenFieldName;
+    my $lenFieldType;
 
 print CMSG_HANDLE<<END_OF_ENCODE_BEG;
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
@@ -235,7 +236,21 @@ END_OF_ENCODE_BEG
     foreach(@$msgDef)
     {
         ($fieldName, $fieldType, $fieldOption) = @$_;
-        if ($fieldOption eq "M")
+        if ($fieldType =~ /^Length/)
+        {
+            $lenFieldName = $fieldName;
+            $lenFieldType = $fieldType;
+print  CMSG_HANDLE<<END_OF_ENCODE_LEN_B;
+            unsigned startIndex = theIndex;
+            if (0 != ${fieldName}.encode(theBuffer, theLen, theIndex))            
+            {
+                DEBUG("failed to encode ${msgName}.${fieldName}");
+                return -1;
+            }
+
+END_OF_ENCODE_LEN_B
+        }
+        elsif ($fieldOption eq "M")
         {
 print  CMSG_HANDLE<<END_OF_ENCODE_BODY;
             if (0 != ${fieldName}.encode(theBuffer, theLen, theIndex))            
@@ -265,6 +280,21 @@ END_OF_ENCODE_OBODY
         {
             die "Please set the Optional Flag for ${msgName}.${fieldName}\n";
         }
+
+    }
+    if ($lenFieldName)
+    {
+print  CMSG_HANDLE<<END_OF_ENCODE_LEN_E;
+
+            //re-encode the length
+            ${lenFieldName}.valueM = theIndex - startIndex;
+            if (0 != $lenFieldName.encode(theBuffer, theLen, startIndex))            
+            {
+                DEBUG("failed to encode ${msgName}.${lenFieldName}");
+                return -1;
+            }
+
+END_OF_ENCODE_LEN_E
 
     }
 

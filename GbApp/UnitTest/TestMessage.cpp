@@ -7,7 +7,9 @@ using namespace GbApp::Msg;
 int main()
 {
     char buffer[16];
-    memset(buffer, 1, 12);
+    int length = htonl(16);
+    memcpy(buffer, &length, 4);
+    memset(buffer+4, 1, 12);
     buffer[12] = 0;
     buffer[13] = 2;
     buffer[14] = 'H';

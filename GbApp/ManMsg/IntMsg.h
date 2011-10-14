@@ -47,6 +47,7 @@ namespace Msg
     public:
         uint32_t valueM;
     };
+    typedef Uint32 Length32;
 
 }
 }
