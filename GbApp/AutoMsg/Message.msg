@@ -9,10 +9,10 @@
 MessageList
     Heartbeat                   0x00
     PDPActivateNotification     0x01
-    QoSModifyREQ                0x02
+    QosModifyREQ                0x02
     QosModifyAccept             0x03
     QosModifyReject             0x04
-    ServiceQuery                0x05
+#    ServiceQuery                0x05
     ServiceNotification         0x06
     AddOrModifyUser             0x10
     AddOrModifyUserAck          0x11
@@ -54,8 +54,8 @@ SubMessage Header
 
 SubMessage MsgAHeader
     include Header
-    IMSI             Uint64    M
-    NSAPI            Uint32    M
+    Imsi             Uint64    M
+    Nsapi            Uint32    M
 
 SubMessage MsgBHeader
     include Header
@@ -66,10 +66,10 @@ SubMessage MsgCHeader
 SubMessage MsgE1Header
     include Header
     UserId           Uint64    M         
-    IP               Uint32    M         
-    LAC              Uint16    M         
-    RAC              Uint16    M         
-    CI               Uint16    M         
+    Ip               Uint32    M         
+    Lac              Uint16    M         
+    Rac              Uint16    M         
+    Ci               Uint16    M         
     Status           Uint16    M
 
 SubMessage MsgE2Header
@@ -85,13 +85,13 @@ Message  Heartbeat
 Message PDPActivateNotification
     include MsgBHeader
     UserId         MobileIdentityIEI       M  
-    QoS            QosIEI                  M
+    Qos            QosIEI                  M
     Location       LocationIEI             M
 
-Message QoSModifyREQ 
+Message QosModifyREQ 
     include MsgBHeader
     UserId         MobileIdentityIEI       M
-    QoS            QosIEI                  M
+    Qos            QosIEI                  M
     Trigger        TriggerIEI              O
 
 Message QosModifyAccept
@@ -123,16 +123,19 @@ Message ServiceNotification
     Location       LocationIEI             M
     Timestamp      Uint64                  M
     MSISDN         PhoneNumberIEI          O
-    IMEI           MobileIdentityIEI       O
+    Imei           MobileIdentityIEI       O
     UserAgent      UserAgentIEI            O
-    APN            ApnIEI                  O
-    URL            UrlIEI                  O
-    RTD            RtdIEI                  O
+    Apn            ApnIEI                  O
+    Url            UrlIEI                  O
+    Rtd            RtdIEI                  O
 
 Message AddOrModifyUser
     include MsgCHeader
     UserId         MobileIdentityIEI       M  
     Properties     PropertiesIEI           M 
+
+Message AddOrModifyUserAck
+    include MsgCHeader
 
 Message StrategyModifyREQ
     include MsgCHeader

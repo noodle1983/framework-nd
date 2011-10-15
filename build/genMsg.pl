@@ -13,6 +13,7 @@ my %submsgType2Name;
 #structure
 #msgName=>[(FieldName, FieldType, M/O)]
 my %msgsDef;
+my @msgsSeq;
 my %submsgsDef;
 
 #load defination
@@ -29,9 +30,9 @@ open CMSG_HANDLE, " > $msgOutFile" or die "failed to open $msgOutFile:$!\n";
     {
         genSubMsg($subType, $subValue);
     }
-    while((my $msgName, my $msgDef) = each %msgsDef)
+    foreach my $msgName  (@msgsSeq)
     {
-        genMsg($msgName, $msgDef);
+        genMsg($msgName, $msgsDef{$msgName});
     }
 
     genEnd();
@@ -100,8 +101,19 @@ print CMSG_HANDLE<<END_OF_MSGDEF_CLASS_B;
     class ${msgName}
     {
     public:
+        ${msgName}(){}
+        ~${msgName}(){}
 
 END_OF_MSGDEF_CLASS_B
+    my $msgType = $msgName2Type{$msgName};
+    if ($msgType)
+    {
+print CMSG_HANDLE<<END_OF_MSGDEF_ENUM;
+        enum{ ID = ${msgType}};
+
+END_OF_MSGDEF_ENUM
+
+    }
 
     genInitFunction($msgName, $msgDef);
     genDecodeFunction($msgName, $msgDef);
@@ -438,6 +450,7 @@ sub parseMsgDef
                 $curMsg = $1;
                 $msgsDef{$curMsg} = [];
                 $state = "Message";
+                push @msgsSeq, $curMsg;
             }
             else
             {
