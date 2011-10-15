@@ -63,6 +63,9 @@ SubMessage MsgBHeader
 SubMessage MsgCHeader
     include Header
 
+SubMessage MsgDHeader
+    include Header
+
 SubMessage MsgE1Header
     include Header
     UserId           Uint64    M         

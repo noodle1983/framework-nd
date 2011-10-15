@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <string>
+#include "IntMsg.h"
 
 namespace GbApp
 {
@@ -27,12 +28,13 @@ namespace Msg
                 return -1;
             theIndex++;
 
-            unsigned char strln = theBuffer[theIndex++];
+            Uint16 length;
+            length.decode(theBuffer, theLen, theIndex);
             if (theIndex + strln > theLen)
                 return -1;
 
-            valueM.assign(theBuffer + theIndex, strln);
-            theIndex += strln;
+            valueM.assign(theBuffer + theIndex, length.valueM);
+            theIndex += length.valueM;
             return 0;
         }
 
@@ -43,7 +45,9 @@ namespace Msg
                 return -1;
 
             theBuffer[theIndex++] = TAG;
-            theBuffer[theIndex++] = valueM.length();
+            Uint16 length;
+            length.valueM = valueM.length();
+            length.encode(theBuffer, theLen, theIndex);
             memcpy(theBuffer + theIndex, valueM.c_str(), valueM.length());
             theIndex += valueM.length();
 
