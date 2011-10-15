@@ -40,6 +40,14 @@ namespace Msg
             return 0;
         }
 
+        template<typename StreamType>
+        StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
+        {
+            theOut << valueM;
+            return theOut;
+        } 
+
+
     public:
         guint8 valueM;
     };
@@ -78,6 +86,13 @@ namespace Msg
 
             return 0;
         }
+
+        template<typename StreamType>
+        StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
+        {
+            theOut << valueM;
+            return theOut;
+        } 
 
     public:
         guint16 valueM;
@@ -119,6 +134,13 @@ namespace Msg
             return 0;
         }
 
+        template<typename StreamType>
+        StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
+        {
+            theOut << valueM;
+            return theOut;
+        } 
+
     public:
         guint32 valueM;
     };
@@ -158,6 +180,13 @@ namespace Msg
 
             return 0;
         }
+
+        template<typename StreamType>
+        StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
+        {
+            theOut << valueM;
+            return theOut;
+        } 
 
     public:
         guint64 valueM;

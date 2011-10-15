@@ -17,7 +17,7 @@ my %submsgsDef;
 #load defination
 parseMsgDef();
 
-dumpMsgDef();
+#dumpMsgDef();
 
 #print message
 open CMSG_HANDLE, " > $msgOutFile" or die "failed to open $msgOutFile:$!\n";
@@ -118,12 +118,66 @@ END_OF_MSGDEF_ENUM
     genInitFunction($msgName, $msgDef);
     genDecodeFunction($msgName, $msgDef);
     genEncodeFunction($msgName, $msgDef);
+    genDumpFunction($msgName, $msgDef);
     genFieldDef($msgName, $msgDef);
 
 print CMSG_HANDLE<<END_OF_MSGDEF_CLASS_E;
     }; /* end of class ${msgName} */
 
 END_OF_MSGDEF_CLASS_E
+}
+################################################################################
+sub genDumpFunction
+{
+    my $msgName = shift;
+    my $msgDef = shift;
+
+print CMSG_HANDLE<<END_OF_DUMP_BEG;
+        template<typename StreamType>
+        StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
+        {
+            std::string leadStr(theLayer * 4, ' ');
+            theOut << "\\n" <<leadStr << "${msgName}";
+            leadStr.append("    ");
+END_OF_DUMP_BEG
+    
+    foreach(@$msgDef)
+    {
+        ($fieldName, $fieldType, $fieldOption) = @$_;
+        if ($fieldOption eq "M")
+        {
+print  CMSG_HANDLE<<END_OF_DUMP_BODY;
+
+            theOut << "\\n" << leadStr << "${fieldName}: ";
+            $fieldName.dump(theOut, theLayer + 1);
+
+END_OF_DUMP_BODY
+        }
+        elsif ($fieldOption eq "O")
+        {
+print  CMSG_HANDLE<<END_OF_DUMP_OBODY;
+            if (${fieldName})
+            {
+                theOut << "\\n" << leadStr << "${fieldName}: ";
+                $fieldName->dump(theOut, theLayer + 1);           
+            }
+END_OF_DUMP_OBODY
+
+        }
+
+    }
+
+print CMSG_HANDLE <<END_OF_DUMP_END;
+            if (0 == theLayer)
+            {
+                theOut << "\\n";
+            }
+            return theOut;
+        } /* end of dump(...) */
+
+END_OF_DUMP_END
+
+
 }
 ################################################################################
 sub genFieldDef

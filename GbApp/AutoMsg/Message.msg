@@ -45,7 +45,8 @@ SubMessageList
     PropertiesIEI        Uint16      0x20
     StrategyIEI          Uint16      0x21
     RtdIEI               Uint16      0x22
-
+    TriggerIEI           Uint16      0x23
+    CauseIEI             Uint16      0x23
 
 ##############################################
 #SubMessage Name
@@ -86,6 +87,9 @@ SubMessage MsgE2Header
 #Message Name
 #    FieldName    FieldType    InitValue
 ##############################################
+Message MsgHeader
+    include Header
+
 Message  Heartbeat
     include Header
 

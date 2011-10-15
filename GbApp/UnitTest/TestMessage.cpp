@@ -7,27 +7,20 @@ using namespace GbApp::Msg;
 
 int main()
 {
-    char buffer[16];
-    int length = GINT32_TO_BE(16);
+    char buffer[12];
+    int length = GINT32_TO_BE(12);
     memcpy(buffer, &length, 4);
     memset(buffer+4, 1, 12);
-    buffer[12] = 0;
-    buffer[13] = 2;
-    buffer[14] = 'H';
-    buffer[15] = 'i';
-    Header header;
+    MsgHeader header;
     unsigned index = 0;
-    header.decode(buffer, 16, index);
-    cout << header.length.valueM << endl;
-    cout << header.transactionId.valueM << endl;
-    cout << header.messageType.valueM << endl;
-    cout << header.option->valueM << endl;
+    header.decode(buffer, 12, index);
+    header.dump(std::cout);
 
-    char buffer2[16];
+    char buffer2[12];
     index = 0;
-    header.encode(buffer2, 16, index);
-    assert(0 == memcmp(buffer, buffer2, 16));
-    assert(16 == index);
+    header.encode(buffer2, 12, index);
+    assert(0 == memcmp(buffer, buffer2, 12));
+    assert(12 == index);
 
     return 0;
 }
