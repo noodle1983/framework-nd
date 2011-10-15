@@ -1,5 +1,9 @@
 #!/usr/bin/perl 
 
+my $msgDefFile = shift;
+my $msgOutFile = $msgDefFile;
+$msgOutFile =~ s/msg$/h/;
+
 my %msgName2Type;
 my %msgType2Name;
 my %submsgName2Type;
@@ -14,10 +18,10 @@ my %submsgsDef;
 #load defination
 parseMsgDef();
 
-dumpMsgDef();
+#dumpMsgDef();
 
 #print message
-open CMSG_HANDLE, " > Message.h" or die "failed to open Message.h:$!\n";
+open CMSG_HANDLE, " > $msgOutFile" or die "failed to open $msgOutFile:$!\n";
 
     genHeaders();
 
@@ -330,7 +334,7 @@ sub parseMsgDef
     my $state = "NONE";
     my $curMsg;
     my $lineNo = 0;
-    open MSG_DEF_HANDLER, "< Message.d" or die "failed to open Message.d:$!\n";
+    open MSG_DEF_HANDLER, "< $msgDefFile" or die "failed to open $msgDefFile:$!\n";
     while (<MSG_DEF_HANDLER>)
     {
         $lineNo++;

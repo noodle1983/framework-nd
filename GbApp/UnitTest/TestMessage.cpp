@@ -1,4 +1,4 @@
-#include "Message.h"
+#include "AutoMsg/Message.h"
 #include <iostream>
 #include <glib.h>
 #include <assert.h>

@@ -6,7 +6,7 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-TARGET=
+TARGET=libGb.a
 SUBDIR=
 
 #########################################
@@ -17,7 +17,7 @@ INC_DIR= -I. -IAutoMsg -IManMsg \
 
 STATIC_LIB=$(PROJBASE)/Log/.lib/libLog.a 
 SHARED_LIB_DIR=
-SHARED_LIB=
+SHARED_LIB= -pthread
 
 include $(PROJBASE)/build/makefile.staticlib.log4cplus.linux
 include $(PROJBASE)/build/makefile.staticlib.glib.linux
@@ -30,5 +30,5 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
+AUTOFILE=AutoMsg/Message.h
 include $(PROJBASE)/build/makefile.staticlib.rules
-

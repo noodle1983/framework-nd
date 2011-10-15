@@ -33,10 +33,10 @@ TESTDEPENDTARGET=$(patsubst %.d, %.d.tmp, $(TESTDEPENDFILES))
 all:$(TARGET)
 test:$(TESTTARGET)
 
-$(TARGET):depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
+$(TARGET):$(AUTOFILE) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
 	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS)
 
-$(TESTTARGET):testdepend $(TARGET) $(TESTOUTSUBDIR) $(TESTOBJECTS)
+$(TESTTARGET):$(AUTOFILE) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS)
 	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR)/$(TARGET) $(LDFLAGS) -o $(OUTDIR)/$@
 
 $(OUTDIR):
@@ -61,6 +61,9 @@ $(OUTDIR)/%.o:%.cpp
 
 $(OUTDIR)/%.o:%.c
 	$(CC) $(CXXFLAGS) -c $< -o $@
+
+%.h:%.msg $(PROJBASE)/build/genMsg.pl
+	perl $(PROJBASE)/build/genMsg.pl $<
 
 depend: $(OUTDIR) $(OUTSUBDIR) $(DEPENDTARGET)
 testdepend: $(OUTDIR) $(TESTOUTSUBDIR) $(TESTDEPENDTARGET)
