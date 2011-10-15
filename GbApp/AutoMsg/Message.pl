@@ -45,7 +45,7 @@ print CMSG_HANDLE<<END_OF_HEADER;
 #include "StrMsg.h"
 #include "IntMsg.h"
 #include "Log.h"
-#include <stdint.h>
+#include <boost/optional.hpp>
 
 namespace GbApp
 {
@@ -105,9 +105,22 @@ END_OF_MSGFIELD_B
     foreach(@$msgDef)
     {
         ($fieldName, $fieldType, $fieldOption) = @$_;
+        if ($fieldOption eq "M")
+        {
 print  CMSG_HANDLE<<END_OF_FIELDDEF_BODY;
         ${fieldType} ${fieldName};           
 END_OF_FIELDDEF_BODY
+        }
+        elsif ($fieldOption eq "O")
+        {
+print  CMSG_HANDLE<<END_OF_FIELDDEF_OBODY;
+        boost::optional<${fieldType}> ${fieldName};           
+END_OF_FIELDDEF_OBODY
+        }
+        else
+        {
+            die "invalid Optional Definination for $msgName.$fieldName";
+        }
     }
 
 }
@@ -175,7 +188,8 @@ print  CMSG_HANDLE<<END_OF_DECODE_WOBODY;
             {
                 if (theBuffer[theIndex] == ${fieldType}::TAG) 
                 {
-                    if (0 != $fieldName.decode( theBuffer, theLen, theIndex))            
+                    ${fieldName}.reset(${fieldType}());
+                    if (0 != $fieldName->decode( theBuffer, theLen, theIndex))            
                     {
                         DEBUG("failed to parse ${msgName}.${fieldName}");
                         return -1;
@@ -188,7 +202,8 @@ END_OF_DECODE_WOBODY
 print  CMSG_HANDLE<<END_OF_DECODE_OBODY;
                 else if (theBuffer[theIndex] == ${fieldType}::TAG) 
                 {
-                    if (0 != $fieldName.decode( theBuffer, theLen, theIndex))            
+                    ${fieldName}.reset(${fieldType}());
+                    if (0 != $fieldName->decode( theBuffer, theLen, theIndex))            
                     {
                         DEBUG("failed to parse ${msgName}.${fieldName}");
                         return -1;
@@ -265,9 +280,9 @@ END_OF_ENCODE_BODY
         {
             my $msgType = $submsgName2Type{ucfirst($fieldName)};
 print  CMSG_HANDLE<<END_OF_ENCODE_OBODY;
-            if ($fieldName.availableM) 
+            if ($fieldName) 
             {
-                if (0 != $fieldName.encode(theBuffer, theLen, theIndex))            
+                if (0 != $fieldName->encode(theBuffer, theLen, theIndex))            
                 {
                     DEBUG("failed to encode ${msgName}.${fieldName}");
                     return -1;

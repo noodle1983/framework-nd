@@ -1,0 +1,11 @@
+#########################################
+#      header and lib dependancy        #
+#########################################
+INC_DIR+= -I$(PROJBASE)/3PP/glib/include/glib-2.0 \
+		-I$(PROJBASE)/3PP/glib/lib/glib-2.0/include/
+
+#STATIC_LIB+= $(PROJBASE)/3PP/glib/lib
+STATIC_LIB+= 
+SHARED_LIB_DIR+=
+SHARED_LIB+=
+

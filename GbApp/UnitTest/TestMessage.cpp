@@ -1,5 +1,6 @@
 #include "Message.h"
 #include <iostream>
+#include <glib.h>
 #include <assert.h>
 using namespace std;
 using namespace GbApp::Msg;
@@ -7,7 +8,7 @@ using namespace GbApp::Msg;
 int main()
 {
     char buffer[16];
-    int length = htonl(16);
+    int length = GINT32_TO_BE(16);
     memcpy(buffer, &length, 4);
     memset(buffer+4, 1, 12);
     buffer[12] = 0;
@@ -20,7 +21,7 @@ int main()
     cout << header.length.valueM << endl;
     cout << header.transactionId.valueM << endl;
     cout << header.messageType.valueM << endl;
-    cout << header.option.valueM << endl;
+    cout << header.option->valueM << endl;
 
     char buffer2[16];
     index = 0;

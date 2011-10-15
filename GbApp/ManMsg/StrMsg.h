@@ -12,14 +12,13 @@ namespace Msg
     class TlvString 
     {
     public:
-        TlvString(){availableM = false;}
+        TlvString(){}
         ~TlvString(){}
 
         enum {TAG = theTag};
 
         void init()
         {
-            availableM = true;
         }
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
@@ -33,7 +32,6 @@ namespace Msg
                 return -1;
 
             valueM.assign(theBuffer + theIndex, strln);
-            availableM = true;
             theIndex += strln;
             return 0;
         }
@@ -52,7 +50,7 @@ namespace Msg
             return 0;
         }
 
-        bool availableM;
+    public:
         std::string valueM;
     };
     typedef TlvString<0> OptionString;
