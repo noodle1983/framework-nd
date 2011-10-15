@@ -53,7 +53,7 @@ namespace Msg
     public:
         std::string valueM;
     };
-    typedef TlvString<0> OptionString;
+//    typedef TlvString<0> OptionString;
 
 }
 }

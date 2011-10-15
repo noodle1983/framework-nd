@@ -8,6 +8,43 @@ namespace GbApp
 {
 namespace Msg
 {
+    class Uint8
+    {
+    public:
+        Uint8(){}
+        ~Uint8(){}
+
+        void init()
+        {
+            valueM = 0;
+        }
+
+        int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
+        {
+            if (theIndex + sizeof(guint8) > theLen)
+                return -1;
+
+            valueM = theBuffer[theIndex];
+            theIndex += sizeof(guint8);
+            return 0;
+        }
+
+        int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
+        {
+            if (theIndex + sizeof(guint8) > theLen)
+                return -1;
+
+            theBuffer[theIndex] = valueM;
+            theIndex += sizeof(guint8);
+
+            return 0;
+        }
+
+    public:
+        guint8 valueM;
+    };
+    typedef Uint8 Length8;
+
     class Uint16
     {
     public:

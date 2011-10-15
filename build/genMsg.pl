@@ -18,14 +18,18 @@ my %submsgsDef;
 #load defination
 parseMsgDef();
 
-#dumpMsgDef();
+dumpMsgDef();
 
 #print message
 open CMSG_HANDLE, " > $msgOutFile" or die "failed to open $msgOutFile:$!\n";
 
     genHeaders();
 
-    while((my $msgName, my $msgDef) = each %submsgsDef)
+    while((my $subType, my $subValue) = each %submsgName2Type)
+    {
+        genSubMsg($subType, $subValue);
+    }
+    while((my $msgName, my $msgDef) = each %msgsDef)
     {
         genMsg($msgName, $msgDef);
     }
@@ -69,6 +73,19 @@ print CMSG_HANDLE<<END_OF_MESSAGE_E;
 
 END_OF_MESSAGE_E
 }
+################################################################################
+#######################       generate genSubMsg       #######################
+################################################################################
+sub genSubMsg
+{
+    my $submsgType = shift;
+    my $submsgValue = shift;
+
+print CMSG_HANDLE<<END_OF_SUBMSG;
+    typedef TlvString<${submsgValue}> ${submsgType};
+END_OF_SUBMSG
+
+}
 
 ################################################################################
 #######################       generate genMsg       #######################
@@ -79,6 +96,7 @@ sub genMsg
     my $msgDef = shift;
     
 print CMSG_HANDLE<<END_OF_MSGDEF_CLASS_B;
+
     class ${msgName}
     {
     public:
@@ -369,9 +387,13 @@ sub parseMsgDef
 
         if ($state eq "Message")
         {
-            if ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
+            if ($line =~ /^\s+include\s+(\w+)\s*$/)
             {
-                push @{$msgsDef{$curMsg}}, [lcfirst($1), $2, $3, $4];
+                @{$msgsDef{$curMsg}} = (@{$msgsDef{$curMsg}}, @{$submsgsDef{$1}} );
+            }
+            elsif ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
+            {
+                push @{$msgsDef{$curMsg}}, [lcfirst($1), $2, $3];
             }
             else
             {
@@ -381,9 +403,13 @@ sub parseMsgDef
 
         if ($state eq "SubMessage")
         {
-            if ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
+            if ($line =~ /^\s+include\s+(\w+)\s*$/)
             {
-                push @{$submsgsDef{$curMsg}}, [lcfirst($1), $2, $3, $4];
+                @{$submsgsDef{$curMsg}} = (@{$submsgsDef{$curMsg}}, @{$submsgsDef{$1}} );
+            }
+            elsif ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
+            {
+                push @{$submsgsDef{$curMsg}}, [lcfirst($1), $2, $3];
             }
             else
             {
@@ -439,6 +465,18 @@ sub dumpMsgDef
         print "$key\t$value\n";
     }
 
+    print "-" x 35 . "SubMessageDef" . "-" x 35 . "\n";
+    while(($key, $value) = each %submsgsDef)
+    {
+        print "$key\n";
+        foreach(@$value)
+        {
+            ($a, $b, $c) = @$_;
+            print "\t$a\t$b\t$c\n";
+        }
+        
+    }
+
     print "-" x 35 . "MessageDef" . "-" x 35 . "\n";
     while(($key, $value) = each %msgsDef)
     {
@@ -451,15 +489,4 @@ sub dumpMsgDef
         
     }
     
-    print "-" x 35 . "SubMessageDef" . "-" x 35 . "\n";
-    while(($key, $value) = each %submsgsDef)
-    {
-        print "$key\n";
-        foreach(@$value)
-        {
-            ($a, $b, $c) = @$_;
-            print "\t$a\t$b\t$c\n";
-        }
-        
-    }
 }
