@@ -19,28 +19,32 @@ MessageList
     StrategyModifyREQ           0x13
     StrategyModifyAccept        0x14
     StrategyModifyReject        0x15
-    SubscribeRawData            0x20
-    SubscribeRawDataAck         0x21
-    CancelSubscribe             0x23
-    CancelSubscribeAck          0x24
-    UserDataNotification        0x31
-    UserStatusNotification      0x32
-    InjectSignalingREQ          0x41
-    InjectSignalingAck          0x42
+#    SubscribeRawData            0x20
+#    SubscribeRawDataAck         0x21
+#    CancelSubscribe             0x23
+#    CancelSubscribeAck          0x24
+#    UserDataNotification        0x31
+#    UserStatusNotification      0x32
+#    InjectSignalingREQ          0x41
+#    InjectSignalingAck          0x42
 
+##############################################
+#MessageList
+#    MessageName                TypeValue   
+##############################################
 SubMessageList
-#    MobileIdentityIEI           0x10
-    LocationIEI                 0x11
-    QosIEI                      0x12
+    MobileIdentityIEI    Uint8       0x10
+    LocationIEI          Uint8       0x11
+    QosIEI               Uint8       0x12
 #    ServiceInfoIEI              0x13
 #    DateTimeIEI                 0x14
-    PhoneNumberIEI              0x15
-    UserAgentIEI                0x16
-    ApnIEI                      0x17
-    UrlIEI                      0x18
-    PropertiesIEI               0x20
-    StrategyIEI                 0x21
-    RtdIEI                      0x22
+    PhoneNumberIEI       Uint8       0x15
+    UserAgentIEI         Uint16      0x16
+    ApnIEI               Uint16      0x17
+    UrlIEI               Uint16      0x18
+    PropertiesIEI        Uint16      0x20
+    StrategyIEI          Uint16      0x21
+    RtdIEI               Uint16      0x22
 
 
 ##############################################

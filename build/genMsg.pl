@@ -5,9 +5,7 @@ my $msgOutFile = $msgDefFile;
 $msgOutFile =~ s/msg$/h/;
 
 my %msgName2Type;
-my %msgType2Name;
-my %submsgName2Type;
-my %submsgType2Name;
+my @submsgName2Type;
 
 #hash table for all the message defination
 #structure
@@ -26,9 +24,10 @@ open CMSG_HANDLE, " > $msgOutFile" or die "failed to open $msgOutFile:$!\n";
 
     genHeaders();
 
-    while((my $subType, my $subValue) = each %submsgName2Type)
+    foreach my $TypeLenTypeValue (@submsgName2Type)
     {
-        genSubMsg($subType, $subValue);
+        (my $subType, my $lengthType, my $subValue) = @$TypeLenTypeValue;
+        genSubMsg($subType, $lengthType, $subValue);
     }
     foreach my $msgName  (@msgsSeq)
     {
@@ -80,10 +79,11 @@ END_OF_MESSAGE_E
 sub genSubMsg
 {
     my $submsgType = shift;
+    my $submsgLenType = shift;
     my $submsgValue = shift;
 
 print CMSG_HANDLE<<END_OF_SUBMSG;
-    typedef TlvString<${submsgValue}> ${submsgType};
+    typedef TlvString<${submsgValue}, ${submsgLenType}> ${submsgType};
 END_OF_SUBMSG
 
 }
@@ -312,7 +312,6 @@ END_OF_ENCODE_BODY
         }
         elsif ($fieldOption eq "O")
         {
-            my $msgType = $submsgName2Type{ucfirst($fieldName)};
 print  CMSG_HANDLE<<END_OF_ENCODE_OBODY;
             if ($fieldName) 
             {
@@ -387,9 +386,9 @@ sub parseMsgDef
         
         if ($state eq "SubMessageList")
         {
-            if ($line =~ /^\s+(\w+)\s+(\w+)\s*$/)
+            if ($line =~ /^\s+(\w+)\s+(\w+)\s+(\w+)\s*$/)
             {
-                $submsgName2Type{$1} = $2;
+                push @submsgName2Type, [$1, $2, $3];
             }
             else
             {
@@ -473,6 +472,11 @@ sub dumpMsgDef
     }
 
     print "-" x 35 . "SubMessage2Type" . "-" x 35 . "\n";
+    foreach my $TypeLenTypeValue (@submsgName2Type)
+    {
+        (my $subType, my $lengthType, my $subValue) = @$TypeLenTypeValue;
+        print "TlvString<$subValue, $lengthType> $subType\n";
+    }
     while(($key, $value) = each %submsgName2Type)
     {
         print "$key\t$value\n";
