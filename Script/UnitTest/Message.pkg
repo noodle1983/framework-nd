@@ -1,0 +1,6 @@
+$#include "Message.h"
+class Message
+{
+    int i;
+    string str;
+};
