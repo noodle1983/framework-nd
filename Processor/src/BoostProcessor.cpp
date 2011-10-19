@@ -4,6 +4,30 @@
 #include <boost/bind.hpp>
 
 using namespace Processor;
+
+//-----------------------------------------------------------------------------
+
+static boost::mutex netProcessorInstanceMutex;
+static boost::shared_ptr<BoostProcessor> netProcessorInstanceReleaser;
+BoostProcessor* BoostProcessor::netProcessorM = NULL;
+
+//-----------------------------------------------------------------------------
+
+BoostProcessor* BoostProcessor::getNetInstance()
+{
+    if (NULL == netProcessorM)
+    {
+        boost::lock_guard<boost::mutex> lock(netProcessorInstanceMutex);
+        if (NULL == netProcessorM)
+        {
+            netProcessorM = new BoostProcessor(3);
+            netProcessorInstanceReleaser.reset(netProcessorM);
+            netProcessorM->start();
+        }
+    }
+    return netProcessorM;
+}
+
 //-----------------------------------------------------------------------------
 BoostProcessor::BoostProcessor(const unsigned theThreadCount)
     :threadCountM(theThreadCount), 
@@ -15,6 +39,7 @@ BoostProcessor::BoostProcessor(const unsigned theThreadCount)
 
 BoostProcessor::~BoostProcessor()
 {
+    threadsM.interrupt_all();
     delete []workersM;
 }
 

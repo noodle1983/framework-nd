@@ -18,10 +18,13 @@ namespace Processor
 
         int process(const unsigned theId, Job* job);
 
+        static BoostProcessor* getNetInstance();
     private:
         unsigned threadCountM;
         BoostWorker* workersM;
         boost::thread_group threadsM;
+
+        static BoostProcessor* netProcessorM;
     };
 
 }

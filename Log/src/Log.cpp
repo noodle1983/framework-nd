@@ -11,7 +11,7 @@ using namespace Log;
 
 static boost::mutex logInstanceMutex;
 static boost::shared_ptr<Logger> logInstanceReleaser;
-Logger* Logger::logM;
+Logger* Logger::logM = NULL;
 
 //-----------------------------------------------------------------------------
 
