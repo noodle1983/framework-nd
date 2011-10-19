@@ -10,16 +10,21 @@ namespace Net
         class SocketConnection;
         typedef boost::shared_ptr<SocketConnection> SocketConnectionPtr;
     }
-    enum ProtocolAccept
-    {
-        REJECTE = -1,
-        ACCEPTE = 0,
-        BUFFERE = 1
-    };
     class IProtocol
     {
     public:
         virtual ~IProtocol() {};
+
+		/**
+		 *
+		 * interface: asynHandleInput
+		 * Description: the net framework will notify the protocol object the input event,
+		 * 		For the performance, Protocol should handle the input in another thread.
+		 * the Args:
+		 * 		theFd: which socket the input is from 
+		 * 		connection: the socket connection which can be write to
+		 *
+		 */
         virtual int asynHandleInput(int theFd, Connection::SocketConnectionPtr connection) = 0;
     };
 

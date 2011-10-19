@@ -17,6 +17,7 @@ namespace Msg
         ~TlvString(){}
 
         enum {TAG = theTag};
+		enum {MIN_BYTES = Uintx::MIN_BYTES + 1};
 
         void init()
         {

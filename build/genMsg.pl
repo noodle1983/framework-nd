@@ -114,6 +114,7 @@ print CMSG_HANDLE<<END_OF_MSGDEF_ENUM;
 END_OF_MSGDEF_ENUM
 
     }
+    genMinSize($msgName, $msgDef);
 
     genInitFunction($msgName, $msgDef);
     genDecodeFunction($msgName, $msgDef);
@@ -125,6 +126,38 @@ print CMSG_HANDLE<<END_OF_MSGDEF_CLASS_E;
     }; /* end of class ${msgName} */
 
 END_OF_MSGDEF_CLASS_E
+}
+################################################################################
+sub genMinSize
+{
+    my $msgName = shift;
+    my $msgDef = shift;
+
+print CMSG_HANDLE<<END_OF_MINSIZE_BEG;
+		enum
+		{
+			MIN_BYTES =
+END_OF_MINSIZE_BEG
+    
+    foreach(@$msgDef)
+    {
+        ($fieldName, $fieldType, $fieldOption) = @$_;
+        if ($fieldOption eq "M")
+        {
+print  CMSG_HANDLE<<END_OF_MINSIZE_BODY;
+						${fieldType}::MIN_BYTES +
+END_OF_MINSIZE_BODY
+        }
+
+    }
+
+print CMSG_HANDLE <<END_OF_MINSIZE_END;
+						0
+        }; /* end of enum MIN_BYTES */
+
+END_OF_MINSIZE_END
+
+
 }
 ################################################################################
 sub genDumpFunction

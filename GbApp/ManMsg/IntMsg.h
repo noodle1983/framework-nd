@@ -14,6 +14,8 @@ namespace Msg
         Uint8(){}
         ~Uint8(){}
 
+		enum {MIN_BYTES = 1};
+
         void init()
         {
             valueM = 0;
@@ -58,6 +60,8 @@ namespace Msg
     public:
         Uint16(){}
         ~Uint16(){}
+
+		enum {MIN_BYTES = 2};
 
         void init()
         {
@@ -106,6 +110,8 @@ namespace Msg
         Uint32(){}
         ~Uint32(){}
 
+		enum {MIN_BYTES = 4};
+
         void init()
         {
             valueM = 0;
@@ -152,6 +158,8 @@ namespace Msg
     public:
         Uint64(){}
         ~Uint64(){}
+
+		enum {MIN_BYTES = 8};
 
         void init()
         {

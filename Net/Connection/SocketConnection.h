@@ -57,6 +57,7 @@ namespace Connection{
 
         size_t getInput(char* const theBuffer, const size_t theLen);
         size_t getnInput(char* const theBuffer, const size_t theLen);
+        size_t peeknInput(char* const theBuffer, const size_t theLen);
         Net::Buffer::BufferStatus sendn(char* const theBuffer, const size_t theLen);
 
         void setLowWaterMarkWatcher(Watcher* theWatcher);

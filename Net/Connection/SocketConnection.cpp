@@ -201,6 +201,16 @@ size_t SocketConnection::getnInput(char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
+size_t SocketConnection::peeknInput(char* const theBuffer, const size_t theLen)
+{
+    if (CloseE == statusM)
+        return 0;
+
+    return inputQueueM.peekn(theBuffer, theLen);
+}
+
+//-----------------------------------------------------------------------------
+
 Net::Buffer::BufferStatus 
 SocketConnection::sendn(char* const theBuffer, const size_t theLen)
 {
