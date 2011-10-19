@@ -7,21 +7,21 @@ namespace Script
 {
 namespace Ruby
 {
-	class RubyInterpreter
-	{
-	public:
-		RubyInterpreter();
-		virtual ~RubyInterpreter();
+    class RubyInterpreter
+    {
+    public:
+        RubyInterpreter();
+        virtual ~RubyInterpreter();
 
-		void init();
-		void fini();
+        void init();
+        void fini();
 
-		bool execute(const std::string& theCmd);
-		bool executeFile(const std::string& theFilePath);
+        bool execute(const std::string& theCmd);
+        bool executeFile(const std::string& theFilePath);
 
-	private:
-		void logRubyErrors(const std::string& theDesc, int theErrorCode);
-	};
+    private:
+        void logRubyErrors(const std::string& theDesc, int theErrorCode);
+    };
 
 }
 }

@@ -29,9 +29,9 @@ void on_accept(int theFd, short theEvt, void *theArg)
 //-----------------------------------------------------------------------------
 
 TcpServer::TcpServer(
-		ProtocolInterface* theProtocol,
-		Reactor::Reactor* theReactor, 
-		Processor::BoostProcessor* theProcessor)
+        ProtocolInterface* theProtocol,
+        Reactor::Reactor* theReactor, 
+        Processor::BoostProcessor* theProcessor)
     : protocolM(theProtocol)
     , reactorM(theReactor)
     , processorM(theProcessor)
@@ -53,10 +53,10 @@ TcpServer::~TcpServer()
 
 void TcpServer::addAcceptEvent()
 {
-	if (-1 == event_add(acceptEvtM, NULL))
-	{
-		processorM->process(fdM, new Processor::Job(boost::bind(&TcpServer::addAcceptEvent, this)));
-	}
+    if (-1 == event_add(acceptEvtM, NULL))
+    {
+        processorM->process(fdM, new Processor::Job(boost::bind(&TcpServer::addAcceptEvent, this)));
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ int TcpServer::startAt(const int thePort)
     //set socket option
     if (evutil_make_listen_socket_reuseable(fdM) < 0)
     {
-		FATAL("failed to set server socket to reuseable");
+        FATAL("failed to set server socket to reuseable");
         exit(-1);
     }
     if (evutil_make_socket_nonblocking(fdM) < 0)
@@ -145,7 +145,7 @@ int TcpServer::startAt(const int thePort)
         exit(-1);
     }
 
-	acceptEvtM = reactorM->newEvent(fdM, EV_READ, on_accept, this);
+    acceptEvtM = reactorM->newEvent(fdM, EV_READ, on_accept, this);
     addAcceptEvent();
 
     DEBUG("Server has been listening at port " << portM);

@@ -7,7 +7,7 @@ using namespace Script::Lua;
 //-----------------------------------------------------------------------------
 
 LuaRunner::LuaRunner()
-	:luaStateM(NULL)
+    :luaStateM(NULL)
 {
 }
 
@@ -15,7 +15,7 @@ LuaRunner::LuaRunner()
 
 LuaRunner::~LuaRunner()
 {
-    fini();	
+    fini();    
 }
 
 //-----------------------------------------------------------------------------

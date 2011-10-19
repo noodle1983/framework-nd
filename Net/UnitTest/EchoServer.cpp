@@ -42,14 +42,14 @@ int main()
     evthread_use_pthreads();
     Processor::BoostProcessor processor(4);
     processor.start();
-	Net::Reactor::Reactor reactor;
+    Net::Reactor::Reactor reactor;
     Net::Protocol::EchoProtocol echoProtocol(&reactor, &processor);
     Net::Server::TcpServer server(&echoProtocol, &reactor, &processor);
     server.startAt(5555);
     reactor.start();
     
     boost::unique_lock<boost::mutex> lock(closedMutexM);
-	while(!closed)
+    while(!closed)
     {
         closedCondM.wait(lock);
     }

@@ -30,7 +30,7 @@ void on_write(int theFd, short theEvt, void *theArg)
 //-----------------------------------------------------------------------------
 
 SocketConnection::SocketConnection(
-			ProtocolInterface* theProtocol,
+            ProtocolInterface* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor, 
             evutil_socket_t theFd)
@@ -43,8 +43,8 @@ SocketConnection::SocketConnection(
     , stopReadingM(false)
     , watcherM(NULL)
 {
-	readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
-	writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
+    readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
+    writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
     addReadEvent();
 }
 
@@ -65,26 +65,26 @@ SocketConnection::~SocketConnection()
 
 void SocketConnection::addReadEvent()
 {
-	if (CloseE == statusM)
+    if (CloseE == statusM)
         return;
-	if (-1 == event_add(readEvtM, NULL))
-	{
-		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addReadEvent, this)));
-	}
+    if (-1 == event_add(readEvtM, NULL))
+    {
+        processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addReadEvent, this)));
+    }
 }
 
 //-----------------------------------------------------------------------------
 
 void SocketConnection::addWriteEvent()
 {
-	if (CloseE == statusM)
+    if (CloseE == statusM)
         return;
-	if (-1 == event_add(writeEvtM, NULL))
-	{
-		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, this)));
-	}
+    if (-1 == event_add(writeEvtM, NULL))
+    {
+        processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, this)));
+    }
 }
-		
+        
 //-----------------------------------------------------------------------------
 
 int SocketConnection::asynRead(int theFd, short theEvt)
@@ -97,18 +97,18 @@ int SocketConnection::asynRead(int theFd, short theEvt)
 void SocketConnection::onRead(int theFd, short theEvt)
 {
     char buffer[1024]= {0};
-	size_t readBufferLeft = inputQueueM.unusedSize();
-	size_t readLen = (readBufferLeft < sizeof(buffer)) ? readBufferLeft : sizeof(buffer);
-	if (readLen == 0)
-	{
-		if (!stopReadingM)
-		{
-			boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
-	        stopReadingM = true;
-		}
-		protocolM->asynHandleInput(fdM, selfM);
-		return;
-	}
+    size_t readBufferLeft = inputQueueM.unusedSize();
+    size_t readLen = (readBufferLeft < sizeof(buffer)) ? readBufferLeft : sizeof(buffer);
+    if (readLen == 0)
+    {
+        if (!stopReadingM)
+        {
+            boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
+            stopReadingM = true;
+        }
+        protocolM->asynHandleInput(fdM, selfM);
+        return;
+    }
 
     int len = read(theFd, buffer, readLen);
     if (len <= 0) 
@@ -124,11 +124,11 @@ void SocketConnection::onRead(int theFd, short theEvt)
         return;
     }
     size_t putLen = inputQueueM.put(buffer, len);
-	assert(putLen == (size_t)len);
+    assert(putLen == (size_t)len);
 
     while(Net::Buffer::BufferOkE == inputQueueM.getStatus()
         || Net::Buffer::BufferLowE == inputQueueM.getStatus() )
-	{
+    {
         readBufferLeft = inputQueueM.unusedSize();
         readLen = (readBufferLeft < sizeof(buffer)) ? readBufferLeft : sizeof(buffer);
         len = read(theFd, buffer, readLen);
@@ -137,7 +137,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
             break;
         }
         putLen = inputQueueM.put(buffer, len);
-		assert(putLen == (size_t)len);
+        assert(putLen == (size_t)len);
     }
 
     if (Net::Buffer::BufferHighE == inputQueueM.getStatus()
@@ -218,7 +218,7 @@ SocketConnection::sendn(char* const theBuffer, const size_t theLen)
     if (0 == len)
     {
         ERROR("outage of the connection's write queue!");
-		processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
+        processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
         return Net::Buffer::BufferNotEnoughE; 
     }
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
@@ -250,8 +250,8 @@ void SocketConnection::setLowWaterMarkWatcher(Watcher* theWatcher)
 
 void SocketConnection::onWrite(int theFd, short theEvt)
 {
-	char buffer[1024]= {0};
-	size_t peekLen = outputQueueM.peek(buffer, sizeof(buffer));
+    char buffer[1024]= {0};
+    size_t peekLen = outputQueueM.peek(buffer, sizeof(buffer));
     int writeLen = 0;
     while (CloseE != statusM && peekLen > 0)
     {
@@ -287,7 +287,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
 
     if (CloseE != statusM && !outputQueueM.empty())
     {
-		addWriteEvent();
+        addWriteEvent();
     }
     
 }
@@ -315,8 +315,8 @@ void SocketConnection::_close()
     if (CloseE == statusM)
         return;
     statusM = CloseE;
-	reactorM->delEvent(readEvtM);
-	reactorM->delEvent(writeEvtM);
+    reactorM->delEvent(readEvtM);
+    reactorM->delEvent(writeEvtM);
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::_release, this)));
 }
 
