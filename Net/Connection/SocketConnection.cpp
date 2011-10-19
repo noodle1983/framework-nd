@@ -84,7 +84,7 @@ void SocketConnection::addWriteEvent()
         processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, this)));
     }
 }
-        
+
 //-----------------------------------------------------------------------------
 
 int SocketConnection::asynRead(int theFd, short theEvt)
@@ -289,7 +289,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
     {
         addWriteEvent();
     }
-    
+
 }
 
 //-----------------------------------------------------------------------------

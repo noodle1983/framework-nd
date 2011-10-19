@@ -23,7 +23,7 @@ namespace Lua
 
         int init();
         void fini();
-        
+
         void regist(RegistFunc theRegistFunc);
         int loadFile(const std::string& theFile);
         int callFunc(

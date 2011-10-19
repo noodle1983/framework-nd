@@ -24,7 +24,7 @@ namespace Reactor
                 event_callback_fn theFn, 
                 void* theArg);
         inline void delEvent(struct event*& theEvent);
-        
+
         inline struct event *newTimer(
                 event_callback_fn theFn, 
                 void* theArg);

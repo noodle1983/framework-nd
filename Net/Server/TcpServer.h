@@ -37,7 +37,7 @@ namespace Server{
         ProtocolInterface* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
-        
+
         struct event* acceptEvtM;
         int portM;
         evutil_socket_t fdM;

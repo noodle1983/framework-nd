@@ -25,7 +25,7 @@ namespace MsgCodec
     protected:
         CodecInterface(CodecInterface* theNextCodec){ nextCodecM = theNextCodec;}
         CodecInterface* nextCodecM;
-        
+
     };
 
     template<typename MsgType>

@@ -70,7 +70,7 @@ namespace Connection{
         void _close();
         void _release();
 
-        
+
     private:
         //for reactor:
         //  this is enough
@@ -102,9 +102,9 @@ namespace Connection{
         bool stopReadingM;
         boost::mutex watcherMutexM;
         Watcher* watcherM;
-        
+
     };
-    
+
 }
 }
 
