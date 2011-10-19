@@ -17,7 +17,7 @@ namespace Net
 namespace Protocol
 {
 
-    class EchoProtocol:public Net::ProtocolInterface
+    class EchoProtocol:public Net::IProtocol
     {
     public:
         EchoProtocol(

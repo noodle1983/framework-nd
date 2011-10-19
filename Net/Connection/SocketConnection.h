@@ -16,7 +16,7 @@ namespace Processor
 
 namespace Net{
 
-class ProtocolInterface;
+class IProtocol;
 namespace Reactor
 {
     class Reactor;
@@ -41,7 +41,7 @@ namespace Connection{
     {
     public:
         SocketConnection(
-            ProtocolInterface* theProtocol,
+            IProtocol* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor, 
             evutil_socket_t theFd);
@@ -83,7 +83,7 @@ namespace Connection{
         struct event* readEvtM;
         struct event* writeEvtM;
 
-        ProtocolInterface* protocolM;
+        IProtocol* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
 

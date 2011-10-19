@@ -10,7 +10,7 @@ namespace Processor
 
 namespace Net
 {
-class ProtocolInterface;
+class IProtocol;
 namespace Reactor
 {
     class Reactor;
@@ -21,7 +21,7 @@ namespace Server{
     {
     public:
         TcpServer(
-            ProtocolInterface* theProtocol,
+            IProtocol* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor);
         virtual ~TcpServer();
@@ -34,7 +34,7 @@ namespace Server{
         void onAccept(int theFd, short theEvt);
 
     private:
-        ProtocolInterface* protocolM;
+        IProtocol* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
 

@@ -16,10 +16,10 @@ namespace Net
         ACCEPTE = 0,
         BUFFERE = 1
     };
-    class ProtocolInterface
+    class IProtocol
     {
     public:
-        virtual ~ProtocolInterface() {};
+        virtual ~IProtocol() {};
         virtual int asynHandleInput(int theFd, Connection::SocketConnectionPtr connection) = 0;
     };
 

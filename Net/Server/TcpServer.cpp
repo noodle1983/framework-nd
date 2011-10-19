@@ -29,7 +29,7 @@ void on_accept(int theFd, short theEvt, void *theArg)
 //-----------------------------------------------------------------------------
 
 TcpServer::TcpServer(
-        ProtocolInterface* theProtocol,
+        IProtocol* theProtocol,
         Reactor::Reactor* theReactor, 
         Processor::BoostProcessor* theProcessor)
     : protocolM(theProtocol)
