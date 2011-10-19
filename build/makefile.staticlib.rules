@@ -9,6 +9,9 @@ TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \
 OUTSUBDIR=$(addprefix $(OUTDIR)/, $(SUBDIR))
 OBJECTS=$(addprefix $(OUTDIR)/, $(TMPOBJECTS))
 
+AUTOMSGDEF=$(wildcard AutoMsg/*.msg) 
+AUTOMSGTARGET=$(patsubst %.msg, %.h, $(AUTOMSGDEF))
+
 #########################################
 #        Test    Target                 #
 #########################################
@@ -33,10 +36,10 @@ TESTDEPENDTARGET=$(patsubst %.d, %.d.tmp, $(TESTDEPENDFILES))
 all:$(TARGET)
 test:$(TESTTARGET)
 
-$(TARGET):$(AUTOFILE) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
+$(TARGET):$(AUTOMSGTARGET) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
 	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS)
 
-$(TESTTARGET):$(AUTOFILE) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS)
+$(TESTTARGET):$(AUTOMSGTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS)
 	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR)/$(TARGET) $(LDFLAGS) -o $(OUTDIR)/$@
 
 $(OUTDIR):
@@ -62,7 +65,7 @@ $(OUTDIR)/%.o:%.cpp
 $(OUTDIR)/%.o:%.c
 	$(CC) $(CXXFLAGS) -c $< -o $@
 
-%.h:%.msg $(PROJBASE)/build/genMsg.pl
+AutoMsg/%.h:AutoMsg/%.msg $(PROJBASE)/build/genMsg.pl
 	perl $(PROJBASE)/build/genMsg.pl $<
 
 depend: $(OUTDIR) $(OUTSUBDIR) $(DEPENDTARGET)
@@ -70,6 +73,7 @@ testdepend: $(OUTDIR) $(TESTOUTSUBDIR) $(TESTDEPENDTARGET)
 
 .PHONY:clean depend test testdepend
 clean:
-	@rm -rf $(OUTDIR)
+	rm -rf $(OUTDIR)
+	rm -f $(AUTOMSGTARGET)
 
 

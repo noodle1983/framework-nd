@@ -30,5 +30,4 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
-AUTOFILE=AutoMsg/Message.h
 include $(PROJBASE)/build/makefile.staticlib.rules
