@@ -5,6 +5,8 @@
 3PP/libevent/lib/
 3PP/log4cplus/include/
 3PP/log4cplus/lib/
+*/AutoMsg/*.h
+*/LuaObject/*.cpp
 */.lib
 *.swp
 *.log
