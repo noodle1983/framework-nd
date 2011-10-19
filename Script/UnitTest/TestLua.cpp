@@ -1,5 +1,6 @@
 #include "Lua/LuaRunner.h"
-#include <UnitTest/Message.h>
+#include <LuaObject/Message.h>
+#include <iostream>
 #include <string>
 
 using namespace Script::Lua;
@@ -17,6 +18,8 @@ int main()
     runner.callFunc("printHello", "Message", &m);
     runner.callFunc("printHello", "Message", &m);
     runner.fini();
+    std::cout << "Message:" << m.i << ":" 
+                            << m.str << std::endl;
     return 0;
 }
 

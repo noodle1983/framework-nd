@@ -9,8 +9,16 @@ TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \
 OUTSUBDIR=$(addprefix $(OUTDIR)/, $(SUBDIR))
 OBJECTS=$(addprefix $(OUTDIR)/, $(TMPOBJECTS))
 
+#########################################
+#        Auto TARGET                    #
+#########################################
 AUTOMSGDEF=$(wildcard AutoMsg/*.msg) 
 AUTOMSGTARGET=$(patsubst %.msg, %.h, $(AUTOMSGDEF))
+
+TOLUAPKG=$(wildcard LuaObject/*.pkg)
+TOLUACPP=$(patsubst %.pkg, %.cpp, $(TOLUAPKG))
+
+AUTOTARGET= $(AUTOMSGTARGET) $(TOLUACPP)
 
 #########################################
 #        Test    Target                 #
@@ -36,10 +44,10 @@ TESTDEPENDTARGET=$(patsubst %.d, %.d.tmp, $(TESTDEPENDFILES))
 all:$(TARGET)
 test:$(TESTTARGET)
 
-$(TARGET):$(AUTOMSGTARGET) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
+$(TARGET):$(AUTOTARGET) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
 	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS)
 
-$(TESTTARGET):$(AUTOMSGTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS)
+$(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS)
 	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR)/$(TARGET) $(LDFLAGS) -o $(OUTDIR)/$@
 
 $(OUTDIR):
@@ -68,12 +76,14 @@ $(OUTDIR)/%.o:%.c
 AutoMsg/%.h:AutoMsg/%.msg $(PROJBASE)/build/genMsg.pl
 	perl $(PROJBASE)/build/genMsg.pl $<
 
+LuaObject/%.cpp: LuaObject/%.pkg
+	$(PROJBASE)/3PP/tolua++/bin/tolua++ -o $@ $<
+
 depend: $(OUTDIR) $(OUTSUBDIR) $(DEPENDTARGET)
 testdepend: $(OUTDIR) $(TESTOUTSUBDIR) $(TESTDEPENDTARGET)
 
 .PHONY:clean depend test testdepend
 clean:
-	rm -rf $(OUTDIR)
-	rm -f $(AUTOMSGTARGET)
+	rm -rf $(OUTDIR) $(AUTOTARGET)
 
 

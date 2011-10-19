@@ -7,7 +7,8 @@ PROJBASE=$(CURDIR)/..
 #                target                 #
 #########################################
 TARGET=libScript.a
-SUBDIR=Lua 
+SUBDIR=Lua \
+	   LuaObject
 
 #########################################
 #      header and lib dependancy        #
