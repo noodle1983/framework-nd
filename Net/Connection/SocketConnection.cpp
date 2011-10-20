@@ -1,5 +1,6 @@
 #include "BoostProcessor.h"
 #include "Connection/SocketConnection.h"
+#include "Client/TcpClient.h"
 #include "Reactor/Reactor.h"
 #include "Protocol.h"
 #include "Log.h"
@@ -8,6 +9,7 @@
 #include <errno.h>
 #include <string.h>
 #include <err.h>
+
 
 using namespace Net::Connection;
 
@@ -42,12 +44,38 @@ SocketConnection::SocketConnection(
     , statusM(ActiveE)
     , stopReadingM(false)
     , watcherM(NULL)
+	, clientM(NULL)
+	, isConnectedNotified(true)
 {
     readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
     writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
     addReadEvent();
 }
 
+//-----------------------------------------------------------------------------
+
+SocketConnection::SocketConnection(
+            IProtocol* theProtocol,
+            Reactor::Reactor* theReactor, 
+            Processor::BoostProcessor* theProcessor, 
+            evutil_socket_t theFd,
+			Client::TcpClient* theClient)
+    : selfM(this)
+    , protocolM(theProtocol)
+    , reactorM(theReactor)
+    , processorM(theProcessor)
+    , fdM(theFd)
+    , statusM(ActiveE)
+    , stopReadingM(false)
+    , watcherM(NULL)
+	, clientM(theClient)
+	, isConnectedNotified(false)
+{
+    readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
+    writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
+    addWriteEvent();
+    addReadEvent();
+}
 //-----------------------------------------------------------------------------
 
 SocketConnection::~SocketConnection()
@@ -59,6 +87,14 @@ SocketConnection::~SocketConnection()
         watcherM = NULL;
     }
     DEBUG("close fd:" << fdM);
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::rmClient()
+{
+	boost::lock_guard<boost::mutex> lock(clientMutexM);
+	clientM = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -260,6 +296,15 @@ void SocketConnection::setLowWaterMarkWatcher(Watcher* theWatcher)
 
 void SocketConnection::onWrite(int theFd, short theEvt)
 {
+	if (!isConnectedNotified && clientM)
+	{
+		boost::lock_guard<boost::mutex> lock(clientMutexM);
+		if (clientM)
+		{
+			clientM->onConnected();
+			isConnectedNotified = true;
+		}
+	}
     char buffer[1024]= {0};
     size_t peekLen = outputQueueM.peek(buffer, sizeof(buffer));
     int writeLen = 0;
@@ -325,6 +370,15 @@ void SocketConnection::_close()
     if (CloseE == statusM)
         return;
     statusM = CloseE;
+	if (clientM)
+	{
+		boost::lock_guard<boost::mutex> lock(clientMutexM);
+		if (clientM)
+		{
+			clientM->onError();
+			clientM = NULL;
+		}
+	}
     reactorM->delEvent(readEvtM);
     reactorM->delEvent(writeEvtM);
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::_release, this)));

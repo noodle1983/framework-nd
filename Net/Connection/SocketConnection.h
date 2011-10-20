@@ -2,6 +2,7 @@
 #define SOCKETCONNECTION_H
 
 #include "Buffer/KfifoBuffer.h"
+#include <boost/thread.hpp>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -21,17 +22,13 @@ namespace Reactor
 {
     class Reactor;
 }
+namespace Client 
+{
+    class TcpClient;
+}
 
-namespace Connection{
-
-    struct Buffer 
-    {
-        Buffer(): lenM(0), offsetM(0)
-        {}
-        int lenM;
-        int offsetM;
-        char rawM[1024];
-    };
+namespace Connection
+{
 
     class SocketConnection;
     typedef boost::shared_ptr<SocketConnection> SocketConnectionPtr;
@@ -47,11 +44,23 @@ namespace Connection{
             evutil_socket_t theFd);
         ~SocketConnection();
 
+		/**
+		 * if there is a client, SocketConnection will notify it when connected and error.
+		 */
+        SocketConnection(
+            IProtocol* theProtocol,
+            Reactor::Reactor* theReactor, 
+            Processor::BoostProcessor* theProcessor, 
+            evutil_socket_t theFd,
+			Client::TcpClient* theClient);
+
         //interface for reactor 
         int asynRead(int theFd, short theEvt);
         int asynWrite(int theFd, short theEvt);
 
         //interface for upper protocol
+		void rmClient();
+		SocketConnectionPtr self(){return selfM;}	
         void close();
         inline bool isClose() {return statusM == CloseE;}
 
@@ -103,6 +112,11 @@ namespace Connection{
         bool stopReadingM;
         boost::mutex watcherMutexM;
         Watcher* watcherM;
+
+		Client::TcpClient* clientM;
+        boost::mutex clientMutexM;
+		bool isConnectedNotified;
+
 
     };
 

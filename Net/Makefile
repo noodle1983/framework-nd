@@ -7,6 +7,7 @@ PROJBASE=$(CURDIR)/..
 TARGET=libNet.a
 SUBDIR=Connection \
         Server  \
+		Client \
         Reactor \
         Protocol \
         Buffer
