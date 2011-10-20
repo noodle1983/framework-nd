@@ -152,6 +152,7 @@ namespace Msg
     };
     /* for the length of the Message, it is reset again at last.*/
     typedef Uint32 Length32;
+    typedef Uint32 MsgId32;
 
     class Uint64
     {

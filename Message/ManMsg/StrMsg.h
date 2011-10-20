@@ -72,6 +72,58 @@ namespace Msg
         std::string valueM;
     };
 
+    /**
+     * PlainString will eat up all the string up to the tail
+     */
+    class PlainString 
+    {
+    public:
+        PlainString(){}
+        ~PlainString(){}
+
+		enum {MIN_BYTES = 0};
+
+        void init()
+        {
+        }
+
+        int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
+        {
+            if (theLen < theIndex)
+                return -1;
+            valueM.assign(theBuffer + theIndex, theLen - theIndex);
+            theIndex = theLen;
+            return 0;
+        }
+
+        int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
+        {
+            int totalLen = valueM.length();
+            if (theIndex + totalLen > theLen)
+                return -1;
+
+            memcpy(theBuffer + theIndex, valueM.c_str(), valueM.length());
+            theIndex += valueM.length();
+
+            return 0;
+        }
+
+        template<typename StreamType>
+        StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
+        {
+            if (valueM.length() > 16)
+            {
+                theOut << valueM.substr(0, 16) << "..." << "len:" << valueM.length();
+            }
+            else
+            {
+                theOut << valueM;
+            }
+            return theOut;
+        } 
+    public:
+        std::string valueM;
+    };
 }
 }
 #endif  /*STRMSG_H*/

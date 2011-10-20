@@ -23,8 +23,8 @@ MessageList
 #    SubscribeRawDataAck         0x21
 #    CancelSubscribe             0x23
 #    CancelSubscribeAck          0x24
-#    UserDataNotification        0x31
-#    UserStatusNotification      0x32
+    UserDataNotification        0x31
+    UserStatusNotification      0x32
 #    InjectSignalingREQ          0x41
 #    InjectSignalingAck          0x42
 
@@ -55,7 +55,7 @@ SubMessageList
 SubMessage Header
     Length           Length32  M
     TransactionId    Uint32    M
-    MessageType      Uint32    M
+    MessageType      MsgId32   M
 
 SubMessage MsgAHeader
     include Header
@@ -88,7 +88,9 @@ SubMessage MsgE2Header
 #    FieldName    FieldType    InitValue
 ##############################################
 Message MsgHeader
-    include Header
+    Length           Length32  M
+    TransactionId    Uint32    M
+    MessageType      Uint32    M
 
 Message  Heartbeat
     include Header
@@ -156,5 +158,13 @@ Message StrategyModifyAccept
     include MsgCHeader
 
 Message StrategyModifyReject
+    include MsgCHeader
     Cause          CauseIEI                M
 
+Message UserDataNotification
+    include MsgE1Header
+    Content        PlainString             M
+
+Message UserStatusNotification
+    include MsgE1Header
+    Content        PlainString             M
