@@ -134,9 +134,9 @@ sub genMinSize
     my $msgDef = shift;
 
 print CMSG_HANDLE<<END_OF_MINSIZE_BEG;
-		enum
-		{
-			MIN_BYTES =
+        enum
+        {
+            MIN_BYTES =
 END_OF_MINSIZE_BEG
     
     foreach(@$msgDef)
@@ -145,14 +145,14 @@ END_OF_MINSIZE_BEG
         if ($fieldOption eq "M")
         {
 print  CMSG_HANDLE<<END_OF_MINSIZE_BODY;
-						${fieldType}::MIN_BYTES +
+                        ${fieldType}::MIN_BYTES +
 END_OF_MINSIZE_BODY
         }
 
     }
 
 print CMSG_HANDLE <<END_OF_MINSIZE_END;
-						0
+                        0
         }; /* end of enum MIN_BYTES */
 
 END_OF_MINSIZE_END
