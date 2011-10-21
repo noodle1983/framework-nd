@@ -8,13 +8,14 @@
 
 namespace Net
 {
+class IClientProtocol;
 namespace Client
 {
     class TcpClient
     {
     public:
         TcpClient( 
-            IProtocol* theProtocol,
+            IClientProtocol* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor);
         ~TcpClient();
@@ -26,7 +27,7 @@ namespace Client
          *         0  : connected or blocked
          */
         int connect(const std::string& thePeerAddr, const int thePeerPort);
-
+		int close();
         Net::Buffer::BufferStatus sendn(char* const theBuffer, const size_t theLen);
 
 
@@ -34,11 +35,11 @@ namespace Client
          * onXxx
          * Description: TcpClient will be notified if it is xxx.
          */
-        void onConnected();
+        void onConnected(int theFd, Connection::SocketConnectionPtr theConnection);
         void onError();
 
     private:
-        IProtocol* protocolM;
+        IClientProtocol* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
         

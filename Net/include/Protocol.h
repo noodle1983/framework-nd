@@ -25,8 +25,27 @@ namespace Net
          *         connection: the socket connection which can be write to
          *
          */
-        virtual int asynHandleInput(int theFd, Connection::SocketConnectionPtr connection) = 0;
+        virtual int asynHandleInput(int theFd, Connection::SocketConnectionPtr theConnection) = 0;
     };
+
+    class IClientProtocol: public IProtocol
+    {
+    public:
+        virtual ~IClientProtocol() {};
+
+        /**
+         *
+         * interface: asynHandleInput
+         * Description: the net framework will notify the protocol object the input event,
+         *         For the performance, Protocol should handle the input in another thread.
+         * the Args:
+         *         theFd: which socket the input is from 
+         *         connection: the socket connection which can be write to
+         *
+         */
+        virtual int onConnected(int theFd, Connection::SocketConnectionPtr theConnection) {return 0;}
+    };
+
 
 }
 

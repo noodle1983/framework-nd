@@ -1,5 +1,6 @@
 #include "TcpClient.h"
 #include "Connection/SocketConnection.h"
+#include "Protocol.h"
 #include "Log.h"
 
 #include <event.h>
@@ -26,7 +27,7 @@ using namespace Net::Client;
 //-----------------------------------------------------------------------------
 
 TcpClient::TcpClient(
-            IProtocol* theProtocol,
+            IClientProtocol* theProtocol,
             Reactor::Reactor* theReactor, 
             Processor::BoostProcessor* theProcessor)
     : protocolM(theProtocol)
@@ -44,11 +45,19 @@ TcpClient::TcpClient(
 
 TcpClient::~TcpClient()
 {
+	close();
+}
+
+//-----------------------------------------------------------------------------
+
+int TcpClient::close()
+{
     if (connectionM.get())    
     {
         connectionM->close();
         connectionM.reset();
     }
+	return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -98,10 +107,11 @@ int TcpClient::connect(const std::string& thePeerAddr, const int thePeerPort)
 
 //-----------------------------------------------------------------------------
 
-void TcpClient::onConnected()
+void TcpClient::onConnected(int theFd, Connection::SocketConnectionPtr theConnection)
 {
     DEBUG("connected to " << peerAddrM 
             << ":" << peerPortM);
+	protocolM->onConnected(theFd, theConnection);
 }
 
 //-----------------------------------------------------------------------------
@@ -111,6 +121,7 @@ void TcpClient::onError()
     WARN("connection lost from " << peerAddrM 
             << ":" << peerPortM);
     connectionM.reset();
+	//reconnect
 }
 
 //-----------------------------------------------------------------------------

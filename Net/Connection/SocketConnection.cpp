@@ -301,7 +301,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
 		boost::lock_guard<boost::mutex> lock(clientMutexM);
 		if (clientM)
 		{
-			clientM->onConnected();
+			clientM->onConnected(theFd, selfM);
 			isConnectedNotified = true;
 		}
 	}
