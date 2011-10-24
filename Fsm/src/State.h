@@ -3,9 +3,12 @@
 
 #include <map>
 #include <list>
+#include <string>
 
 #include <Event.h>
 #include <Action.h>
+
+#define NEW_FSM_STATE(ID) Fsm::State(#ID, ID)
 
 namespace Fsm
 {
@@ -14,8 +17,9 @@ namespace Fsm
     {
     public:   
         State(){}
-        State(const int theId)
-            :idM(theId)
+        State(const std::string theName, const int theId)
+            : idM(theId)
+            , stateNameM(theName)
         {}
         ~State(){};
 
@@ -36,8 +40,19 @@ namespace Fsm
             return rulesM[theEventId];
         }
 
+        inline bool isValid()
+        {
+            return !stateNameM.empty();
+        }
+        
+        inline std::string& getName()
+        {
+            return stateNameM;
+        }
+
     private:
         int idM;
+        std::string stateNameM;
         std::map<int, ActionList> rulesM; 
     };
 }

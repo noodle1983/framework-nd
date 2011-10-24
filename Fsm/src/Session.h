@@ -9,9 +9,10 @@ namespace Fsm
     class Session
     {
     public:
-        Session(FiniteStateMachine * theFsm);
+        Session(FiniteStateMachine * theFsm, void* theData);
         ~Session();
 
+        State& toNextState(const int theNextStateId);
         void handleEvent(const int theEventId, const int theEventArg);
 
         inline State& getEndState()
@@ -24,10 +25,10 @@ namespace Fsm
             return fsmM->getState(curStateIdM);
         }
 
-        inline State& getNextState(const int theNextStateId)
+        template<typename DataType>
+        inline DataType* getData() 
         {
-            curStateIdM = theNextStateId;
-            return fsmM->getState(curStateIdM);
+            return (DataType*)dataM;
         }
 
     private:
@@ -35,6 +36,8 @@ namespace Fsm
         int endStateIdM;
         FiniteStateMachine* fsmM;
         bool isInitializedM;
+        void* dataM;
+        
     };
 }
 

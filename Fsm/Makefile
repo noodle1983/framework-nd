@@ -12,12 +12,15 @@ SUBDIR=src
 #########################################
 #      header and lib dependancy        #
 #########################################
-INC_DIR= -I. -Isrc 
-STATIC_LIB= 
+INC_DIR= -I. -Isrc \
+		-I../Log/include
+STATIC_LIB= $(PROJBASE)/Log/.lib/libLog.a
 SHARED_LIB_DIR=
-SHARED_LIB=
+SHARED_LIB=-pthread
 
 include $(PROJBASE)/build/makefile.boost.header
+include $(PROJBASE)/build/makefile.staticlib.libevent.linux
+include $(PROJBASE)/build/makefile.staticlib.log4cplus.linux
 #########################################
 #              compiler                 #
 #########################################

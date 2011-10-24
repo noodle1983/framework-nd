@@ -2,6 +2,8 @@
 #include "Session.h"
 #include "State.h"
 
+#include <string>
+
 using namespace Fsm;
 //-----------------------------------------------------------------------------
 
@@ -22,7 +24,7 @@ int Fsm::changeState(
     
     //exec ENTRY_EVT
     {
-        State& nextState = theSession->getNextState(theNextStateId);
+        State& nextState = theSession->toNextState(theNextStateId);
         ActionList& actionList = nextState.getActionList(ENTRY_EVT);
         ActionList::iterator it = actionList.begin();
         for (; it != actionList.end(); it++)
