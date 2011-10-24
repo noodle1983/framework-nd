@@ -13,17 +13,27 @@ namespace Fsm
     class State
     {
     public:   
+        State(){}
         State(const int theId)
             :idM(theId)
         {}
-        ~State();
+        ~State(){};
 
-        inline int getId(){return idM;}
-        void addEvent(Event& theEvent)
+        inline int getId()const {return idM;}
+        void addEvent(const Event& theEvent)
         {
             int eventId = theEvent.getId();
             ActionList& actionList = rulesM[eventId];
             actionList.push_back(theEvent.getAction());
+        }
+        ActionList& getActionList(const int theEventId, const int theEventArg)
+        {
+            return rulesM[theEventId];
+        }
+
+        ActionList& getActionList(const int theEventId)
+        {
+            return rulesM[theEventId];
         }
 
     private:

@@ -6,35 +6,36 @@
 
 namespace Fsm
 {
-    class Fsm
+    class FiniteStateMachine
     {
     public:
-        enum {STATE_NONE = -1;};
-        Fsm()
+        enum {STATE_NONE = -1};
+        FiniteStateMachine()
             : initStateIdM(STATE_NONE)
             , endStateIdM(STATE_NONE)
         {
         }
-        ~Fsm();
 
-        Fsm operator+(State& theState)
+        ~FiniteStateMachine(){}
+
+        FiniteStateMachine& operator+=(const State& theState);
+        FiniteStateMachine& operator+=(const Event& theEvent);
+
+        inline State& getState(const int theStateId)
         {
-            int stateId = theState.getId();
-            if (STATE_NONE == initStateIdM)
-            {
-                initStateIdM = stateId;
-            }
-            endStateIdM = stateId;
-
-            statesM[theState.getId()] = theState;
+            return statesM[theStateId];
         }
-
-        Fsm operator+(Event& theEvent)
+        
+        inline int getFirstState()
         {
-            State& curState = statesM[endStateIdM];
-            curState.addEvent(theEvent);
+            return initStateIdM;
         }
     
+        inline int getLastState()
+        {
+            return endStateIdM;
+        }
+
     private:
         std::map<int, State> statesM;
         int initStateIdM;
