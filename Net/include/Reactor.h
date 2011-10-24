@@ -13,6 +13,7 @@ namespace Reactor
     public:
         Reactor();
         ~Reactor();
+        static Reactor* instance();
 
         void start();
         void dispatchLoop();
@@ -32,6 +33,8 @@ namespace Reactor
         struct event_base* evtBaseM; 
         struct event* heartbeatEventM;//to avoid the event loop exit
         boost::thread_group threadsM;
+
+        static Reactor* reactorM;
     };
 
 //-----------------------------------------------------------------------------

@@ -7,13 +7,33 @@ using namespace Processor;
 
 //-----------------------------------------------------------------------------
 
+static boost::mutex fsmProcessorInstanceMutex;
 static boost::mutex netProcessorInstanceMutex;
+static boost::shared_ptr<BoostProcessor> fsmProcessorInstanceReleaser;
 static boost::shared_ptr<BoostProcessor> netProcessorInstanceReleaser;
+BoostProcessor* BoostProcessor::fsmProcessorM = NULL;
 BoostProcessor* BoostProcessor::netProcessorM = NULL;
+//-----------------------------------------------------------------------------
+
+BoostProcessor* BoostProcessor::fsmInstance()
+{
+    if (NULL == fsmProcessorM)
+    {
+        boost::lock_guard<boost::mutex> lock(fsmProcessorInstanceMutex);
+        if (NULL == fsmProcessorM)
+        {
+            fsmProcessorM = new BoostProcessor(3);
+            fsmProcessorInstanceReleaser.reset(fsmProcessorM);
+            fsmProcessorM->start();
+        }
+    }
+    return fsmProcessorM;
+}
+
 
 //-----------------------------------------------------------------------------
 
-BoostProcessor* BoostProcessor::getNetInstance()
+BoostProcessor* BoostProcessor::netInstance()
 {
     if (NULL == netProcessorM)
     {

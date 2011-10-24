@@ -1,15 +1,23 @@
 #include "Session.h"
 #include "Log.h"
+#include "BoostProcessor.h"
+#include "Reactor.h"
+
+#include <utility>
 
 using namespace Fsm;
 
 
 //-----------------------------------------------------------------------------
 
-Session::Session(FiniteStateMachine* theFsm, void* theData)
+Session::Session(FiniteStateMachine* theFsm, const int theId, void* theData)
     : fsmM(theFsm)
     , isInitializedM(false)
     , dataM(theData)
+    , fsmTimeoutEvtM(NULL)
+    , fsmProcessorM(NULL)
+    , idM(theId)
+    , timerIdM(0)
 {
     curStateIdM = fsmM->getFirstState();
     endStateIdM = fsmM->getLastState();
@@ -67,4 +75,73 @@ State& Session::toNextState(const int theNextStateId)
 
     return nextState;
 }
+
+//-----------------------------------------------------------------------------
+typedef std::pair<Session*, int> TimerPair;
+
+void onFsmTimeOut(int theFd, short theEvt, void *theArg)
+{
+    TimerPair* timerPair = (TimerPair*) theArg;
+    Session* session = timerPair->first;
+    int timerId = timerPair->second;
+    session->asynHandleTimeout(timerId);
+    delete timerPair;
+}
+//-----------------------------------------------------------------------------
+
+void Session::asynHandleTimeout(const int theTimerId)
+{
+    if (fsmProcessorM)
+    {
+        fsmProcessorM->process(idM, 
+            new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
+    }
+    else
+    {
+        Processor::BoostProcessor::fsmInstance()->process(idM, 
+            new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
+    }
+
+}
+
+//-----------------------------------------------------------------------------
+
+void Session::handleTimeout(const int theTimerId)
+{
+    if (fsmTimeoutEvtM && theTimerId == timerIdM)
+    {
+        //otherwise it is another timer and the previous one is freed already
+        Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
+        handleEvent(TIMEOUT_EVT, 0);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Session::newSecTimer(const int theSeconds)
+{
+    if (fsmTimeoutEvtM)
+    {
+        Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
+    }
+    timerIdM++;
+    std::pair<Session*,int>* timerPair = new std::pair<Session*, int>(this, timerIdM);
+    fsmTimeoutEvtM = Net::Reactor::Reactor::instance()->newTimer(onFsmTimeOut, timerPair);
+    struct timeval tv;
+    tv.tv_sec = theSeconds;
+    tv.tv_usec = 0;
+    event_add(fsmTimeoutEvtM, &tv);
+}
+
+//-----------------------------------------------------------------------------
+
+void Session::cancelTimer()
+{
+    if (fsmTimeoutEvtM)
+    {
+        Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
+    }
+}
+
+//-----------------------------------------------------------------------------
 

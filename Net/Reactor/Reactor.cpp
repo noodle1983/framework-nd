@@ -4,6 +4,10 @@
 #include <event.h>
 using namespace Net::Reactor;
 
+#include <boost/thread.hpp>
+#include <boost/shared_ptr.hpp>
+
+
 //-----------------------------------------------------------------------------
 
 void on_heartbeat(int theFd, short theEvt, void *theArg)
@@ -30,6 +34,25 @@ Reactor::~Reactor()
     }
 }
 
+//-----------------------------------------------------------------------------
+
+static boost::mutex reactorInstanceMutex;
+static boost::shared_ptr<Reactor> reactorInstanceReleaser;
+Reactor* Reactor::reactorM = NULL;
+Reactor* Reactor::instance()
+{
+    if (NULL == reactorM)
+    {
+        boost::lock_guard<boost::mutex> lock(reactorInstanceMutex);
+        if (NULL == reactorM)
+        {
+            reactorM = new Reactor();
+            reactorInstanceReleaser.reset(reactorM);
+            reactorM->start();
+        }
+    }
+    return reactorM;
+}
 
 //-----------------------------------------------------------------------------
 
@@ -37,7 +60,7 @@ void Reactor::start()
 {
     heartbeatEventM = event_new(evtBaseM, -1, EV_PERSIST, on_heartbeat, this);
     struct timeval tv;
-    tv.tv_sec = 600;  //5 seconds
+    tv.tv_sec = 5;  //5 seconds
     tv.tv_usec = 0;
     event_add(heartbeatEventM, &tv);
     threadsM.create_thread(boost::bind(&Reactor::dispatchLoop, this));

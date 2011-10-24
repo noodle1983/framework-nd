@@ -16,6 +16,13 @@ namespace Fsm
             Fsm::Session* theSession, 
             const int theEventId,
             const int theEventArg);
+
+    int newSecTimer(
+            Fsm::Session* theSession, 
+            const int theSeconds);
+
+    int cancelTimer(
+            Fsm::Session* theSession);
 }
 
 #endif /* ACTION_H */

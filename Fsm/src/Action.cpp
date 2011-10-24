@@ -47,3 +47,21 @@ int Fsm::generateEvent(
 }
 
 //-----------------------------------------------------------------------------
+int Fsm::newSecTimer(
+        Fsm::Session* theSession, 
+        const int theSeconds)
+{
+    theSession->newSecTimer(theSeconds);
+    return 0;
+}
+
+//-----------------------------------------------------------------------------
+int Fsm::cancelTimer(
+        Fsm::Session* theSession)
+{
+    theSession->cancelTimer();
+    return 0;
+}
+
+//-----------------------------------------------------------------------------
+

@@ -1,6 +1,6 @@
 #include <BoostProcessor.h>
 #include <Server/TcpServer.h>
-#include <Reactor/Reactor.h>
+#include <Reactor.h>
 #include <Protocol/EchoProtocol.h>
 #include <Log.h>
 
