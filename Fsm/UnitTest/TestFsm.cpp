@@ -31,7 +31,7 @@ int main()
     cout << "fsm,endstate:" << fsm.getLastState() << endl;
 
     Fsm::Session session(&fsm);
-    session.fsmForword(1, 0);
+    session.handleEvent(1, 0);
     return 0;
 }
 

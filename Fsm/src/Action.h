@@ -11,6 +11,11 @@ namespace Fsm
     int changeState(
             Fsm::Session* theSession, 
             const int theNextStateId);
+
+    int generateEvent(
+            Fsm::Session* theSession, 
+            const int theEventId,
+            const int theEventArg);
 }
 
 #endif /* ACTION_H */
