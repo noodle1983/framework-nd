@@ -55,8 +55,6 @@ print CMSG_HANDLE<<END_OF_HEADER;
 #include "Log.h"
 #include <boost/optional.hpp>
 
-namespace GbApp
-{
 namespace Msg
 {
 
@@ -66,7 +64,6 @@ END_OF_HEADER
 sub genEnd
 {
 print CMSG_HANDLE<<END_OF_MESSAGE_E;
-}
 }
 
 #endif /* MESSAGE_H */

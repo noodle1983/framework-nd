@@ -28,7 +28,7 @@ namespace Client
          */
         int connect(const std::string& thePeerAddr, const int thePeerPort);
         int close();
-        Net::Buffer::BufferStatus sendn(char* const theBuffer, const size_t theLen);
+        size_t sendn(char* const theBuffer, const size_t theLen);
 
 
         /**
@@ -54,7 +54,7 @@ namespace Client
         Net::Connection::SocketConnectionPtr connectionM;
     };
 
-    inline Net::Buffer::BufferStatus
+    inline size_t
     TcpClient::sendn(char* const theBuffer, const size_t theLen)
     {
         if (connectionM.get())
@@ -63,7 +63,7 @@ namespace Client
         }
         else
         {
-            return Net::Buffer::BufferNotEnoughE;
+            return 0;
         }
 
     }

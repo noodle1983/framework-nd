@@ -5,8 +5,6 @@
 #include <string>
 #include "IntMsg.h"
 
-namespace GbApp
-{
 namespace Msg
 {
     template<char theTag, typename Uintx>
@@ -124,7 +122,6 @@ namespace Msg
     public:
         std::string valueM;
     };
-}
 }
 #endif  /*STRMSG_H*/
 

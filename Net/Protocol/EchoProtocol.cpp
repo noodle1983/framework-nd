@@ -34,13 +34,12 @@ int EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
 {
     char buffer[1024];
     size_t len = 1;
-    Net::Buffer::BufferStatus oBufferStatus = connection->sendn(NULL, 0);
-    while (len > 0 && (Net::Buffer::BufferOkE == oBufferStatus || Net::Buffer::BufferLowE == oBufferStatus))
+    while (len > 0 && connection->isWBufferHealthy())
     {
         len = connection->getInput(buffer, sizeof(buffer));
-        oBufferStatus = connection->sendn(buffer, len);
+        connection->sendn(buffer, len);
     }
-    if (Net::Buffer::BufferHighE == oBufferStatus || Net::Buffer::BufferNotEnoughE == oBufferStatus)
+    if (!connection->isWBufferHealthy())
     {
         connection->setLowWaterMarkWatcher(new Net::Connection::Watcher(boost::bind(&EchoProtocol::asynHandleInput, this, _1, _2)));
     }

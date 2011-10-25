@@ -31,6 +31,10 @@ namespace Buffer
                  : (s > lowWaterMarkM)  ? BufferOkE
                  : BufferLowE;
         }
+        inline bool isHealthy()
+        {
+            return (size() < highWaterMarkM); 
+        }
         inline bool empty() {return writeIndexM == readIndexM;}
         inline size_t size(){return (writeIndexM - readIndexM);}
         inline size_t unusedSize(){return sizeM - (writeIndexM - readIndexM);}

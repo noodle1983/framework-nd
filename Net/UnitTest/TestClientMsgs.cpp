@@ -70,12 +70,11 @@ public:
 
     int send(int theFd, Net::Connection::SocketConnectionPtr theConnection)
     {
-        Net::Buffer::BufferStatus oBufferStatus = theConnection->sendn(NULL, 0);
-        while (Net::Buffer::BufferOkE == oBufferStatus || Net::Buffer::BufferLowE == oBufferStatus)
+        while (theConnection->isWBufferHealthy())
         {
             char* buffer = bufferM[wBufferCountM%10];
-            oBufferStatus = theConnection->sendn(buffer, 1024);
-            if (Net::Buffer::BufferNotEnoughE != oBufferStatus)
+            size_t len = theConnection->sendn(buffer, 1024);
+            if (len > 0)
             {
                 wBufferCountM++;
                 //std::cout << "write buffer count:" << wBufferCountM << std::endl;
@@ -85,7 +84,7 @@ public:
                 }
             }
         }
-        if (Net::Buffer::BufferHighE == oBufferStatus || Net::Buffer::BufferNotEnoughE == oBufferStatus)
+        if (!theConnection->isWBufferHealthy())
         {
             theConnection->setLowWaterMarkWatcher(
                     new Net::Connection::Watcher(boost::bind(&BatchDataProtocol::asynSend, this, _1, _2)));

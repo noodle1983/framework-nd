@@ -3,7 +3,7 @@
 #include <glib.h>
 #include <assert.h>
 using namespace std;
-using namespace GbApp::Msg;
+using namespace Msg;
 
 int main()
 {

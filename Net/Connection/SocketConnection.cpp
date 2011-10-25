@@ -247,14 +247,13 @@ size_t SocketConnection::peeknInput(char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-Net::Buffer::BufferStatus
-SocketConnection::sendn(char* const theBuffer, const size_t theLen)
+size_t SocketConnection::sendn(char* const theBuffer, const size_t theLen)
 {
     if (CloseE == statusM)
-        return Net::Buffer::BufferNotEnoughE;
+        return 0;
 
-    if (theLen == 0)
-        return outputQueueM.getStatus();
+    if (0 == theLen || NULL == theBuffer)
+        return 0;
 
     size_t len = 0;
     {
@@ -263,12 +262,10 @@ SocketConnection::sendn(char* const theBuffer, const size_t theLen)
     }
     if (0 == len)
     {
-        ERROR("outage of the connection's write queue!");
-        processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
-        return Net::Buffer::BufferNotEnoughE;
+        WARN("outage of the connection's write queue!");
     }
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
-    return outputQueueM.getStatus();
+    return len;
 }
 
 //-----------------------------------------------------------------------------

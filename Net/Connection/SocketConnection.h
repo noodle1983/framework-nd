@@ -63,11 +63,15 @@ namespace Connection
         SocketConnectionPtr self(){return selfM;}
         void close();
         inline bool isClose() {return statusM == CloseE;}
+        inline bool isRBufferHealthy(){return inputQueueM.isHealthy();};
+        inline bool isWBufferHealthy(){return outputQueueM.isHealthy();};
+        size_t getRBufferSize(){return inputQueueM.size();};
+        size_t getWBufferSize(){return outputQueueM.size();};
 
         size_t getInput(char* const theBuffer, const size_t theLen);
         size_t getnInput(char* const theBuffer, const size_t theLen);
         size_t peeknInput(char* const theBuffer, const size_t theLen);
-        Net::Buffer::BufferStatus sendn(char* const theBuffer, const size_t theLen);
+        size_t sendn(char* const theBuffer, const size_t theLen);
 
         void setLowWaterMarkWatcher(Watcher* theWatcher);
 

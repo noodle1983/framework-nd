@@ -4,8 +4,6 @@
 #include <string.h>
 #include <glib.h>
 
-namespace GbApp
-{
 namespace Msg
 {
     class Uint8
@@ -202,7 +200,6 @@ namespace Msg
     };
     /* for the length of the Message, it is reset again at last.*/
     typedef Uint64 Length64;
-}
 }
 #endif  /*INTMSG_H*/
 
