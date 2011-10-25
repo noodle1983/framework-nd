@@ -73,7 +73,7 @@ public:
         while (theConnection->isWBufferHealthy())
         {
             char* buffer = bufferM[wBufferCountM%10];
-            size_t len = theConnection->sendn(buffer, 1024);
+            unsigned len = theConnection->sendn(buffer, 1024);
             if (len > 0)
             {
                 wBufferCountM++;

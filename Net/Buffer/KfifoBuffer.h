@@ -26,7 +26,7 @@ namespace Buffer
 
         inline BufferStatus getStatus()
         {
-            size_t s = size();
+            unsigned s = size();
             return (s > highWaterMarkM) ? BufferHighE
                  : (s > lowWaterMarkM)  ? BufferOkE
                  : BufferLowE;
@@ -36,25 +36,25 @@ namespace Buffer
             return (size() < highWaterMarkM); 
         }
         inline bool empty() {return writeIndexM == readIndexM;}
-        inline size_t size(){return (writeIndexM - readIndexM);}
-        inline size_t unusedSize(){return sizeM - (writeIndexM - readIndexM);}
+        inline unsigned size(){return (writeIndexM - readIndexM);}
+        inline unsigned unusedSize(){return sizeM - (writeIndexM - readIndexM);}
 
-        size_t put(const char* const theBuffer, const size_t theLen);
-        size_t get(char* const theBuffer, const size_t theLen);
-        size_t peek(char* const theBuffer, const size_t theLen);
-        size_t putn(const char* const theBuffer, const size_t theLen);
-        size_t getn(char* const theBuffer, const size_t theLen);
-        size_t peekn(char* const theBuffer, const size_t theLen);
-        size_t commitRead(const size_t theLen);
+        unsigned put(const char* const theBuffer, const unsigned theLen);
+        unsigned get(char* const theBuffer, const unsigned theLen);
+        unsigned peek(char* const theBuffer, const unsigned theLen);
+        unsigned putn(const char* const theBuffer, const unsigned theLen);
+        unsigned getn(char* const theBuffer, const unsigned theLen);
+        unsigned peekn(char* const theBuffer, const unsigned theLen);
+        unsigned commitRead(const unsigned theLen);
 
     private:
         char* rawM;
-        size_t sizeM;
-        size_t maskM;
-        mutable size_t readIndexM;
-        mutable size_t writeIndexM;
-        size_t highWaterMarkM;
-        size_t lowWaterMarkM;
+        unsigned sizeM;
+        unsigned maskM;
+        mutable unsigned readIndexM;
+        mutable unsigned writeIndexM;
+        unsigned highWaterMarkM;
+        unsigned lowWaterMarkM;
     };
 }
 }

@@ -55,7 +55,7 @@ public:
     int handleInput(Net::Connection::SocketConnectionPtr theConnection)
     {
         char buffer[1024];
-        size_t len = 1;
+        unsigned len = 1;
         len = theConnection->getInput(buffer, sizeof(buffer));
         assert(len == strlen("Hello"));
         assert(0 == memcmp("Hello", buffer, strlen("Hello")));

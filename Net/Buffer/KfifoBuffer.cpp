@@ -41,13 +41,13 @@ void KfifoBuffer::release()
 
 //-----------------------------------------------------------------------------
 
-size_t KfifoBuffer::put(const char* const theBuffer, const size_t theLen)
+unsigned KfifoBuffer::put(const char* const theBuffer, const unsigned theLen)
 {
-    size_t leftSize = sizeM - writeIndexM + readIndexM;
-    size_t putLen = (theLen < leftSize) ? theLen : leftSize;
+    unsigned leftSize = sizeM - writeIndexM + readIndexM;
+    unsigned putLen = (theLen < leftSize) ? theLen : leftSize;
 
-    size_t leftEnd = sizeM - (writeIndexM & maskM);
-    size_t firstPartLen = (putLen < leftEnd) ? putLen : leftEnd;
+    unsigned leftEnd = sizeM - (writeIndexM & maskM);
+    unsigned firstPartLen = (putLen < leftEnd) ? putLen : leftEnd;
     memcpy(rawM + (writeIndexM & maskM), theBuffer, firstPartLen);
     memcpy(rawM, theBuffer + firstPartLen, putLen - firstPartLen);
     writeIndexM += putLen;
@@ -56,13 +56,13 @@ size_t KfifoBuffer::put(const char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-size_t KfifoBuffer::get(char* const theBuffer, const size_t theLen)
+unsigned KfifoBuffer::get(char* const theBuffer, const unsigned theLen)
 {
-    size_t usedSize = writeIndexM - readIndexM;
-    size_t getLen = (theLen < usedSize) ? theLen : usedSize;
+    unsigned usedSize = writeIndexM - readIndexM;
+    unsigned getLen = (theLen < usedSize) ? theLen : usedSize;
 
-    size_t readIndexToEnd = sizeM - (readIndexM & maskM);
-    size_t firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
+    unsigned readIndexToEnd = sizeM - (readIndexM & maskM);
+    unsigned firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
     memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
     memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
     readIndexM += getLen;
@@ -71,13 +71,13 @@ size_t KfifoBuffer::get(char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-size_t KfifoBuffer::peek(char* const theBuffer, const size_t theLen)
+unsigned KfifoBuffer::peek(char* const theBuffer, const unsigned theLen)
 {
-    size_t usedSize = writeIndexM - readIndexM;
-    size_t getLen = (theLen < usedSize) ? theLen : usedSize;
+    unsigned usedSize = writeIndexM - readIndexM;
+    unsigned getLen = (theLen < usedSize) ? theLen : usedSize;
 
-    size_t readIndexToEnd = sizeM - (readIndexM & maskM);
-    size_t firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
+    unsigned readIndexToEnd = sizeM - (readIndexM & maskM);
+    unsigned firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
     memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
     memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
     return getLen;
@@ -85,15 +85,15 @@ size_t KfifoBuffer::peek(char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-size_t KfifoBuffer::putn(const char* const theBuffer, const size_t theLen)
+unsigned KfifoBuffer::putn(const char* const theBuffer, const unsigned theLen)
 {
-    size_t leftSize = sizeM - writeIndexM + readIndexM;
+    unsigned leftSize = sizeM - writeIndexM + readIndexM;
     if (theLen > leftSize)
         return 0;
-    size_t putLen = theLen;
+    unsigned putLen = theLen;
 
-    size_t leftEnd = sizeM - (writeIndexM & maskM);
-    size_t firstPartLen = (putLen < leftEnd) ? putLen : leftEnd;
+    unsigned leftEnd = sizeM - (writeIndexM & maskM);
+    unsigned firstPartLen = (putLen < leftEnd) ? putLen : leftEnd;
     memcpy(rawM + (writeIndexM & maskM), theBuffer, firstPartLen);
     memcpy(rawM, theBuffer + firstPartLen, putLen - firstPartLen);
     writeIndexM += putLen;
@@ -102,15 +102,15 @@ size_t KfifoBuffer::putn(const char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-size_t KfifoBuffer::getn(char* const theBuffer, const size_t theLen)
+unsigned KfifoBuffer::getn(char* const theBuffer, const unsigned theLen)
 {
-    size_t usedSize = writeIndexM - readIndexM;
+    unsigned usedSize = writeIndexM - readIndexM;
     if (theLen > usedSize)
         return 0;
-    size_t getLen = theLen;
+    unsigned getLen = theLen;
 
-    size_t readIndexToEnd = sizeM - (readIndexM & maskM);
-    size_t firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
+    unsigned readIndexToEnd = sizeM - (readIndexM & maskM);
+    unsigned firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
     memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
     memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
     readIndexM += getLen;
@@ -119,15 +119,15 @@ size_t KfifoBuffer::getn(char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-size_t KfifoBuffer::peekn(char* const theBuffer, const size_t theLen)
+unsigned KfifoBuffer::peekn(char* const theBuffer, const unsigned theLen)
 {
-    size_t usedSize = writeIndexM - readIndexM;
+    unsigned usedSize = writeIndexM - readIndexM;
     if (theLen > usedSize)
         return 0;
-    size_t getLen = theLen;
+    unsigned getLen = theLen;
 
-    size_t readIndexToEnd = sizeM - (readIndexM & maskM);
-    size_t firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
+    unsigned readIndexToEnd = sizeM - (readIndexM & maskM);
+    unsigned firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
     memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
     memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
     return getLen;
@@ -135,7 +135,7 @@ size_t KfifoBuffer::peekn(char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-size_t KfifoBuffer::commitRead(const size_t theLen)
+unsigned KfifoBuffer::commitRead(const unsigned theLen)
 {
     readIndexM += theLen;
     return theLen;

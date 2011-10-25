@@ -28,7 +28,7 @@ namespace Client
          */
         int connect(const std::string& thePeerAddr, const int thePeerPort);
         int close();
-        size_t sendn(char* const theBuffer, const size_t theLen);
+        unsigned sendn(char* const theBuffer, const unsigned theLen);
 
 
         /**
@@ -54,8 +54,8 @@ namespace Client
         Net::Connection::SocketConnectionPtr connectionM;
     };
 
-    inline size_t
-    TcpClient::sendn(char* const theBuffer, const size_t theLen)
+    inline unsigned
+    TcpClient::sendn(char* const theBuffer, const unsigned theLen)
     {
         if (connectionM.get())
         {

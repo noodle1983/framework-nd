@@ -33,7 +33,7 @@ int EchoProtocol::asynHandleInput(int theFd, Connection::SocketConnectionPtr con
 int EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
 {
     char buffer[1024];
-    size_t len = 1;
+    unsigned len = 1;
     while (len > 0 && connection->isWBufferHealthy())
     {
         len = connection->getInput(buffer, sizeof(buffer));

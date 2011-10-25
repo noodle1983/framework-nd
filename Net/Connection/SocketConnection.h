@@ -65,13 +65,13 @@ namespace Connection
         inline bool isClose() {return statusM == CloseE;}
         inline bool isRBufferHealthy(){return inputQueueM.isHealthy();};
         inline bool isWBufferHealthy(){return outputQueueM.isHealthy();};
-        size_t getRBufferSize(){return inputQueueM.size();};
-        size_t getWBufferSize(){return outputQueueM.size();};
+        unsigned getRBufferSize(){return inputQueueM.size();};
+        unsigned getWBufferSize(){return outputQueueM.size();};
 
-        size_t getInput(char* const theBuffer, const size_t theLen);
-        size_t getnInput(char* const theBuffer, const size_t theLen);
-        size_t peeknInput(char* const theBuffer, const size_t theLen);
-        size_t sendn(char* const theBuffer, const size_t theLen);
+        unsigned getInput(char* const theBuffer, const unsigned theLen);
+        unsigned getnInput(char* const theBuffer, const unsigned theLen);
+        unsigned peeknInput(char* const theBuffer, const unsigned theLen);
+        unsigned sendn(char* const theBuffer, const unsigned theLen);
 
         void setLowWaterMarkWatcher(Watcher* theWatcher);
 
