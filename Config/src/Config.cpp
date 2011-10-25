@@ -52,7 +52,7 @@ void ConfigCenter::init()
 //-----------------------------------------------------------------------------
 
 
-void ConfigCenter::loadXml(const std::string theXmlPath) 
+void ConfigCenter::loadXml(const std::string theXmlPath)
 {
     try
     {
@@ -60,13 +60,13 @@ void ConfigCenter::loadXml(const std::string theXmlPath)
     }
     catch (boost::property_tree::xml_parser::xml_parser_error& e)
     {
-        WARN("config file is not found:" << theXmlPath); 
+        WARN("config file is not found:" << theXmlPath);
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void ConfigCenter::saveXml(const std::string theXmlPath) 
+void ConfigCenter::saveXml(const std::string theXmlPath)
 {
     boost::property_tree::xml_parser::write_xml(theXmlPath, configDataM);
 }

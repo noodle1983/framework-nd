@@ -9,15 +9,15 @@ namespace Fsm
     typedef boost::function<void (Fsm::Session *)> Action;
 
     int changeState(
-            Fsm::Session* theSession, 
+            Fsm::Session* theSession,
             const int theNextStateId);
 
     int generateEvent(
-            Fsm::Session* theSession, 
+            Fsm::Session* theSession,
             const int theEventId);
 
     int newSecTimer(
-            Fsm::Session* theSession, 
+            Fsm::Session* theSession,
             const int theSeconds);
 
     int cancelTimer(

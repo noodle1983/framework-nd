@@ -33,8 +33,8 @@ void on_write(int theFd, short theEvt, void *theArg)
 
 SocketConnection::SocketConnection(
             IProtocol* theProtocol,
-            Reactor::Reactor* theReactor, 
-            Processor::BoostProcessor* theProcessor, 
+            Reactor::Reactor* theReactor,
+            Processor::BoostProcessor* theProcessor,
             evutil_socket_t theFd)
     : selfM(this)
     , protocolM(theProtocol)
@@ -44,8 +44,8 @@ SocketConnection::SocketConnection(
     , statusM(ActiveE)
     , stopReadingM(false)
     , watcherM(NULL)
-	, clientM(NULL)
-	, isConnectedNotified(true)
+    , clientM(NULL)
+    , isConnectedNotified(true)
 {
     readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
     writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
@@ -56,10 +56,10 @@ SocketConnection::SocketConnection(
 
 SocketConnection::SocketConnection(
             IProtocol* theProtocol,
-            Reactor::Reactor* theReactor, 
-            Processor::BoostProcessor* theProcessor, 
+            Reactor::Reactor* theReactor,
+            Processor::BoostProcessor* theProcessor,
             evutil_socket_t theFd,
-			Client::TcpClient* theClient)
+            Client::TcpClient* theClient)
     : selfM(this)
     , protocolM(theProtocol)
     , reactorM(theReactor)
@@ -68,8 +68,8 @@ SocketConnection::SocketConnection(
     , statusM(ActiveE)
     , stopReadingM(false)
     , watcherM(NULL)
-	, clientM(theClient)
-	, isConnectedNotified(false)
+    , clientM(theClient)
+    , isConnectedNotified(false)
 {
     readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
     writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
@@ -93,8 +93,8 @@ SocketConnection::~SocketConnection()
 
 void SocketConnection::rmClient()
 {
-	boost::lock_guard<boost::mutex> lock(clientMutexM);
-	clientM = NULL;
+    boost::lock_guard<boost::mutex> lock(clientMutexM);
+    clientM = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -147,13 +147,13 @@ void SocketConnection::onRead(int theFd, short theEvt)
     }
 
     int len = read(theFd, buffer, readLen);
-    if (len <= 0) 
+    if (len <= 0)
     {
         DEBUG("Client disconnected. fd:" << fdM);
         _close();
         return;
     }
-    else if (len > SSIZE_MAX) 
+    else if (len > SSIZE_MAX)
     {
         WARN("Socket failure, disconnecting client:" << strerror(errno));
         _close();
@@ -179,7 +179,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
     if (Net::Buffer::BufferHighE == inputQueueM.getStatus()
             || Net::Buffer::BufferNotEnoughE == inputQueueM.getStatus())
     {
-        //TRACE("Flow Control:Socket " << fdM << " stop reading.", fdM); 
+        //TRACE("Flow Control:Socket " << fdM << " stop reading.", fdM);
         boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
         stopReadingM = true;
     }
@@ -247,7 +247,7 @@ size_t SocketConnection::peeknInput(char* const theBuffer, const size_t theLen)
 
 //-----------------------------------------------------------------------------
 
-Net::Buffer::BufferStatus 
+Net::Buffer::BufferStatus
 SocketConnection::sendn(char* const theBuffer, const size_t theLen)
 {
     if (CloseE == statusM)
@@ -265,7 +265,7 @@ SocketConnection::sendn(char* const theBuffer, const size_t theLen)
     {
         ERROR("outage of the connection's write queue!");
         processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
-        return Net::Buffer::BufferNotEnoughE; 
+        return Net::Buffer::BufferNotEnoughE;
     }
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
     return outputQueueM.getStatus();
@@ -285,7 +285,7 @@ int SocketConnection::asynWrite(int theFd, short theEvt)
 void SocketConnection::setLowWaterMarkWatcher(Watcher* theWatcher)
 {
     boost::lock_guard<boost::mutex> lock(watcherMutexM);
-    if (watcherM) 
+    if (watcherM)
     {
         delete watcherM;
     }
@@ -296,28 +296,28 @@ void SocketConnection::setLowWaterMarkWatcher(Watcher* theWatcher)
 
 void SocketConnection::onWrite(int theFd, short theEvt)
 {
-	if (!isConnectedNotified && clientM)
-	{
-		boost::lock_guard<boost::mutex> lock(clientMutexM);
-		if (clientM)
-		{
-			clientM->onConnected(theFd, selfM);
-			isConnectedNotified = true;
-		}
-	}
+    if (!isConnectedNotified && clientM)
+    {
+        boost::lock_guard<boost::mutex> lock(clientMutexM);
+        if (clientM)
+        {
+            clientM->onConnected(theFd, selfM);
+            isConnectedNotified = true;
+        }
+    }
     char buffer[1024]= {0};
     size_t peekLen = outputQueueM.peek(buffer, sizeof(buffer));
     int writeLen = 0;
     while (CloseE != statusM && peekLen > 0)
     {
         writeLen = write(theFd, buffer, peekLen);
-        if (writeLen < 0) 
+        if (writeLen < 0)
         {
-            if (errno == EINTR || errno == EAGAIN) 
+            if (errno == EINTR || errno == EAGAIN)
             {
                 break;
             }
-            else 
+            else
             {
                 DEBUG("Socket write failure.");
                 _close();
@@ -332,7 +332,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
     if (watcherM && (bufferStatus == Net::Buffer::BufferLowE))
     {
         boost::lock_guard<boost::mutex> lock(watcherMutexM);
-        if (watcherM) 
+        if (watcherM)
         {
             (*watcherM)(fdM, selfM);
             delete watcherM;
@@ -370,15 +370,15 @@ void SocketConnection::_close()
     if (CloseE == statusM)
         return;
     statusM = CloseE;
-	if (clientM)
-	{
-		boost::lock_guard<boost::mutex> lock(clientMutexM);
-		if (clientM)
-		{
-			clientM->onError();
-			clientM = NULL;
-		}
-	}
+    if (clientM)
+    {
+        boost::lock_guard<boost::mutex> lock(clientMutexM);
+        if (clientM)
+        {
+            clientM->onError();
+            clientM = NULL;
+        }
+    }
     reactorM->delEvent(readEvtM);
     reactorM->delEvent(writeEvtM);
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::_release, this)));

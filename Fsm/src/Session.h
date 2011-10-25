@@ -38,7 +38,7 @@ namespace Fsm
         }
 
         template<typename DataType>
-        inline DataType* getData() 
+        inline DataType* getData()
         {
             return (DataType*)dataM;
         }
@@ -54,7 +54,7 @@ namespace Fsm
         Processor::BoostProcessor* fsmProcessorM;
         int idM;
         int timerIdM;
-                
+
     };
 }
 

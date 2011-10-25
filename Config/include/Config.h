@@ -23,8 +23,8 @@ namespace Config
             configDataM.put(theKey, theValue);
         }
 
-        void loadXml(const std::string theXmlPath); 
-        void saveXml(const std::string theXmlPath); 
+        void loadXml(const std::string theXmlPath);
+        void saveXml(const std::string theXmlPath);
 
     private:
         ConfigCenter();

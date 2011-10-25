@@ -21,7 +21,7 @@ namespace Net
          * Description: the net framework will notify the protocol object the input event,
          *         For the performance, Protocol should handle the input in another thread.
          * the Args:
-         *         theFd: which socket the input is from 
+         *         theFd: which socket the input is from
          *         connection: the socket connection which can be write to
          *
          */
@@ -39,7 +39,7 @@ namespace Net
          * Description: the net framework will notify the protocol object the input event,
          *         For the performance, Protocol should handle the input in another thread.
          * the Args:
-         *         theFd: which socket the input is from 
+         *         theFd: which socket the input is from
          *         connection: the socket connection which can be write to
          *
          */

@@ -27,14 +27,14 @@ int main()
     {
         UserDataNotification userDataNotification1;
         userDataNotification1.init();
-        userDataNotification1.transactionId.valueM = 0;           
-        userDataNotification1.userId.valueM = 1;           
-        userDataNotification1.ip.valueM = 2;           
-        userDataNotification1.lac.valueM = 3;           
-        userDataNotification1.rac.valueM = 4;            
-        userDataNotification1.ci.valueM = 5;           
-        userDataNotification1.status.valueM = 6;            
-        userDataNotification1.content.valueM = string("UserDataNotification");           
+        userDataNotification1.transactionId.valueM = 0;
+        userDataNotification1.userId.valueM = 1;
+        userDataNotification1.ip.valueM = 2;
+        userDataNotification1.lac.valueM = 3;
+        userDataNotification1.rac.valueM = 4;
+        userDataNotification1.ci.valueM = 5;
+        userDataNotification1.status.valueM = 6;
+        userDataNotification1.content.valueM = string("UserDataNotification");
 
         char buffer[1024];
         unsigned wIndex = 0;

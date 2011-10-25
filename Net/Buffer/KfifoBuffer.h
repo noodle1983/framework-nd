@@ -27,7 +27,7 @@ namespace Buffer
         inline BufferStatus getStatus()
         {
             size_t s = size();
-            return (s > highWaterMarkM) ? BufferHighE 
+            return (s > highWaterMarkM) ? BufferHighE
                  : (s > lowWaterMarkM)  ? BufferOkE
                  : BufferLowE;
         }

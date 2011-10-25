@@ -22,7 +22,7 @@ namespace Reactor
 {
     class Reactor;
 }
-namespace Client 
+namespace Client
 {
     class TcpClient;
 }
@@ -39,28 +39,28 @@ namespace Connection
     public:
         SocketConnection(
             IProtocol* theProtocol,
-            Reactor::Reactor* theReactor, 
-            Processor::BoostProcessor* theProcessor, 
+            Reactor::Reactor* theReactor,
+            Processor::BoostProcessor* theProcessor,
             evutil_socket_t theFd);
         ~SocketConnection();
 
-		/**
-		 * if there is a client, SocketConnection will notify it when connected and error.
-		 */
+        /**
+         * if there is a client, SocketConnection will notify it when connected and error.
+         */
         SocketConnection(
             IProtocol* theProtocol,
-            Reactor::Reactor* theReactor, 
-            Processor::BoostProcessor* theProcessor, 
+            Reactor::Reactor* theReactor,
+            Processor::BoostProcessor* theProcessor,
             evutil_socket_t theFd,
-			Client::TcpClient* theClient);
+            Client::TcpClient* theClient);
 
-        //interface for reactor 
+        //interface for reactor
         int asynRead(int theFd, short theEvt);
         int asynWrite(int theFd, short theEvt);
 
         //interface for upper protocol
-		void rmClient();
-		SocketConnectionPtr self(){return selfM;}	
+        void rmClient();
+        SocketConnectionPtr self(){return selfM;}
         void close();
         inline bool isClose() {return statusM == CloseE;}
 
@@ -113,9 +113,9 @@ namespace Connection
         boost::mutex watcherMutexM;
         Watcher* watcherM;
 
-		Client::TcpClient* clientM;
+        Client::TcpClient* clientM;
         boost::mutex clientMutexM;
-		bool isConnectedNotified;
+        bool isConnectedNotified;
 
 
     };

@@ -8,7 +8,7 @@ using namespace Net::Protocol;
 
 //-----------------------------------------------------------------------------
 EchoProtocol::EchoProtocol(
-        Reactor::Reactor* theReactor, 
+        Reactor::Reactor* theReactor,
         Processor::BoostProcessor* theProcessor)
     : reactorM(theReactor)
     , processorM(theProcessor)

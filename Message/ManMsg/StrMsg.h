@@ -10,14 +10,14 @@ namespace GbApp
 namespace Msg
 {
     template<char theTag, typename Uintx>
-    class TlvString 
+    class TlvString
     {
     public:
         TlvString(){}
         ~TlvString(){}
 
         enum {TAG = theTag};
-		enum {MIN_BYTES = Uintx::MIN_BYTES + 1};
+        enum {MIN_BYTES = Uintx::MIN_BYTES + 1};
 
         void init()
         {
@@ -67,7 +67,7 @@ namespace Msg
                 theOut << valueM;
             }
             return theOut;
-        } 
+        }
     public:
         std::string valueM;
     };
@@ -75,13 +75,13 @@ namespace Msg
     /**
      * PlainString will eat up all the string up to the tail
      */
-    class PlainString 
+    class PlainString
     {
     public:
         PlainString(){}
         ~PlainString(){}
 
-		enum {MIN_BYTES = 0};
+        enum {MIN_BYTES = 0};
 
         void init()
         {
@@ -120,7 +120,7 @@ namespace Msg
                 theOut << valueM;
             }
             return theOut;
-        } 
+        }
     public:
         std::string valueM;
     };

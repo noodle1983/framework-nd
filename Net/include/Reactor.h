@@ -20,17 +20,17 @@ namespace Reactor
         void stop();
 
         inline struct event *newEvent(
-                evutil_socket_t theSocket, 
-                short theEvt, 
-                event_callback_fn theFn, 
+                evutil_socket_t theSocket,
+                short theEvt,
+                event_callback_fn theFn,
                 void* theArg);
         inline void delEvent(struct event*& theEvent);
 
         inline struct event *newTimer(
-                event_callback_fn theFn, 
+                event_callback_fn theFn,
                 void* theArg);
     private:
-        struct event_base* evtBaseM; 
+        struct event_base* evtBaseM;
         struct event* heartbeatEventM;//to avoid the event loop exit
         boost::thread_group threadsM;
 
@@ -39,9 +39,9 @@ namespace Reactor
 
 //-----------------------------------------------------------------------------
 struct event* Reactor::newEvent(
-                evutil_socket_t theSocket, 
-                short theEvt, 
-                event_callback_fn theFn, 
+                evutil_socket_t theSocket,
+                short theEvt,
+                event_callback_fn theFn,
                 void* theArg)
 {
     return event_new(evtBaseM, theSocket, theEvt, theFn, theArg);
@@ -58,7 +58,7 @@ void Reactor::delEvent(struct event*& theEvent)
 
 //-----------------------------------------------------------------------------
 struct event* Reactor::newTimer(
-                event_callback_fn theFn, 
+                event_callback_fn theFn,
                 void* theArg)
 {
     return evtimer_new(evtBaseM, theFn, theArg);

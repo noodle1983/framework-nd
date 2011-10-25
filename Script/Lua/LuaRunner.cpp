@@ -15,14 +15,14 @@ LuaRunner::LuaRunner()
 
 LuaRunner::~LuaRunner()
 {
-    fini();    
+    fini();
 }
 
 //-----------------------------------------------------------------------------
 
 int LuaRunner::init()
 {
-    luaStateM = luaL_newstate();     
+    luaStateM = luaL_newstate();
     if (NULL == luaStateM)
     {
         ERROR("failed to new a lua state!");
@@ -68,13 +68,13 @@ int LuaRunner::callFunc(
 {
     lua_getglobal(luaStateM, theFunc.c_str());
     tolua_pushusertype(luaStateM, (void*)theArg, theLuaType.c_str());
-    if( lua_pcall(luaStateM, 1, 0, 0) != 0 ) 
-    { 
-        WARN("failed to call lua function:" << theFunc 
-                << ", errstr:" << lua_tostring(luaStateM, -1));    
+    if( lua_pcall(luaStateM, 1, 0, 0) != 0 )
+    {
+        WARN("failed to call lua function:" << theFunc
+                << ", errstr:" << lua_tostring(luaStateM, -1));
         lua_pop(luaStateM, 1);
         return -1;
-    } 
+    }
     return 0;
 }
 

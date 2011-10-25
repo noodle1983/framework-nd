@@ -2,7 +2,7 @@
 
 int main()
 {
-    TRACE("trace");    
+    TRACE("trace");
     DEBUG("debug");
     WARN("warn");
     ERROR("error");

@@ -18,7 +18,7 @@ int main()
     runner.callFunc("printHello", "Message", &m);
     runner.callFunc("printHello", "Message", &m);
     runner.fini();
-    std::cout << "Message:" << m.i << ":" 
+    std::cout << "Message:" << m.i << ":"
                             << m.str << std::endl;
     return 0;
 }

@@ -14,7 +14,7 @@ namespace Msg
         Uint8(){}
         ~Uint8(){}
 
-		enum {MIN_BYTES = 1};
+        enum {MIN_BYTES = 1};
 
         void init()
         {
@@ -47,7 +47,7 @@ namespace Msg
         {
             theOut << valueM;
             return theOut;
-        } 
+        }
 
 
     public:
@@ -61,7 +61,7 @@ namespace Msg
         Uint16(){}
         ~Uint16(){}
 
-		enum {MIN_BYTES = 2};
+        enum {MIN_BYTES = 2};
 
         void init()
         {
@@ -96,7 +96,7 @@ namespace Msg
         {
             theOut << valueM;
             return theOut;
-        } 
+        }
 
     public:
         guint16 valueM;
@@ -110,7 +110,7 @@ namespace Msg
         Uint32(){}
         ~Uint32(){}
 
-		enum {MIN_BYTES = 4};
+        enum {MIN_BYTES = 4};
 
         void init()
         {
@@ -145,7 +145,7 @@ namespace Msg
         {
             theOut << valueM;
             return theOut;
-        } 
+        }
 
     public:
         guint32 valueM;
@@ -160,7 +160,7 @@ namespace Msg
         Uint64(){}
         ~Uint64(){}
 
-		enum {MIN_BYTES = 8};
+        enum {MIN_BYTES = 8};
 
         void init()
         {
@@ -195,7 +195,7 @@ namespace Msg
         {
             theOut << valueM;
             return theOut;
-        } 
+        }
 
     public:
         guint64 valueM;

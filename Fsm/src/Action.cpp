@@ -8,7 +8,7 @@ using namespace Fsm;
 //-----------------------------------------------------------------------------
 
 int Fsm::changeState(
-        Fsm::Session* theSession, 
+        Fsm::Session* theSession,
         const int theNextStateId)
 {
     //exec EXIT FUNC
@@ -21,7 +21,7 @@ int Fsm::changeState(
             (*it)(theSession);
         }
     }
-    
+
     //exec ENTRY_EVT
     {
         State& nextState = theSession->toNextState(theNextStateId);
@@ -38,7 +38,7 @@ int Fsm::changeState(
 //-----------------------------------------------------------------------------
 
 int Fsm::generateEvent(
-        Fsm::Session* theSession, 
+        Fsm::Session* theSession,
         const int theEventId)
 {
     theSession->handleEvent(theEventId);
@@ -47,7 +47,7 @@ int Fsm::generateEvent(
 
 //-----------------------------------------------------------------------------
 int Fsm::newSecTimer(
-        Fsm::Session* theSession, 
+        Fsm::Session* theSession,
         const int theSeconds)
 {
     theSession->newSecTimer(theSeconds);

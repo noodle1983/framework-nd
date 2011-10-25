@@ -21,7 +21,7 @@ namespace Protocol
     {
     public:
         EchoProtocol(
-            Reactor::Reactor* theReactor, 
+            Reactor::Reactor* theReactor,
             Processor::BoostProcessor* theProcessor);
         ~EchoProtocol();
 

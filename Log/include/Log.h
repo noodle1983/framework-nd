@@ -7,7 +7,7 @@ namespace Log
 {
     class Logger
     {
-    public:    
+    public:
         ~Logger();
 
         static Logger* instance();

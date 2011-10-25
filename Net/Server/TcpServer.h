@@ -22,7 +22,7 @@ namespace Server{
     public:
         TcpServer(
             IProtocol* theProtocol,
-            Reactor::Reactor* theReactor, 
+            Reactor::Reactor* theReactor,
             Processor::BoostProcessor* theProcessor);
         virtual ~TcpServer();
 

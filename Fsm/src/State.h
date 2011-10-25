@@ -15,7 +15,7 @@ namespace Fsm
     typedef std::list<Action> ActionList;
     class State
     {
-    public:   
+    public:
         State(){}
         State(const std::string theName, const int theId)
             : idM(theId)
@@ -40,7 +40,7 @@ namespace Fsm
         {
             return !stateNameM.empty();
         }
-        
+
         inline const std::string& getName() const
         {
             return stateNameM;
@@ -49,7 +49,7 @@ namespace Fsm
     private:
         int idM;
         std::string stateNameM;
-        std::map<int, ActionList> rulesM; 
+        std::map<int, ActionList> rulesM;
     };
 }
 #endif /* STATE_H */

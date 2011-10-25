@@ -4,7 +4,7 @@
 #include "Log.h"
 
 #include <event.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 
 using namespace Net::Client;
@@ -28,7 +28,7 @@ using namespace Net::Client;
 
 TcpClient::TcpClient(
             IClientProtocol* theProtocol,
-            Reactor::Reactor* theReactor, 
+            Reactor::Reactor* theReactor,
             Processor::BoostProcessor* theProcessor)
     : protocolM(theProtocol)
     , reactorM(theReactor)
@@ -45,19 +45,19 @@ TcpClient::TcpClient(
 
 TcpClient::~TcpClient()
 {
-	close();
+    close();
 }
 
 //-----------------------------------------------------------------------------
 
 int TcpClient::close()
 {
-    if (connectionM.get())    
+    if (connectionM.get())
     {
         connectionM->close();
         connectionM.reset();
     }
-	return 0;
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -85,10 +85,10 @@ int TcpClient::connect(const std::string& thePeerAddr, const int thePeerPort)
         evutil_closesocket(sock);
         return -1;
     }
-    if (::connect(sock, (struct sockaddr*)&sin, sizeof(sin)) < 0) 
+    if (::connect(sock, (struct sockaddr*)&sin, sizeof(sin)) < 0)
     {
         int e = errno;
-        if (! ERR_CONNECT_RETRIABLE(e)) 
+        if (! ERR_CONNECT_RETRIABLE(e))
         {
             WARN("failed to connect to " << peerAddrM
                     << ":" << peerPortM
@@ -98,7 +98,7 @@ int TcpClient::connect(const std::string& thePeerAddr, const int thePeerPort)
             return -1;
         }
     }
-    Net::Connection::SocketConnection* connection = 
+    Net::Connection::SocketConnection* connection =
         new Net::Connection::SocketConnection(protocolM, reactorM, processorM, sock, this);
     connectionM = connection->self();
     return 0;
@@ -109,19 +109,19 @@ int TcpClient::connect(const std::string& thePeerAddr, const int thePeerPort)
 
 void TcpClient::onConnected(int theFd, Connection::SocketConnectionPtr theConnection)
 {
-    DEBUG("connected to " << peerAddrM 
+    DEBUG("connected to " << peerAddrM
             << ":" << peerPortM);
-	protocolM->onConnected(theFd, theConnection);
+    protocolM->onConnected(theFd, theConnection);
 }
 
 //-----------------------------------------------------------------------------
 
 void TcpClient::onError()
 {
-    WARN("connection lost from " << peerAddrM 
+    WARN("connection lost from " << peerAddrM
             << ":" << peerPortM);
     connectionM.reset();
-	//reconnect
+    //reconnect
 }
 
 //-----------------------------------------------------------------------------

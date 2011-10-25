@@ -25,12 +25,12 @@ namespace Fsm
         {
             return statesM[theStateId];
         }
-        
+
         inline int getFirstStateId()
         {
             return initStateIdM;
         }
-    
+
         inline int getLastStateId()
         {
             return endStateIdM;

@@ -22,7 +22,7 @@ VALUE cTestStruct;
 VALUE setInt(VALUE self, VALUE theValue)
 {
     TestStruct * st;
-    Data_Get_Struct(self, TestStruct, st); 
+    Data_Get_Struct(self, TestStruct, st);
     st->intM = NUM2INT(theValue);
     std::cout << "setInt:" << st->intM<< std::endl;
     return theValue;
@@ -31,7 +31,7 @@ VALUE setInt(VALUE self, VALUE theValue)
 VALUE getInt(VALUE self)
 {
     TestStruct * st;
-    Data_Get_Struct(self, TestStruct, st); 
+    Data_Get_Struct(self, TestStruct, st);
     std::cout << "getInt:" << st->intM << std::endl;
     return INT2NUM(st->intM);
 }
@@ -50,7 +50,7 @@ void Init_TestStruct()
     TestStruct testSt;
     testSt.intM = 1;
     VALUE rTestSt = Data_Wrap_Struct(cTestStruct, 0, 0, &testSt);
-    rb_funcall(Qnil, rb_intern("test"), 1, rTestSt); 
+    rb_funcall(Qnil, rb_intern("test"), 1, rTestSt);
 
 
 }

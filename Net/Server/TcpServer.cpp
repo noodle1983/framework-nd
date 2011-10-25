@@ -4,7 +4,7 @@
 #include "Reactor.h"
 #include "Log.h"
 
-#include <sys/types.h>  
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -30,7 +30,7 @@ void on_accept(int theFd, short theEvt, void *theArg)
 
 TcpServer::TcpServer(
         IProtocol* theProtocol,
-        Reactor::Reactor* theReactor, 
+        Reactor::Reactor* theReactor,
         Processor::BoostProcessor* theProcessor)
     : protocolM(theProtocol)
     , reactorM(theReactor)
@@ -76,7 +76,7 @@ void TcpServer::onAccept(int theFd, short theEvt)
     socklen_t clientLen = sizeof(clientAddr);
 
     clientFd = accept(theFd, (struct sockaddr *)&clientAddr, &clientLen);
-    if (clientFd < 0) 
+    if (clientFd < 0)
     {
         WARN("accept failed");
         return;
@@ -89,9 +89,9 @@ void TcpServer::onAccept(int theFd, short theEvt)
             return;
         }
         SocketConnection* connection = new SocketConnection(protocolM, reactorM, processorM, clientFd);
-        DEBUG("Accepted connection from "<< inet_ntoa(clientAddr.sin_addr) 
+        DEBUG("Accepted connection from "<< inet_ntoa(clientAddr.sin_addr)
                 << ", fd:" << clientFd
-                << ", con addr:" << std::hex << (size_t)connection); 
+                << ", con addr:" << std::hex << (size_t)connection);
 
         clientFd = accept(theFd, (struct sockaddr *)&clientAddr, &clientLen);
     }
@@ -149,7 +149,7 @@ int TcpServer::startAt(const int thePort)
     addAcceptEvent();
 
     DEBUG("Server has been listening at port " << portM);
-    return 0;    
+    return 0;
 }
 
 //-----------------------------------------------------------------------------

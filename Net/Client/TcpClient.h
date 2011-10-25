@@ -14,9 +14,9 @@ namespace Client
     class TcpClient
     {
     public:
-        TcpClient( 
+        TcpClient(
             IClientProtocol* theProtocol,
-            Reactor::Reactor* theReactor, 
+            Reactor::Reactor* theReactor,
             Processor::BoostProcessor* theProcessor);
         ~TcpClient();
 
@@ -27,7 +27,7 @@ namespace Client
          *         0  : connected or blocked
          */
         int connect(const std::string& thePeerAddr, const int thePeerPort);
-		int close();
+        int close();
         Net::Buffer::BufferStatus sendn(char* const theBuffer, const size_t theLen);
 
 
@@ -42,7 +42,7 @@ namespace Client
         IClientProtocol* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
-        
+
         std::string peerAddrM;
         int peerPortM;
 
@@ -54,16 +54,16 @@ namespace Client
         Net::Connection::SocketConnectionPtr connectionM;
     };
 
-    inline Net::Buffer::BufferStatus 
+    inline Net::Buffer::BufferStatus
     TcpClient::sendn(char* const theBuffer, const size_t theLen)
     {
-        if (connectionM.get())    
+        if (connectionM.get())
         {
             return connectionM->sendn(theBuffer, theLen);
         }
         else
         {
-            return Net::Buffer::BufferNotEnoughE; 
+            return Net::Buffer::BufferNotEnoughE;
         }
 
     }

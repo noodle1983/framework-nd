@@ -19,7 +19,7 @@ void on_heartbeat(int theFd, short theEvt, void *theArg)
 
 Reactor::Reactor()
 {
-    evtBaseM = event_base_new(); 
+    evtBaseM = event_base_new();
     heartbeatEventM = NULL;
 }
 
@@ -71,7 +71,7 @@ void Reactor::start()
 void Reactor::dispatchLoop()
 {
     DEBUG("enter event dispatch.");
-    int ret = event_base_dispatch(evtBaseM);    
+    int ret = event_base_dispatch(evtBaseM);
     if (-1 == ret)
     {
         ERROR("exit event dispatch with error.");

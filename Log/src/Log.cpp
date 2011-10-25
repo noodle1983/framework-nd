@@ -54,7 +54,7 @@ void Logger::init()
     std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(pattern));
     append->setLayout(layout);
     logImplM = log4cplus::Logger::getInstance("Logger");
-    logImplM.addAppender(append);    
+    logImplM.addAppender(append);
     logImplM.setLogLevel(log4cplus::ALL_LOG_LEVEL);
 }
 

@@ -50,7 +50,7 @@ BoostProcessor* BoostProcessor::netInstance()
 
 //-----------------------------------------------------------------------------
 BoostProcessor::BoostProcessor(const unsigned theThreadCount)
-    :threadCountM(theThreadCount), 
+    :threadCountM(theThreadCount),
      workersM(NULL)
 {
 }

@@ -69,7 +69,7 @@ State& Session::toNextState(const int theNextStateId)
 
     curStateIdM = theNextStateId;
     State& nextState = fsmM->getState(curStateIdM);
-   
+
     DEBUG("FsmStateChanged:" << preStateName
             << " -> " << nextState.getName());
 
@@ -93,12 +93,12 @@ void Session::asynHandleTimeout(const int theTimerId)
 {
     if (fsmProcessorM)
     {
-        fsmProcessorM->process(idM, 
+        fsmProcessorM->process(idM,
             new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
     }
     else
     {
-        Processor::BoostProcessor::fsmInstance()->process(idM, 
+        Processor::BoostProcessor::fsmInstance()->process(idM,
             new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
     }
 

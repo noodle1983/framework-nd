@@ -1,0 +1,20 @@
+#!/bin/sh -e
+
+if [ -z "$1" ]; then
+    REMOTE=origin
+else
+    REMOTE=$1
+fi
+
+BRANCH=`git symbolic-ref HEAD`
+case $BRANCH in
+    refs/heads/*)
+        BRANCH=`basename $BRANCH`
+        ;;
+    *)
+        echo "I can't figure out which branch you are on."
+        exit 1
+        ;;
+esac
+
+git push $REMOTE HEAD:refs/for/$BRANCH

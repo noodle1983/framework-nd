@@ -3,7 +3,7 @@
 
 #include "Action.h"
 
-enum 
+enum
 {
     ENTRY_EVT = -1,
     EXIT_EVT  = -2,
