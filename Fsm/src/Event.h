@@ -16,9 +16,8 @@ namespace Fsm
     {
     public:
 
-        Event(const int theId, const int theEventArg, Action theAction)
+        Event(const int theId, Action theAction)
             : idM(theId)
-            , eventArgM(theEventArg)
             , actionM(theAction)
         {}
         ~Event(){};
@@ -28,18 +27,12 @@ namespace Fsm
             return idM;
         }
 
-        int getEventArg() const
-        {
-            return eventArgM;
-        }
-
         Action getAction() const
         {
             return actionM;
         }
     private:
         int idM;
-        int eventArgM;
         Action actionM;
 
     };

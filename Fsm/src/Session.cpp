@@ -31,7 +31,7 @@ Session::~Session()
 
 //-----------------------------------------------------------------------------
 
-void Session::handleEvent(const int theEventId, const int theEventArg)
+void Session::handleEvent(const int theEventId)
 {
     if (!isInitializedM)
     {
@@ -46,7 +46,7 @@ void Session::handleEvent(const int theEventId, const int theEventArg)
         isInitializedM = true;
     }
     State& curState = getCurState();
-    ActionList& actionList = curState.getActionList(theEventId, theEventArg);
+    ActionList& actionList = curState.getActionList(theEventId);
     if (actionList.empty())
     {
         ERROR("the Event is not defined with id:" << theEventId);
@@ -112,7 +112,7 @@ void Session::handleTimeout(const int theTimerId)
     {
         //otherwise it is another timer and the previous one is freed already
         Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
-        handleEvent(TIMEOUT_EVT, 0);
+        handleEvent(TIMEOUT_EVT);
     }
 }
 

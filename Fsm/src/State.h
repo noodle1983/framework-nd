@@ -30,10 +30,6 @@ namespace Fsm
             ActionList& actionList = rulesM[eventId];
             actionList.push_back(theEvent.getAction());
         }
-        ActionList& getActionList(const int theEventId, const int theEventArg)
-        {
-            return rulesM[theEventId];
-        }
 
         ActionList& getActionList(const int theEventId)
         {

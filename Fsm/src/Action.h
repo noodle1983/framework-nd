@@ -14,8 +14,7 @@ namespace Fsm
 
     int generateEvent(
             Fsm::Session* theSession, 
-            const int theEventId,
-            const int theEventArg);
+            const int theEventId);
 
     int newSecTimer(
             Fsm::Session* theSession, 

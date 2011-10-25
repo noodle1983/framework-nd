@@ -20,7 +20,7 @@ namespace Fsm
         ~Session();
 
         State& toNextState(const int theNextStateId);
-        void handleEvent(const int theEventId, const int theEventArg);
+        void handleEvent(const int theEventId);
         void newSecTimer(const int theSeconds);
         void asynHandleTimeout(const int theTimerId);
         void handleTimeout(const int theTimerId);

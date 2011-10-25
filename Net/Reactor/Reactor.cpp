@@ -89,7 +89,7 @@ void Reactor::stop()
 {
     event_base_loopexit(evtBaseM, NULL);
     threadsM.interrupt_all();
-    threadsM.join_all();
+    //threadsM.join_all();
 }
 
 

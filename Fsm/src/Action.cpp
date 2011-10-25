@@ -39,10 +39,9 @@ int Fsm::changeState(
 
 int Fsm::generateEvent(
         Fsm::Session* theSession, 
-        const int theEventId,
-        const int theEventArg)
+        const int theEventId)
 {
-    theSession->handleEvent(theEventId, theEventArg);
+    theSession->handleEvent(theEventId);
     return 0;
 }
 
