@@ -40,8 +40,8 @@ int main()
     fsm += NEW_FSM_STATE(END_STATE);
     fsm +=      Fsm::Event(ENTRY_EVT, 0, &testEnter);
     fsm +=      Fsm::Event(EXIT_EVT, 0, &testExit);
-    cout << "fsm,initstate:" << fsm.getFirstState() << endl;
-    cout << "fsm,endstate:" << fsm.getLastState() << endl;
+    cout << "fsm,initstate:" << fsm.getFirstStateId() << endl;
+    cout << "fsm,endstate:" << fsm.getLastStateId() << endl;
 
     Fsm::Session session(&fsm, 0, NULL);
     session.handleEvent(1, 0);

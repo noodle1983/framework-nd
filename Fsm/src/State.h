@@ -45,7 +45,7 @@ namespace Fsm
             return !stateNameM.empty();
         }
         
-        inline std::string& getName()
+        inline const std::string& getName() const
         {
             return stateNameM;
         }

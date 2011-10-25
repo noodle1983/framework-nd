@@ -59,7 +59,8 @@ BoostProcessor::BoostProcessor(const unsigned theThreadCount)
 
 BoostProcessor::~BoostProcessor()
 {
-    threadsM.interrupt_all();
+    //threadsM.interrupt_all();
+    stop();
     delete []workersM;
 }
 

@@ -1,4 +1,5 @@
 #include "Fsm.h"
+#include "Log.h"
 
 using namespace Fsm;
 //-----------------------------------------------------------------------------
@@ -9,6 +10,12 @@ FiniteStateMachine& FiniteStateMachine::operator+=(const State& theState)
     if (STATE_NONE == initStateIdM)
     {
         initStateIdM = stateId;
+    }
+    if (statesM.find(stateId) != statesM.end())
+    {
+        FATAL("exit because fsm state " << theState.getName()
+                << " is redefined!");
+        exit(-1);
     }
     endStateIdM = stateId;
 

@@ -19,8 +19,8 @@ Session::Session(FiniteStateMachine* theFsm, const int theId, void* theData)
     , idM(theId)
     , timerIdM(0)
 {
-    curStateIdM = fsmM->getFirstState();
-    endStateIdM = fsmM->getLastState();
+    curStateIdM = fsmM->getFirstStateId();
+    endStateIdM = fsmM->getLastStateId();
 }
 
 //-----------------------------------------------------------------------------
@@ -65,7 +65,7 @@ void Session::handleEvent(const int theEventId, const int theEventArg)
 
 State& Session::toNextState(const int theNextStateId)
 {
-    std::string& preStateName = fsmM->getState(curStateIdM).getName();
+    const std::string& preStateName = fsmM->getState(curStateIdM).getName();
 
     curStateIdM = theNextStateId;
     State& nextState = fsmM->getState(curStateIdM);
