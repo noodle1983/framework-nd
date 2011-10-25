@@ -10,6 +10,9 @@ SUBDIR= Log \
 		Config \
 		Processor \
 		Net \
+		Message \
+		Fsm \
+		Script \
 
 
 #########################################

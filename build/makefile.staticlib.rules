@@ -1,15 +1,5 @@
 OUTDIR=.lib
 #########################################
-#        TARGET                         #
-#########################################
-CFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.c))
-CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp))
-TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \
-           $(patsubst %.c, %.o, $(CFILES))
-OUTSUBDIR=$(addprefix $(OUTDIR)/, $(SUBDIR))
-OBJECTS=$(addprefix $(OUTDIR)/, $(TMPOBJECTS))
-
-#########################################
 #        Auto TARGET                    #
 #########################################
 AUTOMSGDEF=$(wildcard AutoMsg/*.msg) 
@@ -19,6 +9,17 @@ TOLUAPKG=$(wildcard LuaObject/*.pkg)
 TOLUACPP=$(patsubst %.pkg, %.cpp, $(TOLUAPKG))
 
 AUTOTARGET= $(AUTOMSGTARGET) $(TOLUACPP)
+
+#########################################
+#        TARGET                         #
+#########################################
+CFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.c))
+CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp)) \
+        $(TOLUACPP)
+TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \
+           $(patsubst %.c, %.o, $(CFILES)) 
+OUTSUBDIR=$(addprefix $(OUTDIR)/, $(SUBDIR))
+OBJECTS=$(addprefix $(OUTDIR)/, $(TMPOBJECTS))
 
 #########################################
 #        Test    Target                 #
