@@ -26,7 +26,8 @@ class BatchDataProtocol: public Net::IClientProtocol
 public:
     enum{TEST_TIMES = 1024 * 512};
     BatchDataProtocol()
-        : proProcessorM(1)
+        : IClientProtocol(&netProcessorM)
+        , proProcessorM(1)
         , netProcessorM(1)
         , tcpClientM(this, &reactorM, &netProcessorM)
         , wBufferCountM(0)
@@ -90,12 +91,6 @@ public:
                     new Net::Connection::Watcher(boost::bind(&BatchDataProtocol::asynSend, this, _1, _2)));
         }
         return 0;
-    }
-
-    int asynHandleInput(int theFd, Net::Connection::SocketConnectionPtr theConnection)
-    {
-        return proProcessorM.process(theFd + 1,
-                new Processor::Job(boost::bind(&BatchDataProtocol::handleInput, this, theConnection)));
     }
 
     int handleInput(Net::Connection::SocketConnectionPtr theConnection)

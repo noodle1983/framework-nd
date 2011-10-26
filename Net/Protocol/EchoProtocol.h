@@ -25,9 +25,8 @@ namespace Protocol
             Processor::BoostProcessor* theProcessor);
         ~EchoProtocol();
 
-        int asynHandleInput(int theFd, Connection::SocketConnectionPtr connection);
-    private:
         int handleInput(Connection::SocketConnectionPtr connection);
+    private:
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
     };

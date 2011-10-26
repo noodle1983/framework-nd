@@ -10,7 +10,8 @@ using namespace Net::Protocol;
 EchoProtocol::EchoProtocol(
         Reactor::Reactor* theReactor,
         Processor::BoostProcessor* theProcessor)
-    : reactorM(theReactor)
+    : IProtocol(theProcessor) 
+    , reactorM(theReactor)
     , processorM(theProcessor)
 {
 }
@@ -19,13 +20,6 @@ EchoProtocol::EchoProtocol(
 
 EchoProtocol::~EchoProtocol()
 {
-}
-
-//-----------------------------------------------------------------------------
-
-int EchoProtocol::asynHandleInput(int theFd, Connection::SocketConnectionPtr connection)
-{
-    return processorM->process(theFd + 1, new Processor::Job(boost::bind(&EchoProtocol::handleInput, this, connection)));
 }
 
 //-----------------------------------------------------------------------------

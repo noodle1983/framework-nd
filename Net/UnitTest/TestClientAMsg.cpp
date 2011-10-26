@@ -24,7 +24,8 @@ class SingleDataProtocol: public Net::IClientProtocol
 {
 public:
     SingleDataProtocol()
-        : proProcessorM(1)
+        : IClientProtocol(&netProcessorM)
+        , proProcessorM(1)
         , netProcessorM(1)
         , tcpClientM(this, &reactorM, &netProcessorM)
     {
@@ -44,12 +45,6 @@ public:
     {
         tcpClientM.connect("127.0.0.1", 5555);
         tcpClientM.sendn("Hello", 5);
-    }
-
-    int asynHandleInput(int theFd, Net::Connection::SocketConnectionPtr theConnection)
-    {
-        return proProcessorM.process(theFd + 1,
-                new Processor::Job(boost::bind(&SingleDataProtocol::handleInput, this, theConnection)));
     }
 
     int handleInput(Net::Connection::SocketConnectionPtr theConnection)
