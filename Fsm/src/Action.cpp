@@ -46,12 +46,22 @@ int Fsm::generateEvent(
 }
 
 //-----------------------------------------------------------------------------
-int Fsm::newSecTimer(
+int Fsm::newTimer(
         Fsm::Session* theSession,
-        const int theSeconds)
+        const long long theUsec)
 {
-    theSession->newSecTimer(theSeconds);
+    theSession->newTimer(theUsec);
     return 0;
+}
+
+//-----------------------------------------------------------------------------
+
+int Fsm::newFuncTimer(
+		Fsm::Session* theSession,
+		TimerGettor theTimerGettor)
+{
+	long long usec = theTimerGettor();
+	return Fsm::newTimer(theSession, usec);
 }
 
 //-----------------------------------------------------------------------------

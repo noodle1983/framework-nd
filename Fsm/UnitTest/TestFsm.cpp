@@ -36,13 +36,13 @@ int main()
     Fsm::FiniteStateMachine fsm;
     fsm += NEW_FSM_STATE(INIT_STATE);
     fsm +=      Fsm::Event(ENTRY_EVT,  &testEnter);
-    fsm +=      Fsm::Event(START_EVT,  boost::bind(Fsm::changeState, _1, 2));
+    fsm +=      Fsm::Event(START_EVT,  CHANGE_STATE(TIME_STATE));
     fsm +=      Fsm::Event(EXIT_EVT,   &testExit);
 
     fsm += NEW_FSM_STATE(TIME_STATE);
-    fsm +=      Fsm::Event(ENTRY_EVT,   boost::bind(Fsm::newSecTimer, _1, 1));
-    fsm +=      Fsm::Event(TIMEOUT_EVT, boost::bind(Fsm::changeState, _1, 3));
-    fsm +=      Fsm::Event(EXIT_EVT,    boost::bind(Fsm::cancelTimer, _1   ));
+    fsm +=      Fsm::Event(ENTRY_EVT,   NEW_TIMER(1 * 1000000));
+    fsm +=      Fsm::Event(TIMEOUT_EVT, CHANGE_STATE(END_STATE));
+    fsm +=      Fsm::Event(EXIT_EVT,    CANCEL_TIMER());
 
     fsm += NEW_FSM_STATE(END_STATE);
     fsm +=      Fsm::Event(ENTRY_EVT,  &testEnter);

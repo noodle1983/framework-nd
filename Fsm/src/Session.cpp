@@ -118,7 +118,7 @@ void Session::handleTimeout(const int theTimerId)
 
 //-----------------------------------------------------------------------------
 
-void Session::newSecTimer(const int theSeconds)
+void Session::newTimer(const long long theUsec)
 {
     if (fsmTimeoutEvtM)
     {
@@ -128,8 +128,8 @@ void Session::newSecTimer(const int theSeconds)
     std::pair<Session*,int>* timerPair = new std::pair<Session*, int>(this, timerIdM);
     fsmTimeoutEvtM = Net::Reactor::Reactor::instance()->newTimer(onFsmTimeOut, timerPair);
     struct timeval tv;
-    tv.tv_sec = theSeconds;
-    tv.tv_usec = 0;
+    tv.tv_sec = theUsec/1000000;
+    tv.tv_usec = theUsec%1000000;
     event_add(fsmTimeoutEvtM, &tv);
 }
 

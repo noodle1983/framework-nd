@@ -12,7 +12,7 @@ SUBDIR=src
 #########################################
 #      header and lib dependancy        #
 #########################################
-INC_DIR= -I. -Isrc \
+INC_DIR= -I. -Iinclude \
 		-I../Net/include \
 		-I../Log/include \
 		-I../Processor/include
