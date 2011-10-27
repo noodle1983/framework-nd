@@ -1,6 +1,6 @@
 #include "BoostProcessor.h"
-#include "Server/TcpServer.h"
-#include "Connection/SocketConnection.h"
+#include "TcpServer.h"
+#include "SocketConnection.h"
 #include "Reactor.h"
 #include "Log.h"
 

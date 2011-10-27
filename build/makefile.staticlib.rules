@@ -52,20 +52,20 @@ $(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS)
 	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR)/$(TARGET) $(LDFLAGS) -o $(OUTDIR)/$@
 
 $(OUTDIR):
-	@if [ ! -d $@ ]; then mkdir $@; fi;
+	@if [ ! -d $@ ]; then mkdir -p $@; fi;
 
 $(TESTOUTSUBDIR):
-	@if [ ! -d $@ ]; then mkdir $@; fi;
+	@if [ ! -d $@ ]; then mkdir -p $@; fi;
 
 $(OUTSUBDIR):
-	@if [ ! -d $@ ]; then mkdir $@; fi;
+	@if [ ! -d $@ ]; then mkdir -p $@; fi;
 
 -include $(DEPENDFILES)
 -include $(TESTDEPENDFILES)
 $(OUTDIR)/%.d.tmp:%.cpp
 	@echo "building dependancy for $<..."
 	@set -e; rm -f $@ $(OUTDIR)/$*.d; \
-	$(CC) $(CXXFLAGS) -MM -c $< > $@; \
+	($(CC) $(CXXFLAGS) -MM -c $< > $@ || rm -f $@) &&  \
 	sed 's,\(.*\)\.o[ :]*,$(OUTDIR)/$*.o $@: ,g' <$@ >$(OUTDIR)/$*.d; 
 
 $(OUTDIR)/%.o:%.cpp

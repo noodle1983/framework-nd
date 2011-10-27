@@ -1,5 +1,5 @@
 #include "TcpClient.h"
-#include "Connection/SocketConnection.h"
+#include "SocketConnection.h"
 #include "Protocol.h"
 #include "Log.h"
 

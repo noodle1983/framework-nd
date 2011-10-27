@@ -1,11 +1,11 @@
 #ifndef SOCKETCONNECTION_H
 #define SOCKETCONNECTION_H
 
-#include "Buffer/KfifoBuffer.h"
+#include "KfifoBuffer.h"
+
 #include <boost/thread.hpp>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
-
 #include <event.h>
 
 struct timeval;

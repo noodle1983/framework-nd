@@ -1,7 +1,7 @@
 #ifndef TCPCLIENT_H
 #define TCPCLIENT_H
 
-#include "Connection/SocketConnection.h"
+#include "SocketConnection.h"
 #include <string>
 #include <boost/shared_ptr.hpp>
 
