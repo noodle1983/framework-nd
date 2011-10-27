@@ -26,10 +26,10 @@ OBJECTS=$(addprefix $(OUTDIR)/, $(TMPOBJECTS))
 #########################################
 TESTDIR=UnitTest
 TESTCPPFILES=$(foreach DIR, $(TESTDIR), $(wildcard $(DIR)/*.cpp))
-TESTTARGET=$(basename $(notdir $(TESTOBJECTS)))
 TMPTESTOBJECTS=$(patsubst %.cpp, %.o, $(TESTCPPFILES))
 TESTOUTSUBDIR=$(addprefix $(OUTDIR)/, $(TESTDIR))
 TESTOBJECTS=$(addprefix $(OUTDIR)/, $(TMPTESTOBJECTS))
+TESTTARGET=$(basename $(notdir $(TESTOBJECTS)))
 
 #########################################
 #               Depend                  #
