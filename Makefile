@@ -33,6 +33,7 @@ test: $(SUBDIR) $(OUTDIR)
 	done                  
 
 clean: $(SUBDIR)
+	@rm -rf $(RELEASE_DIR)
 	@for DIR in $(SUBDIR);  \
 	do                     \
 		make clean -C $$DIR || exit -1;  \
