@@ -16,12 +16,12 @@ namespace Fsm
     class Session
     {
     public:
-        Session(FiniteStateMachine * theFsm, const int theId, void* theData);
+        Session(FiniteStateMachine* theFsm, const int theId, void* theData);
         ~Session();
 
         State& toNextState(const int theNextStateId);
         void handleEvent(const int theEventId);
-        void newSecTimer(const int theSeconds);
+        void newTimer(const long long theUsec);
         void asynHandleTimeout(const int theTimerId);
         void handleTimeout(const int theTimerId);
         void cancelTimer();
