@@ -1,10 +1,7 @@
-3PP/boost/include/
-3PP/boost/lib/
-3PP/libevent/bin/
-3PP/libevent/include/
-3PP/libevent/lib/
-3PP/log4cplus/include/
-3PP/log4cplus/lib/
+3PP/*
+release/*
+*/3PP/*
+*/release/*
 */AutoMsg/*.h
 */LuaObject/*.cpp
 */.lib

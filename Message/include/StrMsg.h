@@ -1,0 +1,1 @@
+../ManMsg/StrMsg.h

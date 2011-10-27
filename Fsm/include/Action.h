@@ -8,7 +8,8 @@
 #define GEN_EVT(theEventId)       boost::bind(Fsm::generateEvent, _1, (theEventId))
 #define NEW_TIMER(theUsec)        boost::bind(Fsm::newTimer,      _1, (theUsec))
 #define NEW_FUNC_TIMER(theGettor) boost::bind(Fsm::newFuncTimer,  _1, (theGettor))
-#define CANCEL_TIMER()            boost::bind(Fsm::cancelTimer,   _1)
+#define CANCEL_TIMER()            (&Fsm::cancelTimer)
+#define DELETE_SESSION()          (&Fsm::deleteSession)
 
 namespace Fsm
 {
@@ -33,6 +34,9 @@ namespace Fsm
             TimerGettor theTimerGettor);
 
     int cancelTimer(
+            Fsm::Session* theSession);
+
+    int deleteSession(
             Fsm::Session* theSession);
 }
 

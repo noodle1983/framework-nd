@@ -1,4 +1,4 @@
-#include "Lua/LuaRunner.h"
+#include "LuaRunner.h"
 #include <LuaObject/Message.h>
 #include <iostream>
 #include <string>

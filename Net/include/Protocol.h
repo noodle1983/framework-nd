@@ -1,7 +1,7 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
-#include <BoostProcessor.h>
+#include "BoostProcessor.h"
 #include <boost/bind.hpp>
 
 namespace Net

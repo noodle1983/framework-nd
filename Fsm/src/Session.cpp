@@ -10,13 +10,12 @@ using namespace Fsm;
 
 //-----------------------------------------------------------------------------
 
-Session::Session(FiniteStateMachine* theFsm, const int theId, void* theData)
+Session::Session(FiniteStateMachine* theFsm, const int theProcessorId)
     : fsmM(theFsm)
     , isInitializedM(false)
-    , dataM(theData)
     , fsmTimeoutEvtM(NULL)
     , fsmProcessorM(NULL)
-    , idM(theId)
+    , processorIdM(theProcessorId)
     , timerIdM(0)
 {
     curStateIdM = fsmM->getFirstStateId();
@@ -27,6 +26,23 @@ Session::Session(FiniteStateMachine* theFsm, const int theId, void* theData)
 
 Session::~Session()
 {
+}
+
+//-----------------------------------------------------------------------------
+
+void Session::asynHandleEvent(const int theEventId)
+{
+    if (fsmProcessorM)
+    {
+        fsmProcessorM->process(processorIdM,
+            new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
+    }
+    else
+    {
+        Processor::BoostProcessor::fsmInstance()->process(processorIdM,
+            new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
+    }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -93,12 +109,12 @@ void Session::asynHandleTimeout(const int theTimerId)
 {
     if (fsmProcessorM)
     {
-        fsmProcessorM->process(idM,
+        fsmProcessorM->process(processorIdM,
             new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
     }
     else
     {
-        Processor::BoostProcessor::fsmInstance()->process(idM,
+        Processor::BoostProcessor::fsmInstance()->process(processorIdM,
             new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
     }
 
