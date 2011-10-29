@@ -6,7 +6,10 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-TARGET=libProcessor.a
+MOD_NAME=Processor
+#BIN_TARGET=Processor
+#SHARED_TARGET=libProcessor.so
+STATIC_TARGET=libProcessor.a
 SUBDIR=src 
 
 #########################################

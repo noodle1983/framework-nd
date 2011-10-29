@@ -1,8 +1,10 @@
 CC=g++
 cc=gcc
 AR=ar
-ARFLAGS=-rc
-CXXFLAGS=-Wall -Wno-write-strings -g $(INC_DIR) 
-CFLAGs=-Wall -Wno-write-strings -g $(INC_DIR)
+RANLIB=ranlib 
+ARFLAGS=rcs
+SHAREDFLAG= -fPIC -shared
+CXXFLAGS=-fPIC -Wall -Wno-write-strings -g $(INC_DIR) 
+CFLAGs=-fPIC -Wall -Wno-write-strings -g $(INC_DIR)
 LDFLAGS=$(SHARED_LIB_DIR) $(SHARED_LIB) $(STATIC_LIB)
 

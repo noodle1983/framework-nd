@@ -6,7 +6,10 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-TARGET=libGb.a
+MOD_NAME=Message
+#BIN_TARGET=Gb
+#SHARED_TARGET=libGb.so
+STATIC_TARGET=libGb.a
 SUBDIR=
 
 #########################################
@@ -15,7 +18,7 @@ SUBDIR=
 INC_DIR= -I. -IAutoMsg -IManMsg \
 		 -I$(PROJBASE)/Log/include
 
-STATIC_LIB=$(PROJBASE)/Log/.lib/libLog.a 
+STATIC_LIB=$(PROJBASE)/.lib/libLog.a 
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread
 

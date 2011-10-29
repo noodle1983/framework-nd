@@ -6,7 +6,10 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-TARGET=libLog.a
+MOD_NAME=Log
+#BIN_TARGET=Log
+#SHARED_TARGET=libLog.so
+STATIC_TARGET=libLog.a
 SUBDIR=src 
 
 #########################################

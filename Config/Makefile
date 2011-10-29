@@ -6,7 +6,10 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-TARGET=libConfig.a
+MOD_NAME=Config
+#BIN_TARGET=Config
+#SHARED_TARGET=libConfig.so
+STATIC_TARGET=libConfig.a
 SUBDIR=src 
 
 #########################################
@@ -17,7 +20,7 @@ INC_DIR=-I. \
      -I./src \
      -I$(PROJBASE)/Log/include \
 
-STATIC_LIB= $(PROJBASE)/Log/.lib/libLog.a \
+STATIC_LIB= $(PROJBASE)/.lib/libLog.a \
 
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread

@@ -4,7 +4,10 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                Target                 #
 #########################################
-TARGET=libNet.a
+MOD_NAME=Net
+#BIN_TARGET=Net
+#SHARED_TARGET=libNet.so
+STATIC_TARGET=libNet.a
 SUBDIR=Connection \
         Server  \
 		Client \
@@ -21,8 +24,8 @@ INC_DIR= -I. \
      -I$(PROJBASE)/Log/include \
 
 STATIC_LIB= \
-    $(PROJBASE)/Processor/.lib/libProcessor.a \
-    $(PROJBASE)/Log/.lib/libLog.a \
+    $(PROJBASE)/.lib/libProcessor.a \
+    $(PROJBASE)/.lib/libLog.a \
 
 SHARED_LIB_DIR=
 SHARED_LIB=-lrt

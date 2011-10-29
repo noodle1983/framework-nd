@@ -6,7 +6,10 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-TARGET=libScript.a
+MOD_NAME=Script
+#BIN_TARGET=Script
+#SHARED_TARGET=libScript.so
+STATIC_TARGET=libScript.a
 SUBDIR=Lua \
 	   LuaObject
 
@@ -17,7 +20,7 @@ INC_DIR=-I. \
      -I./include \
 	 -I$(PROJBASE)/Log/include
 
-STATIC_LIB= $(PROJBASE)/Log/.lib/libLog.a \
+STATIC_LIB= $(PROJBASE)/.lib/libLog.a \
 
 SHARED_LIB_DIR=
 SHARED_LIB= -lcrypt -lrt -pthread -ldl

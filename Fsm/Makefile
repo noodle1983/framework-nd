@@ -6,7 +6,10 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-TARGET=libFsm.a
+MOD_NAME=Fsm
+#BIN_TARGET=Fsm
+#SHARED_TARGET=libFsm.so
+STATIC_TARGET=libFsm.a
 SUBDIR=src
 
 #########################################
@@ -18,9 +21,9 @@ INC_DIR= -I. -Iinclude \
 		-I../Processor/include
 
 STATIC_LIB= \
-    $(PROJBASE)/Processor/.lib/libProcessor.a \
-	$(PROJBASE)/Log/.lib/libLog.a \
-	$(PROJBASE)/Net/.lib/libNet.a \
+    $(PROJBASE)/.lib/libProcessor.a \
+	$(PROJBASE)/.lib/libLog.a \
+	$(PROJBASE)/.lib/libNet.a \
 
 SHARED_LIB_DIR=
 SHARED_LIB=-pthread -lrt
