@@ -6,10 +6,6 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-MOD_NAME=Log
-#BIN_TARGET=Log
-#SHARED_TARGET=libLog.so
-STATIC_TARGET=libLog.a
 SUBDIR=src 
 
 #########################################
@@ -35,5 +31,5 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
-include $(PROJBASE)/build/makefile.staticlib.rules
+include $(PROJBASE)/build/makefile.compile.rules
 

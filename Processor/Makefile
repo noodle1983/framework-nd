@@ -6,10 +6,6 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-MOD_NAME=Processor
-#BIN_TARGET=Processor
-#SHARED_TARGET=libProcessor.so
-STATIC_TARGET=libProcessor.a
 SUBDIR=src 
 
 #########################################
@@ -34,5 +30,5 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
-include $(PROJBASE)/build/makefile.staticlib.rules
+include $(PROJBASE)/build/makefile.compile.rules
 

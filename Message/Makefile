@@ -6,10 +6,6 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-MOD_NAME=Message
-#BIN_TARGET=Gb
-#SHARED_TARGET=libGb.so
-STATIC_TARGET=libGb.a
 SUBDIR=
 
 #########################################
@@ -33,4 +29,4 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
-include $(PROJBASE)/build/makefile.staticlib.rules
+include $(PROJBASE)/build/makefile.compile.rules

@@ -6,10 +6,6 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-MOD_NAME=Config
-#BIN_TARGET=Config
-#SHARED_TARGET=libConfig.so
-STATIC_TARGET=libConfig.a
 SUBDIR=src 
 
 #########################################
@@ -36,5 +32,5 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
-include $(PROJBASE)/build/makefile.staticlib.rules
+include $(PROJBASE)/build/makefile.compile.rules
 

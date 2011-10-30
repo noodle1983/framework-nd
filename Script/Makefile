@@ -6,10 +6,6 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-MOD_NAME=Script
-#BIN_TARGET=Script
-#SHARED_TARGET=libScript.so
-STATIC_TARGET=libScript.a
 SUBDIR=Lua \
 	   LuaObject
 
@@ -37,5 +33,5 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
-include $(PROJBASE)/build/makefile.staticlib.rules
+include $(PROJBASE)/build/makefile.compile.rules
 

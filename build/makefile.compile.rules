@@ -1,4 +1,16 @@
-OUTDIR=.lib
+#########################################
+#          OUT DIR                      #
+#########################################
+DIR_LIST=$(subst /, \ , $(CURDIR))
+MOD_NAME=$(word $(words $(DIR_LIST)), $(DIR_LIST))
+
+BIN_TARGET=$(if $(APPDIR), $(MOD_NAME))
+SHARED_TARGET=$(if $(COMPILE_SHARED), lib$(MOD_NAME).so)
+STATIC_TARGET=lib$(MOD_NAME).a
+TARGET = $(BIN_TARGET) $(SHARED_TARGET) $(STATIC_TARGET)
+
+OUTDIR_PREFIX=$(PROJBASE)/.lib
+OUTDIR=$(OUTDIR_PREFIX)/$(MOD_NAME)
 #########################################
 #        Auto TARGET                    #
 #########################################
@@ -11,7 +23,7 @@ TOLUACPP=$(patsubst %.pkg, %.cpp, $(TOLUAPKG))
 AUTOTARGET= $(AUTOMSGTARGET) $(TOLUACPP)
 
 #########################################
-#        TARGET                         #
+#               OBJECTS                 #
 #########################################
 CFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.c))
 CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp)) \
@@ -30,6 +42,7 @@ TMPTESTOBJECTS=$(patsubst %.cpp, %.o, $(TESTCPPFILES))
 TESTOUTSUBDIR=$(addprefix $(OUTDIR)/, $(TESTDIR))
 TESTOBJECTS=$(addprefix $(OUTDIR)/, $(TMPTESTOBJECTS))
 TESTTARGET=$(basename $(notdir $(TESTOBJECTS)))
+TEST_OUTDIR=$(OUTDIR_PREFIX)/test
 
 #########################################
 #               Depend                  #
@@ -45,13 +58,20 @@ TESTDEPENDTARGET=$(patsubst %.d, %.d.tmp, $(TESTDEPENDFILES))
 all:$(TARGET)
 test:$(TESTTARGET)
 
-$(TARGET):$(AUTOTARGET) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
-	$(AR) $(ARFLAGS) $(OUTDIR)/$(TARGET) $(OBJECTS)
+$(STATIC_TARGET):$(AUTOTARGET) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
+	$(AR) $(ARFLAGS) $(OUTDIR_PREFIX)/$(STATIC_TARGET) $(OBJECTS)
+	@echo " $(OBJECTS) " > $(OUTDIR_PREFIX)/$(MOD_NAME).objectlist
 
-$(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS)
-	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR)/$(TARGET) $(LDFLAGS) -o $(OUTDIR)/$@
+$(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS) $(TEST_OUTDIR)
+	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR_PREFIX)/$(STATIC_TARGET) $(LDFLAGS) -o $(TEST_OUTDIR)/$@
 
-$(OUTDIR):
+$(OUTDIR):$(OUTDIR_PREFIX)
+	@if [ ! -d $@ ]; then mkdir -p $@; fi;
+
+$(OUTDIR_PREFIX):
+	@if [ ! -d $@ ]; then mkdir -p $@; fi;
+
+$(TEST_OUTDIR):
 	@if [ ! -d $@ ]; then mkdir -p $@; fi;
 
 $(TESTOUTSUBDIR):
@@ -85,6 +105,6 @@ testdepend: $(OUTDIR) $(TESTOUTSUBDIR) $(TESTDEPENDTARGET)
 
 .PHONY:clean depend test testdepend
 clean:
-	rm -rf $(OUTDIR) $(AUTOTARGET)
+	rm -rf $(OUTDIR_PREFIX) $(AUTOTARGET)
 
 

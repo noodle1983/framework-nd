@@ -4,10 +4,6 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                Target                 #
 #########################################
-MOD_NAME=Net
-#BIN_TARGET=Net
-#SHARED_TARGET=libNet.so
-STATIC_TARGET=libNet.a
 SUBDIR=Connection \
         Server  \
 		Client \
@@ -43,5 +39,5 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
-include $(PROJBASE)/build/makefile.staticlib.rules
+include $(PROJBASE)/build/makefile.compile.rules
 

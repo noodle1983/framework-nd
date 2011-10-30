@@ -6,10 +6,6 @@ PROJBASE=$(CURDIR)/..
 #########################################
 #                target                 #
 #########################################
-MOD_NAME=Fsm
-#BIN_TARGET=Fsm
-#SHARED_TARGET=libFsm.so
-STATIC_TARGET=libFsm.a
 SUBDIR=src
 
 #########################################
@@ -40,5 +36,5 @@ include $(PROJBASE)/build/makefile.compiler
 #########################################
 #              rules                    #
 #########################################
-include $(PROJBASE)/build/makefile.staticlib.rules
+include $(PROJBASE)/build/makefile.compile.rules
 
