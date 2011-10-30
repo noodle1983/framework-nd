@@ -360,12 +360,6 @@ END_OF_DECODE_OBODY_E
     if ($msgLengthVar ne "theLen") 
     {
 print CMSG_HANDLE <<CHECK_END_OF_DECODE_CHECK_END;
-
-           if (theIndex != endIndex)
-           {
-                ERROR("${msgName} parse error!");
-                return -1;
-           }
 CHECK_END_OF_DECODE_CHECK_END
     }
 print CMSG_HANDLE <<END_OF_DECODE_END;

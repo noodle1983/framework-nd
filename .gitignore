@@ -1,10 +1,9 @@
-3PP/*
-release/*
-*/3PP/*
-*/release/*
+3PP
+release
+*/3PP
 */AutoMsg/*.h
 */LuaObject/*.cpp
-*/.lib
+.lib
 *.swp
 *.log
 *.bz2
