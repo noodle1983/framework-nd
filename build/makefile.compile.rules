@@ -88,6 +88,12 @@ $(OUTDIR)/%.d.tmp:%.cpp
 	($(CC) $(CXXFLAGS) -MM -c $< > $@ || rm -f $@) &&  \
 	sed 's,\(.*\)\.o[ :]*,$(OUTDIR)/$*.o $@: ,g' <$@ >$(OUTDIR)/$*.d; 
 
+$(OUTDIR)/%.d.tmp:%.c
+	@echo "building dependancy for $<..."
+	@set -e; rm -f $@ $(OUTDIR)/$*.d; \
+	($(cc) $(CXXFLAGS) -MM -c $< > $@ || rm -f $@) &&  \
+	sed 's,\(.*\)\.o[ :]*,$(OUTDIR)/$*.o $@: ,g' <$@ >$(OUTDIR)/$*.d; 
+
 $(OUTDIR)/%.o:%.cpp
 	$(CC) $(CXXFLAGS) -c $< -o $@
 
