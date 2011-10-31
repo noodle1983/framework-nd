@@ -17,7 +17,7 @@ my %submsgsDef;
 #load defination
 parseMsgDef();
 
-#dumpMsgDef();
+dumpMsgDef();
 
 #print message
 open CMSG_HANDLE, " > $msgOutFile" or die "failed to open $msgOutFile:$!\n";
@@ -51,21 +51,26 @@ sub genLuaParser
 
     open LUAPARSER_HANDLE, " > $luaOutFile" or die "failed to open $luaOutFile:$!\n";
 
+    ################################################################################
     #define protocol
+    ################################################################################
 print LUAPARSER_HANDLE <<END_OF_HEADER;
 do
     local p_${protocolName} = Proto("${protocolName}", "${protocolName}")
 
+    local f_Tlv = ProtoField.bytes{"${protocolName}.Tlv", "Tlv"}
     local f_TlvTag = ProtoField.uint8{"${protocolName}.TlvTag", "TlvTag", base.DEC}
-    local f_TlvLength8 = ProtoField.uint8{"${protocolName}.TlvLength8", "TlvLength8", base.DEC}
-    local f_TlvLength16 = ProtoField.uint16{"${protocolName}.TlvLength16", "TlvLength16", base.DEC}
-    local f_TlvLength32 = ProtoField.uint32{"${protocolName}.TlvLength32", "TlvLength32", base.DEC}
-    local f_TlvLength64 = ProtoField.uint64{"${protocolName}.TlvLength64", "TlvLength64", base.DEC}
+    local f_TlvLenUint8 = ProtoField.uint8{"${protocolName}.TlvLenUint8", "TlvLenUint8", base.DEC}
+    local f_TlvLenUint16 = ProtoField.uint16{"${protocolName}.TlvLenUint16", "TlvLenUint16", base.DEC}
+    local f_TlvLenUint32 = ProtoField.uint32{"${protocolName}.TlvLenUint32", "TlvLenUint32", base.DEC}
+    local f_TlvLenUint64 = ProtoField.uint64{"${protocolName}.TlvLenUint64", "TlvLenUint64", base.DEC}
     local f_TlvString = ProtoField.bytes{"${protocolName}.TlvString", "TlvString"}
     local f_unknow = ProtoField.bytes("${protocolName}.unknow","unknow")
 END_OF_HEADER
 
+    ################################################################################
     #define protocol field
+    ################################################################################
     my %definedFields;
     foreach my $msgName (@msgsSeq)
     {
@@ -96,12 +101,101 @@ EOF_INT_FIELD_DEF
     }
     my $luaFields = join ", ", keys(%definedFields);
 print LUAPARSER_HANDLE <<EOF_INT_FIELD_DEF;
-    p_${protocolName}.fields = { ${luaFields}, f_TlvTag, f_TlvLength8, f_TlvLength16, f_TlvLength32, f_TlvLength64, f_TlvString, f_unknow}
+    p_${protocolName}.fields = { ${luaFields}, f_TlvTag, f_TlvLenUint8, f_TlvLenUint16, f_TlvLenUint32, f_TlvLenUint64, f_TlvString, f_unknow}
 
     local data_dis = Dissector.get("data")
 
 EOF_INT_FIELD_DEF
 
+    ################################################################################
+    # gen Tlv dissector
+    ################################################################################
+    foreach my $tlvLen (1, 2, 4, 8)
+    {
+        my $lenType = "TlvLenUint" . ($tlvLen * 8);
+print LUAPARSER_HANDLE <<EOF_TLV_DISSECTOR;
+    local function Tlv_${lenType}_dissector(buf, offset, endoffset, pkt, t)
+        local submsglen = 0
+        if (offset + 1 <= endoffset) then
+            t:add(f_TlvTag, buf(offset, 1))
+            offset = offset + 1
+        else
+            t:add(f_unknow, buf(offset, endoffset - offset))
+            offset = endoffset
+            return offset
+        end
+        if (offset + ${tlvLen} <= endoffset) then
+            t:add(f_${lenType}, buf(offset, ${tlvLen}))
+            submsglen =  buf(offset, ${tlvLen}):uint()
+            offset = offset + ${tlvLen}
+        else
+            t:add(f_unknow, buf(offset, endoffset - offset))
+            offset = endoffset
+            return offset
+        end
+        if (submsglen == 0) then
+            return offset
+        end
+        if (offset + submsglen <= endoffset) then
+            t:add(f_TlvString, buf(offset, submsglen))
+            offset = offset + submsglen
+        else
+            t:add(f_unknow, buf(offset, endoffset - offset))
+            offset = endoffset
+            return offset
+        end
+
+        return offset
+    end    
+EOF_TLV_DISSECTOR
+    }
+    ################################################################################
+    # gen Tlv sub msg dissector
+    ################################################################################
+print LUAPARSER_HANDLE <<EOF_TLV_SUBMSG_DISSECTOR;
+
+    local function Tlv_SubMsg_dissector(buf, offset, endoffset, pkt, t)
+        local tag = 0
+        while offset < endoffset do
+            if (offset + 1 <= endoffset) then
+                tag = buf(offset, 1):uint()
+            else
+                return offset
+            end
+EOF_TLV_SUBMSG_DISSECTOR
+    my $else;
+    foreach my $TypeLenTypeValue (@submsgName2Type)
+    {
+        (my $subType, my $lengthType, my $subValue) = @$TypeLenTypeValue;
+        #print "TlvString<$subValue, $lengthType> $subType\n";
+        my $lengthBytes = $lengthType;
+        $lengthBytes =~ s/\D//g;
+        $lengthBytes /= 8;
+print LUAPARSER_HANDLE <<EOF_TLV_SUBMSG_DISSECTOR;
+            ${else}if (${subValue} == tag) then
+                local submsglen = 0
+                if (offset + ${lengthBytes} <= endoffset) then
+                    submsglen =  buf(offset, ${lengthBytes}):uint()
+                else
+                    t:add(f_unknow, buf(offset, endoffset - offset))
+                    offset = endoffset
+                    return offset
+                end
+                subtree = t:add(f_Tlv, buf(offset, offset + 1 +  ${lengthBytes} + submsglen))
+                subtree:append_text("${subType}")
+                offset = Tlv_TlvLen${lengthType}_dissector(buf, offset, endoffset, pkt, subtree)
+EOF_TLV_SUBMSG_DISSECTOR
+            $else = "else"
+    }
+print LUAPARSER_HANDLE <<EOF_TLV_SUBMSG_DISSECTOR;
+            else
+                t:add(f_unknow, buf(offset, endoffset - offset))
+                offset = endoffset
+                return offset
+            end
+        end
+    end
+EOF_TLV_SUBMSG_DISSECTOR
 
     close LUAPARSER_HANDLE;
 
