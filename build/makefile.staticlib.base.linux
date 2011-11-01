@@ -1,0 +1,17 @@
+#########################################
+#      header and lib dependancy        #
+#########################################
+INC_DIR+= -I$(PROJBASE)/base/release/include \
+
+STATIC_LIB+= \
+    $(PROJBASE)/base/release/lib/libBase.a \
+
+SHARED_LIB_DIR+=
+SHARED_LIB+=  -pthread -lrt
+
+include $(PROJBASE)/base/build/makefile.boost.header
+include $(PROJBASE)/base/build/makefile.staticlib.boost.thread.linux
+include $(PROJBASE)/base/build/makefile.staticlib.libevent.linux
+include $(PROJBASE)/base/build/makefile.staticlib.log4cplus.linux
+include $(PROJBASE)/base/build/makefile.staticlib.glib.linux
+include $(PROJBASE)/base/build/makefile.staticlib.lua.linux
