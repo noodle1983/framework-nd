@@ -43,6 +43,9 @@ TESTOUTSUBDIR=$(addprefix $(OUTDIR)/, $(TESTDIR))
 TESTOBJECTS=$(addprefix $(OUTDIR)/, $(TMPTESTOBJECTS))
 TESTTARGET=$(basename $(notdir $(TESTOBJECTS)))
 TEST_OUTDIR=$(OUTDIR_PREFIX)/test
+TEST_FILE=$(foreach DIR, $(TESTDIR), $(wildcard $(DIR)/*.lua)\
+                                     $(wildcard $(DIR)/*.pcap))
+TEST_OUT_FILE=$(addprefix $(TEST_OUTDIR)/, $(notdir $(TEST_FILE)))
 
 #########################################
 #               Depend                  #
@@ -62,8 +65,11 @@ $(STATIC_TARGET):$(AUTOTARGET) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
 	$(AR) $(ARFLAGS) $(OUTDIR_PREFIX)/$(STATIC_TARGET) $(OBJECTS)
 	@echo " $(OBJECTS) " > $(OUTDIR_PREFIX)/$(MOD_NAME).objectlist
 
-$(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS) $(TEST_OUTDIR)
+$(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS) $(TEST_OUTDIR) $(TEST_OUT_FILE)
 	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR_PREFIX)/$(STATIC_TARGET) $(LDFLAGS) -o $(TEST_OUTDIR)/$(MOD_NAME)$@
+
+$(TEST_OUTDIR)/%:
+	cp $(TESTDIR)/$* $@
 
 $(OUTDIR):$(OUTDIR_PREFIX)
 	@if [ ! -d $@ ]; then mkdir -p $@; fi;
