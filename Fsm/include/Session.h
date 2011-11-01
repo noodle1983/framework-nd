@@ -5,6 +5,7 @@
 #include "State.h"
 
 #include <event.h>
+#include <stdint.h>
 
 namespace Processor
 {
@@ -16,7 +17,7 @@ namespace Fsm
     class Session
     {
     public:
-        Session(FiniteStateMachine* theFsm, const int theProcessorId);
+        Session(FiniteStateMachine* theFsm, const uint64_t theProcessorId);
         virtual ~Session();
 
         State& toNextState(const int theNextStateId);
@@ -46,7 +47,7 @@ namespace Fsm
         bool isInitializedM;
         struct event* fsmTimeoutEvtM;
         Processor::BoostProcessor* fsmProcessorM;
-        int processorIdM;
+        uint64_t processorIdM;
         int timerIdM;
 
     };

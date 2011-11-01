@@ -10,7 +10,7 @@ using namespace Fsm;
 
 //-----------------------------------------------------------------------------
 
-Session::Session(FiniteStateMachine* theFsm, const int theProcessorId)
+Session::Session(FiniteStateMachine* theFsm, const uint64_t theProcessorId)
     : fsmM(theFsm)
     , isInitializedM(false)
     , fsmTimeoutEvtM(NULL)
