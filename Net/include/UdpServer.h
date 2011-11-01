@@ -1,5 +1,5 @@
-#ifndef UDPCONNECTION_H
-#define UDPCONNECTION_H
+#ifndef UDPSERVER_H
+#define UDPSERVER_H
 
 #include "KfifoBuffer.h"
 
@@ -22,27 +22,31 @@ namespace Reactor
 {
     class Reactor;
 }
-namespace Client
-{
-    class TcpClient;
-}
 
-namespace Connection
+namespace Server
 {
 
-    class UdpConnection;
-    typedef boost::shared_ptr<UdpConnection> UdpConnectionPtr;
-    typedef boost::function<void (int, UdpConnectionPtr)> Watcher;
+    class UdpServer;
+    typedef boost::shared_ptr<UdpServer> UdpServerPtr;
 
-    class UdpConnection
+    struct UdpPacket
+    {
+        UdpPacket(){content = NULL;}
+        ~UdpPacket(){if (content) delete[] content;}
+        ev_socklen_t addrlen;
+        struct sockaddr_in peerAddr;
+        int contentLen;
+        char* content;
+    };
+
+    class UdpServer
     {
     public:
-        UdpConnection(
+        UdpServer(
             IProtocol* theProtocol,
             Reactor::Reactor* theReactor,
-            Processor::BoostProcessor* theProcessor,
-            evutil_socket_t theFd);
-        ~UdpConnection();
+            Processor::BoostProcessor* theProcessor);
+        ~UdpServer();
 
 
         //interface for reactor
@@ -50,6 +54,7 @@ namespace Connection
         int asynWrite(int theFd, short theEvt);
 
         //interface for upper protocol
+        int startAt(const int thePort);
         void close();
         inline bool isClose() {return statusM == CloseE;}
         inline bool isRBufferHealthy(){return inputQueueM.isHealthy();};
@@ -95,18 +100,11 @@ namespace Connection
 
         boost::mutex stopReadingMutexM;
         bool stopReadingM;
-        boost::mutex watcherMutexM;
-        Watcher* watcherM;
-
-        Client::TcpClient* clientM;
-        boost::mutex clientMutexM;
-        bool isConnectedNotified;
-
 
     };
 
 }
 }
 
-#endif /*UDPCONNECTION_H*/
+#endif /*UDPSERVER_H*/
 
