@@ -87,7 +87,7 @@ int UdpServer::asynRead(int theFd, short theEvt)
 
 void UdpServer::onRead(int theFd, short theEvt)
 {
-    ev_socklen_t addrlen;
+    ev_socklen_t addrlen = sizeof(sockaddr_in);
     struct sockaddr_in peerAddr;
     int rLen;
     char buffer[4096]= {0};
@@ -98,7 +98,6 @@ void UdpServer::onRead(int theFd, short theEvt)
                                  (struct sockaddr*)&peerAddr, &addrlen);
         if (rLen < 0 )
         {
-            WARN("Socket failure:" << strerror(errno));
             break;
         }
         inputQueueM.put((char*)&addrlen, sizeof(addrlen));
@@ -187,15 +186,15 @@ bool UdpServer::sendAPackage(UdpPacket* thePackage)
     if (CloseE == statusM || NULL == thePackage)
         return false;
 
-    unsigned len = 0;
+    int len = 0;
     {
         boost::lock_guard<boost::mutex> lock(outputQueueMutexM);
         len = sendto(fdM, thePackage->content, thePackage->contentLen, 0, 
                 (sockaddr*)&thePackage->peerAddr, thePackage->addrlen);
     }
-    if (0 == len)
+    if (len < 0)
     {
-        WARN("outage of the connection's write queue!");
+        WARN("Socket failure[" << errno << "]:" << strerror(errno));
     }
     return (len > 0);
 }
