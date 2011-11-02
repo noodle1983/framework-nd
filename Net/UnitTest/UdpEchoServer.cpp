@@ -32,10 +32,10 @@ public:
 
     int handleInput(Net::Server::UdpServerPtr theUdpServer)
     {
-        Net::Server::UdpPacket package;
-        while (theUdpServer->getAPackage(&package))
+        Net::UdpPacket packet;
+        while (theUdpServer->getAPackage(&packet))
         {
-            theUdpServer->sendAPackage(&package);
+            theUdpServer->sendAPackage(&packet);
         }
         return 0;
     }

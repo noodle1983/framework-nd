@@ -87,21 +87,21 @@ int UdpServer::asynRead(int theFd, short theEvt)
 
 void UdpServer::onRead(int theFd, short theEvt)
 {
-    UdpPacket package;
+    Net::UdpPacket packet;
 
     while(inputQueueM.isHealthy())
     {
-        package.contentLen = recvfrom(fdM, (void*)package.content, sizeof(package.content), 0,
-                                 (struct sockaddr*)&package.peerAddr, &package.addrlen);
-        if (package.contentLen < 0 )
+        packet.contentLen = recvfrom(fdM, (void*)packet.content, sizeof(packet.content), 0,
+                                 (struct sockaddr*)&packet.peerAddr, &packet.addrlen);
+        if (packet.contentLen < 0 )
         {
             break;
         }
-        inputQueueM.put((char*)&package.addrlen, sizeof(package.addrlen));
-        inputQueueM.put((char*)&package.peerAddr, package.addrlen);
-        inputQueueM.put((char*)&package.contentLen, sizeof(package.contentLen));
-        int putLen = inputQueueM.put(package.content, package.contentLen);
-        assert(putLen == package.contentLen);
+        inputQueueM.put((char*)&packet.addrlen, sizeof(packet.addrlen));
+        inputQueueM.put((char*)&packet.peerAddr, packet.addrlen);
+        inputQueueM.put((char*)&packet.contentLen, sizeof(packet.contentLen));
+        int putLen = inputQueueM.put(packet.content, packet.contentLen);
+        assert(putLen == packet.contentLen);
     }
 
     if (!inputQueueM.isHealthy())
@@ -117,7 +117,7 @@ void UdpServer::onRead(int theFd, short theEvt)
 }
 //-----------------------------------------------------------------------------
 
-bool UdpServer::getAPackage(UdpPacket* thePackage)
+bool UdpServer::getAPackage(Net::UdpPacket* thePackage)
 {
     if (CloseE == statusM)
         return false;
@@ -142,7 +142,7 @@ bool UdpServer::getAPackage(UdpPacket* thePackage)
     }
 
     len = inputQueueM.getn((char*)&thePackage->contentLen, sizeof(thePackage->contentLen));
-    if (0 == len || thePackage->contentLen > UdpPacket::MAX_UDP_PACKAGE)
+    if (0 == len || thePackage->contentLen > Net::UdpPacket::MAX_UDP_PACKAGE)
     {
         FATAL("internal error");
         exit(-1);
@@ -173,7 +173,7 @@ bool UdpServer::getAPackage(UdpPacket* thePackage)
 
 //-----------------------------------------------------------------------------
 
-bool UdpServer::sendAPackage(UdpPacket* thePackage)
+bool UdpServer::sendAPackage(Net::UdpPacket* thePackage)
 {
     if (CloseE == statusM || NULL == thePackage)
         return false;

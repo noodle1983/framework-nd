@@ -2,6 +2,7 @@
 #define UDPSERVER_H
 
 #include "KfifoBuffer.h"
+#include "UdpPacket.h"
 
 #include <boost/thread.hpp>
 #include <boost/function.hpp>
@@ -29,18 +30,6 @@ namespace Server
     class UdpServer;
     typedef boost::shared_ptr<UdpServer> UdpServerPtr;
 
-    struct UdpPacket
-    {
-        UdpPacket()
-            :addrlen(sizeof(struct sockaddr_in))
-        {}
-        enum { MAX_UDP_PACKAGE = 4096 };
-        ev_socklen_t addrlen;
-        struct sockaddr_in peerAddr;
-        int contentLen;
-        char content[MAX_UDP_PACKAGE];
-    };
-
     class UdpServer
     {
     public:
@@ -59,8 +48,8 @@ namespace Server
         int startAt(const int thePort);
         void close();
         inline bool isClose() {return statusM == CloseE;}
-        bool getAPackage(UdpPacket* thePackage);
-        bool sendAPackage(UdpPacket* thePackage);
+        bool getAPackage(Net::UdpPacket* thePackage);
+        bool sendAPackage(Net::UdpPacket* thePackage);
 
 
 
