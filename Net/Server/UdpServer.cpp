@@ -26,8 +26,8 @@ UdpServer::UdpServer(
             IUdpProtocol* theProtocol,
             Reactor::Reactor* theReactor,
             Processor::BoostProcessor* theProcessor)
-    : readEvtM(NULL)
-    , writeEvtM(NULL)
+    : selfM(this)
+    , readEvtM(NULL)
     , protocolM(theProtocol)
     , reactorM(theReactor)
     , processorM(theProcessor)
@@ -41,8 +41,6 @@ UdpServer::UdpServer(
 UdpServer::~UdpServer()
 {
     evutil_closesocket(fdM);
-    reactorM->delEvent(readEvtM);
-    reactorM->delEvent(writeEvtM);
 }
 
 //-----------------------------------------------------------------------------
@@ -61,6 +59,7 @@ int UdpServer::startAt(const int thePort)
         exit(-1);
     }
     readEvtM = reactorM->newEvent(fdM, EV_READ, on_udp_server_read, this);
+    statusM = ActiveE;
     addReadEvent();
     return 0;
 }
@@ -225,7 +224,6 @@ void UdpServer::_close()
         return;
     statusM = CloseE;
     reactorM->delEvent(readEvtM);
-    reactorM->delEvent(writeEvtM);
     processorM->process(fdM, new Processor::Job(boost::bind(&UdpServer::_release, this)));
 }
 

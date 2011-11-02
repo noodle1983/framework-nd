@@ -80,14 +80,14 @@ namespace Server
 
 
     private:
+        UdpServerPtr selfM;
+
         struct event* readEvtM;
-        struct event* writeEvtM;
 
         IUdpProtocol* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
 
-        UdpServerPtr selfM;
         evutil_socket_t fdM;
 
         //we ensure there is only 1 thread read/write the input queue

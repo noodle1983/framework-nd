@@ -45,6 +45,7 @@ private:
 
 int main()
 {
+    /*
     pid_t pid = fork();
     if (pid < 0)
     {
@@ -57,6 +58,7 @@ int main()
         return 0;
     }
     setsid();
+    */
 
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, SIG_IGN);
@@ -67,8 +69,8 @@ int main()
     processor.start();
     Net::Reactor::Reactor reactor;
     UdpEchoProtocol echoProtocol(&processor);
-    Net::Server::UdpServer server(&echoProtocol, &reactor, &processor);
-    server.startAt(5555);
+    Net::Server::UdpServer *server = new Net::Server::UdpServer(&echoProtocol, &reactor, &processor);
+    server->startAt(5555);
     reactor.start();
 
     boost::unique_lock<boost::mutex> lock(closedMutexM);
@@ -77,6 +79,7 @@ int main()
         closedCondM.wait(lock);
     }
 
+    server->close();
     processor.stop();
     reactor.stop();
     DEBUG("EchoServer stopped.");
