@@ -10,20 +10,20 @@
 #include <err.h>
 
 
-using namespace Net::Connection;
+using namespace Net::Server;
 
 //-----------------------------------------------------------------------------
 
-void on_udp_read(int theFd, short theEvt, void *theArg)
+void on_udp_server_read(int theFd, short theEvt, void *theArg)
 {
-    UdpServer* connection = (UdpServer*)theArg;
-    connection->asynRead(theFd, theEvt);
+    UdpServer* server = (UdpServer*)theArg;
+    server->asynRead(theFd, theEvt);
 }
 
 //-----------------------------------------------------------------------------
 
 UdpServer::UdpServer(
-            IProtocol* theProtocol,
+            IUdpProtocol* theProtocol,
             Reactor::Reactor* theReactor,
             Processor::BoostProcessor* theProcessor)
     : readEvtM(NULL)
@@ -32,7 +32,7 @@ UdpServer::UdpServer(
     , reactorM(theReactor)
     , processorM(theProcessor)
     , statusM(CloseE)
-    , stopReadingMutexM(false)
+    , stopReadingM(false)
 {
 }
 
@@ -51,7 +51,7 @@ int UdpServer::startAt(const int thePort)
 {
     fdM = socket(AF_INET, SOCK_DGRAM, 0);
     struct sockaddr_in myAddr;
-    evutil_make_socket_nonblocking(sock);
+    evutil_make_socket_nonblocking(fdM);
     myAddr.sin_family = AF_INET;
     myAddr.sin_port = htons(thePort);
     myAddr.sin_addr.s_addr = INADDR_ANY;
@@ -60,8 +60,9 @@ int UdpServer::startAt(const int thePort)
         FATAL("bind failed");
         exit(-1);
     }
-    readEvtM = reactorM->newEvent(fdM, EV_READ, on_udp_read, this);
+    readEvtM = reactorM->newEvent(fdM, EV_READ, on_udp_server_read, this);
     addReadEvent();
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -96,16 +97,16 @@ void UdpServer::onRead(int theFd, short theEvt)
     {
         rLen = recvfrom(fdM, (void*)buffer, sizeof(buffer), 0,
                                  (struct sockaddr*)&peerAddr, &addrlen);
-        if (len < 0 )
+        if (rLen < 0 )
         {
             WARN("Socket failure:" << strerror(errno));
             break;
         }
-        inputQueueM.put(&addrlen, sizeof(addrlen));
-        inputQueueM.put(&peerAddr, addrlen);
-        inputQueueM.put(rLen, sizeof(rLen));
-        putLen = inputQueueM.put(buffer, rLen);
-        assert(putLen == (unsigned)len);
+        inputQueueM.put((char*)&addrlen, sizeof(addrlen));
+        inputQueueM.put((char*)&peerAddr, addrlen);
+        inputQueueM.put((char*)&rLen, sizeof(rLen));
+        int putLen = inputQueueM.put(buffer, rLen);
+        assert(putLen == rLen);
     }
 
     if (!inputQueueM.isHealthy())
@@ -127,7 +128,7 @@ bool UdpServer::getAPackage(UdpPacket* thePackage)
         return false;
 
     unsigned len = 0;
-    len = inputQueueM.getn(&thePackage->addrlen, sizeof(thePackage->addrlen));
+    len = inputQueueM.getn((char*)&thePackage->addrlen, sizeof(thePackage->addrlen));
     if (0 == len)
     {
         return false;
@@ -138,14 +139,14 @@ bool UdpServer::getAPackage(UdpPacket* thePackage)
         exit(-1);
     }
 
-    len = inputQueueM.getn(&thePackage->peerAddr, thePackage->addrlen);
+    len = inputQueueM.getn((char*)&thePackage->peerAddr, thePackage->addrlen);
     if (0 == len)
     {
         FATAL("internal error");
         exit(-1);
     }
 
-    len = inputQueueM.getn(&thePackage->contentLen, sizeof(thePackage->contentLen));
+    len = inputQueueM.getn((char*)&thePackage->contentLen, sizeof(thePackage->contentLen));
     if (0 == len)
     {
         FATAL("internal error");
@@ -178,25 +179,22 @@ bool UdpServer::getAPackage(UdpPacket* thePackage)
 
 //-----------------------------------------------------------------------------
 
-unsigned UdpServer::sendn(char* const theBuffer, const unsigned theLen)
+bool UdpServer::sendAPackage(UdpPacket* thePackage)
 {
-    if (CloseE == statusM)
-        return 0;
-
-    if (0 == theLen || NULL == theBuffer)
-        return 0;
+    if (CloseE == statusM || NULL == thePackage)
+        return false;
 
     unsigned len = 0;
     {
         boost::lock_guard<boost::mutex> lock(outputQueueMutexM);
-        len = outputQueueM.putn(theBuffer, theLen);
+        len = sendto(fdM, thePackage->content, thePackage->contentLen, 0, 
+                (sockaddr*)&thePackage->peerAddr, thePackage->addrlen);
     }
     if (0 == len)
     {
         WARN("outage of the connection's write queue!");
     }
-    processorM->process(fdM, new Processor::Job(boost::bind(&UdpServer::addWriteEvent, selfM)));
-    return len;
+    return (len > 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -222,15 +220,6 @@ void UdpServer::_close()
     if (CloseE == statusM)
         return;
     statusM = CloseE;
-    if (clientM)
-    {
-        boost::lock_guard<boost::mutex> lock(clientMutexM);
-        if (clientM)
-        {
-            clientM->onError();
-            clientM = NULL;
-        }
-    }
     reactorM->delEvent(readEvtM);
     reactorM->delEvent(writeEvtM);
     processorM->process(fdM, new Processor::Job(boost::bind(&UdpServer::_release, this)));

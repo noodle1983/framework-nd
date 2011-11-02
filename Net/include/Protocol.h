@@ -11,6 +11,11 @@ namespace Net
         class SocketConnection;
         typedef boost::shared_ptr<SocketConnection> SocketConnectionPtr;
     }
+    namespace Server
+    {
+        class UdpServer;
+        typedef boost::shared_ptr<UdpServer> UdpServerPtr;
+    }
     class IProtocol
     {
     public:
@@ -63,6 +68,35 @@ namespace Net
         virtual int onConnected(int theFd, Connection::SocketConnectionPtr theConnection) {return 0;}
     };
 
+    class IUdpProtocol
+    {
+    public:
+        IUdpProtocol(Processor::BoostProcessor* theProcessor)
+            : processorM(theProcessor)
+        {
+        }
+        virtual ~IUdpProtocol() {};
+
+        /**
+         *
+         * interface: asynHandleInput
+         * Description: the net framework will notify the protocol object the input event,
+         *         For the performance, Protocol should handle the input in another thread.
+         * the Args:
+         *         theFd: which socket the input is from
+         *         connection: the socket connection which can be write to
+         *
+         */
+        int asynHandleInput(int theFd, Server::UdpServerPtr theUdpServer)
+        {
+            return processorM->process(theFd + 1,
+                    new Processor::Job(boost::bind(&IUdpProtocol::handleInput, this, theUdpServer)));
+        }
+        
+        virtual int handleInput(Net::Server::UdpServerPtr theUdpServer) = 0;
+    private:
+        Processor::BoostProcessor* processorM;
+    };
 
 }
 

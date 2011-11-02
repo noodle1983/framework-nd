@@ -17,7 +17,7 @@ namespace Processor
 
 namespace Net{
 
-class IProtocol;
+class IUdpProtocol;
 namespace Reactor
 {
     class Reactor;
@@ -33,6 +33,7 @@ namespace Server
     {
         UdpPacket(){content = NULL;}
         ~UdpPacket(){if (content) delete[] content;}
+
         ev_socklen_t addrlen;
         struct sockaddr_in peerAddr;
         int contentLen;
@@ -43,7 +44,7 @@ namespace Server
     {
     public:
         UdpServer(
-            IProtocol* theProtocol,
+            IUdpProtocol* theProtocol,
             Reactor::Reactor* theReactor,
             Processor::BoostProcessor* theProcessor);
         ~UdpServer();
@@ -57,24 +58,15 @@ namespace Server
         int startAt(const int thePort);
         void close();
         inline bool isClose() {return statusM == CloseE;}
-        inline bool isRBufferHealthy(){return inputQueueM.isHealthy();};
-        inline bool isWBufferHealthy(){return outputQueueM.isHealthy();};
-        unsigned getRBufferSize(){return inputQueueM.size();};
-        unsigned getWBufferSize(){return outputQueueM.size();};
+        bool getAPackage(UdpPacket* thePackage);
+        bool sendAPackage(UdpPacket* thePackage);
 
-        unsigned getInput(char* const theBuffer, const unsigned theLen);
-        unsigned getnInput(char* const theBuffer, const unsigned theLen);
-        unsigned peeknInput(char* const theBuffer, const unsigned theLen);
-        unsigned sendn(char* const theBuffer, const unsigned theLen);
 
-        void setLowWaterMarkWatcher(Watcher* theWatcher);
 
     private:
         friend class boost::function<void ()>;
         void addReadEvent();
-        void addWriteEvent();
         void onRead(int theFd, short theEvt);
-        void onWrite(int theFd, short theEvt);
         void _close();
         void _release();
 
@@ -83,17 +75,17 @@ namespace Server
         struct event* readEvtM;
         struct event* writeEvtM;
 
-        IProtocol* protocolM;
+        IUdpProtocol* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
 
+        UdpServerPtr selfM;
         evutil_socket_t fdM;
 
         //we ensure there is only 1 thread read/write the input queue
         //boost::mutex inputQueueMutexM;
         Net::Buffer::KfifoBuffer inputQueueM;
         boost::mutex outputQueueMutexM;
-        Net::Buffer::KfifoBuffer outputQueueM;
 
         enum Status{ActiveE = 0, CloseE = 1};
         mutable int statusM;
