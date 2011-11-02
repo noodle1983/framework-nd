@@ -154,6 +154,10 @@ bool UdpServer::getAPackage(UdpPacket* thePackage)
     }
     if (thePackage->contentLen > 0)
     {
+        if (thePackage->content)
+        {
+            delete[] thePackage->content;
+        }
         thePackage->content = new char[thePackage->contentLen];
         len = inputQueueM.getn(thePackage->content, thePackage->contentLen);
         if (0 == len)

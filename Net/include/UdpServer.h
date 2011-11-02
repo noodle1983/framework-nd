@@ -32,7 +32,15 @@ namespace Server
     struct UdpPacket
     {
         UdpPacket(){content = NULL;}
-        ~UdpPacket(){if (content) delete[] content;}
+        ~UdpPacket(){freeContent();}
+        void freeContent()
+        {
+            if (content)
+            {
+                delete[] content;
+                content = NULL;
+            }
+        }
 
         ev_socklen_t addrlen;
         struct sockaddr_in peerAddr;
