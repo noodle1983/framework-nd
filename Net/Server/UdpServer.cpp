@@ -87,24 +87,21 @@ int UdpServer::asynRead(int theFd, short theEvt)
 
 void UdpServer::onRead(int theFd, short theEvt)
 {
-    ev_socklen_t addrlen = sizeof(sockaddr_in);
-    struct sockaddr_in peerAddr;
-    int rLen;
-    char buffer[4096]= {0};
+    UdpPacket package;
 
     while(inputQueueM.isHealthy())
     {
-        rLen = recvfrom(fdM, (void*)buffer, sizeof(buffer), 0,
-                                 (struct sockaddr*)&peerAddr, &addrlen);
-        if (rLen < 0 )
+        package.contentLen = recvfrom(fdM, (void*)package.content, sizeof(package.content), 0,
+                                 (struct sockaddr*)&package.peerAddr, &package.addrlen);
+        if (package.contentLen < 0 )
         {
             break;
         }
-        inputQueueM.put((char*)&addrlen, sizeof(addrlen));
-        inputQueueM.put((char*)&peerAddr, addrlen);
-        inputQueueM.put((char*)&rLen, sizeof(rLen));
-        int putLen = inputQueueM.put(buffer, rLen);
-        assert(putLen == rLen);
+        inputQueueM.put((char*)&package.addrlen, sizeof(package.addrlen));
+        inputQueueM.put((char*)&package.peerAddr, package.addrlen);
+        inputQueueM.put((char*)&package.contentLen, sizeof(package.contentLen));
+        int putLen = inputQueueM.put(package.content, package.contentLen);
+        assert(putLen == package.contentLen);
     }
 
     if (!inputQueueM.isHealthy())
@@ -145,18 +142,13 @@ bool UdpServer::getAPackage(UdpPacket* thePackage)
     }
 
     len = inputQueueM.getn((char*)&thePackage->contentLen, sizeof(thePackage->contentLen));
-    if (0 == len)
+    if (0 == len || thePackage->contentLen > UdpPacket::MAX_UDP_PACKAGE)
     {
         FATAL("internal error");
         exit(-1);
     }
     if (thePackage->contentLen > 0)
     {
-        if (thePackage->content)
-        {
-            delete[] thePackage->content;
-        }
-        thePackage->content = new char[thePackage->contentLen];
         len = inputQueueM.getn(thePackage->content, thePackage->contentLen);
         if (0 == len)
         {

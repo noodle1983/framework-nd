@@ -31,21 +31,14 @@ namespace Server
 
     struct UdpPacket
     {
-        UdpPacket(){content = NULL;}
-        ~UdpPacket(){freeContent();}
-        void freeContent()
-        {
-            if (content)
-            {
-                delete[] content;
-                content = NULL;
-            }
-        }
-
+        UdpPacket()
+            :addrlen(sizeof(struct sockaddr_in))
+        {}
+        enum { MAX_UDP_PACKAGE = 4096 };
         ev_socklen_t addrlen;
         struct sockaddr_in peerAddr;
         int contentLen;
-        char* content;
+        char content[MAX_UDP_PACKAGE];
     };
 
     class UdpServer

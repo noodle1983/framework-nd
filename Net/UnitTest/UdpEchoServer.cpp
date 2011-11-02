@@ -36,7 +36,6 @@ public:
         while (theUdpServer->getAPackage(&package))
         {
             theUdpServer->sendAPackage(&package);
-            package.freeContent();
         }
         return 0;
     }
