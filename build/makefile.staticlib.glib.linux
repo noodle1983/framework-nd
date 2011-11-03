@@ -7,5 +7,5 @@ INC_DIR+= -I$(PROJBASE)/3PP/glib/include/glib-2.0 \
 #STATIC_LIB+= $(PROJBASE)/3PP/glib/lib
 STATIC_LIB+= 
 SHARED_LIB_DIR+=
-SHARED_LIB+=
+SHARED_LIB+=$(PROJBASE)/3PP/glib/lib/libglib-2.0.so
 
