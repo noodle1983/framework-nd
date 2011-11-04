@@ -1,7 +1,7 @@
 #ifndef DATAALLOCATOR_H
 #define DATAALLOCATOR_H
 
-#include <glib.h>
+#include <boost/pool/pool.hpp>
 
 namespace Data 
 {
@@ -9,17 +9,24 @@ namespace Data
     class Allocator
     {
     public:        
-        static inline DataType* newData()
+        Allocator()
+            : poolM(sizeof(DataType))
+        {}
+        ~Allocator()
+        {}
+
+        inline DataType* newData()
         {
-            DataType* data = g_slice_new(DataType);
-            data = new(data) DataType;
-            return data;
+            void* data = poolM.malloc();
+            return new(data) DataType;
         }
-        static inline void freeData(DataType* theData)
+        inline void freeData(DataType* theData)
         {
             theData->~DataType();
-            g_slice_free(DataType, theData);
+            poolM.free((void*)theData);
         }
+    private:
+        boost::pool<> poolM;
     };
 }
 #endif /* DATAALLOCATOR_H */
