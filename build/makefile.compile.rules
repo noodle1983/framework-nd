@@ -11,6 +11,7 @@ TARGET = $(BIN_TARGET) $(SHARED_TARGET) $(STATIC_TARGET)
 
 OUTDIR_PREFIX=$(PROJBASE)/.lib
 OUTDIR=$(OUTDIR_PREFIX)/$(MOD_NAME)
+ALL_TARGET = $(addprefix $(OUTDIR_PREFIX)/, $(TARGET))
 #########################################
 #        Auto TARGET                    #
 #########################################
@@ -121,6 +122,10 @@ testdepend: $(OUTDIR) $(TESTOUTSUBDIR) $(TESTDEPENDTARGET)
 
 .PHONY:clean depend test testdepend
 clean:
-	rm -rf $(OUTDIR_PREFIX) $(AUTOTARGET)
-
+	rm -rf $(OUTDIR) $(AUTOTARGET) \
+		$(OUTDIR_PREFIX)/$(MOD_NAME).objectlist \
+		$(ALL_TARGET)
+	@if [ -d "$(OUTDIR_PREFIX)" -a "1" = `ls -l $(OUTDIR_PREFIX)/ | wc -l` ]; then \
+		rm -rf $(OUTDIR_PREFIX); \
+	fi;
 
