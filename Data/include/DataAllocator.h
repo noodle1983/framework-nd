@@ -20,6 +20,12 @@ namespace Data
             void* data = poolM.malloc();
             return new(data) DataType;
         }
+        template<typename ParamType1>
+        inline DataType* newData(ParamType1& param1)
+        {
+            void* data = poolM.malloc();
+            return new(data) DataType(param1);
+        }
         inline void freeData(DataType* theData)
         {
             theData->~DataType();

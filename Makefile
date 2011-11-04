@@ -14,6 +14,7 @@ SUBDIR= Log \
 		Message \
 		Fsm \
 		Script \
+		Data  \
 
 RELEASE_DIR = $(PROJBASE)/release
 #########################################
@@ -64,7 +65,9 @@ release: all
 		$(RELEASE_DIR)/lib 
 	@for DIR in $(SUBDIR);  \
 	do                     \
-		cd $(RELEASE_DIR)/include && cp ../../$$DIR/include/* . && cd $(PROJBASE) ; \
+		cd $(RELEASE_DIR)/include/ && \
+		cp ../../$$DIR/include/* . && \
+		cd $(PROJBASE) ; \
 	done                  
 	cd $(RELEASE_DIR)/lib && \
 	cp ../../.lib/*.a . && \
