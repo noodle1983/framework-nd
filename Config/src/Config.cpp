@@ -1,33 +1,54 @@
 #include "Config.h"
 #include "Log.h"
 
-#include <boost/thread.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
 using namespace Config;
 
 //-----------------------------------------------------------------------------
 
-static boost::mutex configCenterInstanceMutex;
-static boost::shared_ptr<ConfigCenter> configCenterInstanceReleaser;
-ConfigCenter* ConfigCenter::configCenterM;
+boost::shared_mutex ConfigCenter::configCenterMutexM;
+ConfigCenterPtr ConfigCenter::configCenterM;
 
 //-----------------------------------------------------------------------------
 
-ConfigCenter* ConfigCenter::instance()
+ConfigCenterPtr ConfigCenter::instance()
 {
-    if (NULL == configCenterM)
+    if (NULL == configCenterM.get())
     {
-        boost::lock_guard<boost::mutex> lock(configCenterInstanceMutex);
-        if (NULL == configCenterM)
+        boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
+        if (NULL == configCenterM.get())
         {
-            configCenterM = new ConfigCenter();
-            configCenterInstanceReleaser.reset(configCenterM);
-            configCenterM->init();
+            configCenterM.reset(new ConfigCenter());
+            configCenterM->loadXml("config.xml");
         }
     }
+    boost::shared_lock<boost::shared_mutex> lock(configCenterMutexM);
     return configCenterM;
+}
+
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::loadConfig(const std::string theInputXmlFile)
+{
+    ConfigCenterPtr newConfigCenter(new ConfigCenter());
+    if (0 == newConfigCenter->loadXml(theInputXmlFile))
+    {
+        DEBUG("loaded config file:" << theInputXmlFile);
+        boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
+        configCenterM = newConfigCenter;
+    }
+    else if (NULL == configCenterM.get())
+    {
+        WARN("load xml file failed, the default config will be applied.");
+        boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
+        configCenterM = newConfigCenter;
+    }
+    else 
+    {
+        WARN("config center is not changed.");
+    }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -44,15 +65,8 @@ ConfigCenter::~ConfigCenter()
 
 //-----------------------------------------------------------------------------
 
-void ConfigCenter::init()
-{
-    loadXml("config.xml");
-}
 
-//-----------------------------------------------------------------------------
-
-
-void ConfigCenter::loadXml(const std::string theXmlPath)
+int ConfigCenter::loadXml(const std::string theXmlPath)
 {
     try
     {
@@ -61,14 +75,17 @@ void ConfigCenter::loadXml(const std::string theXmlPath)
     catch (boost::property_tree::xml_parser::xml_parser_error& e)
     {
         WARN("config file is not found:" << theXmlPath);
+        return -1;
     }
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
 
-void ConfigCenter::saveXml(const std::string theXmlPath)
+int ConfigCenter::saveXml(const std::string theXmlPath)
 {
     boost::property_tree::xml_parser::write_xml(theXmlPath, configDataM);
+    return 0;
 }
 
 

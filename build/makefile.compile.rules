@@ -44,7 +44,8 @@ TESTOUTSUBDIR=$(addprefix $(OUTDIR)/, $(TESTDIR))
 TESTOBJECTS=$(addprefix $(OUTDIR)/, $(TMPTESTOBJECTS))
 TESTTARGET=$(basename $(notdir $(TESTOBJECTS)))
 TEST_OUTDIR=$(OUTDIR_PREFIX)/test
-TEST_FILE=$(foreach DIR, $(TESTDIR), $(wildcard $(DIR)/*.lua)\
+TEST_FILE=$(foreach DIR, $(TESTDIR), $(wildcard $(DIR)/*.lua) \
+                                     $(wildcard $(DIR)/*.xml) \
                                      $(wildcard $(DIR)/*.pcap))
 TEST_OUT_FILE=$(addprefix $(TEST_OUTDIR)/, $(notdir $(TEST_FILE)))
 
