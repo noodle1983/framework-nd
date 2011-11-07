@@ -46,6 +46,14 @@ int Fsm::generateEvent(
 }
 
 //-----------------------------------------------------------------------------
+
+int Fsm::ignoreEvent(
+        Fsm::Session* theSession)
+{
+    return 0;
+}
+
+//-----------------------------------------------------------------------------
 int Fsm::newTimer(
         Fsm::Session* theSession,
         const long long theUsec)

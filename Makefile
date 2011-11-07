@@ -15,6 +15,7 @@ SUBDIR= Log \
 		Fsm \
 		Script \
 		Data  \
+		DesignPattern \
 
 RELEASE_DIR = $(PROJBASE)/release
 #########################################

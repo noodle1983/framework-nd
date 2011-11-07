@@ -10,6 +10,7 @@
 #define NEW_FUNC_TIMER(theGettor) boost::bind(Fsm::newFuncTimer,  _1, (theGettor))
 #define CANCEL_TIMER()            (&Fsm::cancelTimer)
 #define DELETE_SESSION()          (&Fsm::deleteSession)
+#define IGNORE_EVT()              (&Fsm::ignoreEvent)
 
 namespace Fsm
 {
@@ -24,6 +25,9 @@ namespace Fsm
     int generateEvent(
             Fsm::Session* theSession,
             const int theEventId);
+
+    int ignoreEvent(
+            Fsm::Session* theSession);
 
     int newTimer(
             Fsm::Session* theSession,
