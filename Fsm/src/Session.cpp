@@ -10,13 +10,17 @@ using namespace Fsm;
 
 //-----------------------------------------------------------------------------
 
-Session::Session(FiniteStateMachine* theFsm, const uint64_t theProcessorId)
+Session::Session(
+        FiniteStateMachine* theFsm, 
+        const uint64_t theProcessorId,
+        const std::string& theLogicName)
     : fsmM(theFsm)
     , isInitializedM(false)
     , fsmTimeoutEvtM(NULL)
     , fsmProcessorM(NULL)
     , processorIdM(theProcessorId)
     , timerIdM(0)
+    , logicNameM(theLogicName)
 {
     curStateIdM = fsmM->getFirstStateId();
     endStateIdM = fsmM->getLastStateId();
@@ -86,8 +90,8 @@ State& Session::toNextState(const int theNextStateId)
     curStateIdM = theNextStateId;
     State& nextState = fsmM->getState(curStateIdM);
 
-    DEBUG("FsmStateChanged:" << preStateName
-            << " -> " << nextState.getName());
+    DEBUG( logicNameM << "[" << processorIdM << "] " 
+            << preStateName << " -> " << nextState.getName());
 
     return nextState;
 }

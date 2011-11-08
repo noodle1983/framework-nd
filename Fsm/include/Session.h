@@ -6,6 +6,7 @@
 
 #include <event.h>
 #include <stdint.h>
+#include <string>
 
 namespace Processor
 {
@@ -17,7 +18,10 @@ namespace Fsm
     class Session
     {
     public:
-        Session(FiniteStateMachine* theFsm, const uint64_t theProcessorId);
+        Session(
+                FiniteStateMachine* theFsm, 
+                const uint64_t theProcessorId,
+                const std::string& theLogicName = "");
         virtual ~Session();
 
         State& toNextState(const int theNextStateId);
@@ -49,6 +53,8 @@ namespace Fsm
         Processor::BoostProcessor* fsmProcessorM;
         uint64_t processorIdM;
         int timerIdM;
+
+        std::string logicNameM;
 
     };
 }
