@@ -58,6 +58,12 @@ print CMSG_HANDLE<<END_OF_HEADER;
 
 namespace Msg
 {
+    enum ServiceType
+    {
+        SERVICE_TYPE_ACTION_ORIENTED_E = 1,
+        SERVICE_TYPE_PER_SOCKET_E      = 2,
+        SERVICE_TYPE_SUMMERY_E         = 3
+    };
 
 END_OF_HEADER
 }

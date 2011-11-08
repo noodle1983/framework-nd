@@ -43,7 +43,7 @@ namespace Msg
         template<typename StreamType>
         StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
         {
-            theOut << valueM;
+            theOut << unsigned(valueM);
             return theOut;
         }
 

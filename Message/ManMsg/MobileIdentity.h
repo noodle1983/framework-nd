@@ -16,7 +16,7 @@ namespace Msg
     public:
         MobileIdentity()
             : typeM(0)
-            , mobileIdentityM(0)
+            , valueM(0)
         {}
         ~MobileIdentity(){}
 
@@ -60,20 +60,20 @@ namespace Msg
             {
             case IMEI_E:
             case IMSI_E:
-                if (8 != theLen)
+                if (8 != length.valueM)
                     return -1;
                 return decodeBcdCode(content, length.valueM);
             
             case IMEISV_E:
-                if (9 != theLen)
+                if (9 != length.valueM)
                     return -1;
                 return decodeBcdCode(content, length.valueM);
             
             case TMSI_E:
-                if (5 != theLen)
+                if (5 != length.valueM)
                     return -1;
                 
-                mobileIdentityM = combine_bits2(content, 1, 8, 32); 
+                valueM = combine_bits2(content, 1, 8, 32); 
                 return 0;
             default:
                 return -1;
@@ -89,7 +89,7 @@ namespace Msg
             char msgContent[32];
             memset(msgContent, 0xff, sizeof(msgContent));
 
-            sprintf(mobileIdentityStr, "%llu", (long long unsigned int)mobileIdentityM);
+            sprintf(mobileIdentityStr, "%llu", (long long unsigned int)valueM);
             int mobileIdStrLen = strlen(mobileIdentityStr);
             int msgContentEncIndex = 0;
             msgContent[0] = typeM & 0x07;
@@ -147,7 +147,7 @@ namespace Msg
                        : IMEISV_E == typeM ? "IMEISV"
                        : TMSI_E == typeM ? "TMSI"
                        : "UNKNOW") 
-                   << "=" << mobileIdentityM;
+                   << "=" << valueM;
             return theOut;
         }
 
@@ -219,7 +219,7 @@ namespace Msg
             int imsiLen = convert_bcd_string(theData, theLen, 1, imsiStr, *theData & 0x08);
             if (imsiLen > 0)
             {
-                mobileIdentityM = str2bcdnumber(imsiStr);
+                valueM = str2bcdnumber(imsiStr);
                 return 0;
             }
             else
@@ -253,7 +253,7 @@ namespace Msg
 
     public:
         int typeM;
-        guint64 mobileIdentityM;
+        guint64 valueM;
     };
 
 }

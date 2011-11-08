@@ -11,6 +11,10 @@ namespace Msg
     class TlvString
     {
     public:
+        TlvString(const std::string& theContent)
+            : valueM(theContent)
+        {
+        }
         TlvString(){}
         ~TlvString(){}
 
@@ -76,6 +80,10 @@ namespace Msg
     class PlainString
     {
     public:
+        PlainString(const std::string& theContent)
+            : valueM(theContent)
+        {
+        }
         PlainString(){}
         ~PlainString(){}
 
