@@ -25,26 +25,26 @@ int main()
     }
 
     {
-        UserDataNotification userDataNotification1;
-        userDataNotification1.init();
-        userDataNotification1.transactionId.valueM = 0;
-        userDataNotification1.userId.valueM = 1;
-        userDataNotification1.ip.valueM = 2;
-        userDataNotification1.lac.valueM = 3;
-        userDataNotification1.rac.valueM = 4;
-        userDataNotification1.ci.valueM = 5;
-        userDataNotification1.status.valueM = 6;
-        userDataNotification1.content.valueM = string("UserDataNotification");
+        ServiceNotification serviceNotification1;
+        serviceNotification1.init();
+        serviceNotification1.transactionId.valueM = 0;
+        serviceNotification1.userId.valueM = 1;
+        serviceNotification1.ip.valueM = 2;
+        serviceNotification1.lac.valueM = 3;
+        serviceNotification1.rac.valueM = 4;
+        serviceNotification1.ci.valueM = 5;
+        serviceNotification1.status.valueM = 6;
+        serviceNotification1.content.valueM = string("ServiceNotification");
 
         char buffer[1024];
         unsigned wIndex = 0;
-        userDataNotification1.encode(buffer, sizeof(buffer), wIndex);
-        assert(wIndex == UserDataNotification::MIN_BYTES + strlen("UserDataNotification"));
-        UserDataNotification userDataNotification2;
+        serviceNotification1.encode(buffer, sizeof(buffer), wIndex);
+        assert(wIndex == ServiceNotification::MIN_BYTES + strlen("ServiceNotification"));
+        ServiceNotification serviceNotification2;
         unsigned rIndex = 0;
-        userDataNotification2.decode(buffer, wIndex, rIndex);
+        serviceNotification2.decode(buffer, wIndex, rIndex);
         assert(rIndex == wIndex);
-        userDataNotification2.dump(std::cout);
+        serviceNotification2.dump(std::cout);
     }
 
     return 0;

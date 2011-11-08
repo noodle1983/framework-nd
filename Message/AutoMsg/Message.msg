@@ -33,7 +33,7 @@ MessageList
 #    MessageName                TypeValue   
 ##############################################
 SubMessageList
-    MobileIdentityIEI    Uint8       0x10
+    MobileIdentityIEI    MobileIdentity       0x10
     LocationIEI          Uint8       0x11
     QosIEI               Uint8       0x12
 #    ServiceInfoIEI              0x13
@@ -46,7 +46,7 @@ SubMessageList
     StrategyIEI          Uint16      0x21
     RtdIEI               Uint16      0x22
     TriggerIEI           Uint16      0x23
-    CauseIEI             Uint16      0x23
+    CauseIEI             Uint16      0x24
 
 ##############################################
 #SubMessage Name

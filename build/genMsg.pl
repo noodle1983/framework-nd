@@ -52,6 +52,7 @@ print CMSG_HANDLE<<END_OF_HEADER;
 
 #include "StrMsg.h"
 #include "IntMsg.h"
+#include "MobileIdentity.h"
 #include "Log.h"
 #include <boost/optional.hpp>
 
@@ -79,9 +80,18 @@ sub genSubMsg
     my $submsgLenType = shift;
     my $submsgValue = shift;
 
+    if ($submsgLenType =~ /Uint/)
+    {
 print CMSG_HANDLE<<END_OF_SUBMSG;
     typedef TlvString<${submsgValue}, ${submsgLenType}> ${submsgType};
 END_OF_SUBMSG
+    }
+    else
+    {
+print CMSG_HANDLE<<END_OF_SUBMSG;
+    typedef ${submsgLenType}<${submsgValue}> ${submsgType};
+END_OF_SUBMSG
+    }
 
 }
 
