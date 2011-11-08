@@ -44,7 +44,7 @@ int main()
         serviceNotification1.serviceInfo.upBytes.valueM = 11;           
         serviceNotification1.serviceInfo.downBytes.valueM = 12;           
 
-        serviceNotification1.location.valueM = "location";           
+        //serviceNotification1.location.valueM = "location";           
         serviceNotification1.timestamp.valueM = 13;           
         serviceNotification1.mSISDN.reset(PhoneNumberIEI("13800138000"));           
         serviceNotification1.imei.reset(serviceNotification1.userId);           

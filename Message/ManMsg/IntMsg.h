@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <glib.h>
+#include "MsgErrorCode.h"
 
 namespace Msg
 {
@@ -22,22 +23,22 @@ namespace Msg
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint8) > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             valueM = theBuffer[theIndex];
             theIndex += sizeof(guint8);
-            return 0;
+            return SUCCESS_E;
         }
 
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint8) > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             theBuffer[theIndex] = valueM;
             theIndex += sizeof(guint8);
 
-            return 0;
+            return SUCCESS_E;
         }
 
         template<typename StreamType>
@@ -69,24 +70,24 @@ namespace Msg
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint16) > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             memcpy(&valueM, theBuffer + theIndex, sizeof(guint16));
             valueM = GUINT16_FROM_BE(valueM);
             theIndex += sizeof(guint16);
-            return 0;
+            return SUCCESS_E;
         }
 
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint16) > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             guint16 netInt = GUINT16_TO_BE(valueM);
             memcpy(theBuffer + theIndex, &netInt, sizeof(guint16));
             theIndex += sizeof(guint16);
 
-            return 0;
+            return SUCCESS_E;
         }
 
         template<typename StreamType>
@@ -118,24 +119,24 @@ namespace Msg
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint32) > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             memcpy(&valueM, theBuffer + theIndex, sizeof(guint32));
             valueM = GUINT32_FROM_BE(valueM);
             theIndex += sizeof(guint32);
-            return 0;
+            return SUCCESS_E;
         }
 
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint32) > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             guint32 netInt = GUINT32_TO_BE(valueM);
             memcpy(theBuffer + theIndex, &netInt, sizeof(guint32));
             theIndex += sizeof(guint32);
 
-            return 0;
+            return SUCCESS_E;
         }
 
         template<typename StreamType>
@@ -168,24 +169,24 @@ namespace Msg
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint64) > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             memcpy(&valueM, theBuffer + theIndex, sizeof(guint64));
             valueM = GUINT64_FROM_BE(valueM);
             theIndex += sizeof(guint64);
-            return 0;
+            return SUCCESS_E;
         }
 
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint64) > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             guint64 netInt = GUINT64_TO_BE(valueM);
             memcpy(theBuffer + theIndex, &netInt, sizeof(guint64));
             theIndex += sizeof(guint64);
 
-            return 0;
+            return SUCCESS_E;
         }
 
         template<typename StreamType>

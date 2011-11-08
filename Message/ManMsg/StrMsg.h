@@ -4,6 +4,7 @@
 #include <string.h>
 #include <string>
 #include "IntMsg.h"
+#include "MsgErrorCode.h"
 
 namespace Msg
 {
@@ -27,18 +28,24 @@ namespace Msg
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
-            if (theBuffer[theIndex] != TAG)
-                return -1;
-            theIndex++;
+            int ret = SUCCESS_E;
+            Uint8 tag;
+            ret = tag.decode(theBuffer, theLen, theIndex);
+            if (SUCCESS_E != ret)            
+                return ret;
+            if (tag.valueM != TAG)
+                return ERROR_E;
 
             Uintx length;
-            length.decode(theBuffer, theLen, theIndex);
+            ret = length.decode(theBuffer, theLen, theIndex);
+            if (SUCCESS_E != ret)            
+                return ret;
             if (theIndex + length.valueM > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             valueM.assign(theBuffer + theIndex, length.valueM);
             theIndex += length.valueM;
-            return 0;
+            return SUCCESS_E;
         }
 
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
@@ -47,14 +54,14 @@ namespace Msg
             length.valueM = valueM.length();
             int totalLen = sizeof(length.valueM) + valueM.length();
             if (theIndex + totalLen > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             theBuffer[theIndex++] = TAG;
             length.encode(theBuffer, theLen, theIndex);
             memcpy(theBuffer + theIndex, valueM.c_str(), valueM.length());
             theIndex += valueM.length();
 
-            return 0;
+            return SUCCESS_E;
         }
 
         template<typename StreamType>
@@ -96,22 +103,22 @@ namespace Msg
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theLen < theIndex)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
             valueM.assign(theBuffer + theIndex, theLen - theIndex);
             theIndex = theLen;
-            return 0;
+            return SUCCESS_E;
         }
 
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             int totalLen = valueM.length();
             if (theIndex + totalLen > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             memcpy(theBuffer + theIndex, valueM.c_str(), valueM.length());
             theIndex += valueM.length();
 
-            return 0;
+            return SUCCESS_E;
         }
 
         template<typename StreamType>

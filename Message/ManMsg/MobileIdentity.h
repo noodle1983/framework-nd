@@ -2,6 +2,7 @@
 #define MOBILEIDENTITY_H
 
 #include "IntMsg.h"
+#include "MsgErrorCode.h"
 #include <string.h>
 #include <string>
 #include <stdio.h>
@@ -43,14 +44,20 @@ namespace Msg
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
-            if (theBuffer[theIndex] != TAG)
-                return -1;
-            theIndex++;
+            int ret = SUCCESS_E;
+            Uint8 tag;
+            ret = tag.decode(theBuffer, theLen, theIndex);
+            if (SUCCESS_E != ret)            
+                return ret;
+            if (tag.valueM != TAG)
+                return ERROR_E;
 
             Uint8 length;
-            length.decode(theBuffer, theLen, theIndex);
+            ret = length.decode(theBuffer, theLen, theIndex);
+            if (SUCCESS_E != ret)            
+                return ret;
             if (theIndex + length.valueM > theLen)
-                return -2;
+                return NOT_ENOUGH_BUFFER_E;
 
             const char* content = theBuffer + theIndex;
             theIndex += length.valueM;
@@ -61,30 +68,32 @@ namespace Msg
             case IMEI_E:
             case IMSI_E:
                 if (8 != length.valueM)
-                    return -1;
+                    return ERROR_E;
                 return decodeBcdCode(content, length.valueM);
             
             case IMEISV_E:
                 if (9 != length.valueM)
-                    return -1;
+                    return ERROR_E;
                 return decodeBcdCode(content, length.valueM);
             
             case TMSI_E:
                 if (5 != length.valueM)
-                    return -1;
+                    return ERROR_E;
                 
                 valueM = combine_bits2(content, 1, 8, 32); 
-                return 0;
+                return SUCCESS_E; 
             default:
-                return -1;
+                return ERROR_E;
             }
 
-            return 0;
+            return SUCCESS_E;
         }
 
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
-            assert (typeM == IMSI_E || typeM == IMEI_E || typeM == IMEISV_E);
+            if (typeM != IMSI_E && typeM != IMEI_E && typeM != IMEISV_E)
+                return ERROR_E;
+
             char mobileIdentityStr[32] = {0};
             char msgContent[32];
             memset(msgContent, 0xff, sizeof(msgContent));
@@ -129,7 +138,7 @@ namespace Msg
             }
             int totalLen = 1 + sizeof(length.valueM) + length.valueM;
             if (theIndex + totalLen > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             theBuffer[theIndex++] = TAG;
             length.encode(theBuffer, theLen, theIndex);
@@ -220,11 +229,11 @@ namespace Msg
             if (imsiLen > 0)
             {
                 valueM = str2bcdnumber(imsiStr);
-                return 0;
+                return SUCCESS_E;
             }
             else
             {
-                return -1;
+                return ERROR_E;
             }
         }
 

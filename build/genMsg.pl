@@ -52,7 +52,9 @@ print CMSG_HANDLE<<END_OF_HEADER;
 
 #include "StrMsg.h"
 #include "IntMsg.h"
+#include "MsgErrorCode.h"
 #include "MobileIdentity.h"
+#include "Location.h"
 #include "Log.h"
 #include <boost/optional.hpp>
 
@@ -299,6 +301,7 @@ sub genDecodeFunction
 print CMSG_HANDLE<<END_OF_DECODE_BEG;
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
+            int ret = SUCCESS_E;
 END_OF_DECODE_BEG
     
     foreach(@$msgDef)
@@ -307,10 +310,11 @@ END_OF_DECODE_BEG
         if ($fieldOption eq "M")
         {
 print  CMSG_HANDLE<<END_OF_DECODE_BODY;
-            if (0 != ${fieldName}.decode(theBuffer, ${msgLengthVar}, theIndex))            
+            ret = ${fieldName}.decode(theBuffer, ${msgLengthVar}, theIndex);
+            if (SUCCESS_E != ret)            
             {
                 ERROR("failed to parse ${msgName}.${fieldName}");
-                return -2;
+                return ret;
             }
 
 END_OF_DECODE_BODY
@@ -321,7 +325,7 @@ print  CMSG_HANDLE<<END_OF_DECODE_LENGTH;
             if (theLen < endIndex)
             {
                 ERROR("failed to parse ${msgName}.${fieldName}");
-                return -2;
+                return NOT_ENOUGH_BUFFER_E;
             }
 END_OF_DECODE_LENGTH
                 $msgLengthVar = "endIndex";
@@ -337,10 +341,11 @@ print  CMSG_HANDLE<<END_OF_DECODE_WOBODY;
                 if (theBuffer[theIndex] == ${fieldType}::TAG) 
                 {
                     ${fieldName}.reset(${fieldType}());
-                    if (0 != $fieldName->decode( theBuffer, ${msgLengthVar}, theIndex))            
+                    ret = $fieldName->decode( theBuffer, ${msgLengthVar}, theIndex);
+                    if (SUCCESS_E != ret)            
                     {
                         ERROR("failed to parse ${msgName}.${fieldName}");
-                        return -1;
+                        return ret;
                     }
                 }
 END_OF_DECODE_WOBODY
@@ -351,10 +356,11 @@ print  CMSG_HANDLE<<END_OF_DECODE_OBODY;
                 else if (theBuffer[theIndex] == ${fieldType}::TAG) 
                 {
                     ${fieldName}.reset(${fieldType}());
-                    if (0 != $fieldName->decode( theBuffer, ${msgLengthVar}, theIndex))            
+                    ret = $fieldName->decode( theBuffer, ${msgLengthVar}, theIndex);
+                    if (SUCCESS_E != ret)            
                     {
                         ERROR("failed to parse ${msgName}.${fieldName}");
-                        return -1;
+                        return ret; 
                     }
                 }
 END_OF_DECODE_OBODY
@@ -368,7 +374,7 @@ print  CMSG_HANDLE<<END_OF_DECODE_OBODY_E;
                 else
                 {
                     ERROR("failed to parse structure at index" << theIndex);
-                    return -1;
+                    return ERROR_E;
                 }
            } 
 END_OF_DECODE_OBODY_E
@@ -380,7 +386,7 @@ CHECK_END_OF_DECODE_CHECK_END
     }
 print CMSG_HANDLE <<END_OF_DECODE_END;
 
-            return 0;
+            return ret;
         } /* end of int decode(...) */
 
 END_OF_DECODE_END
@@ -397,6 +403,7 @@ sub genEncodeFunction
 print CMSG_HANDLE<<END_OF_ENCODE_BEG;
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
+            int ret = SUCCESS_E;
 END_OF_ENCODE_BEG
     
     foreach(@$msgDef)
@@ -408,10 +415,11 @@ END_OF_ENCODE_BEG
             $lenFieldType = $fieldType;
 print  CMSG_HANDLE<<END_OF_ENCODE_LEN_B;
             unsigned startIndex = theIndex;
-            if (0 != ${fieldName}.encode(theBuffer, theLen, theIndex))            
+            ret = ${fieldName}.encode(theBuffer, theLen, theIndex);
+            if (SUCCESS_E != ret)            
             {
                 ERROR("failed to encode ${msgName}.${fieldName}");
-                return -1;
+                return ret;
             }
 
 END_OF_ENCODE_LEN_B
@@ -426,10 +434,11 @@ END_OF_ENCODE_SET_ID
 
             }
 print  CMSG_HANDLE<<END_OF_ENCODE_BODY;
-            if (0 != ${fieldName}.encode(theBuffer, theLen, theIndex))            
+            ret = ${fieldName}.encode(theBuffer, theLen, theIndex);
+            if (SUCCESS_E != ret)            
             {
                 ERROR("failed to encode ${msgName}.${fieldName}");
-                return -1;
+                return ret;
             }
 
 END_OF_ENCODE_BODY
@@ -439,10 +448,11 @@ END_OF_ENCODE_BODY
 print  CMSG_HANDLE<<END_OF_ENCODE_OBODY;
             if ($fieldName) 
             {
-                if (0 != $fieldName->encode(theBuffer, theLen, theIndex))            
+                ret = ${fieldName}->encode(theBuffer, theLen, theIndex);
+                if (SUCCESS_E != ret)            
                 {
                     ERROR("failed to encode ${msgName}.${fieldName}");
-                    return -1;
+                    return ret;
                 }
             }
 END_OF_ENCODE_OBODY
@@ -460,10 +470,11 @@ print  CMSG_HANDLE<<END_OF_ENCODE_LEN_E;
 
             //re-encode the length
             ${lenFieldName}.valueM = theIndex - startIndex;
-            if (0 != $lenFieldName.encode(theBuffer, theLen, startIndex))            
+            ret = ${lenFieldName}.encode(theBuffer, theLen, startIndex);
+            if (SUCCESS_E != ret)            
             {
                 DEBUG("failed to encode ${msgName}.${lenFieldName}");
-                return -1;
+                return ret; 
             }
 
 END_OF_ENCODE_LEN_E
@@ -471,7 +482,7 @@ END_OF_ENCODE_LEN_E
     }
 
 print CMSG_HANDLE <<END_OF_ENCODE_END;
-            return 0;
+            return ret;
         } /* end of int encode(...) */
 
 END_OF_ENCODE_END

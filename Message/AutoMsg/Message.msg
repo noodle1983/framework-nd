@@ -34,7 +34,7 @@ MessageList
 ##############################################
 SubMessageList
     MobileIdentityIEI    MobileIdentity       0x10
-    LocationIEI          Uint8       0x11
+    LocationIEI          Location    0x11
     QosIEI               Uint8       0x12
 #    ServiceInfoIEI              0x13
 #    DateTimeIEI                 0x14
@@ -168,3 +168,12 @@ Message UserDataNotification
 Message UserStatusNotification
     include MsgE1Header
     Content        PlainString             M
+
+Message LocationSubMsg
+    Flag           Uint8                   M
+    MNC            Uint16                  M
+    MCC            Uint16                  M
+    LAC            Uint16                  M
+    RAC            Uint16                  M
+    CI             Uint16                  M
+    SI             Uint16                  M
