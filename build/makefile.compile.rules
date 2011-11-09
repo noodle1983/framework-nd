@@ -123,10 +123,12 @@ testdepend: $(OUTDIR) $(TESTOUTSUBDIR) $(TESTDEPENDTARGET)
 
 .PHONY:clean depend test testdepend
 clean:
-	rm -rf $(OUTDIR) $(AUTOTARGET) \
+	@rm -rf $(OUTDIR) $(AUTOTARGET) \
 		$(OUTDIR_PREFIX)/$(MOD_NAME).objectlist \
-		$(ALL_TARGET)
-	@if [ -d "$(OUTDIR_PREFIX)" -a "1" = `ls -l $(OUTDIR_PREFIX)/ | wc -l` ]; then \
+		$(ALL_TARGET) \
+        $(TEST_OUT_FILE) \
+        $(TEST_OUTDIR)/$(MOD_NAME)* 
+	@if [ "2" = `ls -l $(OUTDIR_PREFIX)/ 2>/dev/null | wc -l` ]; then \
 		rm -rf $(OUTDIR_PREFIX); \
 	fi;
 
