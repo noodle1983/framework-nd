@@ -67,9 +67,9 @@ namespace Msg
         template<typename StreamType>
         StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
         {
-            if (valueM.length() > 16)
+            if (valueM.length() > 32)
             {
-                theOut << valueM.substr(0, 16) << "..." << "len:" << valueM.length();
+                theOut << valueM.substr(0, 32) << "..." << "len:" << valueM.length();
             }
             else
             {

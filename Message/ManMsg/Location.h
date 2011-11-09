@@ -26,16 +26,92 @@ namespace Msg
                         Uint16::MIN_BYTES +
                         0
         };
+        enum 
+        {
+           MNC_E = 0x80,
+           MCC_E = 0x40,
+           LAC_E = 0x20,
+           RAC_E = 0x10,
+           CI_E  = 0x08,
+           SI_E  = 0x04
+        };
 
         void init()
         {
             flag.init();            
-            mNC.init();            
-            mCC.init();            
-            lAC.init();            
-            rAC.init();            
-            cI.init();            
-            sI.init();            
+            mnc.init();            
+            mcc.init();            
+            lac.init();            
+            rac.init();            
+            ci.init();            
+            si.init();            
+        }
+
+        void setMNC(const guint16 theMNC)
+        {
+            flag.valueM |= MNC_E;
+            mnc.valueM = theMNC;
+        }
+
+        guint16 getMNC()
+        {
+            return (flag.valueM & MNC_E) ? mnc.valueM : 0;
+        }
+
+
+        void setMCC(const guint16 theMCC)
+        {
+            flag.valueM |= MCC_E;
+            mcc.valueM = theMCC;
+        }
+
+        guint16 getMCC()
+        {
+            return (flag.valueM & MCC_E) ? mcc.valueM : 0;
+        }
+
+        void setLAC(const guint16 theLAC)
+        {
+            flag.valueM |= LAC_E;
+            lac.valueM = theLAC;
+        }
+
+        guint16 getLAC()
+        {
+            return (flag.valueM & LAC_E) ? lac.valueM : 0;
+        }
+
+        void setRAC(const guint16 theRAC)
+        {
+            flag.valueM |= RAC_E;
+            rac.valueM = theRAC;
+        }
+
+        guint16 getRAC()
+        {
+            return (flag.valueM & RAC_E) ? rac.valueM : 0;
+        }
+
+        void setCI(const guint16 theCI)
+        {
+            flag.valueM |= CI_E;
+            ci.valueM = theCI;
+        }
+
+        guint16 getCI()
+        {
+            return (flag.valueM & CI_E) ? ci.valueM : 0;
+        }
+        
+        void setSI(const guint16 theSI)
+        {
+            flag.valueM |= SI_E;
+            si.valueM = theSI;
+        }
+
+        guint16 getSI()
+        {
+            return (flag.valueM & SI_E) ? si.valueM : 0;
         }
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
@@ -61,27 +137,27 @@ namespace Msg
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = mNC.decode(theBuffer, theLen, theIndex);
+            ret = mnc.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = mCC.decode(theBuffer, theLen, theIndex);
+            ret = mcc.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = lAC.decode(theBuffer, theLen, theIndex);
+            ret = lac.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = rAC.decode(theBuffer, theLen, theIndex);
+            ret = rac.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = cI.decode(theBuffer, theLen, theIndex);
+            ret = ci.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = sI.decode(theBuffer, theLen, theIndex);
+            ret = si.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
@@ -94,7 +170,7 @@ namespace Msg
             length.valueM = MIN_BYTES - 2;
             int totalLen = MIN_BYTES;
             if (theIndex + totalLen > theLen)
-                return -1;
+                return NOT_ENOUGH_BUFFER_E;
 
             theBuffer[theIndex++] = TAG;
             length.encode(theBuffer, theLen, theIndex);
@@ -104,31 +180,31 @@ namespace Msg
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = mNC.encode(theBuffer, theLen, theIndex);
+            ret = mnc.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = mCC.encode(theBuffer, theLen, theIndex);
+            ret = mcc.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = lAC.encode(theBuffer, theLen, theIndex);
+            ret = lac.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = rAC.encode(theBuffer, theLen, theIndex);
+            ret = rac.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = cI.encode(theBuffer, theLen, theIndex);
+            ret = ci.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            ret = sI.encode(theBuffer, theLen, theIndex);
+            ret = si.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
                 return ret;
 
-            return 0;
+            return ret;
         }
 
         template<typename StreamType>
@@ -141,39 +217,39 @@ namespace Msg
             flag.dump(theOut, theLayer + 1);
 
 
-            theOut << "\n" << leadStr << "mNC: ";
-            mNC.dump(theOut, theLayer + 1);
+            theOut << "\n" << leadStr << "mnc: ";
+            mnc.dump(theOut, theLayer + 1);
 
 
-            theOut << "\n" << leadStr << "mCC: ";
-            mCC.dump(theOut, theLayer + 1);
+            theOut << "\n" << leadStr << "mcc: ";
+            mcc.dump(theOut, theLayer + 1);
 
 
-            theOut << "\n" << leadStr << "lAC: ";
-            lAC.dump(theOut, theLayer + 1);
+            theOut << "\n" << leadStr << "lac: ";
+            lac.dump(theOut, theLayer + 1);
 
 
-            theOut << "\n" << leadStr << "rAC: ";
-            rAC.dump(theOut, theLayer + 1);
+            theOut << "\n" << leadStr << "rac: ";
+            rac.dump(theOut, theLayer + 1);
 
 
-            theOut << "\n" << leadStr << "cI: ";
-            cI.dump(theOut, theLayer + 1);
+            theOut << "\n" << leadStr << "ci: ";
+            ci.dump(theOut, theLayer + 1);
 
 
-            theOut << "\n" << leadStr << "sI: ";
-            sI.dump(theOut, theLayer + 1);
+            theOut << "\n" << leadStr << "si: ";
+            si.dump(theOut, theLayer + 1);
 
             return theOut;
         }
     public:
         Uint8 flag;           
-        Uint16 mNC;           
-        Uint16 mCC;           
-        Uint16 lAC;           
-        Uint16 rAC;           
-        Uint16 cI;           
-        Uint16 sI;           
+        Uint16 mnc;           
+        Uint16 mcc;           
+        Uint16 lac;           
+        Uint16 rac;           
+        Uint16 ci;           
+        Uint16 si;           
     };
 }
 #endif /* LOCATION_H */

@@ -37,7 +37,7 @@ SubMessageList
     LocationIEI          Location    0x11
     QosIEI               Uint8       0x12
 #    ServiceInfoIEI              0x13
-#    DateTimeIEI                 0x14
+    DateTimeIEI          Timestamp   0x14
     PhoneNumberIEI       Uint8       0x15
     UserAgentIEI         Uint16      0x16
     ApnIEI               Uint16      0x17
@@ -134,7 +134,7 @@ Message ServiceNotification
     ServiceType    Uint8                   M
     ServiceInfo    ServiceInfoIEI          M
     Location       LocationIEI             M
-    Timestamp      Uint64                  M
+    Timestamp      DateTimeIEI             M
     MSISDN         PhoneNumberIEI          O
     Imei           MobileIdentityIEI       O
     UserAgent      UserAgentIEI            O

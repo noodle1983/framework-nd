@@ -55,6 +55,7 @@ print CMSG_HANDLE<<END_OF_HEADER;
 #include "MsgErrorCode.h"
 #include "MobileIdentity.h"
 #include "Location.h"
+#include "Timestamp.h"
 #include "Log.h"
 #include <boost/optional.hpp>
 
@@ -185,7 +186,14 @@ print CMSG_HANDLE<<END_OF_DUMP_BEG;
         StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
         {
             std::string leadStr(theLayer * 4, ' ');
-            theOut << "\\n" <<leadStr << "${msgName}";
+            if (0 == theLayer)
+            {
+                theOut << "\\n" <<leadStr << "${msgName}";
+            }
+            else
+            {
+                theOut << "${msgName}";
+            }
             leadStr.append("    ");
 END_OF_DUMP_BEG
     

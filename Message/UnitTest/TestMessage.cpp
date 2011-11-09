@@ -45,7 +45,8 @@ int main()
         serviceNotification1.serviceInfo.downBytes.valueM = 12;           
 
         //serviceNotification1.location.valueM = "location";           
-        serviceNotification1.timestamp.valueM = 13;           
+        serviceNotification1.timestamp.seconds.valueM = 13;           
+        serviceNotification1.timestamp.fraction.valueM = 14;           
         serviceNotification1.mSISDN.reset(PhoneNumberIEI("13800138000"));           
         serviceNotification1.imei.reset(serviceNotification1.userId);           
         serviceNotification1.userAgent.reset(UserAgentIEI("Firefox"));           
