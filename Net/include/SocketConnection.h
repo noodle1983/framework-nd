@@ -6,6 +6,7 @@
 #include <boost/thread.hpp>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <event.h>
 
 struct timeval;
@@ -32,6 +33,7 @@ namespace Connection
 
     class SocketConnection;
     typedef boost::shared_ptr<SocketConnection> SocketConnectionPtr;
+    typedef boost::weak_ptr<SocketConnection> SocketConnectionWPtr;
     typedef boost::function<void (int, SocketConnectionPtr)> Watcher;
 
     class SocketConnection
