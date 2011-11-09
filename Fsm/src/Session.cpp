@@ -56,15 +56,22 @@ void Session::handleEvent(const int theEventId)
     if (!isInitializedM)
     {
         //the first state's entry function
+        const int curStateId = curStateIdM;
         State& curState = getCurState();
         ActionList& actionList = curState.getActionList(ENTRY_EVT);
         ActionList::iterator it = actionList.begin();
         for (; it != actionList.end(); it++)
         {
+            if (curStateId != curStateIdM)
+            {
+                DEBUG("state changed, ignore rest action for event:" << theEventId);
+                break;
+            }
             (*it)(this);
         }
         isInitializedM = true;
     }
+
     State& curState = getCurState();
     ActionList& actionList = curState.getActionList(theEventId);
     if (actionList.empty())
@@ -73,9 +80,16 @@ void Session::handleEvent(const int theEventId)
         changeState(this, endStateIdM);
         return;
     }
+
+    const int curStateId = curStateIdM;
     ActionList::iterator it = actionList.begin();
     for (; it != actionList.end(); it++)
     {
+        if (curStateId != curStateIdM)
+        {
+            DEBUG("state changed, ignore rest action for event:" << theEventId);
+            break;
+        }
         (*it)(this);
     }
 
