@@ -16,7 +16,7 @@ namespace Msg
     {
     public:
         MobileIdentity()
-            : typeM(0)
+            : typeM(IMSI_E)
             , valueM(0)
         {}
         ~MobileIdentity(){}
