@@ -16,14 +16,17 @@ int Fsm::changeState(
     {
         State& curState = theSession->getCurState();
 
-        DEBUG(theSession->getSessionName() 
-                << "[" << theSession->getSessionId() << "] handleEvent("
-                << theSession->getEventName(EXIT_EVT) << ")");
         ActionList& actionList = curState.getActionList(EXIT_EVT);
         ActionList::iterator it = actionList.begin();
-        for (; it != actionList.end(); it++)
+        if (it != actionList.end())
         {
-            (*it)(theSession);
+            DEBUG(theSession->getSessionName() 
+                    << "[" << theSession->getSessionId() << "] handleEvent("
+                    << theSession->getEventName(EXIT_EVT) << ")");
+            for (; it != actionList.end(); it++)
+            {
+                (*it)(theSession);
+            }
         }
     }
 
@@ -31,14 +34,17 @@ int Fsm::changeState(
     {
         State& nextState = theSession->toNextState(theNextStateId);
 
-        DEBUG(theSession->getSessionName() 
-                << "[" << theSession->getSessionId() << "] handleEvent("
-                << theSession->getEventName(ENTRY_EVT) << ")");
         ActionList& actionList = nextState.getActionList(ENTRY_EVT);
         ActionList::iterator it = actionList.begin();
-        for (; it != actionList.end(); it++)
+        if (it != actionList.end())
         {
-            (*it)(theSession);
+            DEBUG(theSession->getSessionName() 
+                    << "[" << theSession->getSessionId() << "] handleEvent("
+                    << theSession->getEventName(ENTRY_EVT) << ")");
+            for (; it != actionList.end(); it++)
+            {
+                (*it)(theSession);
+            }
         }
     }
     return 0;

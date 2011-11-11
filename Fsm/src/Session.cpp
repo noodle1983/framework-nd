@@ -56,21 +56,24 @@ void Session::handleEvent(const int theEventId)
     if (!isInitializedM)
     {
         //the first state's entry function
-        DEBUG(getSessionName() 
-                << "[" << getSessionId() << "] handleEvent("
-                << getEventName(ENTRY_EVT) << ")");
         const int curStateId = curStateIdM;
         State& curState = getCurState();
         ActionList& actionList = curState.getActionList(ENTRY_EVT);
         ActionList::iterator it = actionList.begin();
-        for (; it != actionList.end(); it++)
+        if (it != actionList.end())
         {
-            if (curStateId != curStateIdM)
+            DEBUG(getSessionName() 
+                    << "[" << getSessionId() << "] handleEvent("
+                    << getEventName(ENTRY_EVT) << ")");
+            for (; it != actionList.end(); it++)
             {
-                DEBUG("state changed, ignore rest action for event:" << theEventId);
-                break;
+                if (curStateId != curStateIdM)
+                {
+                    DEBUG("state changed, ignore rest action for event:" << theEventId);
+                    break;
+                }
+                (*it)(this);
             }
-            (*it)(this);
         }
         isInitializedM = true;
     }
