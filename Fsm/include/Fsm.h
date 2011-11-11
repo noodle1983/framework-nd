@@ -20,6 +20,7 @@ namespace Fsm
 
         FiniteStateMachine& operator+=(const State& theState);
         FiniteStateMachine& operator+=(const Event& theEvent);
+        const std::string& getEventName(const int theEventName);
 
         inline State& getState(const int theStateId)
         {
@@ -38,6 +39,7 @@ namespace Fsm
 
     private:
         std::map<int, State> statesM;
+        std::map<int, std::string> eventNamesM;
         int initStateIdM;
         int endStateIdM;
     };

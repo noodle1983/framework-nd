@@ -27,6 +27,7 @@ FiniteStateMachine& FiniteStateMachine::operator+=(const State& theState)
 
 FiniteStateMachine& FiniteStateMachine::operator+=(const Event& theEvent)
 {
+    eventNamesM[theEvent.getId()] = theEvent.getName();
     State& curState = statesM[endStateIdM];
     curState.addEvent(theEvent);
     return *this;
@@ -34,6 +35,19 @@ FiniteStateMachine& FiniteStateMachine::operator+=(const Event& theEvent)
 
 //-----------------------------------------------------------------------------
 
+const std::string& FiniteStateMachine::getEventName(const int theEventName)
+{
+    std::map<int, std::string>::iterator it = eventNamesM.find(theEventName);
+    if (it != eventNamesM.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        static const std::string emptyString; 
+        return emptyString;
+    }
+}
 
-
+//-----------------------------------------------------------------------------
 

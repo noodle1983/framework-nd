@@ -3,6 +3,7 @@
 
 #include "Action.h"
 
+#define FSM_EVENT(ID, ACTION) Fsm::Event((#ID), (ID), (ACTION))
 
 namespace Fsm
 {
@@ -20,11 +21,17 @@ namespace Fsm
     {
     public:
 
-        Event(const int theId, Action theAction)
-            : idM(theId)
+        Event(const std::string& theEvtName, const int theId, Action theAction)
+            : nameM(theEvtName)
+            , idM(theId)
             , actionM(theAction)
         {}
         ~Event(){};
+        
+        std::string getName() const
+        {
+            return nameM;
+        }
 
         int getId() const
         {
@@ -36,6 +43,7 @@ namespace Fsm
             return actionM;
         }
     private:
+        std::string nameM;
         int idM;
         Action actionM;
 

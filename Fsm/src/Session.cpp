@@ -18,9 +18,9 @@ Session::Session(
     , isInitializedM(false)
     , fsmTimeoutEvtM(NULL)
     , fsmProcessorM(NULL)
-    , processorIdM(theProcessorId)
+    , sessionIdM(theProcessorId)
     , timerIdM(0)
-    , logicNameM(theLogicName)
+    , sessionNameM(theLogicName)
 {
     curStateIdM = fsmM->getFirstStateId();
     endStateIdM = fsmM->getLastStateId();
@@ -38,12 +38,12 @@ void Session::asynHandleEvent(const int theEventId)
 {
     if (fsmProcessorM)
     {
-        fsmProcessorM->process(processorIdM,
+        fsmProcessorM->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
     }
     else
     {
-        Processor::BoostProcessor::fsmInstance()->process(processorIdM,
+        Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
     }
 
@@ -56,6 +56,9 @@ void Session::handleEvent(const int theEventId)
     if (!isInitializedM)
     {
         //the first state's entry function
+        DEBUG(getSessionName() 
+                << "[" << getSessionId() << "] handleEvent("
+                << getEventName(ENTRY_EVT) << ")");
         const int curStateId = curStateIdM;
         State& curState = getCurState();
         ActionList& actionList = curState.getActionList(ENTRY_EVT);
@@ -72,6 +75,9 @@ void Session::handleEvent(const int theEventId)
         isInitializedM = true;
     }
 
+    DEBUG(getSessionName() 
+            << "[" << getSessionId() << "] handleEvent("
+            << getEventName(theEventId) << ")");
     State& curState = getCurState();
     ActionList& actionList = curState.getActionList(theEventId);
     if (actionList.empty())
@@ -104,7 +110,7 @@ State& Session::toNextState(const int theNextStateId)
     curStateIdM = theNextStateId;
     State& nextState = fsmM->getState(curStateIdM);
 
-    DEBUG( logicNameM << "[" << processorIdM << "] " 
+    DEBUG( sessionNameM << "[" << sessionIdM << "] " 
             << preStateName << " -> " << nextState.getName());
 
     return nextState;
@@ -127,12 +133,12 @@ void Session::asynHandleTimeout(const int theTimerId)
 {
     if (fsmProcessorM)
     {
-        fsmProcessorM->process(processorIdM,
+        fsmProcessorM->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
     }
     else
     {
-        Processor::BoostProcessor::fsmInstance()->process(processorIdM,
+        Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
     }
 

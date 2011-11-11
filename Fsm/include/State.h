@@ -8,7 +8,7 @@
 #include <Event.h>
 #include <Action.h>
 
-#define NEW_FSM_STATE(ID) Fsm::State((#ID), (ID))
+#define FSM_STATE(ID) Fsm::State((#ID), (ID))
 
 namespace Fsm
 {

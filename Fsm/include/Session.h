@@ -32,6 +32,20 @@ namespace Fsm
         void handleTimeout(const int theTimerId);
         void cancelTimer();
 
+        const uint64_t getSessionId()
+        {
+            return sessionIdM;
+        }
+
+        const std::string& getSessionName()
+        {
+            return sessionNameM;
+        }
+
+        const std::string& getEventName(const int theEventName)
+        {
+            return fsmM->getEventName(theEventName);
+        }
 
         inline State& getEndState()
         {
@@ -51,10 +65,10 @@ namespace Fsm
         bool isInitializedM;
         struct event* fsmTimeoutEvtM;
         Processor::BoostProcessor* fsmProcessorM;
-        uint64_t processorIdM;
+        uint64_t sessionIdM;
         int timerIdM;
 
-        std::string logicNameM;
+        std::string sessionNameM;
 
     };
 }

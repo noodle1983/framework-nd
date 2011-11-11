@@ -1,6 +1,7 @@
 #include "Action.h"
 #include "Session.h"
 #include "State.h"
+#include "Log.h"
 
 #include <string>
 
@@ -14,6 +15,10 @@ int Fsm::changeState(
     //exec EXIT FUNC
     {
         State& curState = theSession->getCurState();
+
+        DEBUG(theSession->getSessionName() 
+                << "[" << theSession->getSessionId() << "] handleEvent("
+                << theSession->getEventName(EXIT_EVT) << ")");
         ActionList& actionList = curState.getActionList(EXIT_EVT);
         ActionList::iterator it = actionList.begin();
         for (; it != actionList.end(); it++)
@@ -25,6 +30,10 @@ int Fsm::changeState(
     //exec ENTRY_EVT
     {
         State& nextState = theSession->toNextState(theNextStateId);
+
+        DEBUG(theSession->getSessionName() 
+                << "[" << theSession->getSessionId() << "] handleEvent("
+                << theSession->getEventName(ENTRY_EVT) << ")");
         ActionList& actionList = nextState.getActionList(ENTRY_EVT);
         ActionList::iterator it = actionList.begin();
         for (; it != actionList.end(); it++)

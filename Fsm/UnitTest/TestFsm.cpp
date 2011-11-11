@@ -34,24 +34,24 @@ enum MyEvent
 int main()
 {
     Fsm::FiniteStateMachine fsm;
-    fsm += NEW_FSM_STATE(INIT_STATE);
-    fsm +=      Fsm::Event(Fsm::ENTRY_EVT,  &testEnter);
-    fsm +=      Fsm::Event(START_EVT,  CHANGE_STATE(TIME_STATE));
-    fsm +=      Fsm::Event(Fsm::EXIT_EVT,   &testExit);
+    fsm += FSM_STATE(INIT_STATE);
+    fsm +=      FSM_EVENT(Fsm::ENTRY_EVT,  &testEnter);
+    fsm +=      FSM_EVENT(START_EVT,  CHANGE_STATE(TIME_STATE));
+    fsm +=      FSM_EVENT(Fsm::EXIT_EVT,   &testExit);
 
-    fsm += NEW_FSM_STATE(TIME_STATE);
-    fsm +=      Fsm::Event(Fsm::ENTRY_EVT,   NEW_TIMER(1 * 1000000));
-    fsm +=      Fsm::Event(Fsm::TIMEOUT_EVT, CHANGE_STATE(END_STATE));
-    fsm +=      Fsm::Event(Fsm::EXIT_EVT,    CANCEL_TIMER());
+    fsm += FSM_STATE(TIME_STATE);
+    fsm +=      FSM_EVENT(Fsm::ENTRY_EVT,   NEW_TIMER(1 * 1000000));
+    fsm +=      FSM_EVENT(Fsm::TIMEOUT_EVT, CHANGE_STATE(END_STATE));
+    fsm +=      FSM_EVENT(Fsm::EXIT_EVT,    CANCEL_TIMER());
 
-    fsm += NEW_FSM_STATE(END_STATE);
-    fsm +=      Fsm::Event(Fsm::ENTRY_EVT,  &testEnter);
-    fsm +=      Fsm::Event(Fsm::EXIT_EVT,   &testExit);
+    fsm += FSM_STATE(END_STATE);
+    fsm +=      FSM_EVENT(Fsm::ENTRY_EVT,  &testEnter);
+    fsm +=      FSM_EVENT(Fsm::EXIT_EVT,   &testExit);
     cout << "fsm,initstate:" << fsm.getFirstStateId() << endl;
     cout << "fsm,endstate:" << fsm.getLastStateId() << endl;
 
-    Fsm::Session session(&fsm, 0);
-    session.handleEvent(START_EVT);
+    Fsm::Session session(&fsm, 0, "TestSession");
+    session.asynHandleEvent(START_EVT);
     sleep(3);
     return 0;
 }
