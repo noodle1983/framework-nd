@@ -1,4 +1,4 @@
-#include "Config.h"
+#include "ConfigCenter.h"
 #include <iostream>
 
 using namespace std;

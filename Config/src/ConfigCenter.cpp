@@ -1,4 +1,4 @@
-#include "Config.h"
+#include "ConfigCenter.h"
 #include "Log.h"
 
 #include <boost/property_tree/xml_parser.hpp>
