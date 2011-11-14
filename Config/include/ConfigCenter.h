@@ -1,15 +1,21 @@
 #ifndef CONFIGCENTER_H
 #define CONFIGCENTER_H
 
+#include "IntParameter.h"
+
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/property_tree/ptree.hpp>
+#include <boost/unordered_map.hpp>
 #include <string>
 
 namespace Config
 {
+    class XmlGroup;
     class ConfigCenter;
+
     typedef boost::shared_ptr<ConfigCenter> ConfigCenterPtr;
+    typedef boost::unordered_map<std::string, IntParameter> IntParamMap;
+
     class ConfigCenter
     {
     public:
@@ -35,6 +41,7 @@ namespace Config
          */
         static void loadConfig(const std::string theInputXmlFile = "config.xml");
 
+        /*
         template<typename ValueType>
         inline ValueType get(const std::string& theKey, const ValueType theDefault)
         {
@@ -45,17 +52,18 @@ namespace Config
         {
             configDataM.put(theKey, theValue);
         }
-
+        */
         int loadXml(const std::string theXmlPath);
         int saveXml(const std::string theXmlPath);
 
+        static const std::string TOP_XMLNODE_NAME;
     private:
         static ConfigCenterPtr configCenterM;
         static boost::shared_mutex configCenterMutexM;
 
         ConfigCenter();
-        /*config data implement*/
-        boost::property_tree::ptree configDataM;
+        XmlGroup*   topGroupM;
+        IntParamMap intParamMapM;
     };
 }
 

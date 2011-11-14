@@ -13,6 +13,7 @@ const std::string XmlParameter::VALUETYPE_TAG    = "ValueType";
 const std::string XmlParameter::VALUERANGE_TAG   = "ValueRange";
 const std::string XmlParameter::DEFAULTVALUE_TAG = "DefaultValue";
 const std::string XmlParameter::VALUE_TAG        = "Value";
+const std::string XmlParameter::TYPE_INT         = "Int";
 
 //-----------------------------------------------------------------------------
 

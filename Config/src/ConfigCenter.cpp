@@ -1,10 +1,12 @@
 #include "ConfigCenter.h"
+#include "XmlGroup.h"
 #include "Log.h"
 
 #include <boost/property_tree/xml_parser.hpp>
 
 using namespace Config;
 
+static const std::string ConfigCenter::TOP_XMLNODE_NAME = "Configuration";
 //-----------------------------------------------------------------------------
 
 boost::shared_mutex ConfigCenter::configCenterMutexM;
@@ -54,6 +56,7 @@ void ConfigCenter::loadConfig(const std::string theInputXmlFile)
 //-----------------------------------------------------------------------------
 
 ConfigCenter::ConfigCenter()
+    : topGroupM(NULL)
 {
 }
 
@@ -68,15 +71,31 @@ ConfigCenter::~ConfigCenter()
 
 int ConfigCenter::loadXml(const std::string theXmlPath)
 {
-    try
+    file<> fdoc(theXmlPath);  
+    xml_document<>  doc;      
+    doc.parse<0>(fdoc.data());   
+
+    xml_node<>* root = doc.first_node();  
+    if (!root)
     {
-        boost::property_tree::xml_parser::read_xml(theXmlPath, configDataM);
-    }
-    catch (boost::property_tree::xml_parser::xml_parser_error& e)
-    {
-        WARN("config file is not found:" << theXmlPath);
+        ERROR("can't load xml file:" << theXmlPath);
         return -1;
     }
+    if (root->name() != TOP_XMLNODE_NAME)
+    {
+        ERROR("not a xml configuration file:" << theXmlPath);
+        return -1;
+    }
+
+    XmlGroup* group = new XmlGroup();
+    if (0 != group->parse(root->first_node()))
+    {
+        ERROR("can't parse configuration file:" << theXmlPath);
+        return -1;
+    }
+
+    topGroupM = group;
+
     return 0;
 }
 

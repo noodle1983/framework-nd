@@ -10,6 +10,12 @@ const std::string XmlGroup::NAME_ATTR_TAG = "name";
 
 int XmlGroup::parse(xml_node<>* theNode)
 {
+    if (NULL == theNode)
+    {
+        ERROR("invalid group.");
+        return -1;
+    }
+
     if (theNode->name() != GROUP_TAG)    
     {
         ERROR("invalid group tag:" << theNode->name());
@@ -82,6 +88,43 @@ xml_node<>* XmlGroup::genNode(xml_document<>* theDoc)
     return group;
 }
 
+//-----------------------------------------------------------------------------
+
+int convert(
+        IntParamMap& theIntParamMap)
+{
+    std::vector<XmlGroup>::iterator subGroupIt = subGroupsM.begin();
+    for (; subGroupIt != subGroupsM.end(); subGroupIt++)
+    {
+       subGroupIt->convert(theIntParamMap);
+    }
+
+    std::vector<XmlParameter>::iterator paramIt = paramsM.begin();
+    for (; paramIt != paramsM.end(); paramIt++)
+    {
+        const std::string& type = paramIt->getType();
+        if (type == XmlParameter::TYPE_INT)
+        {
+            IntParamMap::iterator it = intParamMapM.find(paramIt->getId());
+            if (it == intParamMapM.end())
+            {
+                IntParameter intParam(paramIt->getName());
+                intParam.setValue(paramIt->getValue());
+                intParam.setValueRange(paramIt->getValueRange());
+                intParamMapM.insert(intParam);
+            }
+            else
+            {
+                it->second.setValue(paramIt->getValue());
+                it->second.setValueRange(paramIt->getValueRange());
+            }
+
+        }
+    }
+
+    return group;
+
+}
 
 //-----------------------------------------------------------------------------
 

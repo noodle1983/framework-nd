@@ -29,38 +29,86 @@ int IntParameter::get()
 
 //-----------------------------------------------------------------------------
 
+int IntParameter::set(const std::string& theValue)
+{
+    int value = 0;
+    if (0 != scanf("%d", &value))
+    {
+        ERROR(nameM << "'s value " << theValue << " is invalid.");
+        return -1;
+    }
+    return set(value);
+}
+
+//-----------------------------------------------------------------------------
+
 int IntParameter::set(const int theValue)
 {
     if (theValue == valueM)
         return 0;
 
-    if (!checkRangeM 
-            || (checkRangeM && theValue >= minValueM && theValue <= maxValueM))
+    bool notifyWatcher = false;
+
     {
+        boost::upgrade_lock<boost::shared_mutex> lock(valueMutexM);
+        if (!checkRangeM 
+                || (checkRangeM && theValue >= minValueM && theValue <= maxValueM))
         {
-            boost::unique_lock<boost::shared_mutex> lock(valueMutexM);
-            valueM = theValue;
+            {
+                boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
+                valueM = theValue;
+            }
+            notifyWatcher = true;
         }
+        else
+        {
+            ERROR("invalid value: "<< theValue
+                    << " for " << nameM 
+                    << "(" << minValueM << "-" << maxValueM << ")");        
+            return -1;
+        }
+    }
+    if (notifyWatcher)
+    {
         for (WatcherList::iterator it = changesWatchersM.begin();
                 it != changesWatchersM.end(); it++)
         {
             (*it)(theValue);
         }
     }
-    else
+    return 0;
+}
+
+//-----------------------------------------------------------------------------
+
+void IntParameter::setRange(const std::string& theRange);
+{
+    if (theRange.empty())
+        return;
+
+    int minValue = 0;
+    int maxValue = 0;
+    if (0 != scanf("%d-%d", &minValueM, &maxValueM))
     {
-        ERROR("invalid value: "<< theValue
-                << " for " << nameM 
-                << "(" << minValueM << "-" << maxValueM << ")");        
+        ERROR(nameM << "'s range " << theRange << " is invalid.");
         return -1;
     }
-    return 0;
+    if (minValueM < maxValueM)
+    {
+        return setRange(minValueM, maxValueM);
+    }
+    else
+    {
+        return setRange(maxValueM, minValueM);
+    }
+
 }
 
 //-----------------------------------------------------------------------------
 
 void IntParameter::setRange(const int theMin, const int theMax)
 {
+    boost::unique_lock<boost::shared_mutex> lock(valueMutexM);
     checkRangeM = true;
     minValueM = theMin;
     maxValueM = theMax;

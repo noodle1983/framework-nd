@@ -18,7 +18,9 @@ namespace Config
         typedef std::list<Watcher> WatcherList;
 
         int get();
+        int set(const std::string& theValue);
         int set(const int theValue);
+        void setRange(const std::string& theRange);
         void setRange(const int theMin, const int theMax);
         void registerWatcher(Watcher& theWatcher);
 
