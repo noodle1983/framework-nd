@@ -90,7 +90,7 @@ xml_node<>* XmlGroup::genNode(xml_document<>* theDoc)
 
 //-----------------------------------------------------------------------------
 
-int convert(
+int XmlGroup::convert(
         IntParamMap& theIntParamMap)
 {
     std::vector<XmlGroup>::iterator subGroupIt = subGroupsM.begin();
@@ -102,27 +102,27 @@ int convert(
     std::vector<XmlParameter>::iterator paramIt = paramsM.begin();
     for (; paramIt != paramsM.end(); paramIt++)
     {
-        const std::string& type = paramIt->getType();
+        const std::string& type = paramIt->getValueType();
         if (type == XmlParameter::TYPE_INT)
         {
-            IntParamMap::iterator it = intParamMapM.find(paramIt->getId());
-            if (it == intParamMapM.end())
+            IntParamMap::iterator it = theIntParamMap.find(paramIt->getId());
+            if (it == theIntParamMap.end())
             {
                 IntParameter intParam(paramIt->getName());
-                intParam.setValue(paramIt->getValue());
-                intParam.setValueRange(paramIt->getValueRange());
-                intParamMapM.insert(intParam);
+                intParam.set(paramIt->getValue());
+                intParam.setRange(paramIt->getValueRange());
+                theIntParamMap.insert(std::pair<std::string, IntParameter>(paramIt->getId(), intParam));
             }
             else
             {
-                it->second.setValue(paramIt->getValue());
-                it->second.setValueRange(paramIt->getValueRange());
+                it->second.set(paramIt->getValue());
+                it->second.setRange(paramIt->getValueRange());
             }
 
         }
     }
 
-    return group;
+    return 0;
 
 }
 

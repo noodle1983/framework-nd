@@ -41,18 +41,9 @@ namespace Config
          */
         static void loadConfig(const std::string theInputXmlFile = "config.xml");
 
-        /*
-        template<typename ValueType>
-        inline ValueType get(const std::string& theKey, const ValueType theDefault)
-        {
-            return configDataM.get<ValueType>(theKey, theDefault);
-        }
-        template<typename ValueType>
-        inline void set(const std::string& theKey, const ValueType& theValue)
-        {
-            configDataM.put(theKey, theValue);
-        }
-        */
+        int get(const std::string& theKey, const int theDefault);
+        void set(const std::string& theKey, const int theValue);
+        void setInt(const std::string& theKey, const std::string& theValue);
         int loadXml(const std::string theXmlPath);
         int saveXml(const std::string theXmlPath);
 

@@ -16,6 +16,16 @@ IntParameter::IntParameter(const std::string& theName)
 
 //-----------------------------------------------------------------------------
 
+IntParameter::IntParameter(const IntParameter& theIntParam)
+    : nameM(theIntParam._getName())
+    , checkRangeM(theIntParam._getCheckRange())
+    , minValueM(theIntParam._getMinValue())
+    , maxValueM(theIntParam._getMaxValue())
+    , valueM(theIntParam._getValue())
+{
+}
+//-----------------------------------------------------------------------------
+
 IntParameter::~IntParameter()
 {}
 
@@ -81,17 +91,17 @@ int IntParameter::set(const int theValue)
 
 //-----------------------------------------------------------------------------
 
-void IntParameter::setRange(const std::string& theRange);
+void IntParameter::setRange(const std::string& theRange)
 {
     if (theRange.empty())
         return;
 
     int minValue = 0;
     int maxValue = 0;
-    if (0 != scanf("%d-%d", &minValueM, &maxValueM))
+    if (0 != scanf("%d-%d", &minValue, &maxValue))
     {
         ERROR(nameM << "'s range " << theRange << " is invalid.");
-        return -1;
+        return;
     }
     if (minValueM < maxValueM)
     {

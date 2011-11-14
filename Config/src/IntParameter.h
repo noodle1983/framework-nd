@@ -12,6 +12,7 @@ namespace Config
     {
     public:
         IntParameter(const std::string& theName);
+        IntParameter(const IntParameter& theIntParam);
         ~IntParameter();
 
         typedef boost::function<void (const int)> Watcher;
@@ -24,6 +25,11 @@ namespace Config
         void setRange(const int theMin, const int theMax);
         void registerWatcher(Watcher& theWatcher);
 
+        const std::string& _getName()const {return nameM;}
+        bool  _getCheckRange()const {return checkRangeM;}
+        int  _getMinValue()const {return minValueM;}
+        int  _getMaxValue()const {return maxValueM;}
+        int  _getValue()const {return valueM;}
     private:
         const std::string nameM;
         bool checkRangeM;

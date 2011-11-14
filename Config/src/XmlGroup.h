@@ -8,9 +8,11 @@
 #include <rapidxml_utils.hpp>
 #include <vector>
 #include <string>
+#include <boost/unordered_map.hpp>
 
 namespace Config
 {
+    typedef boost::unordered_map<std::string, IntParameter> IntParamMap;
     class XmlGroup 
     {
     public:

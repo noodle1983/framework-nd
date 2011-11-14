@@ -2,11 +2,14 @@
 #include "XmlGroup.h"
 #include "Log.h"
 
+#include <rapidxml.hpp>
+#include <rapidxml_utils.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
 using namespace Config;
+using namespace rapidxml;
 
-static const std::string ConfigCenter::TOP_XMLNODE_NAME = "Configuration";
+const std::string ConfigCenter::TOP_XMLNODE_NAME = "Configuration";
 //-----------------------------------------------------------------------------
 
 boost::shared_mutex ConfigCenter::configCenterMutexM;
@@ -64,6 +67,11 @@ ConfigCenter::ConfigCenter()
 
 ConfigCenter::~ConfigCenter()
 {
+    if (topGroupM)
+    {
+        delete topGroupM;
+        topGroupM = NULL;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -71,7 +79,7 @@ ConfigCenter::~ConfigCenter()
 
 int ConfigCenter::loadXml(const std::string theXmlPath)
 {
-    file<> fdoc(theXmlPath);  
+    file<> fdoc(theXmlPath.c_str());  
     xml_document<>  doc;      
     doc.parse<0>(fdoc.data());   
 
@@ -94,7 +102,14 @@ int ConfigCenter::loadXml(const std::string theXmlPath)
         return -1;
     }
 
+    if (topGroupM)
+    {
+        delete topGroupM;
+        topGroupM = NULL;
+    }
     topGroupM = group;
+    topGroupM->convert(intParamMapM);
+
 
     return 0;
 }
@@ -103,10 +118,51 @@ int ConfigCenter::loadXml(const std::string theXmlPath)
 
 int ConfigCenter::saveXml(const std::string theXmlPath)
 {
-    boost::property_tree::xml_parser::write_xml(theXmlPath, configDataM);
     return 0;
 }
 
+//-----------------------------------------------------------------------------
 
+int ConfigCenter::get(const std::string& theKey, const int theDefault)
+{
+    IntParamMap::iterator it = intParamMapM.find(theKey);
+    if (it != intParamMapM.end())
+    {
+        return it->second.get();
+    }
+    else
+    {
+        return theDefault;
+    }
+}
 
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::set(const std::string& theKey, const int theValue)
+{
+    IntParamMap::iterator it = intParamMapM.find(theKey);
+    if (it != intParamMapM.end())
+    {
+        it->second.set(theValue);
+    }
+    else
+    {
+        ERROR("config not found:" << theKey);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::setInt(const std::string& theKey, const std::string& theValue)
+{
+    IntParamMap::iterator it = intParamMapM.find(theKey);
+    if (it != intParamMapM.end())
+    {
+        it->second.set(theValue);
+    }
+    else
+    {
+        ERROR("config not found:" << theKey);
+    }
+}
 

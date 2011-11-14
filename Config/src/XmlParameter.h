@@ -34,6 +34,14 @@ namespace Config
         const std::string& getValueRange(){return valueRangeM;}
         const std::string& getDefaultValue(){return defaultValueM;}
         const std::string& getValue(){return valueM;}
+
+        void setName(const std::string& theName){nameM = theName;}
+        void setId(const std::string& theId){idM = theId;}
+        void setDesc(const std::string& theDesc){descM = theDesc;}
+        void setValueType(const std::string& theType){valueTypeM = theType;}
+        void setValueRange(const std::string& theRange){valueRangeM = theRange;}
+        void setDefaultValue(const std::string& theDefaultValue){defaultValueM = theDefaultValue;}
+        void setValue(const std::string& theValue){valueM = theValue;}
     private:
         std::string nameM;
         std::string idM;
