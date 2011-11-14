@@ -14,6 +14,7 @@ MessageList
     QosModifyReject             0x04
 #    ServiceQuery                0x05
     ServiceNotification         0x06
+    PDPDeactivateNotification   0x07
     AddOrModifyUser             0x10
     AddOrModifyUserAck          0x11
     StrategyModifyREQ           0x13
@@ -100,6 +101,10 @@ Message PDPActivateNotification
     UserId         MobileIdentityIEI       M  
     Qos            QosIEI                  M
     Location       LocationIEI             M
+
+Message PDPDeactivateNotification
+    include MsgBHeader
+    UserId         MobileIdentityIEI       M  
 
 Message QosModifyREQ 
     include MsgBHeader
