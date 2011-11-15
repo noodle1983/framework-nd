@@ -89,7 +89,7 @@ namespace Net
          */
         int asynHandleInput(int theFd, Server::UdpServerPtr theUdpServer)
         {
-            return processorM->process(theFd + 1,
+            return processorM->process(theFd,
                     new Processor::Job(boost::bind(&IUdpProtocol::handleInput, this, theUdpServer)));
         }
         
