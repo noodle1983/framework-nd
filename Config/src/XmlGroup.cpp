@@ -91,12 +91,13 @@ xml_node<>* XmlGroup::genNode(xml_document<>* theDoc)
 //-----------------------------------------------------------------------------
 
 int XmlGroup::convert(
-        IntParamMap& theIntParamMap)
+        IntParamMap& theIntParamMap,
+        StringParamMap& theStringParamMap)
 {
     std::vector<XmlGroup>::iterator subGroupIt = subGroupsM.begin();
     for (; subGroupIt != subGroupsM.end(); subGroupIt++)
     {
-       subGroupIt->convert(theIntParamMap);
+       subGroupIt->convert(theIntParamMap, theStringParamMap);
     }
 
     std::vector<XmlParameter>::iterator paramIt = paramsM.begin();
@@ -117,6 +118,21 @@ int XmlGroup::convert(
             {
                 it->second.set(paramIt->getValue());
                 it->second.setRange(paramIt->getValueRange());
+            }
+
+        }
+        else if (type == XmlParameter::TYPE_STRING)
+        {
+            StringParamMap::iterator it = theStringParamMap.find(paramIt->getId());
+            if (it == theStringParamMap.end())
+            {
+                StringParameter strParam(paramIt->getName());
+                strParam.set(paramIt->getValue());
+                theStringParamMap.insert(std::pair<std::string, StringParameter>(paramIt->getId(), strParam));
+            }
+            else
+            {
+                it->second.set(paramIt->getValue());
             }
 
         }

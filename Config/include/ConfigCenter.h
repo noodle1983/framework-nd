@@ -2,6 +2,7 @@
 #define CONFIGCENTER_H
 
 #include "IntParameter.h"
+#include "StringParameter.h"
 
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
@@ -15,6 +16,7 @@ namespace Config
 
     typedef boost::shared_ptr<ConfigCenter> ConfigCenterPtr;
     typedef boost::unordered_map<std::string, IntParameter> IntParamMap;
+    typedef boost::unordered_map<std::string, StringParameter> StringParamMap;
 
     class ConfigCenter
     {
@@ -44,6 +46,10 @@ namespace Config
         int get(const std::string& theKey, const int theDefault);
         void set(const std::string& theKey, const int theValue);
         void setInt(const std::string& theKey, const std::string& theValue);
+
+        const std::string get(const std::string& theKey, const std::string& theDefault);
+        void set(const std::string& theKey, const std::string& theValue);
+
         int loadXml(const std::string theXmlPath);
         int saveXml(const std::string theXmlPath);
 
@@ -55,6 +61,7 @@ namespace Config
         ConfigCenter();
         XmlGroup*   topGroupM;
         IntParamMap intParamMapM;
+        StringParamMap strParamMapM;
     };
 }
 

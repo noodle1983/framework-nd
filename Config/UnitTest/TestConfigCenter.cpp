@@ -1,5 +1,6 @@
 #include "ConfigCenter.h"
 #include <iostream>
+#include <string>
 using namespace std;
 
 int main()
@@ -10,6 +11,8 @@ int main()
     cout << "test1:" << test1 << endl;
     int notexist = Config::ConfigCenter::instance()->get("notexist", -1);
     cout << "notexist:" << notexist << endl;
+    std::string str = Config::ConfigCenter::instance()->get("test.str", "notexist");
+    cout << "str:" << str << endl;
     return 0;
 }
 

@@ -82,6 +82,7 @@ int IntParameter::set(const int theValue)
     }
     if (notifyWatcher)
     {
+        boost::unique_lock<boost::mutex> lock(watcherMutexM);
         for (WatcherList::iterator it = changesWatchersM.begin();
                 it != changesWatchersM.end(); it++)
         {

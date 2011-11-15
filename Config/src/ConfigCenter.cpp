@@ -108,7 +108,7 @@ int ConfigCenter::loadXml(const std::string theXmlPath)
         topGroupM = NULL;
     }
     topGroupM = group;
-    topGroupM->convert(intParamMapM);
+    topGroupM->convert(intParamMapM, strParamMapM);
 
 
     return 0;
@@ -157,6 +157,36 @@ void ConfigCenter::setInt(const std::string& theKey, const std::string& theValue
 {
     IntParamMap::iterator it = intParamMapM.find(theKey);
     if (it != intParamMapM.end())
+    {
+        it->second.set(theValue);
+    }
+    else
+    {
+        ERROR("config not found:" << theKey);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+const std::string ConfigCenter::get(const std::string& theKey, const std::string& theDefault)
+{
+    StringParamMap::iterator it = strParamMapM.find(theKey);
+    if (it != strParamMapM.end())
+    {
+        return it->second.get();
+    }
+    else
+    {
+        return theDefault;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::set(const std::string& theKey, const std::string& theValue)
+{
+    StringParamMap::iterator it = strParamMapM.find(theKey);
+    if (it != strParamMapM.end())
     {
         it->second.set(theValue);
     }

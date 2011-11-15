@@ -17,6 +17,12 @@
 			<DefaultValue>0</DefaultValue>
 			<Value>2</Value>
 		</Parameter>
+		<Parameter name="Test Parameter" id="test.str">
+			<Description>the description</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>abc</DefaultValue>
+			<Value>abcc</Value>
+		</Parameter>
 	</Group>
 </Configuration>
 

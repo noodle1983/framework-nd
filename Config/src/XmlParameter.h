@@ -26,6 +26,7 @@ namespace Config
         static const std::string DEFAULTVALUE_TAG;
         static const std::string VALUE_TAG;
         static const std::string TYPE_INT;
+        static const std::string TYPE_STRING;
 
         const std::string& getName(){return nameM;}
         const std::string& getId(){return idM;}

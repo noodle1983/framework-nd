@@ -14,6 +14,7 @@ const std::string XmlParameter::VALUERANGE_TAG   = "ValueRange";
 const std::string XmlParameter::DEFAULTVALUE_TAG = "DefaultValue";
 const std::string XmlParameter::VALUE_TAG        = "Value";
 const std::string XmlParameter::TYPE_INT         = "Int";
+const std::string XmlParameter::TYPE_STRING      = "String";
 
 //-----------------------------------------------------------------------------
 
@@ -83,11 +84,20 @@ xml_node<>* XmlParameter::genNode(xml_document<>* theDoc)
     param->append_attribute(theDoc->allocate_attribute(NAME_ATTR_TAG.c_str(), nameM.c_str()));
     param->append_attribute(theDoc->allocate_attribute(ID_ATTR_TAG.c_str(), idM.c_str()));
 
-    param->append_node(theDoc->allocate_node(node_element, DESCRIPTION_TAG.c_str(), descM.c_str()));
-    param->append_node(theDoc->allocate_node(node_element, VALUETYPE_TAG.c_str(), valueTypeM.c_str()));
-    param->append_node(theDoc->allocate_node(node_element, VALUERANGE_TAG.c_str(), valueRangeM.c_str()));
-    param->append_node(theDoc->allocate_node(node_element, DEFAULTVALUE_TAG.c_str(), defaultValueM.c_str()));
-    param->append_node(theDoc->allocate_node(node_element, VALUE_TAG.c_str(), valueM.c_str()));
+    param->append_node(
+            theDoc->allocate_node(node_element, DESCRIPTION_TAG.c_str(), descM.c_str()));
+    param->append_node(
+            theDoc->allocate_node(node_element, VALUETYPE_TAG.c_str(), valueTypeM.c_str()));
+
+    if (!valueRangeM.empty())
+    {
+        param->append_node(
+                theDoc->allocate_node(node_element, VALUERANGE_TAG.c_str(), valueRangeM.c_str()));
+    }
+    param->append_node(
+            theDoc->allocate_node(node_element, DEFAULTVALUE_TAG.c_str(), defaultValueM.c_str()));
+    param->append_node(
+            theDoc->allocate_node(node_element, VALUE_TAG.c_str(), valueM.c_str()));
 
     return param;
 }
