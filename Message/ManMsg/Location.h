@@ -28,12 +28,12 @@ namespace Msg
         };
         enum 
         {
-           MNC_E = 0x80,
-           MCC_E = 0x40,
-           LAC_E = 0x20,
-           RAC_E = 0x10,
-           CI_E  = 0x08,
-           SI_E  = 0x04
+           MNC_MASK_E = 0x80,
+           MCC_MASK_E = 0x40,
+           LAC_MASK_E = 0x20,
+           RAC_MASK_E = 0x10,
+           CI_MASK_E  = 0x08,
+           SI_MASK_E  = 0x04
         };
 
         void init()
@@ -49,69 +49,69 @@ namespace Msg
 
         void setMNC(const guint16 theMNC)
         {
-            flag.valueM |= MNC_E;
+            flag.valueM |= MNC_MASK_E;
             mnc.valueM = theMNC;
         }
 
         guint16 getMNC()
         {
-            return (flag.valueM & MNC_E) ? mnc.valueM : 0;
+            return (flag.valueM & MNC_MASK_E) ? mnc.valueM : 0;
         }
 
 
         void setMCC(const guint16 theMCC)
         {
-            flag.valueM |= MCC_E;
+            flag.valueM |= MCC_MASK_E;
             mcc.valueM = theMCC;
         }
 
         guint16 getMCC()
         {
-            return (flag.valueM & MCC_E) ? mcc.valueM : 0;
+            return (flag.valueM & MCC_MASK_E) ? mcc.valueM : 0;
         }
 
         void setLAC(const guint16 theLAC)
         {
-            flag.valueM |= LAC_E;
+            flag.valueM |= LAC_MASK_E;
             lac.valueM = theLAC;
         }
 
         guint16 getLAC()
         {
-            return (flag.valueM & LAC_E) ? lac.valueM : 0;
+            return (flag.valueM & LAC_MASK_E) ? lac.valueM : 0;
         }
 
         void setRAC(const guint16 theRAC)
         {
-            flag.valueM |= RAC_E;
+            flag.valueM |= RAC_MASK_E;
             rac.valueM = theRAC;
         }
 
         guint16 getRAC()
         {
-            return (flag.valueM & RAC_E) ? rac.valueM : 0;
+            return (flag.valueM & RAC_MASK_E) ? rac.valueM : 0;
         }
 
         void setCI(const guint16 theCI)
         {
-            flag.valueM |= CI_E;
+            flag.valueM |= CI_MASK_E;
             ci.valueM = theCI;
         }
 
         guint16 getCI()
         {
-            return (flag.valueM & CI_E) ? ci.valueM : 0;
+            return (flag.valueM & CI_MASK_E) ? ci.valueM : 0;
         }
         
         void setSI(const guint16 theSI)
         {
-            flag.valueM |= SI_E;
+            flag.valueM |= SI_MASK_E;
             si.valueM = theSI;
         }
 
         guint16 getSI()
         {
-            return (flag.valueM & SI_E) ? si.valueM : 0;
+            return (flag.valueM & SI_MASK_E) ? si.valueM : 0;
         }
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)

@@ -36,7 +36,7 @@ MessageList
 SubMessageList
     MobileIdentityIEI    MobileIdentity       0x10
     LocationIEI          Location    0x11
-    QosIEI               Uint8       0x12
+    QosIEI               Qos         0x12
 #    ServiceInfoIEI              0x13
     DateTimeIEI          Timestamp   0x14
     PhoneNumberIEI       Uint8       0x15
@@ -182,3 +182,24 @@ Message LocationSubMsg
     RAC            Uint16                  M
     CI             Uint16                  M
     SI             Uint16                  M
+
+Message QosSubMsg
+    Arp                       Uint8        M
+    Delay                     Uint8        M
+    Reliability               Uint8        M
+    Peak                      Uint8        M
+    Precedence                Uint8        M
+    Mean                      Uint8        M
+    Traffic                   Uint8        M
+    Deliveryorder             Uint8        M
+    DeliveryOfErroneousSdu    Uint8        M
+    MaxSduSize                Uint8        M
+    MaxBitRateUp              Uint8        M
+    MaxBitRateDown            Uint8        M
+    ResidualBer               Uint8        M
+    SduErrRatio               Uint8        M
+    TransferDelay             Uint8        M
+    TrafficHandlingPriority   Uint8        M
+    GuaranteedBitRateUp       Uint8        M
+    GuaranteedBitRateDown     Uint8        M
+
