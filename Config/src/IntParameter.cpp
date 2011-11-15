@@ -1,5 +1,7 @@
-#include <IntParameter.h>
+#include "IntParameter.h"
 #include "Log.h"
+
+#include <stdio.h>
 
 using namespace Config;
 
@@ -42,7 +44,7 @@ int IntParameter::get()
 int IntParameter::set(const std::string& theValue)
 {
     int value = 0;
-    if (0 != scanf("%d", &value))
+    if (0 == sscanf(theValue.c_str(), "%d", &value))
     {
         ERROR(nameM << "'s value " << theValue << " is invalid.");
         return -1;
@@ -98,7 +100,7 @@ void IntParameter::setRange(const std::string& theRange)
 
     int minValue = 0;
     int maxValue = 0;
-    if (0 != scanf("%d-%d", &minValue, &maxValue))
+    if (0 == sscanf(theRange.c_str(), "%d-%d", &minValue, &maxValue))
     {
         ERROR(nameM << "'s range " << theRange << " is invalid.");
         return;
