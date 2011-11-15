@@ -43,6 +43,7 @@ namespace Config
         void setValueRange(const std::string& theRange){valueRangeM = theRange;}
         void setDefaultValue(const std::string& theDefaultValue){defaultValueM = theDefaultValue;}
         void setValue(const std::string& theValue){valueM = theValue;}
+        void setValue(const int theValue);
     private:
         std::string nameM;
         std::string idM;

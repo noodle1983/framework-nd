@@ -106,13 +106,13 @@ void IntParameter::setRange(const std::string& theRange)
         ERROR(nameM << "'s range " << theRange << " is invalid.");
         return;
     }
-    if (minValueM < maxValueM)
+    if (minValue < maxValue)
     {
-        return setRange(minValueM, maxValueM);
+        return setRange(minValue, maxValue);
     }
     else
     {
-        return setRange(maxValueM, minValueM);
+        return setRange(maxValue, minValue);
     }
 
 }

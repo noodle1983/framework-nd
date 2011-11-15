@@ -13,6 +13,8 @@
 
 namespace Config
 {
+    class ConfigCenter;
+
     typedef boost::unordered_map<std::string, IntParameter> IntParamMap;
     typedef boost::unordered_map<std::string, StringParameter> StringParamMap;
     class XmlGroup 
@@ -23,7 +25,10 @@ namespace Config
 
         int parse(rapidxml::xml_node<>* theGroupNode);
         rapidxml::xml_node<>* genNode(rapidxml::xml_document<>* theDoc);
-        int convert(
+        int convertToMap(
+                IntParamMap& theIntParamMap,
+                StringParamMap& theStringParamMap);
+        void refreshFromMap(
                 IntParamMap& theIntParamMap,
                 StringParamMap& theStringParamMap);
 

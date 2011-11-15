@@ -4,6 +4,7 @@
 
 #include <rapidxml.hpp>
 #include <rapidxml_utils.hpp>
+#include <rapidxml_print.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
 using namespace Config;
@@ -77,7 +78,7 @@ ConfigCenter::~ConfigCenter()
 //-----------------------------------------------------------------------------
 
 
-int ConfigCenter::loadXml(const std::string theXmlPath)
+int ConfigCenter::loadXml(const std::string& theXmlPath)
 {
     file<> fdoc(theXmlPath.c_str());  
     xml_document<>  doc;      
@@ -108,7 +109,7 @@ int ConfigCenter::loadXml(const std::string theXmlPath)
         topGroupM = NULL;
     }
     topGroupM = group;
-    topGroupM->convert(intParamMapM, strParamMapM);
+    topGroupM->convertToMap(intParamMapM, strParamMapM);
 
 
     return 0;
@@ -116,8 +117,26 @@ int ConfigCenter::loadXml(const std::string theXmlPath)
 
 //-----------------------------------------------------------------------------
 
-int ConfigCenter::saveXml(const std::string theXmlPath)
+int ConfigCenter::saveXml(const std::string& theXmlPath)
 {
+    if (!topGroupM || theXmlPath.empty())
+    {
+        return -1;
+    }
+    xml_document<> doc;  
+
+    xml_node<>* rot = doc.allocate_node(node_pi,doc.allocate_string("xml version='1.0' encoding='utf-8'"));
+    doc.append_node(rot);
+
+    xml_node<>* node =  doc.allocate_node(node_element, TOP_XMLNODE_NAME.c_str(),NULL);  
+    doc.append_node(node);
+
+    topGroupM->refreshFromMap(intParamMapM, strParamMapM);
+    node->append_node(topGroupM->genNode(&doc));
+
+    std::ofstream out(theXmlPath.c_str());
+    out  <<  doc;
+    out.close();
     return 0;
 }
 

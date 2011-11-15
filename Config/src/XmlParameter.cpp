@@ -1,5 +1,6 @@
 #include "XmlParameter.h"
 #include "Log.h"
+#include <sstream>
 
 using namespace Config;
 using namespace rapidxml;
@@ -105,4 +106,9 @@ xml_node<>* XmlParameter::genNode(xml_document<>* theDoc)
 
 //-----------------------------------------------------------------------------
 
-
+void XmlParameter::setValue(const int theValue)
+{
+    std::ostringstream ostr;
+    ostr << theValue;
+    setValue(ostr.str());
+}

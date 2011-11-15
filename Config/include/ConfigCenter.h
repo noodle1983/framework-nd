@@ -50,8 +50,8 @@ namespace Config
         const std::string get(const std::string& theKey, const std::string& theDefault);
         void set(const std::string& theKey, const std::string& theValue);
 
-        int loadXml(const std::string theXmlPath);
-        int saveXml(const std::string theXmlPath);
+        int loadXml(const std::string& theXmlPath);
+        int saveXml(const std::string& theXmlPath);
 
         static const std::string TOP_XMLNODE_NAME;
     private:

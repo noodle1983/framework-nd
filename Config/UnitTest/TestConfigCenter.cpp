@@ -13,6 +13,11 @@ int main()
     cout << "notexist:" << notexist << endl;
     std::string str = Config::ConfigCenter::instance()->get("test.str", "notexist");
     cout << "str:" << str << endl;
+
+    Config::ConfigCenter::instance()->set("test.test0", test0 + 1);
+    Config::ConfigCenter::instance()->set("test.test1", test1 + 1);
+    Config::ConfigCenter::instance()->set("test.str", "write back");
+    Config::ConfigCenter::instance()->saveXml(".saved_config.xml");
     return 0;
 }
 

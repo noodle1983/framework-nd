@@ -90,14 +90,14 @@ xml_node<>* XmlGroup::genNode(xml_document<>* theDoc)
 
 //-----------------------------------------------------------------------------
 
-int XmlGroup::convert(
+int XmlGroup::convertToMap(
         IntParamMap& theIntParamMap,
         StringParamMap& theStringParamMap)
 {
     std::vector<XmlGroup>::iterator subGroupIt = subGroupsM.begin();
     for (; subGroupIt != subGroupsM.end(); subGroupIt++)
     {
-       subGroupIt->convert(theIntParamMap, theStringParamMap);
+       subGroupIt->convertToMap(theIntParamMap, theStringParamMap);
     }
 
     std::vector<XmlParameter>::iterator paramIt = paramsM.begin();
@@ -140,6 +140,49 @@ int XmlGroup::convert(
 
     return 0;
 
+}
+
+//-----------------------------------------------------------------------------
+
+void XmlGroup::refreshFromMap(
+                IntParamMap& theIntParamMap,
+                StringParamMap& theStringParamMap)
+{
+    std::vector<XmlGroup>::iterator subGroupIt = subGroupsM.begin();
+    for (; subGroupIt != subGroupsM.end(); subGroupIt++)
+    {
+       subGroupIt->refreshFromMap(theIntParamMap, theStringParamMap);
+    }
+
+    std::vector<XmlParameter>::iterator paramIt = paramsM.begin();
+    for (; paramIt != paramsM.end(); paramIt++)
+    {
+        const std::string& type = paramIt->getValueType();
+        if (type == XmlParameter::TYPE_INT)
+        {
+            IntParamMap::iterator it = theIntParamMap.find(paramIt->getId());
+            if (it == theIntParamMap.end())
+            {
+                paramIt->setValue(-1);
+            }
+            else
+            {
+                paramIt->setValue(it->second.get());
+            }
+        }
+        else if (type == XmlParameter::TYPE_STRING)
+        {
+            StringParamMap::iterator it = theStringParamMap.find(paramIt->getId());
+            if (it == theStringParamMap.end())
+            {
+                paramIt->setValue("");
+            }
+            else
+            {
+                paramIt->setValue(it->second.get());
+            }
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
