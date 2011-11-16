@@ -2,6 +2,7 @@
 #define LUARUNNERPOOL_H
 
 #include "LuaRunner.h"
+#include "Singleton.hpp"
 
 extern "C"
 {
@@ -49,6 +50,7 @@ namespace Lua
         RunnerArray runnerArrayM;
         boost::shared_mutex runnerArrayMutexM;
     };
+    typedef DesignPattern::Singleton<LuaRunnerPool> LuaRunnerPoolSingleton;
 }
 }
 

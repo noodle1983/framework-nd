@@ -14,7 +14,8 @@ SUBDIR=Lua \
 #########################################
 INC_DIR=-I. \
      -I./include \
-	 -I$(PROJBASE)/Log/include
+	 -I$(PROJBASE)/Log/include \
+	 -I$(PROJBASE)/DesignPattern/include
 
 STATIC_LIB= $(PROJBASE)/.lib/libLog.a \
 
