@@ -134,8 +134,12 @@ namespace Msg
             else if (typeM == IMEISV_E)
             {
                 length.valueM = IMEISV_LEN;
-
             }
+            else
+            {
+                length.valueM = msgContentEncIndex;
+            }
+
             int totalLen = 1 + sizeof(length.valueM) + length.valueM;
             if (theIndex + totalLen > theLen)
                 return NOT_ENOUGH_BUFFER_E;
