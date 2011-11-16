@@ -31,7 +31,9 @@ CPPFILES=$(foreach DIR, $(SUBDIR), $(wildcard $(DIR)/*.cpp)) \
         $(TOLUACPP)
 TMPOBJECTS=$(patsubst %.cpp, %.o, $(CPPFILES)) \
            $(patsubst %.c, %.o, $(CFILES)) 
-OUTSUBDIR=$(addprefix $(OUTDIR)/, $(SUBDIR))
+OUTSUBDIR=$(addprefix $(OUTDIR)/, $(SUBDIR) \
+    $(if $(TOLUACPP), LuaObject))
+    
 OBJECTS=$(addprefix $(OUTDIR)/, $(TMPOBJECTS))
 
 #########################################
@@ -128,6 +130,9 @@ clean:
 		$(ALL_TARGET) \
         $(TEST_OUT_FILE) \
         $(TEST_OUTDIR)/$(MOD_NAME)* 
+	@if [ "1" = `ls -l $(OUTDIR_PREFIX)/ 2>/dev/null | wc -l` ]; then \
+		rm -rf $(OUTDIR_PREFIX); \
+	fi;
 	@if [ "2" = `ls -l $(OUTDIR_PREFIX)/ 2>/dev/null | wc -l` ]; then \
 		rm -rf $(OUTDIR_PREFIX); \
 	fi;
