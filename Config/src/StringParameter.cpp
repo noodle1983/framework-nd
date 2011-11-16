@@ -51,6 +51,7 @@ int StringParameter::set(const std::string& theValue)
             (*it)(theValue);
         }
     }
+    CFG_DEBUG("set config[" << nameM << "=" << theValue << "]");
     return 0;
 }
 

@@ -27,6 +27,7 @@ ConfigCenterPtr ConfigCenter::instance()
         {
             configCenterM.reset(new ConfigCenter());
             configCenterM->loadXml("config.xml");
+            CFG_DEBUG("loaded config file:config.xml");
         }
     }
     boost::shared_lock<boost::shared_mutex> lock(configCenterMutexM);
@@ -40,19 +41,19 @@ void ConfigCenter::loadConfig(const std::string theInputXmlFile)
     ConfigCenterPtr newConfigCenter(new ConfigCenter());
     if (0 == newConfigCenter->loadXml(theInputXmlFile))
     {
-        DEBUG("loaded config file:" << theInputXmlFile);
+        CFG_DEBUG("loaded config file:" << theInputXmlFile);
         boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
         configCenterM = newConfigCenter;
     }
     else if (NULL == configCenterM.get())
     {
-        WARN("load xml file failed, the default config will be applied.");
+        CFG_ERROR("load xml file failed, the default config will be applied.");
         boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
         configCenterM = newConfigCenter;
     }
     else 
     {
-        WARN("config center is not changed.");
+        CFG_ERROR("config center is not changed.");
     }
 
 }
@@ -87,19 +88,19 @@ int ConfigCenter::loadXml(const std::string& theXmlPath)
     xml_node<>* root = doc.first_node();  
     if (!root)
     {
-        ERROR("can't load xml file:" << theXmlPath);
+        CFG_ERROR("can't load xml file:" << theXmlPath);
         return -1;
     }
     if (root->name() != TOP_XMLNODE_NAME)
     {
-        ERROR("not a xml configuration file:" << theXmlPath);
+        CFG_ERROR("not a xml configuration file:" << theXmlPath);
         return -1;
     }
 
     XmlGroup* group = new XmlGroup();
     if (0 != group->parse(root->first_node()))
     {
-        ERROR("can't parse configuration file:" << theXmlPath);
+        CFG_ERROR("can't parse configuration file:" << theXmlPath);
         return -1;
     }
 
@@ -166,7 +167,7 @@ void ConfigCenter::set(const std::string& theKey, const int theValue)
     }
     else
     {
-        ERROR("config not found:" << theKey);
+        CFG_ERROR("config not found:" << theKey);
     }
 }
 
@@ -181,7 +182,7 @@ void ConfigCenter::setInt(const std::string& theKey, const std::string& theValue
     }
     else
     {
-        ERROR("config not found:" << theKey);
+        CFG_ERROR("config not found:" << theKey);
     }
 }
 
@@ -211,7 +212,7 @@ void ConfigCenter::set(const std::string& theKey, const std::string& theValue)
     }
     else
     {
-        ERROR("config not found:" << theKey);
+        CFG_ERROR("config not found:" << theKey);
     }
 }
 

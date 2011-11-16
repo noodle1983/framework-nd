@@ -46,7 +46,7 @@ int IntParameter::set(const std::string& theValue)
     int value = 0;
     if (0 == sscanf(theValue.c_str(), "%d", &value))
     {
-        ERROR(nameM << "'s value " << theValue << " is invalid.");
+        CFG_ERROR(nameM << "'s value " << theValue << " is invalid.");
         return -1;
     }
     return set(value);
@@ -74,7 +74,7 @@ int IntParameter::set(const int theValue)
         }
         else
         {
-            ERROR("invalid value: "<< theValue
+            CFG_ERROR("invalid value: "<< theValue
                     << " for " << nameM 
                     << "(" << minValueM << "-" << maxValueM << ")");        
             return -1;
@@ -89,6 +89,7 @@ int IntParameter::set(const int theValue)
             (*it)(theValue);
         }
     }
+    CFG_DEBUG("set config[" << nameM << "=" << theValue << "]");
     return 0;
 }
 
@@ -103,7 +104,7 @@ void IntParameter::setRange(const std::string& theRange)
     int maxValue = 0;
     if (0 == sscanf(theRange.c_str(), "%d-%d", &minValue, &maxValue))
     {
-        ERROR(nameM << "'s range " << theRange << " is invalid.");
+        CFG_ERROR(nameM << "'s range " << theRange << " is invalid.");
         return;
     }
     if (minValue < maxValue)

@@ -23,7 +23,7 @@ int XmlParameter::parse(xml_node<>* theNode)
 {
     if (theNode->name() != PARAMETER_TAG)    
     {
-        ERROR("invalid paramter tag:" << theNode->name());
+        CFG_ERROR("invalid paramter tag:" << theNode->name());
         return -1;
     }
 
@@ -40,7 +40,7 @@ int XmlParameter::parse(xml_node<>* theNode)
         }
         else
         {
-            ERROR("invalid attribute tag:" << attr->name());
+            CFG_ERROR("invalid attribute tag:" << attr->name());
             return -1;
         }
     }
@@ -70,7 +70,7 @@ int XmlParameter::parse(xml_node<>* theNode)
         }
         else
         {
-            ERROR("invalid sub-node tag:" << node->name());
+            CFG_ERROR("invalid sub-node tag:" << node->name());
             return -1;
         }
     }

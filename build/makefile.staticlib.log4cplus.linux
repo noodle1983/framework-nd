@@ -1,7 +1,8 @@
 #########################################
 #      header and lib dependancy        #
 #########################################
-INC_DIR+= -I$(PROJBASE)/3PP/log4cplus/include
+INC_DIR+= -I$(PROJBASE)/3PP/log4cplus/include \
+		  -I$(PROJBASE)/DesignPattern/include
 
 STATIC_LIB+= \
     $(PROJBASE)/3PP/log4cplus/lib/liblog4cplus.a \

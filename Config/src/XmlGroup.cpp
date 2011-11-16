@@ -12,13 +12,13 @@ int XmlGroup::parse(xml_node<>* theNode)
 {
     if (NULL == theNode)
     {
-        ERROR("invalid group.");
+        CFG_ERROR("invalid group.");
         return -1;
     }
 
     if (theNode->name() != GROUP_TAG)    
     {
-        ERROR("invalid group tag:" << theNode->name());
+        CFG_ERROR("invalid group tag:" << theNode->name());
         return -1;
     }
 
@@ -31,7 +31,7 @@ int XmlGroup::parse(xml_node<>* theNode)
         }
         else
         {
-            ERROR("invalid attribute tag:" << attr->name());
+            CFG_ERROR("invalid attribute tag:" << attr->name());
             return -1;
         }
     }
@@ -59,7 +59,7 @@ int XmlGroup::parse(xml_node<>* theNode)
         }
         else
         {
-            ERROR("invalid sub-node tag:" << node->name());
+            CFG_ERROR("invalid sub-node tag:" << node->name());
             return -1;
         }
     }
