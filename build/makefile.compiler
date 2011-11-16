@@ -4,7 +4,7 @@ AR=ar
 RANLIB=ranlib 
 ARFLAGS=rcs
 SHAREDFLAG= -fPIC -shared
-CXXFLAGS=-fPIC -Wall -Wno-write-strings -g $(INC_DIR) 
-CFLAGs=-fPIC -Wall -Wno-write-strings -g $(INC_DIR)
+CXXFLAGS=-fPIC -Wall -Wno-write-strings -g -O2 $(INC_DIR) 
+CFLAGs=-fPIC -Wall -Wno-write-strings -g -O2 $(INC_DIR)
 LDFLAGS=$(SHARED_LIB_DIR) $(SHARED_LIB) $(STATIC_LIB)
 
