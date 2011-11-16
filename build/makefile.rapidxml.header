@@ -1,0 +1,8 @@
+#########################################
+#      header and lib dependancy        #
+#########################################
+INC_DIR+= -I$(PROJBASE)/3PP/rapidxml 
+STATIC_LIB+= 
+SHARED_LIB_DIR+=
+SHARED_LIB+=
+

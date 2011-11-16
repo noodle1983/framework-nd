@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<Configuration>
+	<Group name="Test Group">
+		<Group name="Test Group">
+			<Parameter name="Test Parameter" id="test.test0">
+				<Description>the description</Description>
+				<ValueType>Int</ValueType>
+				<ValueRange>0-100</ValueRange>
+				<DefaultValue>0</DefaultValue>
+				<Value>0</Value>
+			</Parameter>
+		</Group>
+		<Parameter name="Test Parameter" id="test.test1">
+			<Description>the description</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>0-100</ValueRange>
+			<DefaultValue>0</DefaultValue>
+			<Value>2</Value>
+		</Parameter>
+		<Parameter name="Test Parameter" id="test.str">
+			<Description>the description</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>abc</DefaultValue>
+			<Value>abcc</Value>
+		</Parameter>
+	</Group>
+</Configuration>
+

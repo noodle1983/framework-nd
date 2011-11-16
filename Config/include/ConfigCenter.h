@@ -1,15 +1,23 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CONFIGCENTER_H
+#define CONFIGCENTER_H
+
+#include "IntParameter.h"
+#include "StringParameter.h"
 
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/property_tree/ptree.hpp>
+#include <boost/unordered_map.hpp>
 #include <string>
 
 namespace Config
 {
+    class XmlGroup;
     class ConfigCenter;
+
     typedef boost::shared_ptr<ConfigCenter> ConfigCenterPtr;
+    typedef boost::unordered_map<std::string, IntParameter> IntParamMap;
+    typedef boost::unordered_map<std::string, StringParameter> StringParamMap;
+
     class ConfigCenter
     {
     public:
@@ -35,29 +43,27 @@ namespace Config
          */
         static void loadConfig(const std::string theInputXmlFile = "config.xml");
 
-        template<typename ValueType>
-        inline ValueType get(const std::string& theKey, const ValueType theDefault)
-        {
-            return configDataM.get<ValueType>(theKey, theDefault);
-        }
-        template<typename ValueType>
-        inline void set(const std::string& theKey, const ValueType& theValue)
-        {
-            configDataM.put(theKey, theValue);
-        }
+        int get(const std::string& theKey, const int theDefault);
+        void set(const std::string& theKey, const int theValue);
+        void setInt(const std::string& theKey, const std::string& theValue);
 
-        int loadXml(const std::string theXmlPath);
-        int saveXml(const std::string theXmlPath);
+        const std::string get(const std::string& theKey, const std::string& theDefault);
+        void set(const std::string& theKey, const std::string& theValue);
 
+        int loadXml(const std::string& theXmlPath);
+        int saveXml(const std::string& theXmlPath);
+
+        static const std::string TOP_XMLNODE_NAME;
     private:
         static ConfigCenterPtr configCenterM;
         static boost::shared_mutex configCenterMutexM;
 
         ConfigCenter();
-        /*config data implement*/
-        boost::property_tree::ptree configDataM;
+        XmlGroup*   topGroupM;
+        IntParamMap intParamMapM;
+        StringParamMap strParamMapM;
     };
 }
 
-#endif /* CONFIG_H */
+#endif /* CONFIGCENTER_H */
 
