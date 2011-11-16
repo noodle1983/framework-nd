@@ -8,6 +8,7 @@ extern "C"
 #include <lualib.h>
 }
 #include <string>
+#include <boost/shared_ptr.hpp>
 
 typedef int (*RegistFunc)(lua_State* theState);
 
@@ -24,8 +25,8 @@ namespace Lua
         int init();
         void fini();
 
-        void regist(RegistFunc theRegistFunc);
         int loadFile(const std::string& theFile);
+        void registCppType(RegistFunc theRegistFunc);
         int callFunc(
                 const std::string& theFunc,
                 const std::string& theLuaType,
@@ -33,9 +34,10 @@ namespace Lua
     private:
         lua_State *luaStateM;
     };
+    typedef boost::shared_ptr<LuaRunner> LuaRunnerPtr;
 
     //-----------------------------------------------------------------------------
-    inline void LuaRunner::regist(RegistFunc theRegistFunc)
+    inline void LuaRunner::registCppType(RegistFunc theRegistFunc)
     {
         (*theRegistFunc)(luaStateM);
     }
