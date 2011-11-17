@@ -23,8 +23,12 @@ namespace Config
         XmlGroup(){};
         ~XmlGroup(){};
 
-        int parse(rapidxml::xml_node<>* theGroupNode);
-        rapidxml::xml_node<>* genNode(rapidxml::xml_document<>* theDoc);
+        int parse(
+                rapidxml::xml_node<>* theGroupNode, 
+                const std::string& theGroupName = "");
+        rapidxml::xml_node<>* genNode(
+                rapidxml::xml_document<>* theDoc, 
+                const std::string& theGroupName = "");
         int convertToMap(
                 IntParamMap& theIntParamMap,
                 StringParamMap& theStringParamMap);

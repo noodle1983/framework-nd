@@ -98,7 +98,7 @@ int ConfigCenter::loadXml(const std::string& theXmlPath)
     }
 
     XmlGroup* group = new XmlGroup();
-    if (0 != group->parse(root))
+    if (0 != group->parse(root, TOP_XMLNODE_NAME))
     {
         CFG_ERROR("can't parse configuration file:" << theXmlPath);
         return -1;
@@ -129,11 +129,11 @@ int ConfigCenter::saveXml(const std::string& theXmlPath)
     xml_node<>* rot = doc.allocate_node(node_pi,doc.allocate_string("xml version='1.0' encoding='utf-8'"));
     doc.append_node(rot);
 
-    xml_node<>* node =  doc.allocate_node(node_element, TOP_XMLNODE_NAME.c_str(),NULL);  
-    doc.append_node(node);
+    //xml_node<>* node =  doc.allocate_node(node_element, TOP_XMLNODE_NAME.c_str(),NULL);  
+    //doc.append_node(node);
 
     topGroupM->refreshFromMap(intParamMapM, strParamMapM);
-    node->append_node(topGroupM->genNode(&doc));
+    doc.append_node(topGroupM->genNode(&doc, TOP_XMLNODE_NAME));
 
     std::ofstream out(theXmlPath.c_str());
     out  <<  doc;

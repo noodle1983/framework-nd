@@ -8,7 +8,7 @@ const std::string XmlGroup::GROUP_TAG = "Group";
 const std::string XmlGroup::NAME_ATTR_TAG = "name";
 //-----------------------------------------------------------------------------
 
-int XmlGroup::parse(xml_node<>* theNode)
+int XmlGroup::parse(xml_node<>* theNode, const std::string& theGroupName)
 {
     if (NULL == theNode)
     {
@@ -16,13 +16,19 @@ int XmlGroup::parse(xml_node<>* theNode)
         return -1;
     }
 
-    /*
-    if (theNode->name() != GROUP_TAG)    
+    if (!theGroupName.empty())
+    {
+        if (theNode->name() != theGroupName)
+        {
+            CFG_ERROR("invalid group tag:" << theGroupName);
+            return -1;
+        }
+    }
+    else if (theNode->name() != GROUP_TAG)    
     {
         CFG_ERROR("invalid group tag:" << theNode->name());
         return -1;
     }
-    */
 
     xml_attribute<>* attr = theNode->first_attribute();  
     for (; NULL != attr; attr = attr->next_attribute()) 
@@ -70,10 +76,17 @@ int XmlGroup::parse(xml_node<>* theNode)
 
 //-----------------------------------------------------------------------------
 
-xml_node<>* XmlGroup::genNode(xml_document<>* theDoc)
+xml_node<>* XmlGroup::genNode(xml_document<>* theDoc, const std::string& theGroupName)
 {
-    xml_node<>* group =  theDoc->allocate_node(node_element, GROUP_TAG.c_str(), NULL);  
-    group->append_attribute(theDoc->allocate_attribute(NAME_ATTR_TAG.c_str(), nameM.c_str()));
+    xml_node<>* group =  theDoc->allocate_node(
+            node_element, 
+            theGroupName.empty() ? GROUP_TAG.c_str() : theGroupName.c_str(), 
+            NULL);  
+    if (theGroupName.empty())
+    {
+        group->append_attribute(
+                theDoc->allocate_attribute(NAME_ATTR_TAG.c_str(), nameM.c_str()));
+    }
 
     std::vector<XmlGroup>::iterator subGroupIt = subGroupsM.begin();
     for (; subGroupIt != subGroupsM.end(); subGroupIt++)
