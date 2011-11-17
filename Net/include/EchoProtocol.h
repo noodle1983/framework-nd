@@ -26,6 +26,11 @@ namespace Protocol
         ~EchoProtocol();
 
         int handleInput(Connection::SocketConnectionPtr connection);
+
+        virtual const std::string getAddr();
+        virtual int getPort();
+        virtual int getRBufferSizePower();
+        virtual int getWBufferSizePower();
     private:
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;

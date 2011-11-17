@@ -45,7 +45,7 @@ int main()
     Net::Reactor::Reactor reactor;
     Net::Protocol::EchoProtocol echoProtocol(&reactor, &processor);
     Net::Server::TcpServer server(&echoProtocol, &reactor, &processor);
-    server.startAt(5555);
+    server.start();
     reactor.start();
 
     boost::unique_lock<boost::mutex> lock(closedMutexM);

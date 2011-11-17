@@ -27,7 +27,7 @@ namespace Server{
         virtual ~TcpServer();
 
         void addAcceptEvent();
-        int startAt(const int thePort);
+        int start();
         void stop();
 
         int asynAccept(int theFd, short theEvt);

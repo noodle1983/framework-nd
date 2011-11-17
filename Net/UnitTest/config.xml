@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<Configuration>
+    <Group name="Echo Client Protocol Group">
+		<Parameter name="Peer Address" id="echo.c.addr">
+            <Description>specify the address which the protocol will connect to</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>127.0.0.1</DefaultValue>
+			<Value>127.0.0.1</Value>
+		</Parameter>
+		<Parameter name="Peer Port" id="echo.c.port">
+            <Description>specify the port which the protocol will connect to</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-65535</ValueRange>
+			<DefaultValue>5460</DefaultValue>
+			<Value>5460</Value>
+		</Parameter>
+		<Parameter name="Receive Buffer Size Power" id="echo.c.rpower">
+            <Description>specify the receive buffer size: power(2, echo.rpower).</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>10-24</ValueRange>
+			<DefaultValue>20</DefaultValue>
+			<Value>20</Value>
+		</Parameter>
+		<Parameter name="Write Buffer Size Power" id="echo.c.wpower">
+            <Description>specify the write buffer size: power(2, echo.rpower).</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>10-24</ValueRange>
+			<DefaultValue>20</DefaultValue>
+			<Value>20</Value>
+		</Parameter>
+	</Group>
+
+    <Group name="Echo Server Protocol Group">
+		<Parameter name="Listen Address" id="echo.s.addr">
+            <Description>specify the address which the protocol will listen to</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>0.0.0.0</DefaultValue>
+			<Value>0.0.0.0</Value>
+		</Parameter>
+		<Parameter name="Listen Port" id="echo.s.port">
+            <Description>specify the port which the protocol will listen to</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-65535</ValueRange>
+			<DefaultValue>5460</DefaultValue>
+			<Value>5460</Value>
+		</Parameter>
+		<Parameter name="Receive Buffer Size Power" id="echo.s.rpower">
+            <Description>specify the receive buffer size: power(2, echo.rpower).</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>10-24</ValueRange>
+			<DefaultValue>20</DefaultValue>
+			<Value>20</Value>
+		</Parameter>
+		<Parameter name="Write Buffer Size Power" id="echo.s.wpower">
+            <Description>specify the write buffer size: power(2, echo.rpower).</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>10-24</ValueRange>
+			<DefaultValue>20</DefaultValue>
+			<Value>20</Value>
+		</Parameter>
+	</Group>
+
+    <Group name="Processor/ThreadPool Group">
+		<Parameter name="Net Processor Thread Number" id="prc.netTno">
+            <Description>specify the thread number for Net Processor/ThreadPool</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>3</DefaultValue>
+			<Value>3</Value>
+		</Parameter>
+		<Parameter name="Fsm Processor Thread Number" id="prc.fsmTno">
+            <Description>specify the thread number for Fsm Processor/ThreadPool</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>3</DefaultValue>
+			<Value>3</Value>
+		</Parameter>
+	</Group>
+
+	<Group name="Traffic Log Group">
+		<Parameter name="Log Level" id="log.level">
+            <Description>specify the log level: 0:TRACE/ALL; 1:DEBUG; 2:INFO; 3:WARN; 4:ERROR; 5:FATAL; 6:NONE</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>0-6</ValueRange>
+			<DefaultValue>3</DefaultValue>
+			<Value>3</Value>
+		</Parameter>
+		<Parameter name="Log pattern" id="log.pattern">
+			<Description>specify how to log a message. please refer to log4plus' manual.</Description>
+			<ValueType>String</ValueType>
+            <DefaultValue>%D{%y-%m-%d %H:%M:%S.%q} %-5p [%l] %m%n</DefaultValue>
+            <Value>%D{%y-%m-%d %H:%M:%S.%q} %-5p [%l] %m%n</Value>
+		</Parameter>
+		<Parameter name="Log File Name" id="log.filename">
+			<Description>specify the file which will be logged to</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>trouble_shooting.log</DefaultValue>
+			<Value>trouble_shooting.log</Value>
+		</Parameter>
+		<Parameter name="Log File Size" id="log.fileSize">
+            <Description>specify the max size(MB) for a single file.</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>10</DefaultValue>
+			<Value>10</Value>
+		</Parameter>
+		<Parameter name="Log File No." id="log.fileNum">
+            <Description>specify the max file number which the log files should keep.</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>10</DefaultValue>
+			<Value>10</Value>
+		</Parameter>
+	</Group>
+</Configuration>
+

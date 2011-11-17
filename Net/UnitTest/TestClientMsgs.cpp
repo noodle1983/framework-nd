@@ -3,12 +3,15 @@
 #include "Reactor.h"
 #include "Protocol.h"
 #include "Log.h"
+#include "ConfigCenter.h"
 
 #include <event.h>
 #include <event2/thread.h>
 #include <unistd.h>
 #include <signal.h>
 #include <iostream>
+
+using namespace Config;
 
 static int closed = false;
 static boost::mutex closedMutexM;
@@ -51,7 +54,7 @@ public:
 
     void startTest()
     {
-        tcpClientM.connect("127.0.0.1", 5555);
+        tcpClientM.connect();
     }
 
     int onConnected(int theFd, Net::Connection::SocketConnectionPtr theConnection)
@@ -126,6 +129,26 @@ public:
             }
         }
         return 0;
+    }
+
+    const std::string getAddr()
+    {
+        return ConfigCenter::instance()->get("echo.c.addr", "127.0.0.1");
+    }
+
+    int getPort()
+    {
+        return ConfigCenter::instance()->get("echo.c.port", 5460);
+    }
+
+    int getRBufferSizePower()
+    {
+        return ConfigCenter::instance()->get("echo.c.rpower", 20);
+    }
+
+    int getWBufferSizePower()
+    {
+        return ConfigCenter::instance()->get("echo.c.wpower", 20);
     }
 
 private:

@@ -18,7 +18,7 @@ namespace Buffer
     class KfifoBuffer
     {
     public:
-        KfifoBuffer();
+        KfifoBuffer(const int theSizePower);
         ~KfifoBuffer();
 
         void init();

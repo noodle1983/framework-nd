@@ -3,6 +3,7 @@
 #include "SocketConnection.h"
 #include "Reactor.h"
 #include "Log.h"
+#include "Protocol.h"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -102,10 +103,8 @@ void TcpServer::onAccept(int theFd, short theEvt)
 //-----------------------------------------------------------------------------
 
 
-int TcpServer::startAt(const int thePort)
+int TcpServer::start()
 {
-    portM = thePort;
-
     //new a socket
     fdM = socket(AF_INET, SOCK_STREAM, 0);
     if (fdM < 0)
@@ -129,8 +128,11 @@ int TcpServer::startAt(const int thePort)
     struct sockaddr_in listenAddr;
     memset(&listenAddr, 0, sizeof(listenAddr));
     listenAddr.sin_family = AF_INET;
-    listenAddr.sin_addr.s_addr = INADDR_ANY;
+    evutil_inet_pton(AF_INET, protocolM->getAddr().c_str(), &listenAddr.sin_addr);
+    portM = protocolM->getPort();
     listenAddr.sin_port = htons(portM);
+    //listenAddr.sin_addr.s_addr = INADDR_ANY;
+    //listenAddr.sin_port = htons(portM);
     if (bind(fdM, (struct sockaddr *)&listenAddr,
         sizeof(listenAddr)) < 0)
     {

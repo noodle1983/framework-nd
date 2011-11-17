@@ -62,10 +62,10 @@ int TcpClient::close()
 
 //-----------------------------------------------------------------------------
 
-int TcpClient::connect(const std::string& thePeerAddr, const int thePeerPort)
+int TcpClient::connect()
 {
-    peerAddrM = thePeerAddr;
-    peerPortM = thePeerPort;
+    peerAddrM = protocolM->getAddr();
+    peerPortM = protocolM->getPort();
 
     evutil_socket_t sock;
     struct sockaddr_in sin;

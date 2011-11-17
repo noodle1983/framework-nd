@@ -42,6 +42,13 @@ namespace Net
         }
         
         virtual int handleInput(Net::Connection::SocketConnectionPtr theConnection) = 0;
+
+        //Config
+        virtual const std::string getAddr(){ return "0.0.0.0"; }
+        virtual int getPort(){ return 5460; }
+        virtual int getRBufferSizePower(){ return 20; }
+        virtual int getWBufferSizePower(){ return 20; }
+        
     private:
         Processor::BoostProcessor* processorM;
     };
@@ -66,6 +73,8 @@ namespace Net
          *
          */
         virtual int onConnected(int theFd, Connection::SocketConnectionPtr theConnection) {return 0;}
+
+        virtual const std::string getAddr(){ return "127.0.0.1"; }
     };
 
     class IUdpProtocol
@@ -94,6 +103,9 @@ namespace Net
         }
         
         virtual int handleInput(Net::Server::UdpServerPtr theUdpServer) = 0;
+        
+        //Config
+        virtual int getRBufferSizePower(){ return 20; }
     private:
         Processor::BoostProcessor* processorM;
     };

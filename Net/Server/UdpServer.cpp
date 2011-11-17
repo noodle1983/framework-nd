@@ -31,6 +31,7 @@ UdpServer::UdpServer(
     , protocolM(theProtocol)
     , reactorM(theReactor)
     , processorM(theProcessor)
+    , inputQueueM(theProtocol->getRBufferSizePower())
     , statusM(CloseE)
     , stopReadingM(false)
 {

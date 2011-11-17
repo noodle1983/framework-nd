@@ -2,9 +2,10 @@
 #include "EchoProtocol.h"
 #include "SocketConnection.h"
 #include "Reactor.h"
-
+#include "ConfigCenter.h"
 
 using namespace Net::Protocol;
+using namespace Config;
 
 //-----------------------------------------------------------------------------
 EchoProtocol::EchoProtocol(
@@ -40,8 +41,35 @@ int EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
     return 0;
 }
 
+//-----------------------------------------------------------------------------
 
+const std::string EchoProtocol::getAddr()
+{
+    return ConfigCenter::instance()->get("echo.s.addr", "0.0.0.0");
+}
 
 //-----------------------------------------------------------------------------
+
+int EchoProtocol::getPort()
+{
+    return ConfigCenter::instance()->get("echo.s.port", 5460);
+}
+
+//-----------------------------------------------------------------------------
+
+int EchoProtocol::getRBufferSizePower()
+{
+    return ConfigCenter::instance()->get("echo.s.rpower", 20);
+}
+
+//-----------------------------------------------------------------------------
+
+int EchoProtocol::getWBufferSizePower()
+{
+    return ConfigCenter::instance()->get("echo.s.wpower", 20);
+}
+
+//-----------------------------------------------------------------------------
+
 
 

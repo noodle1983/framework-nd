@@ -5,9 +5,13 @@ using namespace Net::Buffer;
 
 //-----------------------------------------------------------------------------
 
-KfifoBuffer::KfifoBuffer()
+KfifoBuffer::KfifoBuffer(const int theSizePower)
 {
-    sizeM = 1 << 20; //1MB
+    // limit the size to 1k ~ 16M
+    int sizePower = theSizePower < 10 ? 10
+              : theSizePower > 24 ? 24
+              : theSizePower;
+    sizeM = 1 << sizePower; //1MB
     maskM = sizeM - 1;
     rawM = new char[sizeM];
     readIndexM = 0;

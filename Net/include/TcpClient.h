@@ -26,7 +26,7 @@ namespace Client
          *         -1 : there is an error.
          *         0  : connected or blocked
          */
-        int connect(const std::string& thePeerAddr, const int thePeerPort);
+        int connect();
         int close();
         unsigned sendn(char* const theBuffer, const unsigned theLen);
 
