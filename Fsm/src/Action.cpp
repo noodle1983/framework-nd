@@ -65,6 +65,8 @@ int Fsm::generateEvent(
 int Fsm::ignoreEvent(
         Fsm::Session* theSession)
 {
+    DEBUG(theSession->getSessionName() 
+            << " ignore event.");
     return 0;
 }
 

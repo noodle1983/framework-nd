@@ -85,7 +85,8 @@ void Session::handleEvent(const int theEventId)
     ActionList& actionList = curState.getActionList(theEventId);
     if (actionList.empty())
     {
-        ERROR("the Event is not defined with id:" << theEventId);
+        ERROR(getSessionName()
+                << "the Event is not defined with id:" << theEventId);
         changeState(this, endStateIdM);
         return;
     }
@@ -96,7 +97,8 @@ void Session::handleEvent(const int theEventId)
     {
         if (curStateId != curStateIdM)
         {
-            DEBUG("state changed, ignore rest action for event:" << theEventId);
+            DEBUG(getSessionName()
+                    << " state changed, ignore rest action for event:" << theEventId);
             break;
         }
         (*it)(this);
