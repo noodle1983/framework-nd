@@ -25,8 +25,8 @@ namespace Fsm
         virtual ~Session();
 
         State& toNextState(const int theNextStateId);
-		void asynHandleEvent(const int theEventId);
-        void handleEvent(const int theEventId);
+		int asynHandleEvent(const int theEventId);
+        int handleEvent(const int theEventId);
         void newTimer(const long long theUsec);
         void asynHandleTimeout(const int theTimerId);
         void handleTimeout(const int theTimerId);

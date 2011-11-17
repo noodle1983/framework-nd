@@ -34,7 +34,7 @@ Session::~Session()
 
 //-----------------------------------------------------------------------------
 
-void Session::asynHandleEvent(const int theEventId)
+int Session::asynHandleEvent(const int theEventId)
 {
     if (fsmProcessorM)
     {
@@ -46,12 +46,12 @@ void Session::asynHandleEvent(const int theEventId)
         Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
     }
-
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
 
-void Session::handleEvent(const int theEventId)
+int Session::handleEvent(const int theEventId)
 {
     if (!isInitializedM)
     {
@@ -88,7 +88,7 @@ void Session::handleEvent(const int theEventId)
         ERROR(getSessionName()
                 << "the Event is not defined with id:" << theEventId);
         changeState(this, endStateIdM);
-        return;
+        return -1;
     }
 
     const int curStateId = curStateIdM;
@@ -103,7 +103,7 @@ void Session::handleEvent(const int theEventId)
         }
         (*it)(this);
     }
-
+    return 0;
 }
 
 //-----------------------------------------------------------------------------

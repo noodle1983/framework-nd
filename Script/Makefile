@@ -7,7 +7,6 @@ PROJBASE=$(CURDIR)/..
 #                target                 #
 #########################################
 SUBDIR=Lua \
-	   LuaObject
 
 #########################################
 #      header and lib dependancy        #
