@@ -1,9 +1,11 @@
-#include <BoostProcessor.h>
-#include <BoostWorker.h>
+#include "BoostProcessor.h"
+#include "BoostWorker.h"
+#include "ConfigCenter.h"
 
 #include <boost/bind.hpp>
 
 using namespace Processor;
+using namespace Config;
 
 //-----------------------------------------------------------------------------
 
@@ -22,7 +24,8 @@ BoostProcessor* BoostProcessor::fsmInstance()
         boost::lock_guard<boost::mutex> lock(fsmProcessorInstanceMutex);
         if (NULL == fsmProcessorM)
         {
-            fsmProcessorM = new BoostProcessor(3);
+            int threadCount = ConfigCenter::instance()->get("prc.fsmTno", 3);
+            fsmProcessorM = new BoostProcessor(threadCount);
             fsmProcessorInstanceReleaser.reset(fsmProcessorM);
             fsmProcessorM->start();
         }
@@ -40,7 +43,8 @@ BoostProcessor* BoostProcessor::netInstance()
         boost::lock_guard<boost::mutex> lock(netProcessorInstanceMutex);
         if (NULL == netProcessorM)
         {
-            netProcessorM = new BoostProcessor(3);
+            int threadCount = ConfigCenter::instance()->get("prc.netTno", 3);
+            netProcessorM = new BoostProcessor(threadCount);
             netProcessorInstanceReleaser.reset(netProcessorM);
             netProcessorM->start();
         }
@@ -69,6 +73,9 @@ BoostProcessor::~BoostProcessor()
 void BoostProcessor::start()
 {
     if (0 == threadCountM)
+        return;
+
+    if (NULL != workersM)
         return;
 
     workersM = new BoostWorker[threadCountM];

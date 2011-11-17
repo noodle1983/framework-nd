@@ -98,7 +98,7 @@ int ConfigCenter::loadXml(const std::string& theXmlPath)
     }
 
     XmlGroup* group = new XmlGroup();
-    if (0 != group->parse(root->first_node()))
+    if (0 != group->parse(root))
     {
         CFG_ERROR("can't parse configuration file:" << theXmlPath);
         return -1;
@@ -138,6 +138,7 @@ int ConfigCenter::saveXml(const std::string& theXmlPath)
     std::ofstream out(theXmlPath.c_str());
     out  <<  doc;
     out.close();
+    CFG_DEBUG("saved to config file:" << theXmlPath);
     return 0;
 }
 

@@ -16,11 +16,13 @@ int XmlGroup::parse(xml_node<>* theNode)
         return -1;
     }
 
+    /*
     if (theNode->name() != GROUP_TAG)    
     {
         CFG_ERROR("invalid group tag:" << theNode->name());
         return -1;
     }
+    */
 
     xml_attribute<>* attr = theNode->first_attribute();  
     for (; NULL != attr; attr = attr->next_attribute()) 

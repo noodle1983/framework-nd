@@ -15,12 +15,14 @@ INC_DIR=-I. \
      -I./include \
      -I./src \
 
-STATIC_LIB= 
+STATIC_LIB= \
+
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread
 
 include $(PROJBASE)/build/makefile.boost.header
 include $(PROJBASE)/build/makefile.staticlib.boost.thread.linux
+include $(PROJBASE)/build/makefile.staticlib.configAndLog.linux
 
 #########################################
 #              compiler                 #
