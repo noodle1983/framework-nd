@@ -55,7 +55,7 @@ log4cplus::Logger& Logger::trafficLogger()
             trafficLoggerM = log4cplus::Logger::getInstance("Traffic");
             trafficLoggerM.addAppender(append);
             trafficLoggerM.setLogLevel(logLevel);
-            LOG4CPLUS_DEBUG(trafficLoggerM, "------------------------------------");
+            LOG4CPLUS_FATAL(trafficLoggerM, "------------------process start------------------");
         }
     }
     return trafficLoggerM;
@@ -82,7 +82,7 @@ log4cplus::Logger& Logger::configLogger()
             configLoggerM = log4cplus::Logger::getInstance("Config");
             configLoggerM.addAppender(append);
             configLoggerM.setLogLevel(log4cplus::ALL_LOG_LEVEL);
-            LOG4CPLUS_DEBUG(configLoggerM, "------------------------------------");
+            LOG4CPLUS_FATAL(configLoggerM, "-----------------process start-------------------");
         }
     }
     return configLoggerM;

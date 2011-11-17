@@ -6,7 +6,7 @@
 			<ValueType>Int</ValueType>
 			<ValueRange>0-6</ValueRange>
 			<DefaultValue>3</DefaultValue>
-			<Value>0</Value>
+			<Value>3</Value>
 		</Parameter>
 		<Parameter name="Log pattern" id="log.pattern">
 			<Description>specify how to log a message. please refer to log4plus' manual.</Description>
