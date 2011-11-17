@@ -17,6 +17,7 @@ INC_DIR=-I. \
 	 -I$(PROJBASE)/DesignPattern/include
 
 STATIC_LIB= $(PROJBASE)/.lib/libLog.a \
+	   $(PROJBASE)/.lib/libConfig.a
 
 SHARED_LIB_DIR=
 SHARED_LIB= -lcrypt -lrt -pthread -ldl

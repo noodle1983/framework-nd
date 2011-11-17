@@ -44,7 +44,7 @@ all: $(SUBDIR)
 		make -C $$DIR || exit -1; \
 	done                  
 
-test: $(SUBDIR) $(OUTDIR)
+test: all $(SUBDIR) $(OUTDIR)
 	@for DIR in $(SUBDIR);  \
 	do                     \
 		make test -C $$DIR || exit -1; \

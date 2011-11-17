@@ -1,4 +1,5 @@
 #include "Logger.h"
+#include "ConfigCenter.h"
 
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
@@ -6,6 +7,7 @@
 #include <log4cplus/fileappender.h>
 
 using namespace Log;
+using namespace Config;
 
 //-----------------------------------------------------------------------------
 
@@ -30,17 +32,29 @@ log4cplus::Logger& Logger::trafficLogger()
         boost::lock_guard<boost::mutex> lock(trafficLoggerMutexM);
         if (!isTrafficLoggerInited)
         {
+            int logLevel = ConfigCenter::instance()->get("log.level", 3);
+            logLevel *= 10000;
+
+            std::string logFilename = ConfigCenter::instance()->
+                get("log.filename", "trouble_shooting.log");
+
+            int fileSize = ConfigCenter::instance()->get("log.fileSize", 10);
+            int fileNum = ConfigCenter::instance()->get("log.fileNum", 10);
+            std::string logPattern = ConfigCenter::instance()->
+                get("log.pattern", "%D{%y-%m-%d %H:%M:%S.%q} %-5p [%l] %m%n");
+
             isTrafficLoggerInited = true;
-            log4cplus::SharedAppenderPtr append(new log4cplus::RollingFileAppender("trouble_shooting.log",
-                                                            10 * 1024 * 1024, // max file size
-                                                            10               //max backup index
-                                                            ));
-            std::string pattern = "%D{%m/%d/%y %H:%M:%S.%q} %-5p [%l] %m%n";
-            std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(pattern));
+
+            log4cplus::SharedAppenderPtr append(
+                    new log4cplus::RollingFileAppender(logFilename,
+                                                       fileSize * 1024 * 1024, // max file size
+                                                       fileNum               //max backup index
+                                                       ));
+            std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(logPattern));
             append->setLayout(layout);
-            trafficLoggerM = log4cplus::Logger::getInstance("Logger");
+            trafficLoggerM = log4cplus::Logger::getInstance("Traffic");
             trafficLoggerM.addAppender(append);
-            trafficLoggerM.setLogLevel(log4cplus::ALL_LOG_LEVEL);
+            trafficLoggerM.setLogLevel(logLevel);
             LOG4CPLUS_DEBUG(trafficLoggerM, "------------------------------------");
         }
     }
@@ -62,7 +76,7 @@ log4cplus::Logger& Logger::configLogger()
                                                             10 * 1024 * 1024, // max file size
                                                             10               //max backup index
                                                             ));
-            std::string pattern = "%D{%m/%d/%y %H:%M:%S.%q} %-5p [%l] %m%n";
+            std::string pattern = "%D{%y-%m-%d %H:%M:%S.%q} %-5p [%l] %m%n";
             std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(pattern));
             append->setLayout(layout);
             configLoggerM = log4cplus::Logger::getInstance("Config");

@@ -14,13 +14,16 @@ SUBDIR=
 INC_DIR= -I. -IAutoMsg -IManMsg \
 		 -I$(PROJBASE)/Log/include
 
-STATIC_LIB=$(PROJBASE)/.lib/libLog.a 
+STATIC_LIB=$(PROJBASE)/.lib/libLog.a \
+		   $(PROJBASE)/.lib/libConfig.a
+
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread
 
+include $(PROJBASE)/build/makefile.boost.header
+include $(PROJBASE)/build/makefile.staticlib.boost.thread.linux
 include $(PROJBASE)/build/makefile.staticlib.log4cplus.linux
 include $(PROJBASE)/build/makefile.staticlib.glib.linux
-include $(PROJBASE)/build/makefile.boost.header
 #########################################
 #              compiler                 #
 #########################################
