@@ -3,6 +3,11 @@
 #include <string>
 using namespace std;
 
+void intChange(const int theValue)
+{
+    cout << "change to value:" << theValue << endl;
+}
+
 int main()
 {
     int test0 = Config::ConfigCenter::instance()->get("test.test0", -1);
@@ -13,6 +18,9 @@ int main()
     cout << "notexist:" << notexist << endl;
     std::string str = Config::ConfigCenter::instance()->get("test.str", "notexist");
     cout << "str:" << str << endl;
+
+    Config::ConfigCenter::instance()->
+        registValueWatcher("test.test0", Config::IntParameter::Watcher(intChange));
 
     Config::ConfigCenter::instance()->set("test.test0", test0 + 1);
     Config::ConfigCenter::instance()->set("test.test1", test1 + 1);

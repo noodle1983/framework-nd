@@ -189,6 +189,24 @@ void ConfigCenter::setInt(const std::string& theKey, const std::string& theValue
 
 //-----------------------------------------------------------------------------
 
+void ConfigCenter::registValueWatcher(
+        const std::string& theKey, 
+        IntParameter::Watcher theWatcher)
+{
+    IntParamMap::iterator it = intParamMapM.find(theKey);
+    if (it != intParamMapM.end())
+    {
+        it->second.registerWatcher(theWatcher);
+    }
+    else
+    {
+        CFG_ERROR("config not found:" << theKey);
+    }
+
+}
+
+//-----------------------------------------------------------------------------
+
 const std::string ConfigCenter::get(const std::string& theKey, const std::string& theDefault)
 {
     StringParamMap::iterator it = strParamMapM.find(theKey);
@@ -215,5 +233,23 @@ void ConfigCenter::set(const std::string& theKey, const std::string& theValue)
     {
         CFG_ERROR("config not found:" << theKey);
     }
+}
+
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::registValueWatcher(
+        const std::string& theKey, 
+        StringParameter::Watcher theWatcher)
+{
+    StringParamMap::iterator it = strParamMapM.find(theKey);
+    if (it != strParamMapM.end())
+    {
+        it->second.registerWatcher(theWatcher);
+    }
+    else
+    {
+        CFG_ERROR("config not found:" << theKey);
+    }
+
 }
 

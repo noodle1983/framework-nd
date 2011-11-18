@@ -46,9 +46,16 @@ namespace Config
         int get(const std::string& theKey, const int theDefault);
         void set(const std::string& theKey, const int theValue);
         void setInt(const std::string& theKey, const std::string& theValue);
+        void registValueWatcher(
+                const std::string& theKey,
+                IntParameter::Watcher theWatcher);
 
         const std::string get(const std::string& theKey, const std::string& theDefault);
         void set(const std::string& theKey, const std::string& theValue);
+        void registValueWatcher(
+                const std::string& theKey,
+                StringParameter::Watcher theWatcher);
+
 
         int loadXml(const std::string& theXmlPath);
         int saveXml(const std::string& theXmlPath);
