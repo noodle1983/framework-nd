@@ -64,6 +64,27 @@ int main()
         //assert(rIndex == wIndex);
         serviceNotification2.dump(std::cout);
     }
+    {
+        UserDataNotification msg;
+        msg.init();
+        msg.userId.valueM = 123456789012345;           
+        msg.ip.valueM = 1;           
+        msg.lac.valueM = 2;           
+        msg.rac.valueM = 3;           
+        msg.ci.valueM = 4;           
+        msg.status.valueM = 5;           
+        msg.content.valueM = "abc";           
+
+        char buffer[1024];
+        unsigned wIndex = 0;
+        msg.encode(buffer, sizeof(buffer), wIndex);
+        UserDataNotification msg2;
+        unsigned rIndex = 0;
+        msg2.decode(buffer, wIndex, rIndex);
+        //assert(rIndex == wIndex);
+        msg2.dump(std::cout);
+
+    }
 
     return 0;
 }

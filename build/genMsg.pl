@@ -57,6 +57,7 @@ print CMSG_HANDLE<<END_OF_HEADER;
 #include "Qos.h"
 #include "Location.h"
 #include "Timestamp.h"
+#include "BcdString.h"
 #include "Log.h"
 #include <boost/optional.hpp>
 

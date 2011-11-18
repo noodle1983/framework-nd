@@ -74,7 +74,7 @@ SubMessage MsgDHeader
 
 SubMessage MsgE1Header
     include Header
-    UserId           Uint64    M         
+    UserId           BcdUserId M         
     Ip               Uint32    M         
     Lac              Uint16    M         
     Rac              Uint16    M         
