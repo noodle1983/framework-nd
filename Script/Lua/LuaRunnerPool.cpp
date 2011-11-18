@@ -37,6 +37,7 @@ void LuaRunnerPool::registCppType(RegistFunc theRegistFunc)
 int LuaRunnerPool::init(const int theCnt)
 {
     runnerCountM = theCnt;
+    INFO("LuaRunner number:" << runnerCountM);
     if (!isRunnerCntValid())
     {
         ERROR("invalid LuaRunner Count:" << theCnt
