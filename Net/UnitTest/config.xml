@@ -1,27 +1,27 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <Configuration>
     <Group name="Echo Client Protocol Group">
-		<Parameter name="Peer Address" id="echo.c.addr">
+		<Parameter name="Echo protocol Peer Address" id="echo.c.addr">
             <Description>specify the address which the protocol will connect to</Description>
 			<ValueType>String</ValueType>
 			<DefaultValue>127.0.0.1</DefaultValue>
 			<Value>127.0.0.1</Value>
 		</Parameter>
-		<Parameter name="Peer Port" id="echo.c.port">
+		<Parameter name="Echo Protocol Peer Port" id="echo.c.port">
             <Description>specify the port which the protocol will connect to</Description>
 			<ValueType>Int</ValueType>
 			<ValueRange>1-65535</ValueRange>
 			<DefaultValue>5460</DefaultValue>
 			<Value>5460</Value>
 		</Parameter>
-		<Parameter name="Receive Buffer Size Power" id="echo.c.rpower">
+		<Parameter name="Echo Client Receive Buffer Size Power" id="echo.c.rpower">
             <Description>specify the receive buffer size: power(2, echo.rpower).</Description>
 			<ValueType>Int</ValueType>
 			<ValueRange>10-24</ValueRange>
 			<DefaultValue>20</DefaultValue>
 			<Value>20</Value>
 		</Parameter>
-		<Parameter name="Write Buffer Size Power" id="echo.c.wpower">
+		<Parameter name="Echo Client Write Buffer Size Power" id="echo.c.wpower">
             <Description>specify the write buffer size: power(2, echo.rpower).</Description>
 			<ValueType>Int</ValueType>
 			<ValueRange>10-24</ValueRange>
@@ -31,27 +31,27 @@
 	</Group>
 
     <Group name="Echo Server Protocol Group">
-		<Parameter name="Listen Address" id="echo.s.addr">
+		<Parameter name="Echo Server Listen Address" id="echo.s.addr">
             <Description>specify the address which the protocol will listen to</Description>
 			<ValueType>String</ValueType>
 			<DefaultValue>0.0.0.0</DefaultValue>
 			<Value>0.0.0.0</Value>
 		</Parameter>
-		<Parameter name="Listen Port" id="echo.s.port">
+		<Parameter name="Echo Server Listen Port" id="echo.s.port">
             <Description>specify the port which the protocol will listen to</Description>
 			<ValueType>Int</ValueType>
 			<ValueRange>1-65535</ValueRange>
 			<DefaultValue>5460</DefaultValue>
 			<Value>5460</Value>
 		</Parameter>
-		<Parameter name="Receive Buffer Size Power" id="echo.s.rpower">
+		<Parameter name="Echo Server Connection Receive Buffer Size Power" id="echo.s.rpower">
             <Description>specify the receive buffer size: power(2, echo.rpower).</Description>
 			<ValueType>Int</ValueType>
 			<ValueRange>10-24</ValueRange>
 			<DefaultValue>20</DefaultValue>
 			<Value>20</Value>
 		</Parameter>
-		<Parameter name="Write Buffer Size Power" id="echo.s.wpower">
+		<Parameter name="Echo Server Connection Write Buffer Size Power" id="echo.s.wpower">
             <Description>specify the write buffer size: power(2, echo.rpower).</Description>
 			<ValueType>Int</ValueType>
 			<ValueRange>10-24</ValueRange>
