@@ -5,7 +5,6 @@
 #include <rapidxml.hpp>
 #include <rapidxml_utils.hpp>
 #include <rapidxml_print.hpp>
-#include <boost/property_tree/xml_parser.hpp>
 
 using namespace Config;
 using namespace rapidxml;
@@ -191,7 +190,7 @@ void ConfigCenter::setInt(const std::string& theKey, const std::string& theValue
 
 void ConfigCenter::registValueWatcher(
         const std::string& theKey, 
-        IntParameter::Watcher theWatcher)
+        IntWatcher theWatcher)
 {
     IntParamMap::iterator it = intParamMapM.find(theKey);
     if (it != intParamMapM.end())
@@ -239,7 +238,7 @@ void ConfigCenter::set(const std::string& theKey, const std::string& theValue)
 
 void ConfigCenter::registValueWatcher(
         const std::string& theKey, 
-        StringParameter::Watcher theWatcher)
+        StringWatcher theWatcher)
 {
     StringParamMap::iterator it = strParamMapM.find(theKey);
     if (it != strParamMapM.end())

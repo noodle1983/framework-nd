@@ -18,6 +18,9 @@ namespace Config
     typedef boost::unordered_map<std::string, IntParameter> IntParamMap;
     typedef boost::unordered_map<std::string, StringParameter> StringParamMap;
 
+    typedef IntParameter::Watcher IntWatcher;
+    typedef StringParameter::Watcher StringWatcher;
+
     class ConfigCenter
     {
     public:
@@ -48,13 +51,13 @@ namespace Config
         void setInt(const std::string& theKey, const std::string& theValue);
         void registValueWatcher(
                 const std::string& theKey,
-                IntParameter::Watcher theWatcher);
+                IntWatcher theWatcher);
 
         const std::string get(const std::string& theKey, const std::string& theDefault);
         void set(const std::string& theKey, const std::string& theValue);
         void registValueWatcher(
                 const std::string& theKey,
-                StringParameter::Watcher theWatcher);
+                StringWatcher theWatcher);
 
 
         int loadXml(const std::string& theXmlPath);
