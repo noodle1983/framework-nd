@@ -7,7 +7,7 @@
 #define CHANGE_STATE(theStateId)  boost::bind(Fsm::changeState,   _1, (theStateId))
 #define GEN_EVT(theEventId)       boost::bind(Fsm::generateEvent, _1, (theEventId))
 #define NEW_TIMER(theUsec)        boost::bind(Fsm::newTimer,      _1, (theUsec))
-#define NEW_FUNC_TIMER(theGettor) boost::bind(Fsm::newFuncTimer,  _1, (theGettor))
+#define NEW_FUNC_TIMER(theGettor) boost::bind(Fsm::newFuncTimer,  _1, Fsm::TimerGettor(theGettor))
 #define CANCEL_TIMER()            (&Fsm::cancelTimer)
 #define DELETE_SESSION()          (&Fsm::deleteSession)
 #define IGNORE_EVT()              (&Fsm::ignoreEvent)
