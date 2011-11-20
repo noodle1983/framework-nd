@@ -12,6 +12,14 @@ BoostWorker::BoostWorker()
 
 BoostWorker::~BoostWorker()
 {
+    Job* job;
+    while (!jobQueueM.empty())
+    {
+		job = jobQueueM.front();
+		jobQueueM.pop_front();
+        delete job;
+        job = NULL;
+    }
 
 }
 
