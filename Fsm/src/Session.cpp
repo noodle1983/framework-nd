@@ -130,7 +130,8 @@ void onFsmTimeOut(int theFd, short theEvt, void *theArg)
     Session* session = timerPair->first;
     int timerId = timerPair->second;
     session->asynHandleTimeout(timerId);
-    delete timerPair;
+	// the timerPair will be deleted in the fsm's thread
+    //delete timerPair;
 }
 //-----------------------------------------------------------------------------
 
@@ -156,6 +157,7 @@ void Session::handleTimeout(const int theTimerId)
     if (fsmTimeoutEvtM && theTimerId == timerIdM)
     {
         //otherwise it is another timer and the previous one is freed already
+		delete (TimerPair*)fsmTimeoutEvtM->ev_arg;
         Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
         handleEvent(TIMEOUT_EVT);
     }
@@ -167,6 +169,7 @@ void Session::newTimer(const long long theUsec)
 {
     if (fsmTimeoutEvtM)
     {
+		delete (TimerPair*)fsmTimeoutEvtM->ev_arg;
         Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
     }
     timerIdM++;
@@ -184,6 +187,7 @@ void Session::cancelTimer()
 {
     if (fsmTimeoutEvtM)
     {
+		delete (TimerPair*)fsmTimeoutEvtM->ev_arg;
         Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
     }
 }
