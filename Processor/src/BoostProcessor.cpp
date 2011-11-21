@@ -11,10 +11,13 @@ using namespace Config;
 
 static boost::mutex fsmProcessorInstanceMutex;
 static boost::mutex netProcessorInstanceMutex;
+static boost::mutex manProcessorInstanceMutex;
 static boost::shared_ptr<BoostProcessor> fsmProcessorInstanceReleaser;
 static boost::shared_ptr<BoostProcessor> netProcessorInstanceReleaser;
+static boost::shared_ptr<BoostProcessor> manProcessorInstanceReleaser;
 BoostProcessor* BoostProcessor::fsmProcessorM = NULL;
 BoostProcessor* BoostProcessor::netProcessorM = NULL;
+BoostProcessor* BoostProcessor::manProcessorM = NULL;
 //-----------------------------------------------------------------------------
 
 BoostProcessor* BoostProcessor::fsmInstance()
@@ -50,6 +53,24 @@ BoostProcessor* BoostProcessor::netInstance()
         }
     }
     return netProcessorM;
+}
+
+//-----------------------------------------------------------------------------
+
+BoostProcessor* BoostProcessor::manInstance()
+{
+    if (NULL == manProcessorM)
+    {
+        boost::lock_guard<boost::mutex> lock(manProcessorInstanceMutex);
+        if (NULL == manProcessorM)
+        {
+            int threadCount = ConfigCenter::instance()->get("prc.manTno", 1);
+            manProcessorM = new BoostProcessor(threadCount);
+            manProcessorInstanceReleaser.reset(manProcessorM);
+            manProcessorM->start();
+        }
+    }
+    return manProcessorM;
 }
 
 //-----------------------------------------------------------------------------
