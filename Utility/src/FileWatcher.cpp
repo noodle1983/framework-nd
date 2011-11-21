@@ -15,7 +15,9 @@ using namespace Utility;
 void on_filewatcher_timeout(int theFd, short theEvt, void *theArg)
 {
     FileWatcher* theWatcher = (FileWatcher*) theArg;
-    theWatcher->checkFile();
+    Processor::BoostProcessor::manInstance()->process(
+            0, 
+            new Processor::Job(boost::bind(&FileWatcher::checkFile, theWatcher)));
 }
 
 //-----------------------------------------------------------------------------
@@ -27,8 +29,6 @@ FileWatcher::FileWatcher(
     : filePathM(thePath)
     , secM(theSec)
     , callbackM(theCallback)
-    , lastModTimeM(0)
-    , timerEventM(NULL)
 {
     struct stat fileStat;
     if (0 == stat(filePathM.c_str(), &fileStat))
@@ -39,6 +39,7 @@ FileWatcher::FileWatcher(
     {
         CFG_WARN("failed to stat file:" << filePathM
                 << ". errno:" << errno);
+        lastModTimeM = 0;
     }
 
     timerEventM = Net::Reactor::Reactor::instance()->newPersistTimer(

@@ -21,9 +21,10 @@ INC_DIR=-I. \
 STATIC_LIB= $(PROJBASE)/.lib/libLog.a \
 	$(PROJBASE)/.lib/libNet.a \
 	$(PROJBASE)/.lib/libProcessor.a \
+	$(PROJBASE)/.lib/libConfig.a \
 
 SHARED_LIB_DIR=
-SHARED_LIB= -pthread
+SHARED_LIB= -pthread -lrt
 
 include $(PROJBASE)/build/makefile.boost.header
 include $(PROJBASE)/build/makefile.rapidxml.header
