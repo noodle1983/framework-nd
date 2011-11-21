@@ -77,16 +77,21 @@ int FileWatcher::checkFile()
             lastModTimeM = fileStat.st_mtime;
             CFG_DEBUG("reload file:" << filePathM);
         }
+        struct timeval tv;
+        tv.tv_sec = (secM == 0 ? 5 : secM); 
+        tv.tv_usec = 0;
+        event_add(timerEventM, &tv);
+        return 0;
     }
     else
     {
+        struct timeval tv;
+        tv.tv_sec = (secM == 0 ? 5 : secM); 
+        tv.tv_usec = 0;
+        event_add(timerEventM, &tv);
         return -1;
     }
 
-    struct timeval tv;
-    tv.tv_sec = (secM == 0 ? 5 : secM); 
-    tv.tv_usec = 0;
-    event_add(timerEventM, &tv);
     return 0;
 }
 
