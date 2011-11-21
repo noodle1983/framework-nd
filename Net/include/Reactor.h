@@ -29,6 +29,10 @@ namespace Reactor
         inline struct event *newTimer(
                 event_callback_fn theFn,
                 void* theArg);
+
+        inline struct event *newPersistTimer(
+                event_callback_fn theFn,
+                void* theArg);
     private:
         struct event_base* evtBaseM;
         struct event* heartbeatEventM;//to avoid the event loop exit
@@ -62,6 +66,17 @@ struct event* Reactor::newTimer(
                 void* theArg)
 {
     return evtimer_new(evtBaseM, theFn, theArg);
+}
+//-----------------------------------------------------------------------------
+struct event* Reactor::newPersistTimer(
+                event_callback_fn theFn,
+                void* theArg)
+{
+    return event_new(evtBaseM,
+                    -1, 
+                    EV_PERSIST, 
+                    theFn, 
+                    theArg); 
 }
 //-----------------------------------------------------------------------------
 }
