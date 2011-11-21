@@ -25,8 +25,10 @@ ConfigCenterPtr ConfigCenter::instance()
         if (NULL == configCenterM.get())
         {
             configCenterM.reset(new ConfigCenter());
-            configCenterM->loadXml("config.xml");
-            CFG_DEBUG("loaded config file:config.xml");
+            if (0 == configCenterM->loadXml("config.xml"))
+            {
+                CFG_DEBUG("loaded config file:config.xml");
+            }
         }
     }
     boost::shared_lock<boost::shared_mutex> lock(configCenterMutexM);
@@ -80,36 +82,46 @@ ConfigCenter::~ConfigCenter()
 
 int ConfigCenter::loadXml(const std::string& theXmlPath)
 {
-    file<> fdoc(theXmlPath.c_str());  
-    xml_document<>  doc;      
-    doc.parse<0>(fdoc.data());   
-
-    xml_node<>* root = doc.first_node();  
-    if (!root)
+    try
     {
-        CFG_ERROR("can't load xml file:" << theXmlPath);
+        file<> fdoc(theXmlPath.c_str());  
+        xml_document<>  doc;      
+        doc.parse<0>(fdoc.data());   
+
+        xml_node<>* root = doc.first_node();  
+        if (!root)
+        {
+            CFG_ERROR("can't load xml file:" << theXmlPath);
+            return -1;
+        }
+        if (root->name() != TOP_XMLNODE_NAME)
+        {
+            CFG_ERROR("not a xml configuration file:" << theXmlPath);
+            return -1;
+        }
+
+        XmlGroup* group = new XmlGroup();
+        if (0 != group->parse(root, TOP_XMLNODE_NAME))
+        {
+            CFG_ERROR("can't parse configuration file:" << theXmlPath);
+            return -1;
+        }
+
+        if (topGroupM)
+        {
+            delete topGroupM;
+            topGroupM = NULL;
+        }
+        topGroupM = group;
+        topGroupM->convertToMap(intParamMapM, strParamMapM);
+    }
+    catch (std::exception& e)
+    {
+        CFG_ERROR("can't parse configuration file:" << theXmlPath
+                << ". exception:" << e.what());
         return -1;
     }
-    if (root->name() != TOP_XMLNODE_NAME)
-    {
-        CFG_ERROR("not a xml configuration file:" << theXmlPath);
-        return -1;
-    }
-
-    XmlGroup* group = new XmlGroup();
-    if (0 != group->parse(root, TOP_XMLNODE_NAME))
-    {
-        CFG_ERROR("can't parse configuration file:" << theXmlPath);
-        return -1;
-    }
-
-    if (topGroupM)
-    {
-        delete topGroupM;
-        topGroupM = NULL;
-    }
-    topGroupM = group;
-    topGroupM->convertToMap(intParamMapM, strParamMapM);
+        
 
 
     return 0;
@@ -167,7 +179,7 @@ void ConfigCenter::set(const std::string& theKey, const int theValue)
     }
     else
     {
-        CFG_ERROR("config not found:" << theKey);
+        CFG_ERROR("can't set value, config not found:" << theKey);
     }
 }
 
@@ -182,7 +194,7 @@ void ConfigCenter::setInt(const std::string& theKey, const std::string& theValue
     }
     else
     {
-        CFG_ERROR("config not found:" << theKey);
+        CFG_ERROR("can't set value, config not found:" << theKey);
     }
 }
 
@@ -199,7 +211,7 @@ void ConfigCenter::registValueWatcher(
     }
     else
     {
-        CFG_ERROR("config not found:" << theKey);
+        CFG_ERROR("can't regist watcher, config not found:" << theKey);
     }
 
 }
@@ -230,7 +242,7 @@ void ConfigCenter::set(const std::string& theKey, const std::string& theValue)
     }
     else
     {
-        CFG_ERROR("config not found:" << theKey);
+        CFG_ERROR("can't regist watcher, config not found:" << theKey);
     }
 }
 
@@ -247,7 +259,7 @@ void ConfigCenter::registValueWatcher(
     }
     else
     {
-        CFG_ERROR("config not found:" << theKey);
+        CFG_ERROR("can't regist watcher, config not found:" << theKey);
     }
 
 }
