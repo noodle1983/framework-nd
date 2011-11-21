@@ -125,7 +125,7 @@ Message ServiceInfoIEI
     SrcPort        Uint16                  M
     DescPort       Uint16                  M
     Protocol       Uint8                   M
-    CatalogId      Uint32                  M
+    CatalogId      Uint48                  M
     AppId          Uint32                  M
     BehaviorId     Uint32                  M
     UpPktCnt       Uint32                  M

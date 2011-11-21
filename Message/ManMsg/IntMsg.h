@@ -172,7 +172,7 @@ namespace Msg
                 return NOT_ENOUGH_BUFFER_E;
 
             memset(&valueM, 0, 2);
-            memcpy((char*)(&valueM + 2), theBuffer + theIndex, MIN_BYTES);
+            memcpy((char*)(&valueM) + 2, theBuffer + theIndex, MIN_BYTES);
             valueM = GUINT64_FROM_BE(valueM);
             theIndex += MIN_BYTES;
             return SUCCESS_E;
