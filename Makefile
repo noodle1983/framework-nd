@@ -16,6 +16,7 @@ SUBDIR= Log \
 		Script \
 		Data  \
 		DesignPattern \
+		Utility \
 
 RELEASE_DIR = $(PROJBASE)/release
 #########################################

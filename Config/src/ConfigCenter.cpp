@@ -37,7 +37,7 @@ ConfigCenterPtr ConfigCenter::instance()
 
 //-----------------------------------------------------------------------------
 
-void ConfigCenter::loadConfig(const std::string theInputXmlFile)
+void ConfigCenter::loadConfig(const std::string& theInputXmlFile)
 {
     ConfigCenterPtr newConfigCenter(new ConfigCenter());
     if (0 == newConfigCenter->loadXml(theInputXmlFile))
