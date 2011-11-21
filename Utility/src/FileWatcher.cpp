@@ -12,7 +12,7 @@ using namespace Utility;
 
 //-----------------------------------------------------------------------------
 
-void on_filewatcher_timeout(int theFd, short theEvt, void *theArg)
+static void onFilewatcherTimeout(int theFd, short theEvt, void *theArg)
 {
     FileWatcher* theWatcher = (FileWatcher*) theArg;
     Processor::BoostProcessor::manInstance()->process(
@@ -42,8 +42,8 @@ FileWatcher::FileWatcher(
         lastModTimeM = 0;
     }
 
-    timerEventM = Net::Reactor::Reactor::instance()->newPersistTimer(
-                            on_filewatcher_timeout, 
+    timerEventM = Net::Reactor::Reactor::instance()->newTimer(
+                            onFilewatcherTimeout, 
                             this); 
     struct timeval tv;
     tv.tv_sec = (secM == 0 ? 5 : secM); 
@@ -82,6 +82,11 @@ int FileWatcher::checkFile()
     {
         return -1;
     }
+
+    struct timeval tv;
+    tv.tv_sec = (secM == 0 ? 5 : secM); 
+    tv.tv_usec = 0;
+    event_add(timerEventM, &tv);
     return 0;
 }
 

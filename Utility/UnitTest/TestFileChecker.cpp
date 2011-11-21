@@ -28,10 +28,11 @@ void printFile(const std::string& theFile)
 
 int main()
 {
-    Utility::FileWatcher(
-            "checker.txt", 
-            5, 
-            Utility::FileWatcherCallback(printFile));
+    evthread_use_pthreads();
+    Utility::FileWatcher fileWatcher = Utility::FileWatcher(
+                    "checker.txt", 
+                    5, 
+                    Utility::FileWatcherCallback(printFile));
 
     boost::unique_lock<boost::mutex> lock(closedMutexM);
     while(!closed)
