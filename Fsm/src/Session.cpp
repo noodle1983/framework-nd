@@ -31,7 +31,7 @@ Session::Session(
     curStateIdM = fsmM->getFirstStateId();
     endStateIdM = fsmM->getLastStateId();
 #ifdef LOG_FATAL
-	tidM = gettid();
+	tidM = -1;
 #endif
 
 }
@@ -64,7 +64,11 @@ int Session::asynHandleEvent(const int theEventId)
 int Session::handleEvent(const int theEventId)
 {
 #ifdef LOG_FATAL
-	if (tidM != gettid())
+	if (-1 == tidM)
+	{
+		tidM = gettid();
+	}
+	else if (tidM != gettid())
 	{
 		LOG_FATAL("tid not match:" << tidM << "-" << gettid());
 		assert(tidM == gettid());
