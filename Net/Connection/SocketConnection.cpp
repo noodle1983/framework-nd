@@ -197,11 +197,11 @@ void SocketConnection::onRead(int theFd, short theEvt)
 
 unsigned SocketConnection::getInput(char* const theBuffer, const unsigned theLen)
 {
-    if (CloseE == statusM)
-        return 0;
+    //if (CloseE == statusM)
+    //    return 0;
 
     unsigned len = inputQueueM.get(theBuffer, theLen);
-    if (stopReadingM)
+    if (stopReadingM && CloseE != statusM)
     {
         Net::Buffer::BufferStatus postBufferStatus = inputQueueM.getStatus();
         if (postBufferStatus == Net::Buffer::BufferLowE)
@@ -220,11 +220,11 @@ unsigned SocketConnection::getInput(char* const theBuffer, const unsigned theLen
 
 unsigned SocketConnection::getnInput(char* const theBuffer, const unsigned theLen)
 {
-    if (CloseE == statusM)
-        return 0;
+    //if (CloseE == statusM)
+    //    return 0;
 
     unsigned len = inputQueueM.getn(theBuffer, theLen);
-    if (stopReadingM)
+    if (stopReadingM && CloseE != statusM)
     {
         Net::Buffer::BufferStatus postBufferStatus = inputQueueM.getStatus();
         if (postBufferStatus == Net::Buffer::BufferLowE)
@@ -243,8 +243,8 @@ unsigned SocketConnection::getnInput(char* const theBuffer, const unsigned theLe
 
 unsigned SocketConnection::peeknInput(char* const theBuffer, const unsigned theLen)
 {
-    if (CloseE == statusM)
-        return 0;
+    //if (CloseE == statusM)
+    //    return 0;
 
     return inputQueueM.peekn(theBuffer, theLen);
 }
