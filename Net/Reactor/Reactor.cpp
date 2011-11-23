@@ -70,15 +70,15 @@ void Reactor::start()
 
 void Reactor::dispatchLoop()
 {
-    DEBUG("enter event dispatch.");
+    LOG_DEBUG("enter event dispatch.");
     int ret = event_base_dispatch(evtBaseM);
     if (-1 == ret)
     {
-        ERROR("exit event dispatch with error.");
+        LOG_ERROR("exit event dispatch with error.");
     }
     else
     {
-        DEBUG("exit event dispatch.");
+        LOG_DEBUG("exit event dispatch.");
     }
 
 }

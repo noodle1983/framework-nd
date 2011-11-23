@@ -70,6 +70,10 @@ namespace Fsm
 
         std::string sessionNameM;
 
+#ifdef DEBUG
+		int64_t tidM;
+#endif
+
     };
 }
 

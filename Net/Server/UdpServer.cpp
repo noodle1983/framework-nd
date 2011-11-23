@@ -56,7 +56,7 @@ int UdpServer::startAt(const int thePort)
     myAddr.sin_addr.s_addr = INADDR_ANY;
     if (bind(fdM, (struct sockaddr*)&myAddr, sizeof(myAddr))<0) 
     {
-        FATAL("bind failed");
+        LOG_FATAL("bind failed");
         exit(-1);
     }
     readEvtM = reactorM->newEvent(fdM, EV_READ, on_udp_server_read, this);
@@ -131,21 +131,21 @@ bool UdpServer::getAPackage(Net::UdpPacket* thePackage)
     }
     if (thePackage->addrlen > sizeof(thePackage->peerAddr))
     {
-        FATAL("internal error");
+        LOG_FATAL("internal error");
         exit(-1);
     }
 
     len = inputQueueM.getn((char*)&thePackage->peerAddr, thePackage->addrlen);
     if (0 == len)
     {
-        FATAL("internal error");
+        LOG_FATAL("internal error");
         exit(-1);
     }
 
     len = inputQueueM.getn((char*)&thePackage->contentLen, sizeof(thePackage->contentLen));
     if (0 == len || thePackage->contentLen > Net::UdpPacket::MAX_UDP_PACKAGE)
     {
-        FATAL("internal error");
+        LOG_FATAL("internal error");
         exit(-1);
     }
     if (thePackage->contentLen > 0)
@@ -153,7 +153,7 @@ bool UdpServer::getAPackage(Net::UdpPacket* thePackage)
         len = inputQueueM.getn(thePackage->content, thePackage->contentLen);
         if (0 == len)
         {
-            FATAL("internal error");
+            LOG_FATAL("internal error");
             exit(-1);
         }
     }
@@ -187,7 +187,7 @@ bool UdpServer::sendAPackage(Net::UdpPacket* thePackage)
     }
     if (len < 0)
     {
-        WARN("Socket failure[" << errno << "]:" << strerror(errno));
+        LOG_WARN("Socket failure[" << errno << "]:" << strerror(errno));
     }
     return (len > 0);
 }

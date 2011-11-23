@@ -5,8 +5,8 @@ INC_DIR+= -I$(PROJBASE)/3PP/lua/include \
     -I$(PROJBASE)/3PP/tolua++/include
 
 STATIC_LIB+= \
+    $(PROJBASE)/3PP/tolua++/lib/libtolua++.a \
     $(PROJBASE)/3PP/lua/lib/liblua.a \
-    $(PROJBASE)/3PP/tolua++/lib/libtolua++.a 
 
 SHARED_LIB_DIR+=
 SHARED_LIB+= -ldl

@@ -7,6 +7,12 @@
 
 using namespace Fsm;
 
+#ifdef LOG_FATAL
+#include <assert.h>
+#include <sys/syscall.h>
+#define gettid() syscall(__NR_gettid)
+#endif
+
 
 //-----------------------------------------------------------------------------
 
@@ -24,6 +30,10 @@ Session::Session(
 {
     curStateIdM = fsmM->getFirstStateId();
     endStateIdM = fsmM->getLastStateId();
+#ifdef LOG_FATAL
+	tidM = gettid();
+#endif
+
 }
 
 //-----------------------------------------------------------------------------
@@ -53,6 +63,13 @@ int Session::asynHandleEvent(const int theEventId)
 
 int Session::handleEvent(const int theEventId)
 {
+#ifdef LOG_FATAL
+	if (tidM != gettid())
+	{
+		LOG_FATAL("tid not match:" << tidM << "-" << gettid());
+		assert(tidM == gettid());
+	}
+#endif
     if (!isInitializedM)
     {
         //the first state's entry function
@@ -62,14 +79,14 @@ int Session::handleEvent(const int theEventId)
         ActionList::iterator it = actionList.begin();
         if (it != actionList.end())
         {
-            DEBUG(getSessionName() 
+            LOG_DEBUG(getSessionName() 
                     << "[" << getSessionId() << "] handleEvent("
                     << getEventName(ENTRY_EVT) << ")");
             for (; it != actionList.end(); it++)
             {
                 if (curStateId != curStateIdM)
                 {
-                    DEBUG("state changed, ignore rest action for event:" << theEventId);
+                    LOG_DEBUG("state changed, ignore rest action for event:" << theEventId);
                     break;
                 }
                 (*it)(this);
@@ -78,14 +95,14 @@ int Session::handleEvent(const int theEventId)
         isInitializedM = true;
     }
 
-    DEBUG(getSessionName() 
+    LOG_DEBUG(getSessionName() 
             << "[" << getSessionId() << "] handleEvent("
             << getEventName(theEventId) << ")");
     State& curState = getCurState();
     ActionList& actionList = curState.getActionList(theEventId);
     if (actionList.empty())
     {
-        ERROR(getSessionName()
+        LOG_ERROR(getSessionName()
                 << "the Event is not defined with id:" << theEventId);
         changeState(this, endStateIdM);
         return -1;
@@ -97,7 +114,7 @@ int Session::handleEvent(const int theEventId)
     {
         if (curStateId != curStateIdM)
         {
-            DEBUG(getSessionName()
+            LOG_DEBUG(getSessionName()
                     << " state changed, ignore rest action for event:" << theEventId);
             break;
         }
@@ -115,7 +132,7 @@ State& Session::toNextState(const int theNextStateId)
     curStateIdM = theNextStateId;
     State& nextState = fsmM->getState(curStateIdM);
 
-    DEBUG( sessionNameM << "[" << sessionIdM << "] " 
+    LOG_DEBUG( sessionNameM << "[" << sessionIdM << "] " 
             << preStateName << " -> " << nextState.getName());
 
     return nextState;

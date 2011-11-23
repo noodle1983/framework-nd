@@ -7,22 +7,22 @@
 
 //-----------------------------------------------------------------------------
 //trafficLogger
-#define TRACE(msg) \
+#define LOG_TRACE(msg) \
 LOG4CPLUS_TRACE(Log::LoggerSingleton::instance()->trafficLogger(), msg)
 
-#define DEBUG(msg) \
+#define LOG_DEBUG(msg) \
 LOG4CPLUS_DEBUG(Log::LoggerSingleton::instance()->trafficLogger(), msg)
 
-#define INFO(msg) \
+#define LOG_INFO(msg) \
 LOG4CPLUS_INFO(Log::LoggerSingleton::instance()->trafficLogger(), msg)
 
-#define WARN(msg) \
+#define LOG_WARN(msg) \
 LOG4CPLUS_WARN(Log::LoggerSingleton::instance()->trafficLogger(), msg)
 
-#define ERROR(msg) \
+#define LOG_ERROR(msg) \
 LOG4CPLUS_ERROR(Log::LoggerSingleton::instance()->trafficLogger(), msg)
 
-#define FATAL(msg) \
+#define LOG_FATAL(msg) \
 LOG4CPLUS_FATAL(Log::LoggerSingleton::instance()->trafficLogger(), msg)
 
 //-----------------------------------------------------------------------------

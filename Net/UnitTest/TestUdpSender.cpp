@@ -18,7 +18,7 @@ static boost::mutex closedMutexM;
 static boost::condition_variable closedCondM;
 void sig_stop(int sig)
 {
-    DEBUG("receive signal " << sig << ". stopping...");
+    LOG_DEBUG("receive signal " << sig << ". stopping...");
     boost::lock_guard<boost::mutex> lock(closedMutexM);
     closed = true;
     closedCondM.notify_one();

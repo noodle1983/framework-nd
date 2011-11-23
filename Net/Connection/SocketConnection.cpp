@@ -90,7 +90,7 @@ SocketConnection::~SocketConnection()
         delete watcherM;
         watcherM = NULL;
     }
-    DEBUG("close fd:" << fdM);
+    LOG_DEBUG("close fd:" << fdM);
 }
 
 //-----------------------------------------------------------------------------
@@ -153,13 +153,13 @@ void SocketConnection::onRead(int theFd, short theEvt)
     int len = read(theFd, buffer, readLen);
     if (len <= 0)
     {
-        DEBUG("Client disconnected. fd:" << fdM);
+        LOG_DEBUG("Client disconnected. fd:" << fdM);
         _close();
         return;
     }
     else if (len > SSIZE_MAX)
     {
-        WARN("Socket failure, disconnecting client:" << strerror(errno));
+        LOG_WARN("Socket failure, disconnecting client:" << strerror(errno));
         _close();
         return;
     }
@@ -266,7 +266,7 @@ unsigned SocketConnection::sendn(char* const theBuffer, const unsigned theLen)
     }
     if (0 == len)
     {
-        WARN("outage of the connection's write queue!");
+        LOG_WARN("outage of the connection's write queue!");
     }
     processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
     return len;
@@ -320,7 +320,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
             }
             else
             {
-                DEBUG("Socket write failure.");
+                LOG_DEBUG("Socket write failure.");
                 _close();
                 return;
             }

@@ -20,7 +20,7 @@ int Fsm::changeState(
         ActionList::iterator it = actionList.begin();
         if (it != actionList.end())
         {
-            DEBUG(theSession->getSessionName() 
+            LOG_DEBUG(theSession->getSessionName() 
                     << "[" << theSession->getSessionId() << "] handleEvent("
                     << theSession->getEventName(EXIT_EVT) << ")");
             for (; it != actionList.end(); it++)
@@ -38,7 +38,7 @@ int Fsm::changeState(
         ActionList::iterator it = actionList.begin();
         if (it != actionList.end())
         {
-            DEBUG(theSession->getSessionName() 
+            LOG_DEBUG(theSession->getSessionName() 
                     << "[" << theSession->getSessionId() << "] handleEvent("
                     << theSession->getEventName(ENTRY_EVT) << ")");
             for (; it != actionList.end(); it++)
@@ -65,7 +65,7 @@ int Fsm::generateEvent(
 int Fsm::ignoreEvent(
         Fsm::Session* theSession)
 {
-    DEBUG(theSession->getSessionName() 
+    LOG_DEBUG(theSession->getSessionName() 
             << " ignore event.");
     return 0;
 }

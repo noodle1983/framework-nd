@@ -2,10 +2,10 @@
 
 int main()
 {
-    TRACE("trace");
-    DEBUG("debug");
-    WARN("warn");
-    ERROR("error");
-    FATAL("fatal");
+    LOG_TRACE("trace");
+    LOG_DEBUG("debug");
+    LOG_WARN("warn");
+    LOG_ERROR("error");
+    LOG_FATAL("fatal");
 }
 

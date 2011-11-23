@@ -14,7 +14,7 @@ static boost::mutex closedMutexM;
 static boost::condition_variable closedCondM;
 void sig_stop(int sig)
 {
-    DEBUG("receive signal " << sig << ". stopping...");
+    LOG_DEBUG("receive signal " << sig << ". stopping...");
     boost::lock_guard<boost::mutex> lock(closedMutexM);
     closed = true;
     closedCondM.notify_one();
@@ -81,7 +81,7 @@ int main()
     server->close();
     processor.stop();
     reactor.stop();
-    DEBUG("EchoServer stopped.");
+    LOG_DEBUG("EchoServer stopped.");
     return 0;
 }
 

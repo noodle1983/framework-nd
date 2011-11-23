@@ -37,10 +37,10 @@ void LuaRunnerPool::registCppType(RegistFunc theRegistFunc)
 int LuaRunnerPool::init(const int theCnt)
 {
     runnerCountM = theCnt;
-    INFO("LuaRunner number:" << runnerCountM);
+    LOG_INFO("LuaRunner number:" << runnerCountM);
     if (!isRunnerCntValid())
     {
-        ERROR("invalid LuaRunner Count:" << theCnt
+        LOG_ERROR("invalid LuaRunner Count:" << theCnt
                 << ". please set it to the same as thread count!");
         exit(-1);
     }
@@ -57,7 +57,7 @@ int LuaRunnerPool::reset()
         if (0 != luaRunner->init() 
                 || 0 != luaRunner->loadFile(scriptFileM))
         {
-            ERROR("can't load lua script file:" << scriptFileM);
+            LOG_ERROR("can't load lua script file:" << scriptFileM);
             exit(-1);
         }
         ModRegFunsArray::iterator it = modRegFunsM.begin();

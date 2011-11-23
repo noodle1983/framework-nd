@@ -79,18 +79,18 @@ void TcpServer::onAccept(int theFd, short theEvt)
     clientFd = accept(theFd, (struct sockaddr *)&clientAddr, &clientLen);
     if (clientFd < 0)
     {
-        WARN("accept failed");
+        LOG_WARN("accept failed");
         return;
     }
     while(clientFd >= 0)
     {
         if (evutil_make_socket_nonblocking(clientFd) < 0)
         {
-            WARN("failed to set client socket non-blocking");
+            LOG_WARN("failed to set client socket non-blocking");
             return;
         }
         SocketConnection* connection = new SocketConnection(protocolM, reactorM, processorM, clientFd);
-        DEBUG("Accepted connection from "<< inet_ntoa(clientAddr.sin_addr)
+        LOG_DEBUG("Accepted connection from "<< inet_ntoa(clientAddr.sin_addr)
                 << ", fd:" << clientFd
                 << ", con addr:" << std::hex << (size_t)connection);
 
@@ -109,18 +109,18 @@ int TcpServer::start()
     fdM = socket(AF_INET, SOCK_STREAM, 0);
     if (fdM < 0)
     {
-        FATAL("listen failed on " << portM);
+        LOG_FATAL("listen failed on " << portM);
         exit(-1);
     }
     //set socket option
     if (evutil_make_listen_socket_reuseable(fdM) < 0)
     {
-        FATAL("failed to set server socket to reuseable");
+        LOG_FATAL("failed to set server socket to reuseable");
         exit(-1);
     }
     if (evutil_make_socket_nonblocking(fdM) < 0)
     {
-        FATAL("failed to set server socket to non-blocking");
+        LOG_FATAL("failed to set server socket to non-blocking");
         exit(-1);
     }
 
@@ -136,21 +136,21 @@ int TcpServer::start()
     if (bind(fdM, (struct sockaddr *)&listenAddr,
         sizeof(listenAddr)) < 0)
     {
-        FATAL("bind failed");
+        LOG_FATAL("bind failed");
         exit(-1);
     }
 
     //listen
     if (listen(fdM, 5) < 0)
     {
-        FATAL("listen failed");
+        LOG_FATAL("listen failed");
         exit(-1);
     }
 
     acceptEvtM = reactorM->newEvent(fdM, EV_READ, on_accept, this);
     addAcceptEvent();
 
-    DEBUG("Server has been listening at port " << portM);
+    LOG_DEBUG("Server has been listening at port " << portM);
     return 0;
 }
 

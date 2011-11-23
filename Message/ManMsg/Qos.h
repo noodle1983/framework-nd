@@ -87,126 +87,126 @@ namespace Msg
             ret = arp.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.arp");
+                LOG_ERROR("failed to parse QosSubMsg.arp");
                 return ret;
             }
 
             ret = delay.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.delay");
+                LOG_ERROR("failed to parse QosSubMsg.delay");
                 return ret;
             }
 
             ret = reliability.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.reliability");
+                LOG_ERROR("failed to parse QosSubMsg.reliability");
                 return ret;
             }
 
             ret = peak.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.peak");
+                LOG_ERROR("failed to parse QosSubMsg.peak");
                 return ret;
             }
 
             ret = precedence.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.precedence");
+                LOG_ERROR("failed to parse QosSubMsg.precedence");
                 return ret;
             }
 
             ret = mean.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.mean");
+                LOG_ERROR("failed to parse QosSubMsg.mean");
                 return ret;
             }
 
             ret = traffic.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.traffic");
+                LOG_ERROR("failed to parse QosSubMsg.traffic");
                 return ret;
             }
 
             ret = deliveryorder.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.deliveryorder");
+                LOG_ERROR("failed to parse QosSubMsg.deliveryorder");
                 return ret;
             }
 
             ret = deliveryOfErroneousSdu.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.deliveryOfErroneousSdu");
+                LOG_ERROR("failed to parse QosSubMsg.deliveryOfErroneousSdu");
                 return ret;
             }
 
             ret = maxSduSize.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.maxSduSize");
+                LOG_ERROR("failed to parse QosSubMsg.maxSduSize");
                 return ret;
             }
 
             ret = maxBitRateUp.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.maxBitRateUp");
+                LOG_ERROR("failed to parse QosSubMsg.maxBitRateUp");
                 return ret;
             }
 
             ret = maxBitRateDown.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.maxBitRateDown");
+                LOG_ERROR("failed to parse QosSubMsg.maxBitRateDown");
                 return ret;
             }
 
             ret = residualBer.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.residualBer");
+                LOG_ERROR("failed to parse QosSubMsg.residualBer");
                 return ret;
             }
 
             ret = sduErrRatio.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.sduErrRatio");
+                LOG_ERROR("failed to parse QosSubMsg.sduErrRatio");
                 return ret;
             }
 
             ret = transferDelay.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.transferDelay");
+                LOG_ERROR("failed to parse QosSubMsg.transferDelay");
                 return ret;
             }
 
             ret = trafficHandlingPriority.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.trafficHandlingPriority");
+                LOG_ERROR("failed to parse QosSubMsg.trafficHandlingPriority");
                 return ret;
             }
 
             ret = guaranteedBitRateUp.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.guaranteedBitRateUp");
+                LOG_ERROR("failed to parse QosSubMsg.guaranteedBitRateUp");
                 return ret;
             }
 
             ret = guaranteedBitRateDown.decode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse QosSubMsg.guaranteedBitRateDown");
+                LOG_ERROR("failed to parse QosSubMsg.guaranteedBitRateDown");
                 return ret;
             }
 
@@ -228,126 +228,126 @@ namespace Msg
             ret = arp.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.arp");
+                LOG_ERROR("failed to encode QosSubMsg.arp");
                 return ret;
             }
 
             ret = delay.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.delay");
+                LOG_ERROR("failed to encode QosSubMsg.delay");
                 return ret;
             }
 
             ret = reliability.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.reliability");
+                LOG_ERROR("failed to encode QosSubMsg.reliability");
                 return ret;
             }
 
             ret = peak.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.peak");
+                LOG_ERROR("failed to encode QosSubMsg.peak");
                 return ret;
             }
 
             ret = precedence.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.precedence");
+                LOG_ERROR("failed to encode QosSubMsg.precedence");
                 return ret;
             }
 
             ret = mean.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.mean");
+                LOG_ERROR("failed to encode QosSubMsg.mean");
                 return ret;
             }
 
             ret = traffic.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.traffic");
+                LOG_ERROR("failed to encode QosSubMsg.traffic");
                 return ret;
             }
 
             ret = deliveryorder.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.deliveryorder");
+                LOG_ERROR("failed to encode QosSubMsg.deliveryorder");
                 return ret;
             }
 
             ret = deliveryOfErroneousSdu.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.deliveryOfErroneousSdu");
+                LOG_ERROR("failed to encode QosSubMsg.deliveryOfErroneousSdu");
                 return ret;
             }
 
             ret = maxSduSize.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.maxSduSize");
+                LOG_ERROR("failed to encode QosSubMsg.maxSduSize");
                 return ret;
             }
 
             ret = maxBitRateUp.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.maxBitRateUp");
+                LOG_ERROR("failed to encode QosSubMsg.maxBitRateUp");
                 return ret;
             }
 
             ret = maxBitRateDown.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.maxBitRateDown");
+                LOG_ERROR("failed to encode QosSubMsg.maxBitRateDown");
                 return ret;
             }
 
             ret = residualBer.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.residualBer");
+                LOG_ERROR("failed to encode QosSubMsg.residualBer");
                 return ret;
             }
 
             ret = sduErrRatio.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.sduErrRatio");
+                LOG_ERROR("failed to encode QosSubMsg.sduErrRatio");
                 return ret;
             }
 
             ret = transferDelay.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.transferDelay");
+                LOG_ERROR("failed to encode QosSubMsg.transferDelay");
                 return ret;
             }
 
             ret = trafficHandlingPriority.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.trafficHandlingPriority");
+                LOG_ERROR("failed to encode QosSubMsg.trafficHandlingPriority");
                 return ret;
             }
 
             ret = guaranteedBitRateUp.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.guaranteedBitRateUp");
+                LOG_ERROR("failed to encode QosSubMsg.guaranteedBitRateUp");
                 return ret;
             }
 
             ret = guaranteedBitRateDown.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode QosSubMsg.guaranteedBitRateDown");
+                LOG_ERROR("failed to encode QosSubMsg.guaranteedBitRateDown");
                 return ret;
             }
 

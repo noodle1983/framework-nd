@@ -323,7 +323,7 @@ print  CMSG_HANDLE<<END_OF_DECODE_BODY;
             ret = ${fieldName}.decode(theBuffer, ${msgLengthVar}, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to parse ${msgName}.${fieldName}");
+                LOG_ERROR("failed to parse ${msgName}.${fieldName}");
                 return ret;
             }
 
@@ -334,7 +334,7 @@ print  CMSG_HANDLE<<END_OF_DECODE_LENGTH;
             unsigned endIndex = theIndex - ${fieldType}::MIN_BYTES + ${fieldName}.valueM;
             if (theLen < endIndex)
             {
-                ERROR("failed to parse ${msgName}.${fieldName}");
+                LOG_ERROR("failed to parse ${msgName}.${fieldName}");
                 return NOT_ENOUGH_BUFFER_E;
             }
 END_OF_DECODE_LENGTH
@@ -354,7 +354,7 @@ print  CMSG_HANDLE<<END_OF_DECODE_WOBODY;
                     ret = $fieldName->decode( theBuffer, ${msgLengthVar}, theIndex);
                     if (SUCCESS_E != ret)            
                     {
-                        ERROR("failed to parse ${msgName}.${fieldName}");
+                        LOG_ERROR("failed to parse ${msgName}.${fieldName}");
                         return ret;
                     }
                 }
@@ -369,7 +369,7 @@ print  CMSG_HANDLE<<END_OF_DECODE_OBODY;
                     ret = $fieldName->decode( theBuffer, ${msgLengthVar}, theIndex);
                     if (SUCCESS_E != ret)            
                     {
-                        ERROR("failed to parse ${msgName}.${fieldName}");
+                        LOG_ERROR("failed to parse ${msgName}.${fieldName}");
                         return ret; 
                     }
                 }
@@ -383,7 +383,7 @@ END_OF_DECODE_OBODY
 print  CMSG_HANDLE<<END_OF_DECODE_OBODY_E;
                 else
                 {
-                    ERROR("failed to parse structure at index" << theIndex);
+                    LOG_ERROR("failed to parse structure at index" << theIndex);
                     return ERROR_E;
                 }
            } 
@@ -428,7 +428,7 @@ print  CMSG_HANDLE<<END_OF_ENCODE_LEN_B;
             ret = ${fieldName}.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode ${msgName}.${fieldName}");
+                LOG_ERROR("failed to encode ${msgName}.${fieldName}");
                 return ret;
             }
 
@@ -447,7 +447,7 @@ print  CMSG_HANDLE<<END_OF_ENCODE_BODY;
             ret = ${fieldName}.encode(theBuffer, theLen, theIndex);
             if (SUCCESS_E != ret)            
             {
-                ERROR("failed to encode ${msgName}.${fieldName}");
+                LOG_ERROR("failed to encode ${msgName}.${fieldName}");
                 return ret;
             }
 
@@ -461,7 +461,7 @@ print  CMSG_HANDLE<<END_OF_ENCODE_OBODY;
                 ret = ${fieldName}->encode(theBuffer, theLen, theIndex);
                 if (SUCCESS_E != ret)            
                 {
-                    ERROR("failed to encode ${msgName}.${fieldName}");
+                    LOG_ERROR("failed to encode ${msgName}.${fieldName}");
                     return ret;
                 }
             }
@@ -483,7 +483,7 @@ print  CMSG_HANDLE<<END_OF_ENCODE_LEN_E;
             ret = ${lenFieldName}.encode(theBuffer, theLen, startIndex);
             if (SUCCESS_E != ret)            
             {
-                DEBUG("failed to encode ${msgName}.${lenFieldName}");
+                LOG_DEBUG("failed to encode ${msgName}.${lenFieldName}");
                 return ret; 
             }
 

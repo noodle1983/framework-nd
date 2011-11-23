@@ -13,7 +13,7 @@ FiniteStateMachine& FiniteStateMachine::operator+=(const State& theState)
     }
     if (statesM.find(stateId) != statesM.end())
     {
-        FATAL("exit because fsm state " << theState.getName()
+        LOG_FATAL("exit because fsm state " << theState.getName()
                 << " is redefined!");
         exit(-1);
     }

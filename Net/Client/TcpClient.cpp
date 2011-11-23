@@ -76,12 +76,12 @@ int TcpClient::connect()
     sin.sin_port = htons(peerPortM);
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        ERROR("failed to do socket(AF_INET,...)!");
+        LOG_ERROR("failed to do socket(AF_INET,...)!");
         return -1;
     }
     if (evutil_make_socket_nonblocking(sock) < 0)
     {
-        ERROR("failed to make socket monblocking!");
+        LOG_ERROR("failed to make socket monblocking!");
         evutil_closesocket(sock);
         return -1;
     }
@@ -90,7 +90,7 @@ int TcpClient::connect()
         int e = errno;
         if (! ERR_CONNECT_RETRIABLE(e))
         {
-            WARN("failed to connect to " << peerAddrM
+            LOG_WARN("failed to connect to " << peerAddrM
                     << ":" << peerPortM
                     << ", errstr:" << evutil_socket_error_to_string(e));
             evutil_closesocket(sock);
@@ -109,7 +109,7 @@ int TcpClient::connect()
 
 void TcpClient::onConnected(int theFd, Connection::SocketConnectionPtr theConnection)
 {
-    DEBUG("connected to " << peerAddrM
+    LOG_DEBUG("connected to " << peerAddrM
             << ":" << peerPortM);
     protocolM->onConnected(theFd, theConnection);
 }
@@ -118,7 +118,7 @@ void TcpClient::onConnected(int theFd, Connection::SocketConnectionPtr theConnec
 
 void TcpClient::onError()
 {
-    WARN("connection lost from " << peerAddrM
+    LOG_WARN("connection lost from " << peerAddrM
             << ":" << peerPortM);
     connectionM.reset();
     //reconnect
