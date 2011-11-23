@@ -7,7 +7,7 @@
 
 using namespace Fsm;
 
-#ifdef LOG_FATAL
+#ifdef DEBUG
 #include <assert.h>
 #include <sys/syscall.h>
 #define gettid() syscall(__NR_gettid)
@@ -30,7 +30,7 @@ Session::Session(
 {
     curStateIdM = fsmM->getFirstStateId();
     endStateIdM = fsmM->getLastStateId();
-#ifdef LOG_FATAL
+#ifdef DEBUG 
 	tidM = -1;
 #endif
 
@@ -63,15 +63,28 @@ int Session::asynHandleEvent(const int theEventId)
 
 int Session::handleEvent(const int theEventId)
 {
-#ifdef LOG_FATAL
+#ifdef DEBUG
+    extern boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
+    extern boost::thread_specific_ptr<unsigned> g_threadGroupIndex;
+    unsigned threadCount = *g_threadGroupTotal.get();
+    unsigned threadIndex = *g_threadGroupIndex.get();
+    if ((sessionIdM%threadCount) != threadIndex)
+    {
+		LOG_FATAL("job is handled in wrong thread:" << threadIndex 
+                << ", count:" << threadCount
+                << ", id:" << sessionIdM);
+		assert(false);
+    }
+    
+
 	if (-1 == tidM)
 	{
 		tidM = gettid();
 	}
 	else if (tidM != gettid())
 	{
-		LOG_FATAL("tid not match:" << tidM << "-" << gettid());
-		assert(tidM == gettid());
+		LOG_FATAL("tid not match pre:" << tidM << "-now:" << gettid());
+		assert(false);
 	}
 #endif
     if (!isInitializedM)
@@ -175,6 +188,30 @@ void Session::asynHandleTimeout(const int theTimerId)
 
 void Session::handleTimeout(const int theTimerId)
 {
+#ifdef DEBUG
+    extern boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
+    extern boost::thread_specific_ptr<unsigned> g_threadGroupIndex;
+    unsigned threadCount = *g_threadGroupTotal.get();
+    unsigned threadIndex = *g_threadGroupIndex.get();
+    if ((sessionIdM%threadCount) != threadIndex)
+    {
+		LOG_FATAL("job is handled in wrong thread:" << threadIndex 
+                << ", count:" << threadCount
+                << ", id:" << sessionIdM);
+		assert(false);
+    }
+    
+
+	if (-1 == tidM)
+	{
+		tidM = gettid();
+	}
+	else if (tidM != gettid())
+	{
+		LOG_FATAL("tid not match pre:" << tidM << "-now:" << gettid());
+		assert(false);
+	}
+#endif
     if (fsmTimeoutEvtM && theTimerId == timerIdM)
     {
         //otherwise it is another timer and the previous one is freed already

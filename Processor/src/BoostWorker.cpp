@@ -2,8 +2,12 @@
 
 using namespace Processor;
 
+boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
+boost::thread_specific_ptr<unsigned> g_threadGroupIndex;
 //-----------------------------------------------------------------------------
 BoostWorker::BoostWorker()
+    : groupTotalM(0)
+    , groupIndexM(-1)
 {
 
 }
@@ -52,6 +56,8 @@ int BoostWorker::process(Job* theJob)
 
 void BoostWorker::run()
 {
+    g_threadGroupTotal.reset(new unsigned(groupTotalM));
+    g_threadGroupIndex.reset(new unsigned(groupIndexM));
     Job* job;
     while (true)
     {

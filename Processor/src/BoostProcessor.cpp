@@ -102,6 +102,7 @@ void BoostProcessor::start()
     workersM = new BoostWorker[threadCountM];
     for (unsigned i = 0; i < threadCountM; i++)
     {
+        workersM[i].setGroupInfo(threadCountM, i);
         threadsM.create_thread(boost::bind(&BoostWorker::run, &workersM[i]));
     }
 }

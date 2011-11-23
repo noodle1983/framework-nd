@@ -14,6 +14,11 @@ namespace Processor
     public:
         BoostWorker();
         ~BoostWorker();
+        void setGroupInfo(const unsigned theTotal, const unsigned theIndex)
+        {
+            groupTotalM = theTotal;
+            groupIndexM = theIndex;
+        }
 
         void stop();
 
@@ -21,7 +26,8 @@ namespace Processor
 
         void run();
     private:
-
+        unsigned groupTotalM;
+        unsigned groupIndexM;
         JobQueue jobQueueM;
         boost::mutex queueMutexM;
         boost::condition_variable queueCondM;
