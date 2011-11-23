@@ -46,6 +46,7 @@ Session::~Session()
 
 int Session::asynHandleEvent(const int theEventId)
 {
+    /*
     if (fsmProcessorM)
     {
         fsmProcessorM->process(sessionIdM,
@@ -53,9 +54,10 @@ int Session::asynHandleEvent(const int theEventId)
     }
     else
     {
+    */
         Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
-    }
+    //}
     return 0;
 }
 
@@ -173,6 +175,7 @@ void onFsmTimeOut(int theFd, short theEvt, void *theArg)
 
 void Session::asynHandleTimeout(const int theTimerId)
 {
+    /*
     if (fsmProcessorM)
     {
         fsmProcessorM->process(sessionIdM,
@@ -180,9 +183,11 @@ void Session::asynHandleTimeout(const int theTimerId)
     }
     else
     {
+    */
         Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
-    }
+
+//    }
 
 }
 

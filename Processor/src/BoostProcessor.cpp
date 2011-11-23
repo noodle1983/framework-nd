@@ -28,9 +28,10 @@ BoostProcessor* BoostProcessor::fsmInstance()
         if (NULL == fsmProcessorM)
         {
             int threadCount = ConfigCenter::instance()->get("prc.fsmTno", 3);
-            fsmProcessorM = new BoostProcessor(threadCount);
-            fsmProcessorInstanceReleaser.reset(fsmProcessorM);
-            fsmProcessorM->start();
+            BoostProcessor* fsmProcessor = new BoostProcessor(threadCount);
+            fsmProcessorInstanceReleaser.reset(fsmProcessor);
+            fsmProcessor->start();
+            fsmProcessorM = fsmProcessor;
         }
     }
     return fsmProcessorM;
@@ -47,9 +48,10 @@ BoostProcessor* BoostProcessor::netInstance()
         if (NULL == netProcessorM)
         {
             int threadCount = ConfigCenter::instance()->get("prc.netTno", 3);
-            netProcessorM = new BoostProcessor(threadCount);
-            netProcessorInstanceReleaser.reset(netProcessorM);
-            netProcessorM->start();
+            BoostProcessor* netProcessor = new BoostProcessor(threadCount);
+            netProcessorInstanceReleaser.reset(netProcessor);
+            netProcessor->start();
+            netProcessorM = netProcessor;
         }
     }
     return netProcessorM;
@@ -65,9 +67,10 @@ BoostProcessor* BoostProcessor::manInstance()
         if (NULL == manProcessorM)
         {
             int threadCount = ConfigCenter::instance()->get("prc.manTno", 1);
-            manProcessorM = new BoostProcessor(threadCount);
-            manProcessorInstanceReleaser.reset(manProcessorM);
-            manProcessorM->start();
+            BoostProcessor* manProcessor = new BoostProcessor(threadCount);
+            manProcessorInstanceReleaser.reset(manProcessor);
+            manProcessor->start();
+            manProcessorM = manProcessor;
         }
     }
     return manProcessorM;
