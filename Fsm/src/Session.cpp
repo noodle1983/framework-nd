@@ -120,7 +120,9 @@ int Session::handleEvent(const int theEventId)
     if (actionList.empty())
     {
         LOG_ERROR(getSessionName()
-                << "the Event is not defined with id:" << theEventId);
+                << "[" << getSessionId() << "]"
+                << " the Event " << theEventId << " is not defined"
+                << " under state:" << curState.getName());
         changeState(this, endStateIdM);
         return -1;
     }

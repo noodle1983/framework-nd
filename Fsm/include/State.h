@@ -33,7 +33,15 @@ namespace Fsm
 
         ActionList& getActionList(const int theEventId)
         {
-            return rulesM[theEventId];
+            std::map<int, ActionList>::iterator it = rulesM.find(theEventId);
+            if (it == rulesM.end())
+            {
+                return emptyActionListM;
+            }
+            else 
+            {
+                return it->second;
+            }
         }
 
         inline bool isValid()
@@ -50,6 +58,7 @@ namespace Fsm
         int idM;
         std::string stateNameM;
         std::map<int, ActionList> rulesM;
+        static ActionList emptyActionListM;
     };
 }
 #endif /* STATE_H */

@@ -1,8 +1,10 @@
 #ifndef FSM_H
 #define FSM_H
 
+#include "State.h"
+#include "Log.h"
+
 #include <map>
-#include <State.h>
 
 namespace Fsm
 {
@@ -24,7 +26,13 @@ namespace Fsm
 
         inline State& getState(const int theStateId)
         {
-            return statesM[theStateId];
+            std::map<int, State>::iterator it = statesM.find(theStateId);
+            if (it == statesM.end())
+            {
+                LOG_FATAL("failed to find state with id" << theStateId);
+                exit(-1);
+            }
+            return it->second;
         }
 
         inline int getFirstStateId()
