@@ -13,6 +13,7 @@ using namespace Fsm;
 #define gettid() syscall(__NR_gettid)
 #endif
 
+typedef std::pair<Session*, int> TimerPair;
 
 //-----------------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ Session::Session(
     curStateIdM = fsmM->getFirstStateId();
     endStateIdM = fsmM->getLastStateId();
 #ifdef DEBUG 
-	tidM = -1;
+    tidM = -1;
 #endif
 
 }
@@ -46,7 +47,6 @@ Session::~Session()
 
 int Session::asynHandleEvent(const int theEventId)
 {
-    /*
     if (fsmProcessorM)
     {
         fsmProcessorM->process(sessionIdM,
@@ -54,10 +54,9 @@ int Session::asynHandleEvent(const int theEventId)
     }
     else
     {
-    */
         Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
-    //}
+    }
     return 0;
 }
 
@@ -72,22 +71,22 @@ int Session::handleEvent(const int theEventId)
     unsigned threadIndex = *g_threadGroupIndex.get();
     if ((sessionIdM%threadCount) != threadIndex)
     {
-		LOG_FATAL("job is handled in wrong thread:" << threadIndex 
+        LOG_FATAL("job is handled in wrong thread:" << threadIndex 
                 << ", count:" << threadCount
                 << ", id:" << sessionIdM);
-		assert(false);
+        assert(false);
     }
     
 
-	if (-1 == tidM)
-	{
-		tidM = gettid();
-	}
-	else if (tidM != gettid())
-	{
-		LOG_FATAL("tid not match pre:" << tidM << "-now:" << gettid());
-		assert(false);
-	}
+    if (-1 == tidM)
+    {
+        tidM = gettid();
+    }
+    else if (tidM != gettid())
+    {
+        LOG_FATAL("tid not match pre:" << tidM << "-now:" << gettid());
+        assert(false);
+    }
 #endif
     if (!isInitializedM)
     {
@@ -160,7 +159,6 @@ State& Session::toNextState(const int theNextStateId)
 }
 
 //-----------------------------------------------------------------------------
-typedef std::pair<Session*, int> TimerPair;
 
 void onFsmTimeOut(int theFd, short theEvt, void *theArg)
 {
@@ -168,14 +166,13 @@ void onFsmTimeOut(int theFd, short theEvt, void *theArg)
     Session* session = timerPair->first;
     int timerId = timerPair->second;
     session->asynHandleTimeout(timerId);
-	// the timerPair will be deleted in the fsm's thread
+    // the timerPair will be deleted in the fsm's thread
     //delete timerPair;
 }
 //-----------------------------------------------------------------------------
 
 void Session::asynHandleTimeout(const int theTimerId)
 {
-    /*
     if (fsmProcessorM)
     {
         fsmProcessorM->process(sessionIdM,
@@ -183,11 +180,10 @@ void Session::asynHandleTimeout(const int theTimerId)
     }
     else
     {
-    */
         Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
             new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
 
-//    }
+    }
 
 }
 
@@ -202,28 +198,29 @@ void Session::handleTimeout(const int theTimerId)
     unsigned threadIndex = *g_threadGroupIndex.get();
     if ((sessionIdM%threadCount) != threadIndex)
     {
-		LOG_FATAL("job is handled in wrong thread:" << threadIndex 
+        LOG_FATAL("job is handled in wrong thread:" << threadIndex 
                 << ", count:" << threadCount
                 << ", id:" << sessionIdM);
-		assert(false);
+        assert(false);
     }
     
 
-	if (-1 == tidM)
-	{
-		tidM = gettid();
-	}
-	else if (tidM != gettid())
-	{
-		LOG_FATAL("tid not match pre:" << tidM << "-now:" << gettid());
-		assert(false);
-	}
+    if (-1 == tidM)
+    {
+        tidM = gettid();
+    }
+    else if (tidM != gettid())
+    {
+        LOG_FATAL("tid not match pre:" << tidM << "-now:" << gettid());
+        assert(false);
+    }
 #endif
     if (fsmTimeoutEvtM && theTimerId == timerIdM)
     {
         //otherwise it is another timer and the previous one is freed already
-		delete (TimerPair*)fsmTimeoutEvtM->ev_arg;
+        TimerPair* timePair = (TimerPair*)event_get_callback_arg(fsmTimeoutEvtM);
         Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
+        delete timePair;
         handleEvent(TIMEOUT_EVT);
     }
 }
@@ -234,8 +231,9 @@ void Session::newTimer(const long long theUsec)
 {
     if (fsmTimeoutEvtM)
     {
-		delete (TimerPair*)fsmTimeoutEvtM->ev_arg;
+        TimerPair* timePair = (TimerPair*)event_get_callback_arg(fsmTimeoutEvtM);
         Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
+        delete timePair;
     }
     timerIdM++;
     std::pair<Session*,int>* timerPair = new std::pair<Session*, int>(this, timerIdM);
@@ -252,8 +250,9 @@ void Session::cancelTimer()
 {
     if (fsmTimeoutEvtM)
     {
-		delete (TimerPair*)fsmTimeoutEvtM->ev_arg;
+        TimerPair* timePair = (TimerPair*)event_get_callback_arg(fsmTimeoutEvtM);
         Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
+        delete timePair;
     }
 }
 
