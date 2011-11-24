@@ -46,9 +46,10 @@ Reactor* Reactor::instance()
         boost::lock_guard<boost::mutex> lock(reactorInstanceMutex);
         if (NULL == reactorM)
         {
-            reactorM = new Reactor();
-            reactorInstanceReleaser.reset(reactorM);
-            reactorM->start();
+            Reactor* reactor = new Reactor();
+            reactorInstanceReleaser.reset(reactor);
+            reactor->start();
+            reactorM = reactor;
         }
     }
     return reactorM;
