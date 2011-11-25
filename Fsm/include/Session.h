@@ -20,26 +20,31 @@ namespace Fsm
     public:
         Session(
                 FiniteStateMachine* theFsm, 
-                const uint64_t theProcessorId,
-                const std::string& theLogicName = "");
+                const uint64_t theSessionId);
+        Session();
+        void init(
+                FiniteStateMachine* theFsm, 
+                const uint64_t theSessionId);
         virtual ~Session();
+
 
         State& toNextState(const int theNextStateId);
 		int asynHandleEvent(const int theEventId);
         int handleEvent(const int theEventId);
         void newTimer(const long long theUsec);
-        void asynHandleTimeout(const int theTimerId);
-        void handleTimeout(const int theTimerId);
+        void asynHandleTimeout(const unsigned char theTimerId);
+        void handleTimeout(const unsigned char theTimerId);
         void cancelTimer();
+
 
         const uint64_t getSessionId()
         {
             return sessionIdM;
         }
 
-        const std::string& getSessionName()
+        virtual const char* getSessionName()
         {
-            return sessionNameM;
+            return "Session";
         }
 
         const std::string& getEventName(const int theEventName)
@@ -58,17 +63,14 @@ namespace Fsm
         }
 
     protected:
-        int curStateIdM;
-        int endStateIdM;
+        bool isInitializedM;
+        unsigned char curStateIdM;
+        unsigned char endStateIdM;
+        unsigned timerIdM;
         FiniteStateMachine* fsmM;
 
-        bool isInitializedM;
         struct event* fsmTimeoutEvtM;
-        Processor::BoostProcessor* fsmProcessorM;
         uint64_t sessionIdM;
-        int timerIdM;
-
-        std::string sessionNameM;
 
 #ifdef DEBUG
 		int64_t tidM;

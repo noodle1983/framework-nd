@@ -13,28 +13,60 @@ using namespace Fsm;
 #define gettid() syscall(__NR_gettid)
 #endif
 
-typedef std::pair<Session*, int> TimerPair;
-
+typedef std::pair<Session*, unsigned char> TimerPair;
 //-----------------------------------------------------------------------------
 
 Session::Session(
         FiniteStateMachine* theFsm, 
-        const uint64_t theProcessorId,
-        const std::string& theLogicName)
-    : fsmM(theFsm)
-    , isInitializedM(false)
-    , fsmTimeoutEvtM(NULL)
-    , fsmProcessorM(NULL)
-    , sessionIdM(theProcessorId)
+        const uint64_t theSessionId)
+    : isInitializedM(false)
+    , curStateIdM(theFsm->getFirstStateId())
+    , endStateIdM(theFsm->getLastStateId())
     , timerIdM(0)
-    , sessionNameM(theLogicName)
+    , fsmM(theFsm)
+    , fsmTimeoutEvtM(NULL)
+    , sessionIdM(theSessionId)
 {
-    curStateIdM = fsmM->getFirstStateId();
-    endStateIdM = fsmM->getLastStateId();
 #ifdef DEBUG 
     tidM = -1;
 #endif
 
+}
+
+//-----------------------------------------------------------------------------
+
+Session::Session()
+    : isInitializedM(false)
+    , curStateIdM(0)
+    , endStateIdM(0)
+    , timerIdM(0)
+    , fsmM(NULL)
+    , fsmTimeoutEvtM(NULL)
+    , sessionIdM(0)
+{
+#ifdef DEBUG 
+    tidM = -1;
+#endif
+
+}
+
+//-----------------------------------------------------------------------------
+
+void Session::init(
+        FiniteStateMachine* theFsm, 
+        const uint64_t theSessionId)
+{
+    fsmM = theFsm;
+    sessionIdM = theSessionId;
+    isInitializedM = false;
+    curStateIdM = fsmM->getFirstStateId();
+    endStateIdM = fsmM->getLastStateId();
+    timerIdM = 0;
+    if (fsmTimeoutEvtM)
+    {
+        Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
+    }
+    fsmTimeoutEvtM = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -47,16 +79,8 @@ Session::~Session()
 
 int Session::asynHandleEvent(const int theEventId)
 {
-    if (fsmProcessorM)
-    {
-        fsmProcessorM->process(sessionIdM,
-            new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
-    }
-    else
-    {
-        Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
-            new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
-    }
+    Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
+        new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
     return 0;
 }
 
@@ -152,7 +176,7 @@ State& Session::toNextState(const int theNextStateId)
     curStateIdM = theNextStateId;
     State& nextState = fsmM->getState(curStateIdM);
 
-    LOG_DEBUG( sessionNameM << "[" << sessionIdM << "] " 
+    LOG_DEBUG( getSessionName() << "[" << sessionIdM << "] " 
             << preStateName << " -> " << nextState.getName());
 
     return nextState;
@@ -171,25 +195,15 @@ void onFsmTimeOut(int theFd, short theEvt, void *theArg)
 }
 //-----------------------------------------------------------------------------
 
-void Session::asynHandleTimeout(const int theTimerId)
+void Session::asynHandleTimeout(const unsigned char theTimerId)
 {
-    if (fsmProcessorM)
-    {
-        fsmProcessorM->process(sessionIdM,
-            new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
-    }
-    else
-    {
-        Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
-            new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
-
-    }
-
+    Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
+        new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
 }
 
 //-----------------------------------------------------------------------------
 
-void Session::handleTimeout(const int theTimerId)
+void Session::handleTimeout(const unsigned char theTimerId)
 {
 #ifdef DEBUG
     extern boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
@@ -236,7 +250,7 @@ void Session::newTimer(const long long theUsec)
         delete timePair;
     }
     timerIdM++;
-    std::pair<Session*,int>* timerPair = new std::pair<Session*, int>(this, timerIdM);
+    TimerPair* timerPair = new TimerPair(this, timerIdM);
     fsmTimeoutEvtM = Net::Reactor::Reactor::instance()->newTimer(onFsmTimeOut, timerPair);
     struct timeval tv;
     tv.tv_sec = theUsec/1000000;

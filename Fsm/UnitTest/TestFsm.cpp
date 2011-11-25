@@ -50,7 +50,8 @@ int main()
     cout << "fsm,initstate:" << fsm.getFirstStateId() << endl;
     cout << "fsm,endstate:" << fsm.getLastStateId() << endl;
 
-    Fsm::Session session(&fsm, 0, "TestSession");
+    Fsm::Session session;
+    session.init(&fsm, 0);
     session.asynHandleEvent(START_EVT);
     sleep(3);
     return 0;
