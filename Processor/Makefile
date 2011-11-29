@@ -14,6 +14,7 @@ SUBDIR=src
 INC_DIR=-I. \
      -I./include \
      -I./src \
+	 -I$(PROJBASE)/Data/include \
 
 STATIC_LIB= \
 

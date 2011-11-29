@@ -1,6 +1,8 @@
 #ifndef THREADSAFEALLOCATOR_HPP
 #define THREADSAFEALLOCATOR_HPP
 
+#include "DataAllocator.hpp"
+
 #include <vector>
 #include <boost/thread.hpp>
 
@@ -28,6 +30,15 @@ namespace Data
             allocatorM.freeData(theData);
         }
 
+		unsigned long long getSize()
+		{
+			return allocatorM.getSize();
+		}
+
+		unsigned long long getUsed()
+		{
+			return allocatorM.getUsed();
+		}
     private:
         Allocator<DataType, batchCount> allocatorM;
         boost::mutex allocatorMutexM;

@@ -21,9 +21,12 @@ namespace Data
         
         Allocator()
             : freeHeaderM(NULL)
+			, sizeM(0)
+			, usedM(0)
         {}
         ~Allocator()
         {
+			sizeM = 0;
             int vectorSize = dataCachesM.size();
             for (int i = 0; i < vectorSize; i++)
             {
@@ -33,6 +36,7 @@ namespace Data
 
         DataType* newData()
         {
+			usedM++;
             if (freeHeaderM)
             {
                 DataType* res = freeHeaderM;
@@ -42,6 +46,7 @@ namespace Data
             else
             {
                 DataType* newDataCache = new DataType[BATCH_COUNT]; 
+				sizeM += BATCH_COUNT;
                 for (unsigned long long i = 0; i < BATCH_COUNT - 1; i++)
                 {
                     newDataCache[i].nextFreeM = &newDataCache[i+1];
@@ -56,13 +61,25 @@ namespace Data
 
         void freeData(DataType* theData)
         {
+			usedM--;
             theData->nextFreeM = freeHeaderM;
             freeHeaderM = theData;
         }
 
+		unsigned long long getSize()
+		{
+			return sizeM;
+		}
+
+		unsigned long long getUsed()
+		{
+			return usedM;
+		}
     private:
         DataCacheVector dataCachesM;
         DataType* freeHeaderM;
+		unsigned long long sizeM;
+		unsigned long long usedM;
     };
 }
 #endif /* DATAALLOCATOR_HPP */
