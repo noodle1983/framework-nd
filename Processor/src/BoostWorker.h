@@ -1,14 +1,15 @@
 #ifndef BOOSTWORKER_H
 #define BOOSTWORKER_H
 
+#include "ProcessorJob.hpp"
+
 #include <boost/function.hpp>
 #include <boost/thread.hpp>
 #include <list>
 
 namespace Processor
 {
-    typedef boost::function<void ()> Job;
-    typedef std::list<Job*> JobQueue;
+    typedef std::list<IJob*> JobQueue;
     class BoostWorker
     {
     public:
@@ -22,7 +23,7 @@ namespace Processor
 
         void stop();
 
-        int process(Job* theJob);
+        int process(IJob* theJob);
 
         void run();
     private:

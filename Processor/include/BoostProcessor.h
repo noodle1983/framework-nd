@@ -1,12 +1,15 @@
 #ifndef BOOSTPROCESSOR_H
 #define BOOSTPROCESSOR_H
 
+#include "ProcessorJob.hpp"
+#include "BoostWorker.h"
+
 #include <boost/thread.hpp>
 
 namespace Processor
 {
     class BoostWorker;
-    typedef boost::function<void ()> Job;
+
     class BoostProcessor
     {
     public:
@@ -20,8 +23,28 @@ namespace Processor
         void start();
         void stop();
 
-        int process(const unsigned theId, Job* job);
+        int process(
+                const unsigned theId, 
+                void (*theFunc)());
 
+        template<typename ParamType1>
+        int process(
+                const unsigned theId, 
+                void (*theFunc)(ParamType1),
+                ParamType1 theParam);
+        
+        template<typename ClassType>
+        int process(
+                const unsigned theId, 
+                void (ClassType::*theFunc)(),
+                ClassType* theObj);
+
+        template<typename ClassType, typename ParamType1>
+        int process(
+                const unsigned theId, 
+                void (ClassType::*theFunc)(ParamType1),
+                ClassType* theObj,
+                ParamType1 theParam);
     private:
         unsigned threadCountM;
         BoostWorker* workersM;
@@ -31,6 +54,23 @@ namespace Processor
         static BoostProcessor* netProcessorM;
         static BoostProcessor* manProcessorM;
     };
+	
+//-----------------------------------------------------------------------------
+
+	template<typename ParamType1>
+	int BoostProcessor::process(
+			const unsigned theId, 
+			void (*theFunc)(ParamType1),
+			ParamType1 theParam)
+	{
+		OneParamJob<ParamType1>* job = 
+			OneParamJob<ParamType1>::AllocatorSingleton::instance()->newData();
+		job->init(theFunc, theParam);
+
+		unsigned workerId = theId % threadCountM;
+		return workersM[workerId].process(job);
+	}
+
 
 }
 

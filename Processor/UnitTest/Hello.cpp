@@ -13,7 +13,8 @@ int main()
 {
     Processor::BoostProcessor processor(1);
     processor.start();
-    processor.process(1, new Processor::Job(boost::bind(&say, "Hello")));
+    processor.process(1, say, "Hello");
+	sleep(1);
     processor.stop();
     return 0;
 }

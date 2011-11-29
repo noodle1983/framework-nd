@@ -16,14 +16,16 @@ BoostWorker::BoostWorker()
 
 BoostWorker::~BoostWorker()
 {
+    /*
     Job* job;
     while (!jobQueueM.empty())
     {
-		job = jobQueueM.front();
-		jobQueueM.pop_front();
+        job = jobQueueM.front();
+        jobQueueM.pop_front();
         delete job;
         job = NULL;
     }
+    */
 
 }
 
@@ -37,7 +39,7 @@ void BoostWorker::stop()
 //-----------------------------------------------------------------------------
 
 
-int BoostWorker::process(Job* theJob)
+int BoostWorker::process(IJob* theJob)
 {
     bool jobQueueEmpty = false;
     {
@@ -58,7 +60,7 @@ void BoostWorker::run()
 {
     g_threadGroupTotal.reset(new unsigned(groupTotalM));
     g_threadGroupIndex.reset(new unsigned(groupIndexM));
-    Job* job;
+    IJob* job;
     while (true)
     {
         {
@@ -72,7 +74,8 @@ void BoostWorker::run()
             jobQueueM.pop_front();
         }
         (*job)();
-        delete job;
+        job->returnToPool();
+        //delete job;
         job = NULL;
     }
 }

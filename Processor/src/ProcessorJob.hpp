@@ -68,6 +68,15 @@ namespace Processor
 		{}
 		~OneParamJob(){}
 
+		OneParamJob()
+			:funcM(NULL)
+		{}
+		void init(Func theFunc, Param theParam)
+		{
+			funcM = theFunc;
+			paramM = theParam;
+		}
+
 
 		virtual void operator()()
 		{

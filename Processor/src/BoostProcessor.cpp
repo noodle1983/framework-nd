@@ -1,6 +1,7 @@
 #include "BoostProcessor.h"
 #include "BoostWorker.h"
 #include "ConfigCenter.h"
+#include "ProcessorJob.hpp"
 
 #include <boost/bind.hpp>
 
@@ -120,11 +121,26 @@ void BoostProcessor::stop()
 
 //-----------------------------------------------------------------------------
 
+/*
 int BoostProcessor::process(const unsigned theId, Job* job)
 {
     unsigned workerId = theId % threadCountM;
     return workersM[workerId].process(job);
 }
+*/
 
 //-----------------------------------------------------------------------------
 
+int BoostProcessor::process(
+        const unsigned theId, 
+        void (*theFunc)())
+{
+    NullParamJob* job = 
+        NullParamJob::AllocatorSingleton::instance()->newData();
+    job->init(theFunc);
+
+    unsigned workerId = theId % threadCountM;
+    return workersM[workerId].process(job);
+}
+
+//-----------------------------------------------------------------------------
