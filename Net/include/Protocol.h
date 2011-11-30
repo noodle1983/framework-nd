@@ -42,6 +42,7 @@ namespace Net
         }
         
         virtual int handleInput(Net::Connection::SocketConnectionPtr theConnection) = 0;
+        virtual int handleClose(Net::Connection::SocketConnectionPtr theConnection) {return 0;}
 
         //Config
         virtual const std::string getAddr(){ return "0.0.0.0"; }

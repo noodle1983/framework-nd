@@ -371,6 +371,7 @@ void SocketConnection::_close()
     if (CloseE == statusM)
         return;
     statusM = CloseE;
+	protocolM->handleClose(selfM);
     if (clientM)
     {
         boost::lock_guard<boost::mutex> lock(clientMutexM);

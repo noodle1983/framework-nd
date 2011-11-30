@@ -1,9 +1,16 @@
 #ifndef TelnetProtocol_h
 #define TelnetProtocol_h
 
+#include "Protocol.h"
+
 #include <list>
 #include <map>
 #include <string>
+
+namespace Processor
+{
+	class BoostProcessor;
+}
 
 namespace Net
 {
@@ -19,13 +26,13 @@ namespace Protocol
 	class ICmdHandler
 	{
 	public:
-		CmdHandler(){}
-		virtual ~CmdHandler(){}
+		ICmdHandler(){}
+		virtual ~ICmdHandler(){}
 		virtual int handle(CmdArgsList& theArgs) = 0;
-		virtual const string& getUsage() = 0;
+		virtual const char* getUsage() = 0;
 	};
 
-	class TelnetTopCmd: public CmdHandler
+	class TelnetTopCmd: public ICmdHandler
 	{
 		TelnetTopCmd();
 		~TelnetTopCmd();
@@ -35,14 +42,15 @@ namespace Protocol
 			ICmdHandler* theHandler);
 		int handle(CmdArgsList& theArgs);
 
-		const string& getUsage() {return "";};
+		const char* getUsage() {return "";};
 	private:
 		CmdMap allTopCmdsM;
 	};
 
-    class TelnetProtocol:public Net::IProtocol
+    class TelnetProtocol : public Net::IProtocol
     {
     public:
+		TelnetProtocol(Processor::BoostProcessor* theProcessor);
         TelnetProtocol();
         ~TelnetProtocol();
 
