@@ -159,8 +159,8 @@ bool UdpServer::getAPackage(Net::UdpPacket* thePackage)
     }
     if (stopReadingM)
     {
-        Net::Buffer::BufferStatus postBufferStatus = inputQueueM.getStatus();
-        if (postBufferStatus == Net::Buffer::BufferLowE)
+        Utility::BufferStatus postBufferStatus = inputQueueM.getStatus();
+        if (postBufferStatus == Utility::BufferLowE)
         {
             {
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);

@@ -74,7 +74,7 @@ namespace Server
 
         //we ensure there is only 1 thread read/write the input queue
         //boost::mutex inputQueueMutexM;
-        Net::Buffer::KfifoBuffer inputQueueM;
+        Utility::KfifoBuffer inputQueueM;
         boost::mutex outputQueueMutexM;
 
         enum Status{ActiveE = 0, CloseE = 1};

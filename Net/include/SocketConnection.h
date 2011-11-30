@@ -107,9 +107,9 @@ namespace Connection
 
         //we ensure there is only 1 thread read/write the input queue
         //boost::mutex inputQueueMutexM;
-        Net::Buffer::KfifoBuffer inputQueueM;
+        Utility::KfifoBuffer inputQueueM;
         boost::mutex outputQueueMutexM;
-        Net::Buffer::KfifoBuffer outputQueueM;
+        Utility::KfifoBuffer outputQueueM;
 
         enum Status{ActiveE = 0, CloseE = 1};
         mutable int statusM;

@@ -3,9 +3,7 @@
 
 #include <sys/types.h>
 
-namespace Net
-{
-namespace Buffer
+namespace Utility 
 {
     enum BufferStatus
     {
@@ -56,7 +54,6 @@ namespace Buffer
         unsigned highWaterMarkM;
         unsigned lowWaterMarkM;
     };
-}
 }
 
 #endif /* KFIFOBUFFER_H */

@@ -1,7 +1,7 @@
 #include "KfifoBuffer.h"
 #include "string.h"
 
-using namespace Net::Buffer;
+using namespace Utility;
 
 //-----------------------------------------------------------------------------
 

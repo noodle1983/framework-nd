@@ -166,8 +166,8 @@ void SocketConnection::onRead(int theFd, short theEvt)
     unsigned putLen = inputQueueM.put(buffer, len);
     assert(putLen == (unsigned)len);
 
-    while(Net::Buffer::BufferOkE == inputQueueM.getStatus()
-        || Net::Buffer::BufferLowE == inputQueueM.getStatus() )
+    while(Utility::BufferOkE == inputQueueM.getStatus()
+        || Utility::BufferLowE == inputQueueM.getStatus() )
     {
         readBufferLeft = inputQueueM.unusedSize();
         readLen = (readBufferLeft < sizeof(buffer)) ? readBufferLeft : sizeof(buffer);
@@ -180,8 +180,8 @@ void SocketConnection::onRead(int theFd, short theEvt)
         assert(putLen == (unsigned)len);
     }
 
-    if (Net::Buffer::BufferHighE == inputQueueM.getStatus()
-            || Net::Buffer::BufferNotEnoughE == inputQueueM.getStatus())
+    if (Utility::BufferHighE == inputQueueM.getStatus()
+            || Utility::BufferNotEnoughE == inputQueueM.getStatus())
     {
         //TRACE("Flow Control:Socket " << fdM << " stop reading.", fdM);
         boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
@@ -203,8 +203,8 @@ unsigned SocketConnection::getInput(char* const theBuffer, const unsigned theLen
     unsigned len = inputQueueM.get(theBuffer, theLen);
     if (stopReadingM && CloseE != statusM)
     {
-        Net::Buffer::BufferStatus postBufferStatus = inputQueueM.getStatus();
-        if (postBufferStatus == Net::Buffer::BufferLowE)
+        Utility::BufferStatus postBufferStatus = inputQueueM.getStatus();
+        if (postBufferStatus == Utility::BufferLowE)
         {
             {
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
@@ -226,8 +226,8 @@ unsigned SocketConnection::getnInput(char* const theBuffer, const unsigned theLe
     unsigned len = inputQueueM.getn(theBuffer, theLen);
     if (stopReadingM && CloseE != statusM)
     {
-        Net::Buffer::BufferStatus postBufferStatus = inputQueueM.getStatus();
-        if (postBufferStatus == Net::Buffer::BufferLowE)
+        Utility::BufferStatus postBufferStatus = inputQueueM.getStatus();
+        if (postBufferStatus == Utility::BufferLowE)
         {
             {
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
@@ -329,8 +329,8 @@ void SocketConnection::onWrite(int theFd, short theEvt)
         peekLen = outputQueueM.peek(buffer, sizeof(buffer));
     }
 
-    Net::Buffer::BufferStatus bufferStatus = outputQueueM.getStatus();
-    if (watcherM && (bufferStatus == Net::Buffer::BufferLowE))
+    Utility::BufferStatus bufferStatus = outputQueueM.getStatus();
+    if (watcherM && (bufferStatus == Utility::BufferLowE))
     {
         boost::lock_guard<boost::mutex> lock(watcherMutexM);
         if (watcherM)
