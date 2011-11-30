@@ -30,14 +30,14 @@ public:
     }
     ~UdpEchoProtocol(){};
 
-    int handleInput(Net::Server::UdpServerPtr theUdpServer)
+    void handleInput(Net::Server::UdpServerPtr theUdpServer)
     {
         Net::UdpPacket packet;
         while (theUdpServer->getAPackage(&packet))
         {
             theUdpServer->sendAPackage(&packet);
         }
-        return 0;
+        return ;
     }
 private:
 };

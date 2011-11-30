@@ -69,10 +69,10 @@ public:
     int asynSend(int theFd, Net::Connection::SocketConnectionPtr theConnection)
     {
         return proProcessorM.process(theFd + 1,
-                new Processor::Job(boost::bind(&BatchDataProtocol::send, this, theFd, theConnection)));
+                &BatchDataProtocol::send, this, theFd, theConnection);
     }
 
-    int send(int theFd, Net::Connection::SocketConnectionPtr theConnection)
+    void send(int theFd, Net::Connection::SocketConnectionPtr theConnection)
     {
         while (theConnection->isWBufferHealthy())
         {
@@ -84,7 +84,7 @@ public:
                 //std::cout << "write buffer count:" << wBufferCountM << std::endl;
                 if (wBufferCountM == TEST_TIMES)
                 {
-                    return 0;
+                    return;
                 }
             }
         }
@@ -93,10 +93,10 @@ public:
             theConnection->setLowWaterMarkWatcher(
                     new Net::Connection::Watcher(boost::bind(&BatchDataProtocol::asynSend, this, _1, _2)));
         }
-        return 0;
+        return;
     }
 
-    int handleInput(Net::Connection::SocketConnectionPtr theConnection)
+    void handleInput(Net::Connection::SocketConnectionPtr theConnection)
     {
         char buffer[1024];
         while(1)
@@ -125,10 +125,8 @@ public:
                 std::cout << "exit" << std::endl;
                 tcpClientM.close();
                 sig_stop(0);
-                return 0;
             }
         }
-        return 0;
     }
 
     const std::string getAddr()

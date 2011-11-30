@@ -14,6 +14,7 @@ SUBDIR=src
 INC_DIR= -I. -Iinclude \
 		-I../Net/include \
 		-I../Log/include \
+		-I../Data/include \
 		-I../Processor/include
 
 STATIC_LIB= \

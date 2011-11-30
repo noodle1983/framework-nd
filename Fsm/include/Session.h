@@ -30,7 +30,7 @@ namespace Fsm
 
         State& toNextState(const int theNextStateId);
 		int asynHandleEvent(const int theEventId);
-        int handleEvent(const int theEventId);
+        void handleEvent(const int theEventId);
         void newTimer(const long long theUsec);
         void asynHandleTimeout(const unsigned char theTimerId);
         void handleTimeout(const unsigned char theTimerId);

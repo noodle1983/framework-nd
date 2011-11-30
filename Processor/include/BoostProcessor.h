@@ -5,6 +5,7 @@
 #include "BoostWorker.h"
 
 #include <boost/thread.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace Processor
 {
@@ -37,7 +38,13 @@ namespace Processor
         int process(
                 const unsigned theId, 
                 void (ClassType::*theFunc)(),
-                ClassType* theObj);
+                ClassType*const theObj);
+
+        template<typename ClassType>
+        int process(
+                const unsigned theId, 
+                void (ClassType::*theFunc)(),
+                boost::shared_ptr<ClassType> theObj);
 
         template<typename ClassType, typename ParamType1>
         int process(
@@ -45,6 +52,16 @@ namespace Processor
                 void (ClassType::*theFunc)(ParamType1),
                 ClassType* theObj,
                 ParamType1 theParam);
+
+        template<typename ClassType, 
+                 typename ParamType1,
+                 typename ParamType2>
+        int process(
+                const unsigned theId, 
+                void (ClassType::*theFunc)(ParamType1, ParamType2),
+                ClassType* theObj,
+                ParamType1 theParam1,
+                ParamType2 theParam2);
     private:
         unsigned threadCountM;
         BoostWorker* workersM;
@@ -70,7 +87,76 @@ namespace Processor
 		unsigned workerId = theId % threadCountM;
 		return workersM[workerId].process(job);
 	}
+	
+//-----------------------------------------------------------------------------
 
+    template<typename ClassType>
+    int BoostProcessor::process(
+            const unsigned theId, 
+            void (ClassType::*theFunc)(),
+            ClassType*const theObj)
+    {
+		NullParamClassJob<ClassType>* job = 
+			NullParamClassJob<ClassType>::AllocatorSingleton::instance()->newData();
+		job->init(theFunc, theObj);
+
+		unsigned workerId = theId % threadCountM;
+		return workersM[workerId].process(job);
+    }
+	
+//-----------------------------------------------------------------------------
+
+    template<typename ClassType>
+    int BoostProcessor::process(
+            const unsigned theId, 
+            void (ClassType::*theFunc)(),
+            boost::shared_ptr<ClassType> theObj)
+    {
+		NullParamClassEJob<ClassType>* job = 
+			NullParamClassEJob<ClassType>::AllocatorSingleton::instance()->newData();
+		job->init(theFunc, theObj);
+
+		unsigned workerId = theId % threadCountM;
+		return workersM[workerId].process(job);
+    }
+	
+//-----------------------------------------------------------------------------
+
+    template<typename ClassType, typename ParamType1>
+    int BoostProcessor::process(
+            const unsigned theId, 
+            void (ClassType::*theFunc)(ParamType1),
+            ClassType* theObj,
+            ParamType1 theParam)
+    {
+		OneParamClassJob<ClassType, ParamType1>* job = 
+			OneParamClassJob<ClassType, ParamType1>::AllocatorSingleton::instance()->newData();
+		job->init(theFunc, theObj, theParam);
+
+		unsigned workerId = theId % threadCountM;
+		return workersM[workerId].process(job);
+    }
+
+	
+//-----------------------------------------------------------------------------
+    template<typename ClassType, 
+             typename ParamType1,
+             typename ParamType2>
+    int BoostProcessor::process(
+            const unsigned theId, 
+            void (ClassType::*theFunc)(ParamType1, ParamType2),
+            ClassType* theObj,
+            ParamType1 theParam1,
+            ParamType2 theParam2)
+    {
+		TwoParamClassJob<ClassType, ParamType1, ParamType2>* job = 
+			TwoParamClassJob<ClassType, ParamType1, ParamType2>::AllocatorSingleton::instance()->newData();
+		job->init(theFunc, theObj, theParam1, theParam2);
+
+		unsigned workerId = theId % threadCountM;
+		return workersM[workerId].process(job);
+
+    }
 
 }
 

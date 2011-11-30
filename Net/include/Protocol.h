@@ -38,11 +38,11 @@ namespace Net
         int asynHandleInput(int theFd, Connection::SocketConnectionPtr theConnection)
         {
             return processorM->process(theFd + 1,
-                    new Processor::Job(boost::bind(&IProtocol::handleInput, this, theConnection)));
+                    &IProtocol::handleInput, this, theConnection);
         }
         
-        virtual int handleInput(Net::Connection::SocketConnectionPtr theConnection) = 0;
-        virtual int handleClose(Net::Connection::SocketConnectionPtr theConnection) {return 0;}
+        virtual void handleInput(Net::Connection::SocketConnectionPtr theConnection) = 0;
+        virtual void handleClose(Net::Connection::SocketConnectionPtr theConnection) {}
 
         //Config
         virtual const std::string getAddr(){ return "0.0.0.0"; }
@@ -100,10 +100,10 @@ namespace Net
         int asynHandleInput(int theFd, Server::UdpServerPtr theUdpServer)
         {
             return processorM->process(theFd,
-                    new Processor::Job(boost::bind(&IUdpProtocol::handleInput, this, theUdpServer)));
+                    &IUdpProtocol::handleInput, this, theUdpServer);
         }
         
-        virtual int handleInput(Net::Server::UdpServerPtr theUdpServer) = 0;
+        virtual void handleInput(Net::Server::UdpServerPtr theUdpServer) = 0;
         
         //Config
         virtual int getRBufferSizePower(){ return 20; }

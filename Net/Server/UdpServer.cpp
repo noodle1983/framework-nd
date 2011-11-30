@@ -73,7 +73,7 @@ void UdpServer::addReadEvent()
         return;
     if (-1 == event_add(readEvtM, NULL))
     {
-        processorM->process(fdM, new Processor::Job(boost::bind(&UdpServer::addReadEvent, this)));
+        processorM->process(fdM, &UdpServer::addReadEvent, this);
     }
 }
 
@@ -81,7 +81,7 @@ void UdpServer::addReadEvent()
 
 int UdpServer::asynRead(int theFd, short theEvt)
 {
-    return processorM->process(fdM, new Processor::Job(boost::bind(&UdpServer::onRead, this, theFd, theEvt)));
+    return processorM->process(fdM, &UdpServer::onRead, this, theFd, theEvt);
 }
 
 //-----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ bool UdpServer::getAPackage(Net::UdpPacket* thePackage)
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            processorM->process(fdM, new Processor::Job(boost::bind(&UdpServer::addReadEvent, selfM)));
+            processorM->process(fdM, &UdpServer::addReadEvent, selfM);
         }
     }
     return len;
@@ -198,7 +198,7 @@ void UdpServer::close()
 {
     if (CloseE == statusM)
         return;
-    processorM->process(fdM, new Processor::Job(boost::bind(&UdpServer::_close, this)));
+    processorM->process(fdM, &UdpServer::_close, this);
 }
 
 //-----------------------------------------------------------------------------
@@ -216,7 +216,7 @@ void UdpServer::_close()
         return;
     statusM = CloseE;
     reactorM->delEvent(readEvtM);
-    processorM->process(fdM, new Processor::Job(boost::bind(&UdpServer::_release, this)));
+    processorM->process(fdM, &UdpServer::_release, this);
 }
 
 //-----------------------------------------------------------------------------

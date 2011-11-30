@@ -56,7 +56,7 @@ void TcpServer::addAcceptEvent()
 {
     if (-1 == event_add(acceptEvtM, NULL))
     {
-        processorM->process(fdM, new Processor::Job(boost::bind(&TcpServer::addAcceptEvent, this)));
+        processorM->process(fdM, &TcpServer::addAcceptEvent, this);
     }
 }
 
@@ -64,8 +64,8 @@ void TcpServer::addAcceptEvent()
 
 int TcpServer::asynAccept(int theFd, short theEvt)
 {
-    return processorM->process(fdM, new Processor::Job(boost::bind(&TcpServer::onAccept, this, theFd, theEvt)));
-}
+    return processorM->process(fdM, &TcpServer::onAccept, this, theFd, theEvt);
+} 
 
 //-----------------------------------------------------------------------------
 

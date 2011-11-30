@@ -19,9 +19,9 @@ TelnetProtocol::~TelnetProtocol()
 
 //-----------------------------------------------------------------------------
 
-int TelnetProtocol::handleInput(Connection::SocketConnectionPtr connection)
+void TelnetProtocol::handleInput(Connection::SocketConnectionPtr connection)
 {
-	return 0;
+	return ;
 }
 
 //-----------------------------------------------------------------------------

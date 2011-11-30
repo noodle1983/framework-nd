@@ -17,7 +17,7 @@ static void onFilewatcherTimeout(int theFd, short theEvt, void *theArg)
     FileWatcher* theWatcher = (FileWatcher*) theArg;
     Processor::BoostProcessor::manInstance()->process(
             0, 
-            new Processor::Job(boost::bind(&FileWatcher::checkFile, theWatcher)));
+            &FileWatcher::checkFile, theWatcher);
 }
 
 //-----------------------------------------------------------------------------
@@ -64,7 +64,7 @@ FileWatcher::~FileWatcher()
 
 //-----------------------------------------------------------------------------
 
-int FileWatcher::checkFile()
+void FileWatcher::checkFile()
 {
     struct stat fileStat;
     if (0 == stat(filePathM.c_str(), &fileStat))
@@ -72,8 +72,7 @@ int FileWatcher::checkFile()
         if (lastModTimeM != fileStat.st_mtime)
         {
             Processor::BoostProcessor::manInstance()->process(
-                    (uint64_t)timerEventM, 
-                    new Processor::Job(boost::bind(callbackM, filePathM)));
+                    0, callbackM, filePathM);
             lastModTimeM = fileStat.st_mtime;
             CFG_DEBUG("reload file:" << filePathM);
         }
@@ -81,7 +80,7 @@ int FileWatcher::checkFile()
         tv.tv_sec = (secM == 0 ? 5 : secM); 
         tv.tv_usec = 0;
         event_add(timerEventM, &tv);
-        return 0;
+        return ;
     }
     else
     {
@@ -89,9 +88,9 @@ int FileWatcher::checkFile()
         tv.tv_sec = (secM == 0 ? 5 : secM); 
         tv.tv_usec = 0;
         event_add(timerEventM, &tv);
-        return -1;
+        return ;
     }
 
-    return 0;
+    return ;
 }
 

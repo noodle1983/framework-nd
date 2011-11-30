@@ -25,7 +25,7 @@ namespace Protocol
             Processor::BoostProcessor* theProcessor);
         ~EchoProtocol();
 
-        int handleInput(Connection::SocketConnectionPtr connection);
+        void handleInput(Connection::SocketConnectionPtr connection);
 
         virtual const std::string getAddr();
         virtual int getPort();

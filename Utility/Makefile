@@ -16,6 +16,7 @@ INC_DIR=-I. \
      -I./src \
      -I$(PROJBASE)/Log/include \
      -I$(PROJBASE)/Net/include \
+     -I$(PROJBASE)/Data/include \
      -I$(PROJBASE)/Processor/include \
 
 STATIC_LIB= $(PROJBASE)/.lib/libLog.a \

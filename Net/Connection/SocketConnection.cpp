@@ -109,7 +109,7 @@ void SocketConnection::addReadEvent()
         return;
     if (-1 == event_add(readEvtM, NULL))
     {
-        processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addReadEvent, this)));
+        processorM->process(fdM, &SocketConnection::addReadEvent, this);
     }
 }
 
@@ -121,7 +121,7 @@ void SocketConnection::addWriteEvent()
         return;
     if (-1 == event_add(writeEvtM, NULL))
     {
-        processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, this)));
+        processorM->process(fdM, &SocketConnection::addWriteEvent, this);
     }
 }
 
@@ -129,7 +129,7 @@ void SocketConnection::addWriteEvent()
 
 int SocketConnection::asynRead(int theFd, short theEvt)
 {
-    return processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::onRead, this, theFd, theEvt)));
+    return processorM->process(fdM, &SocketConnection::onRead, this, theFd, theEvt);
 }
 
 //-----------------------------------------------------------------------------
@@ -210,7 +210,7 @@ unsigned SocketConnection::getInput(char* const theBuffer, const unsigned theLen
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addReadEvent, selfM)));
+            processorM->process(fdM, &SocketConnection::addReadEvent, selfM);
         }
     }
     return len;
@@ -233,7 +233,7 @@ unsigned SocketConnection::getnInput(char* const theBuffer, const unsigned theLe
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addReadEvent, selfM)));
+            processorM->process(fdM, &SocketConnection::addReadEvent, selfM);
         }
     }
     return len;
@@ -268,7 +268,7 @@ unsigned SocketConnection::sendn(char* const theBuffer, const unsigned theLen)
     {
         LOG_WARN("outage of the connection's write queue!");
     }
-    processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::addWriteEvent, selfM)));
+    processorM->process(fdM, &SocketConnection::addWriteEvent, selfM);
     return len;
 }
 
@@ -278,7 +278,7 @@ int SocketConnection::asynWrite(int theFd, short theEvt)
 {
     if (CloseE == statusM)
         return -1;
-    return processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::onWrite, this, theFd, theEvt)));
+    return processorM->process(fdM, &SocketConnection::onWrite, this, theFd, theEvt);
 }
 
 //-----------------------------------------------------------------------------
@@ -354,7 +354,7 @@ void SocketConnection::close()
 {
     if (CloseE == statusM)
         return;
-    processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::_close, this)));
+    processorM->process(fdM, &SocketConnection::_close, this);
 }
 
 //-----------------------------------------------------------------------------
@@ -383,7 +383,7 @@ void SocketConnection::_close()
     }
     reactorM->delEvent(readEvtM);
     reactorM->delEvent(writeEvtM);
-    processorM->process(fdM, new Processor::Job(boost::bind(&SocketConnection::_release, this)));
+    processorM->process(fdM, &SocketConnection::_release, this);
 }
 
 //-----------------------------------------------------------------------------

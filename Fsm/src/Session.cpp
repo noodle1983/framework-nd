@@ -80,13 +80,13 @@ Session::~Session()
 int Session::asynHandleEvent(const int theEventId)
 {
     Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
-        new Processor::Job(boost::bind(&Session::handleEvent, this, theEventId)));
+        &Session::handleEvent, this, theEventId);
     return 0;
 }
 
 //-----------------------------------------------------------------------------
 
-int Session::handleEvent(const int theEventId)
+void Session::handleEvent(const int theEventId)
 {
 #ifdef DEBUG
     extern boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
@@ -149,7 +149,7 @@ int Session::handleEvent(const int theEventId)
                 << " the Event " << theEventId << " is not defined"
                 << " under state:" << curState.getName());
         changeState(this, endStateIdM);
-        return -1;
+        return ;
     }
 
     const int curStateId = curStateIdM;
@@ -164,7 +164,7 @@ int Session::handleEvent(const int theEventId)
         }
         (*it)(this);
     }
-    return 0;
+    return ;
 }
 
 //-----------------------------------------------------------------------------
@@ -198,7 +198,7 @@ void onFsmTimeOut(int theFd, short theEvt, void *theArg)
 void Session::asynHandleTimeout(const unsigned char theTimerId)
 {
     Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
-        new Processor::Job(boost::bind(&Session::handleTimeout, this, theTimerId)));
+        &Session::handleTimeout, this, theTimerId);
 }
 
 //-----------------------------------------------------------------------------

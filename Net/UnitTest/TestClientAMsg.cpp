@@ -50,7 +50,7 @@ public:
         tcpClientM.sendn("Hello", 5);
     }
 
-    int handleInput(Net::Connection::SocketConnectionPtr theConnection)
+    void handleInput(Net::Connection::SocketConnectionPtr theConnection)
     {
         char buffer[1024];
         unsigned len = 1;
@@ -59,7 +59,6 @@ public:
         assert(0 == memcmp("Hello", buffer, strlen("Hello")));
         tcpClientM.close();
         sig_stop(0);
-        return 0;
     }
 
     const std::string getAddr()

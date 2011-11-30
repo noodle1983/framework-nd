@@ -54,7 +54,7 @@ namespace Protocol
         TelnetProtocol();
         ~TelnetProtocol();
 
-        int handleInput(Connection::SocketConnectionPtr connection);
+        void handleInput(Connection::SocketConnectionPtr connection);
 
         virtual const std::string getAddr();
         virtual int getPort();

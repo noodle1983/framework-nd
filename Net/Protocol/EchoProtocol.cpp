@@ -25,7 +25,7 @@ EchoProtocol::~EchoProtocol()
 
 //-----------------------------------------------------------------------------
 
-int EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
+void EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
 {
     char buffer[1024];
     unsigned len = 1;
@@ -38,7 +38,6 @@ int EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
     {
         connection->setLowWaterMarkWatcher(new Net::Connection::Watcher(boost::bind(&EchoProtocol::asynHandleInput, this, _1, _2)));
     }
-    return 0;
 }
 
 //-----------------------------------------------------------------------------

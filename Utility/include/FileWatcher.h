@@ -8,7 +8,7 @@
 
 namespace Utility
 {
-    typedef boost::function<void (const std::string&)> FileWatcherCallback;
+    typedef void (*FileWatcherCallback)(std::string theFileName);
     class FileWatcher 
     {
     public:
@@ -18,7 +18,7 @@ namespace Utility
                 FileWatcherCallback theCallback);
         ~FileWatcher();
 
-        int checkFile();
+        void checkFile();
     private:
         std::string         filePathM;
         uint64_t            secM;

@@ -18,6 +18,7 @@ INC_DIR= -I. \
      -I./include \
      -I$(PROJBASE)/Processor/include \
      -I$(PROJBASE)/Log/include \
+     -I$(PROJBASE)/Data/include \
 
 STATIC_LIB= \
     $(PROJBASE)/.lib/libProcessor.a \
