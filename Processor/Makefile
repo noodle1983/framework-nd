@@ -15,8 +15,9 @@ INC_DIR=-I. \
      -I./include \
      -I./src \
 	 -I$(PROJBASE)/Data/include \
+	 -I$(PROJBASE)/Utility/include \
 
-STATIC_LIB= \
+STATIC_LIB= $(PROJBASE)/.lib/libUtility.a \
 
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread
@@ -24,6 +25,7 @@ SHARED_LIB= -pthread
 include $(PROJBASE)/build/makefile.boost.header
 include $(PROJBASE)/build/makefile.staticlib.boost.thread.linux
 include $(PROJBASE)/build/makefile.staticlib.configAndLog.linux
+include $(PROJBASE)/build/makefile.staticlib.libevent.linux
 
 #########################################
 #              compiler                 #

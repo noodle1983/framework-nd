@@ -15,12 +15,14 @@ INC_DIR= -I. -Iinclude \
 		-I../Net/include \
 		-I../Log/include \
 		-I../Data/include \
+		-I../Utility/include \
 		-I../Processor/include
 
 STATIC_LIB= \
     $(PROJBASE)/.lib/libProcessor.a \
 	$(PROJBASE)/.lib/libLog.a \
 	$(PROJBASE)/.lib/libNet.a \
+	$(PROJBASE)/.lib/libUtility.a \
     $(PROJBASE)/.lib/libConfig.a
 
 SHARED_LIB_DIR=

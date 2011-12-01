@@ -24,6 +24,14 @@ namespace Processor
         void start();
         void stop();
 
+		inline void addLocalTimer(
+                const unsigned theId, 
+                const struct timeval& theInterval, 
+                struct event* theEvent);
+		inline void cancelLocalTimer(
+                const unsigned theId, 
+                struct event*);
+
         int process(
                 const unsigned theId, 
                 void (*theFunc)());
@@ -72,6 +80,28 @@ namespace Processor
         static BoostProcessor* manProcessorM;
     };
 	
+        
+//-----------------------------------------------------------------------------
+
+		void BoostProcessor::addLocalTimer(
+                const unsigned theId, 
+                const struct timeval& theInterval, 
+                struct event* theEvent)
+        {
+            unsigned workerId = theId % threadCountM;
+            return workersM[workerId].addLocalTimer(theInterval, theEvent);
+        }
+        
+//-----------------------------------------------------------------------------
+
+		void BoostProcessor::cancelLocalTimer(
+                const unsigned theId, 
+                struct event* theEvent)
+        {
+            unsigned workerId = theId % threadCountM;
+            return workersM[workerId].cancelLocalTimer(theEvent);
+        }
+        
 //-----------------------------------------------------------------------------
 
 	template<typename ParamType1>
