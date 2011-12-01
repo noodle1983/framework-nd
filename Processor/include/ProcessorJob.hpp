@@ -3,6 +3,7 @@
 
 #include "ThreadSafeAllocator.hpp"
 #include "Singleton.hpp"
+#include "Log.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -17,6 +18,17 @@ namespace Processor
 		virtual void operator()() = 0;
 		virtual void returnToPool() = 0;
 	};
+
+	template<typename Type>
+	void finiObject(boost::shared_ptr<Type>& theObj)
+	{
+		theObj.reset();
+	}
+
+	template<typename Type>
+	inline void finiObject(Type theObj)
+	{}
+
 
 	class NullParamJob: public IJob
 	{
@@ -87,6 +99,7 @@ namespace Processor
 
 		virtual void returnToPool()
 		{
+			finiObject(paramM);
 			AllocatorSingleton::instance()->freeData(this);
 		}
 	public:
@@ -218,6 +231,7 @@ namespace Processor
 
 		virtual void returnToPool()
 		{
+			finiObject(param1M);
 			AllocatorSingleton::instance()->freeData(this);
 		}
 	public:
@@ -272,6 +286,8 @@ namespace Processor
 
 		virtual void returnToPool()
 		{
+			finiObject(param1M);
+			finiObject(param2M);
 			AllocatorSingleton::instance()->freeData(this);
 		}
 	public:
