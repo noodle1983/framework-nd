@@ -24,10 +24,10 @@ void sig_stop(int sig)
     closedCondM.notify_one();
 }
 
+const uint64_t TEST_TIMES = 1024 * 1024 * 40;
 class BatchDataProtocol: public Net::IClientProtocol
 {
 public:
-    enum{TEST_TIMES = 1024 * 512};
     BatchDataProtocol()
         : IClientProtocol(&netProcessorM)
         , proProcessorM(1)
@@ -107,9 +107,9 @@ public:
                 break;
             }
             //std::cout << "read len:" << len << std::endl;
-            for (unsigned i = 0; i < len; i++)
+            for (uint64_t i = 0; i < len; i++)
             {
-                unsigned offset = readIndexM + i;
+                uint64_t offset = readIndexM + i;
                 assert(unsigned(buffer[i]) == ('0' + offset/1024%10));
 
             }
@@ -154,8 +154,8 @@ private:
     Processor::BoostProcessor proProcessorM;
     Processor::BoostProcessor netProcessorM;
     Net::Client::TcpClient tcpClientM;
-    unsigned wBufferCountM;
-    unsigned readIndexM;
+    uint64_t wBufferCountM;
+    uint64_t readIndexM;
     char bufferM[10][1024];
     long long starttimeM;
 };
