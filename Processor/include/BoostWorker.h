@@ -44,6 +44,10 @@ namespace Processor
 		//integrate timer handling
 		min_heap_t timerHeapM;
 		struct timeval timeNowM;	
+
+#ifdef DEBUG
+		int64_t tidM;
+#endif
     };
 }
 

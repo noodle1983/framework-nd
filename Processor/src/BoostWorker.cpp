@@ -8,6 +8,12 @@ using namespace Processor;
 
 boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
 boost::thread_specific_ptr<unsigned> g_threadGroupIndex;
+
+#ifdef DEBUG
+#include <assert.h>
+#include <sys/syscall.h>
+#define gettid() syscall(__NR_gettid)
+#endif
 //-----------------------------------------------------------------------------
 BoostWorker::BoostWorker()
     : groupTotalM(0)
@@ -18,6 +24,9 @@ BoostWorker::BoostWorker()
     timeNowM.tv_sec = 0;
     timeNowM.tv_usec = 0;
 
+#ifdef DEBUG 
+    tidM = -1;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -61,6 +70,31 @@ void BoostWorker::addLocalTimer(
         const struct timeval& theInterval, 
         struct event* theEvent)
 {
+#ifdef DEBUG
+    extern boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
+    extern boost::thread_specific_ptr<unsigned> g_threadGroupIndex;
+    unsigned threadCount = *g_threadGroupTotal.get();
+    unsigned threadIndex = *g_threadGroupIndex.get();
+    if (threadIndex != groupIndexM || threadCount != threadCount)
+    {
+        LOG_FATAL("job is handled in wrong thread:" << threadIndex 
+                << ", count:" << threadCount
+                << ", worker's index:" << groupIndexM
+                << ", worker's groupCount:" << groupTotalM);
+        assert(false);
+    }
+    
+
+    if (-1 == tidM)
+    {
+        tidM = gettid();
+    }
+    else if (tidM != gettid())
+    {
+        LOG_FATAL("tid not match pre:" << tidM << "-now:" << gettid());
+        assert(false);
+    }
+#endif
     //if it is the first one, get the time of now
     //else reuse the one in run()
     if (min_heap_empty(&timerHeapM))
@@ -146,7 +180,7 @@ void BoostWorker::run()
         {
             queueCondM.timed_wait(lock, 
                     boost::posix_time::from_time_t(timeNowM.tv_sec) 
-                        + boost::posix_time::microseconds(timeNowM.tv_usec + 1000));
+                        + boost::posix_time::microseconds(timeNowM.tv_usec + 10));
         }
         else
         {
@@ -155,7 +189,7 @@ void BoostWorker::run()
                 evutil_gettimeofday(&timeNowM, NULL);
                 queueCondM.timed_wait(lock, 
                         boost::posix_time::from_time_t(timeNowM.tv_sec) 
-                            + boost::posix_time::microseconds(timeNowM.tv_usec + 1000));
+                            + boost::posix_time::microseconds(timeNowM.tv_usec + 10));
             }
         }
     }
