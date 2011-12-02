@@ -74,7 +74,8 @@ public:
 
     void send(int theFd, Net::Connection::SocketConnectionPtr theConnection)
     {
-        while (theConnection->isWBufferHealthy())
+		bool canWrite = true;
+        while ((canWrite = theConnection->isWBufferHealthy()))
         {
             char* buffer = bufferM[wBufferCountM%10];
             unsigned len = theConnection->sendn(buffer, 1024);
@@ -88,7 +89,7 @@ public:
                 }
             }
         }
-        if (!theConnection->isWBufferHealthy())
+        if (!canWrite)
         {
             theConnection->setLowWaterMarkWatcher(
                     new Net::Connection::Watcher(boost::bind(&BatchDataProtocol::asynSend, this, _1, _2)));

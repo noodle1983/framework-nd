@@ -285,12 +285,27 @@ int SocketConnection::asynWrite(int theFd, short theEvt)
 
 void SocketConnection::setLowWaterMarkWatcher(Watcher* theWatcher)
 {
-    boost::lock_guard<boost::mutex> lock(watcherMutexM);
-    if (watcherM)
+	//if it is already writable
+    Utility::BufferStatus bufferStatus = outputQueueM.getStatus();
+	if (bufferStatus == Utility::BufferLowE)
+	{
+		(*theWatcher)(fdM, selfM);
+		return;
+	}
+
+	//or set theWatcher and add the write event
+	{
+		boost::lock_guard<boost::mutex> lock(watcherMutexM);
+		if (watcherM)
+		{
+			delete watcherM;
+		}
+		watcherM = theWatcher;
+	}
+    if (CloseE != statusM)
     {
-        delete watcherM;
+        addWriteEvent();
     }
-    watcherM = theWatcher;
 }
 
 //-----------------------------------------------------------------------------

@@ -29,12 +29,13 @@ void EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
 {
     char buffer[1024];
     unsigned len = 1;
-    while (len > 0 && connection->isWBufferHealthy())
+	bool canWrite = true;
+    while (len > 0 && (canWrite = connection->isWBufferHealthy()))
     {
         len = connection->getInput(buffer, sizeof(buffer));
         connection->sendn(buffer, len);
     }
-    if (!connection->isWBufferHealthy())
+    if (!canWrite)
     {
         connection->setLowWaterMarkWatcher(new Net::Connection::Watcher(boost::bind(&EchoProtocol::asynHandleInput, this, _1, _2)));
     }
