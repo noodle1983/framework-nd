@@ -24,7 +24,7 @@ void sig_stop(int sig)
     closedCondM.notify_one();
 }
 
-const uint64_t TEST_TIMES = 1024 * 1024 * 40;
+const uint64_t TEST_TIMES = 1024 * 1024 * 1/2;
 class BatchDataProtocol: public Net::IClientProtocol
 {
 public:

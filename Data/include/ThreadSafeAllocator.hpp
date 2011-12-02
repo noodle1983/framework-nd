@@ -3,7 +3,6 @@
 
 #include "DataAllocator.hpp"
 
-#include <vector>
 #include <boost/thread.hpp>
 
 namespace Data 
@@ -12,37 +11,48 @@ namespace Data
     class ThreadSafeAllocator
     {
     public:        
+        enum{ALLOC_COUNT = 10};
+        typedef Allocator<DataType, batchCount/ALLOC_COUNT, boost::mutex, boost::mutex> AllocatorType;
+
         
         ThreadSafeAllocator()
         {}
         ~ThreadSafeAllocator()
         {}
 
-        DataType* newData()
+        DataType* newData(uint64_t theRandId)
         {
-            boost::lock_guard<boost::mutex> lock(allocatorMutexM);
-            return allocatorM.newData();
+            return allocatorM[theRandId%ALLOC_COUNT].newData();
         }
 
         void freeData(DataType* theData)
         {
-            boost::lock_guard<boost::mutex> lock(allocatorMutexM);
-            allocatorM.freeData(theData);
+            theData->allocatorM->freeData(theData);
         }
 
 		unsigned long long getSize()
 		{
-			return allocatorM.getSize();
+            unsigned long long size = 0;
+			for (int i = 0; i < ALLOC_COUNT; i++)
+            {
+                size += allocatorM[i].getSize();
+            }
+            return size;
 		}
 
 		unsigned long long getUsed()
 		{
-			return allocatorM.getUsed();
+            unsigned long long used = 0;
+			for (int i = 0; i < ALLOC_COUNT; i++)
+            {
+                used += allocatorM[i].getUsed();
+            }
+            return used;
 		}
     private:
-        Allocator<DataType, batchCount> allocatorM;
-        boost::mutex allocatorMutexM;
+        AllocatorType allocatorM[ALLOC_COUNT];
     };
+
 }
 #endif /* THREADSAFEALLOCATOR_HPP */
 

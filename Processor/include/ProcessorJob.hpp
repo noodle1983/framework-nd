@@ -34,7 +34,9 @@ namespace Processor
 	{
 	public:
 		typedef Data::ThreadSafeAllocator<NullParamJob, 100000> Allocator;
+        typedef Allocator::AllocatorType AllocatorType;
 		typedef DesignPattern::Singleton<Allocator> AllocatorSingleton;
+		typedef NullParamJob CacheData;
 		typedef void (*Func)();
 
 		NullParamJob(Func theFunc)
@@ -58,15 +60,18 @@ namespace Processor
 
 		virtual void returnToPool()
 		{
-			AllocatorSingleton::instance()->freeData(this);
+			allocatorM->freeData(this);
 		}
 
+    private:
+        Func funcM;
+
 	public:
-		union
-		{
-			Func funcM;
-			NullParamJob* nextFreeM;
-		};
+        union
+        {
+            AllocatorType* allocatorM; 
+            CacheData* nextFreeM;
+        };
 	};
 
 	template<typename Param>
@@ -74,7 +79,9 @@ namespace Processor
 	{
 	public:
 		typedef Data::ThreadSafeAllocator<OneParamJob, 100000> Allocator;
+        typedef typename Allocator::AllocatorType AllocatorType;
 		typedef DesignPattern::Singleton<Allocator> AllocatorSingleton;
+		typedef OneParamJob<Param> CacheData;
 		typedef void (*Func)(Param theParam);
 		OneParamJob(Func theFunc, Param theParam)
 			: funcM(theFunc)
@@ -100,15 +107,19 @@ namespace Processor
 		virtual void returnToPool()
 		{
 			finiObject(paramM);
-			AllocatorSingleton::instance()->freeData(this);
+			allocatorM->freeData(this);
 		}
-	public:
-		union
-		{
-			Func funcM;
-			OneParamJob* nextFreeM;
-		};
+
+	private:
+        Func funcM;
 		Param paramM;
+
+	public:
+        union
+        {
+            AllocatorType* allocatorM; 
+            CacheData* nextFreeM;
+        };
 	};
 
 
@@ -117,7 +128,9 @@ namespace Processor
 	{
 	public:
 		typedef Data::ThreadSafeAllocator<NullParamClassJob, 100000> Allocator;
+        typedef typename Allocator::AllocatorType AllocatorType;
 		typedef DesignPattern::Singleton<Allocator> AllocatorSingleton;
+        typedef NullParamClassJob<ClassType> CacheData;
 		typedef void (ClassType::*Func)();
 
 		NullParamClassJob(Func theFunc, ClassType*const theObj)
@@ -143,15 +156,17 @@ namespace Processor
 
 		virtual void returnToPool()
 		{
-			AllocatorSingleton::instance()->freeData(this);
+			allocatorM->freeData(this);
 		}
-	public:
+	private:
 		Func funcM;
-		union
-		{
-			ClassType* objM;
-			NullParamClassJob* nextFreeM;
-		};
+        ClassType* objM;
+	public:
+        union
+        {
+            AllocatorType* allocatorM; 
+            CacheData* nextFreeM;
+        };
 	};
 
 	template<typename ClassType>
@@ -159,7 +174,9 @@ namespace Processor
 	{
 	public:
 		typedef Data::ThreadSafeAllocator<NullParamClassEJob, 100000> Allocator;
+        typedef typename Allocator::AllocatorType AllocatorType;
 		typedef DesignPattern::Singleton<Allocator> AllocatorSingleton;
+        typedef NullParamClassEJob<ClassType> CacheData; 
         typedef boost::shared_ptr<ClassType> ClassPtr;
 		typedef void (ClassType::*Func)();
 
@@ -186,15 +203,17 @@ namespace Processor
 		virtual void returnToPool()
 		{
             objM.reset();
-			AllocatorSingleton::instance()->freeData(this);
+			allocatorM->freeData(this);
 		}
-	public:
-		union
-		{
-            Func funcM;
-			NullParamClassEJob* nextFreeM;
-		};
+	private:
+        Func funcM;
         ClassPtr objM;
+	public:
+        union
+        {
+            AllocatorType* allocatorM; 
+            CacheData* nextFreeM;
+        };
 	};
 
 
@@ -203,7 +222,9 @@ namespace Processor
 	{
 	public:
 		typedef Data::ThreadSafeAllocator<OneParamClassJob, 100000> Allocator;
+        typedef typename Allocator::AllocatorType AllocatorType;
 		typedef DesignPattern::Singleton<Allocator> AllocatorSingleton;
+        typedef OneParamClassJob<ClassType, ParamType1> CacheData;
 		typedef void (ClassType::*Func)(ParamType1);
 
 		OneParamClassJob(Func theFunc, ClassType*const theObj, ParamType1 theParam1)
@@ -232,16 +253,18 @@ namespace Processor
 		virtual void returnToPool()
 		{
 			finiObject(param1M);
-			AllocatorSingleton::instance()->freeData(this);
+			allocatorM->freeData(this);
 		}
-	public:
+    private:
 		Func funcM;
+        ClassType* objM;
+		ParamType1 param1M;
+	public:
 		union
 		{
-			ClassType* objM;
-			OneParamClassJob* nextFreeM;
+            AllocatorType* allocatorM; 
+            CacheData* nextFreeM;
 		};
-		ParamType1 param1M;
 	};
 
 	template<typename ClassType, typename ParamType1, typename ParamType2>
@@ -249,7 +272,9 @@ namespace Processor
 	{
 	public:
 		typedef Data::ThreadSafeAllocator<TwoParamClassJob, 100000> Allocator;
+        typedef typename Allocator::AllocatorType AllocatorType;
 		typedef DesignPattern::Singleton<Allocator> AllocatorSingleton;
+        typedef TwoParamClassJob<ClassType, ParamType1, ParamType2> CacheData;
 		typedef void (ClassType::*Func)(ParamType1, ParamType2);
 
 		TwoParamClassJob(
@@ -288,17 +313,19 @@ namespace Processor
 		{
 			finiObject(param1M);
 			finiObject(param2M);
-			AllocatorSingleton::instance()->freeData(this);
+			allocatorM->freeData(this);
 		}
-	public:
+	private:
 		Func funcM;
-		union
-		{
-			ClassType* objM;
-			TwoParamClassJob* nextFreeM;
-		};
+        ClassType* objM;
 		ParamType1 param1M;
 		ParamType2 param2M;
+	public:
+		union
+		{
+            AllocatorType* allocatorM; 
+            CacheData* nextFreeM;
+		};
 	};
 }
 #endif /* PROCESSORJOB_HPP */

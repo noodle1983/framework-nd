@@ -39,7 +39,7 @@ int main()
 {
 
 	{
-		NullParamJob* job = NullParamJob::AllocatorSingleton::instance()->newData();
+		NullParamJob* job = NullParamJob::AllocatorSingleton::instance()->newData(0);
 		cout << "pool used " << NullParamJob::AllocatorSingleton::instance()->getUsed() << endl;
 		job->init(sayHello);
 		IJob* job2 = job;
@@ -51,7 +51,7 @@ int main()
 		//OneParamJob<const char*> job(say, "say sth");
 		//job();
         typedef OneParamJob<const char*> StrJob;
-		StrJob* job = StrJob::AllocatorSingleton::instance()->newData();
+		StrJob* job = StrJob::AllocatorSingleton::instance()->newData(0);
 		cout << "pool used " << StrJob::AllocatorSingleton::instance()->getUsed() << endl;
 		job->init(say, "say sth");
 		IJob* job2 = job;
@@ -64,7 +64,7 @@ int main()
 		//NullParamClassJob<A> job(&A::sayHello, &a);
 		//job();
         typedef NullParamClassJob<A> ANullParamJob;
-		ANullParamJob* job = ANullParamJob::AllocatorSingleton::instance()->newData();
+		ANullParamJob* job = ANullParamJob::AllocatorSingleton::instance()->newData(0);
 		cout << "pool used " << ANullParamJob::AllocatorSingleton::instance()->getUsed() << endl;
 		job->init(&A::sayHello, &a);
 		IJob* job2 = job;
@@ -77,7 +77,7 @@ int main()
 		//OneParamClassJob<A, const char*> job(&A::say, &a, "something");
 		//job();
         typedef OneParamClassJob<A, const char*> AOneParamJob;
-		AOneParamJob* job = AOneParamJob::AllocatorSingleton::instance()->newData();
+		AOneParamJob* job = AOneParamJob::AllocatorSingleton::instance()->newData(0);
 		cout << "pool used " << AOneParamJob::AllocatorSingleton::instance()->getUsed() << endl;
 		job->init(&A::say, &a, "something");
 		IJob* job2 = job;
@@ -90,7 +90,7 @@ int main()
 		//TwoParamClassJob<A, const char*, const char*> job(&A::talk, &a, "something", " and something");
 		//job();
         typedef TwoParamClassJob<A, const char*, const char*> ATwoParamJob;
-		ATwoParamJob* job = ATwoParamJob::AllocatorSingleton::instance()->newData();
+		ATwoParamJob* job = ATwoParamJob::AllocatorSingleton::instance()->newData(0);
 		cout << "pool used " << ATwoParamJob::AllocatorSingleton::instance()->getUsed() << endl;
 		job->init(&A::talk, &a, "something", "sth");
 		IJob* job2 = job;

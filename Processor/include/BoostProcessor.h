@@ -111,7 +111,7 @@ namespace Processor
 			ParamType1 theParam)
 	{
 		OneParamJob<ParamType1>* job = 
-			OneParamJob<ParamType1>::AllocatorSingleton::instance()->newData();
+			OneParamJob<ParamType1>::AllocatorSingleton::instance()->newData(theId);
 		job->init(theFunc, theParam);
 
 		unsigned workerId = theId % threadCountM;
@@ -127,7 +127,7 @@ namespace Processor
             ClassType*const theObj)
     {
 		NullParamClassJob<ClassType>* job = 
-			NullParamClassJob<ClassType>::AllocatorSingleton::instance()->newData();
+			NullParamClassJob<ClassType>::AllocatorSingleton::instance()->newData(theId);
 		job->init(theFunc, theObj);
 
 		unsigned workerId = theId % threadCountM;
@@ -143,7 +143,7 @@ namespace Processor
             boost::shared_ptr<ClassType> theObj)
     {
 		NullParamClassEJob<ClassType>* job = 
-			NullParamClassEJob<ClassType>::AllocatorSingleton::instance()->newData();
+			NullParamClassEJob<ClassType>::AllocatorSingleton::instance()->newData(theId);
 		job->init(theFunc, theObj);
 
 		unsigned workerId = theId % threadCountM;
@@ -160,7 +160,7 @@ namespace Processor
             ParamType1 theParam)
     {
 		OneParamClassJob<ClassType, ParamType1>* job = 
-			OneParamClassJob<ClassType, ParamType1>::AllocatorSingleton::instance()->newData();
+			OneParamClassJob<ClassType, ParamType1>::AllocatorSingleton::instance()->newData(theId);
 		job->init(theFunc, theObj, theParam);
 
 		unsigned workerId = theId % threadCountM;
@@ -180,7 +180,7 @@ namespace Processor
             ParamType2 theParam2)
     {
 		TwoParamClassJob<ClassType, ParamType1, ParamType2>* job = 
-			TwoParamClassJob<ClassType, ParamType1, ParamType2>::AllocatorSingleton::instance()->newData();
+			TwoParamClassJob<ClassType, ParamType1, ParamType2>::AllocatorSingleton::instance()->newData(theId);
 		job->init(theFunc, theObj, theParam1, theParam2);
 
 		unsigned workerId = theId % threadCountM;

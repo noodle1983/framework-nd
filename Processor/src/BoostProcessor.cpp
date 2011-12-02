@@ -136,7 +136,7 @@ int BoostProcessor::process(
         void (*theFunc)())
 {
     NullParamJob* job = 
-        NullParamJob::AllocatorSingleton::instance()->newData();
+        NullParamJob::AllocatorSingleton::instance()->newData(theId);
     job->init(theFunc);
 
     unsigned workerId = theId % threadCountM;

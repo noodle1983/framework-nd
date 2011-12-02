@@ -180,7 +180,7 @@ void BoostWorker::run()
         {
             queueCondM.timed_wait(lock, 
                     boost::posix_time::from_time_t(timeNowM.tv_sec) 
-                        + boost::posix_time::microseconds(timeNowM.tv_usec + 10));
+                        + boost::posix_time::microseconds(timeNowM.tv_usec + 500));
         }
         else
         {
@@ -189,7 +189,7 @@ void BoostWorker::run()
                 evutil_gettimeofday(&timeNowM, NULL);
                 queueCondM.timed_wait(lock, 
                         boost::posix_time::from_time_t(timeNowM.tv_sec) 
-                            + boost::posix_time::microseconds(timeNowM.tv_usec + 10));
+                            + boost::posix_time::microseconds(timeNowM.tv_usec + 500));
             }
         }
     }
