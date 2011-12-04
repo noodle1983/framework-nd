@@ -95,9 +95,11 @@ void BoostWorker::addLocalTimer(
         assert(false);
     }
 #endif
+
+	bool timerHeapEmpty = false;
     //if it is the first one, get the time of now
     //else reuse the one in run()
-    if (min_heap_empty(&timerHeapM))
+    if ((timerHeapEmpty = min_heap_empty(&timerHeapM)))
     {
         evutil_gettimeofday(&timeNowM, NULL);
     }
@@ -117,6 +119,10 @@ void BoostWorker::addLocalTimer(
         LOG_FATAL("not enough memory!");
         exit(-1);
     }
+	if (timerHeapEmpty)
+	{
+        queueCondM.notify_one();
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -176,7 +182,11 @@ void BoostWorker::run()
             } 
         }
 
-        if (bufferJobQueueM.empty() && !min_heap_empty(&timerHeapM))
+		if (!bufferJobQueueM.empty())
+		{
+			continue;
+		}
+        else if (bufferJobQueueM.empty() && !min_heap_empty(&timerHeapM))
         {
             queueCondM.timed_wait(lock, 
                     boost::posix_time::from_time_t(timeNowM.tv_sec) 
@@ -184,12 +194,10 @@ void BoostWorker::run()
         }
         else
         {
+            boost::unique_lock<boost::mutex> queueLock(queueMutexM);
             while (bufferJobQueueM.empty() && min_heap_empty(&timerHeapM))
             {
-                evutil_gettimeofday(&timeNowM, NULL);
-                queueCondM.timed_wait(lock, 
-                        boost::posix_time::from_time_t(timeNowM.tv_sec) 
-                            + boost::posix_time::microseconds(timeNowM.tv_usec + 500));
+                queueCondM.wait(queueLock); 
             }
         }
     }
