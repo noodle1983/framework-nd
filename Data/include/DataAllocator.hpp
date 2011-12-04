@@ -24,9 +24,9 @@ public:
     class NullMutex
     {
     public:
-        void lock();
-        bool try_lock();
-        void unlock();
+        inline void lock(){}
+        inline bool try_lock(){return true;}
+        inline void unlock(){}
     };
 
     template<typename DataType, 
@@ -58,7 +58,7 @@ public:
 
         DataType* newData()
         {
-            boost::lock_guard<boost::mutex> lock(newMutexM);
+            boost::lock_guard<NewMutex> lock(newMutexM);
             newCounterM++;
             if (freeHeaderM != freeTailerM)
             {
@@ -91,7 +91,7 @@ public:
         void freeData(DataType* theData)
         {
             assert(theData->allocatorM == this);
-            boost::lock_guard<boost::mutex> lock(freeMutexM);
+            boost::lock_guard<FreeMutex> lock(freeMutexM);
             freeCounterM++;
             freeTailerM->nextFreeM = theData;
             freeTailerM = theData;

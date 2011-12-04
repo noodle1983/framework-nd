@@ -5,13 +5,18 @@ using namespace std;
 
 struct Test
 {
-    Test* nextFreeM;
+	typedef Data::Allocator<Test, 1000 * 1000> Allocator;
+	union
+	{
+		Allocator* allocatorM;
+		Test* nextFreeM;
+	};
     char reserve[1024];
 };
 
 int main()
 {
-    Data::Allocator<Test, 1000 * 1000> allocator;
+	Test::Allocator allocator;
     Test *t = allocator.newData();
     allocator.freeData(t);
     cout << "type any key to exit: " << endl;
