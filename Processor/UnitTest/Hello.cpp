@@ -47,7 +47,7 @@ int main()
     {
         closedCondM.wait(lock);
     }
-    processor.stop();
+    processor.waitStop();
     return 0;
 }
 

@@ -113,6 +113,29 @@ void BoostProcessor::start()
 
 //-----------------------------------------------------------------------------
 
+void BoostProcessor::waitStop()
+{
+    unsigned int i = 0;
+    while(true)
+    {
+        /* check the worker once only */
+        for (; i < threadCountM && workersM[i].isJobQueueEmpty(); i++)
+        {
+        }
+        if (i == threadCountM)
+        {
+            break;
+        }
+        else
+        {
+            usleep(1);
+        }
+    }
+    threadsM.interrupt_all();
+}
+
+//-----------------------------------------------------------------------------
+
 void BoostProcessor::stop()
 {
     threadsM.interrupt_all();

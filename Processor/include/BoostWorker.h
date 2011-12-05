@@ -24,6 +24,8 @@ namespace Processor
             groupIndexM = theIndex;
         }
 
+        inline bool isJobQueueEmpty()
+        {return bufferJobQueueM.empty();}
         void stop();
 
         int process(IJob* theJob);

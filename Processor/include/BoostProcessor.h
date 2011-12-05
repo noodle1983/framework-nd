@@ -22,6 +22,7 @@ namespace Processor
         static BoostProcessor* manInstance();
 
         void start();
+        void waitStop();
         void stop();
 
 		inline void addLocalTimer(
