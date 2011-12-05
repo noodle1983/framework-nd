@@ -67,6 +67,9 @@ void Session::init(
         Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
     }
     fsmTimeoutEvtM = NULL;
+#ifdef DEBUG 
+    tidM = -1;
+#endif
 }
 
 //-----------------------------------------------------------------------------
