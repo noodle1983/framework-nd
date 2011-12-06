@@ -9,7 +9,8 @@ SUBDIR=Connection \
 		Client \
         Reactor \
         Protocol \
-        Buffer
+        Buffer \
+        Pcap \
 
 #########################################
 #      header and lib dependancy        #
@@ -28,7 +29,7 @@ STATIC_LIB= \
     $(PROJBASE)/.lib/libUtility.a \
 
 SHARED_LIB_DIR=
-SHARED_LIB=-lrt
+SHARED_LIB=-lrt -lpcap
 
 include $(PROJBASE)/build/makefile.staticlib.configAndLog.linux
 include $(PROJBASE)/build/makefile.staticlib.libevent.linux
