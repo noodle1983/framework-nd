@@ -11,7 +11,8 @@ namespace Pcap
         Sniffer();
         ~Sniffer();
 
-        void setFielter();
+		void start();
+		void stop();
 
     private:
         pcap_t *m_pcapHandler;        /* Session handle */
