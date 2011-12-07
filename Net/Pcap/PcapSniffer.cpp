@@ -11,7 +11,7 @@ using namespace Config;
 
 Sniffer::Sniffer()
 	: pcapHandlerM(NULL)
-    , isToStop(false)
+    , isToStopM(false)
 {
 }
 
@@ -60,7 +60,8 @@ void Sniffer::start()
         exit(-1);
     }
 
-    isToStop = false;
+    isToStopM = false;
+	fileDumperM.init(pcapHandlerM);
     threadsM.create_thread(boost::bind(&Sniffer::sniffLoop, this));
 }
 
@@ -70,7 +71,7 @@ void Sniffer::stop()
 {
     if (pcapHandlerM)
     {
-        isToStop = true;
+        isToStopM = true;
         pcap_breakloop(pcapHandlerM);
         threadsM.interrupt_all();
         threadsM.join_all();
@@ -82,7 +83,7 @@ void Sniffer::stop()
 
 void Sniffer::sniffLoop()
 {
-    while(!isToStop)
+    while(!isToStopM)
     {
         pcap_loop(pcapHandlerM, 1024, handlePackage, (u_char*)this);
     }
@@ -91,7 +92,17 @@ void Sniffer::sniffLoop()
 
 //-----------------------------------------------------------------------------
 
-void Sniffer::handlePackage(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
+void Sniffer::handlePackage(u_char *args, const struct pcap_pkthdr *theHeader, const u_char *thePackage)
 {
     Sniffer* sniffer = (Sniffer*)args;   
+
+	struct pcap_pkthdr* headerCopy = new pcap_pkthdr;
+	*headerCopy = *theHeader;
+	boost::shared_ptr<struct pcap_pkthdr> newHeader(headerCopy);
+
+	u_char *pkgCopy = new u_char[theHeader->caplen];
+	memcpy(pkgCopy, thePackage, theHeader->caplen);
+	boost::shared_array<u_char> newPackage(pkgCopy);
+	
+	sniffer->fileDumperM.asynHandlePackage(newHeader, newPackage);
 }

@@ -3,6 +3,8 @@
 
 #include "BoostProcessor.h"
 #include <pcap.h>
+#include <boost/shared_ptr.hpp>
+#include <boost/shared_array.hpp>
 
 namespace Net
 {
@@ -18,11 +20,20 @@ namespace Pcap
 		void fini();
 		void reset(pcap_t* thePcapHandler);
 
-        void asynHandlePackage(const struct pcap_pkthdr *theHeader, const u_char *thePacket);
-        void handlePackage(const struct pcap_pkthdr *theHeader, const u_char *thePacket);
+        void asynHandlePackage(
+				boost::shared_ptr<struct pcap_pkthdr> theHeader, 
+				boost::shared_array<u_char> thePacket);
+
+		friend class BoostProcessor;
+		friend class BoostWorker;
 
 	private:
 		std::string getFileName();
+		void _init(pcap_t* thePcapHandler);
+		void _fini();
+        void handlePackage(
+				boost::shared_ptr<struct pcap_pkthdr> theHeader, 
+				boost::shared_array<u_char> thePacket);
 
     private:    
         Processor::BoostProcessor processorM;

@@ -1,6 +1,8 @@
 #ifndef SNIFFER_H
 #define SNIFFER_H
 
+#include "PcapFileDumper.h"
+
 #include <string>
 #include <boost/thread.hpp>
 #include <pcap.h>
@@ -29,7 +31,9 @@ namespace Pcap
         std::string filterExpM; /* The filter expression */
         boost::thread_group threadsM;
 		
-		bool isToStop; 
+		bool isToStopM; 
+
+		FileDumper fileDumperM;
     };
 }
 }

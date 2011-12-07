@@ -1,4 +1,5 @@
 #include "PcapFileDumper.h"
+#include "ConfigCenter.h"
 
 using namespace Net::Pcap;
 using namespace Config;
@@ -18,19 +19,27 @@ FileDumper::FileDumper()
 FileDumper::~FileDumper()
 {
 	fini();
+	processorM.waitStop();
 }
 
 //-----------------------------------------------------------------------------
 
 void FileDumper::init(pcap_t* thePcapHandler)
 {
-	pcapHandlerM(thePcapHandler);
+	processorM.process(0, &FileDumper::_init, this, thePcapHandler);
+}
+
+//-----------------------------------------------------------------------------
+
+void FileDumper::_init(pcap_t* thePcapHandler)
+{
+	pcapHandlerM = thePcapHandler;
 	if (pcapHandlerM)
 	{
 		std::string filename = getFileName();
 		if (pcapDumperM)
 		{
-			pcap_dump_close(myfile);
+			pcap_dump_close(pcapDumperM);
 			pcapDumperM = NULL;
 		}
 		pcapDumperM = pcap_dump_open(pcapHandlerM, filename.c_str());
@@ -41,12 +50,18 @@ void FileDumper::init(pcap_t* thePcapHandler)
 
 void FileDumper::fini()
 {
+	processorM.process(0, &FileDumper::_fini, this);
+}
+
+//-----------------------------------------------------------------------------
+
+void FileDumper::_fini()
+{
 	if (pcapDumperM)
 	{
-		pcap_dump_close(myfile);
+		pcap_dump_close(pcapDumperM);
 		pcapDumperM = NULL;
 	}
-
 }
 
 //-----------------------------------------------------------------------------
@@ -58,16 +73,27 @@ void FileDumper::reset(pcap_t* thePcapHandler)
 
 //-----------------------------------------------------------------------------
 
-void FileDumper::asynHandlePackage(const struct pcap_pkthdr *theHeader, const u_char *thePacket)
+void FileDumper::asynHandlePackage(
+				boost::shared_ptr<struct pcap_pkthdr> theHeader, 
+				boost::shared_array<u_char> thePacket)
 {
-
+	processorM.process(0, &FileDumper::handlePackage, this, theHeader, thePacket);
 }
 
 //-----------------------------------------------------------------------------
 
-void FileDumper::handlePackage(const struct pcap_pkthdr *theHeader, const u_char *thePacket)
+void FileDumper::handlePackage(
+				boost::shared_ptr<struct pcap_pkthdr> theHeader, 
+				boost::shared_array<u_char> thePacket)
 {
-
+	if (pcapDumperM)
+	{
+		pcap_dump((u_char*)pcapDumperM, theHeader.get(), thePacket.get());
+	}
+	else
+	{
+		LOG_WARN("drop a package");
+	}
 }
 
 //-----------------------------------------------------------------------------
