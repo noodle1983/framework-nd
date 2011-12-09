@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <utility>
 
+#include <iostream>
+
 using namespace std;
 
 enum ParseState
@@ -23,7 +25,7 @@ int main ()
     string input = "User-Agent: Firfox\r\n";
     std::pair<ParseState, string> keyPair = make_pair(USER_AGENT, "User-Agent:"); 
 
-	RulesTable2<unsigned char, int, int> rulesTable;
+	RulesTable2<char, int, int> rulesTable;
     rulesTable.setDefaultRule(IGNORE_LINE);
 
     map<string, int> subStates;
@@ -32,7 +34,7 @@ int main ()
     string key = keyPair.second;
     int preState = NONE;
     int curState = NONE;
-    for (int i = 1; i < key.length(); i++) 
+    for (unsigned i = 1; i < key.length(); i++) 
     {
         string preStr = key.substr(0, i);
         map<string, int>::iterator it = subStates.find(preStr);
@@ -42,24 +44,24 @@ int main ()
         }
         else
         {
-            subStates[preState] = nextSubState;
+            subStates[preStr] = nextSubState;
             curState = nextSubState;
             nextSubState--;
         }
-        rulesTable[key[i-1]][preState] = curState;
-        preState = curState
+        rulesTable.setRule(key.at(i-1), preState, curState);
+        preState = curState;
     }
-    rulesTable[key[key.length()-1]][preState] = keyPair.first;
+    rulesTable.setRule(key.at(key.length()-1), preState, keyPair.first);
 
 
     {
         int state = NONE;
 		int saveStart = -1;
 		int keyId = NONE;
-        for (int i = 0; i < input.lengty(); i++)
+        for (unsigned i = 0; i < input.length(); i++)
         {
             char ch = input[i];
-			if ('0x0A' == ch)
+			if ('\n' == ch)
 			{
 				state = NONE;
 				saveStart = -1;
@@ -72,15 +74,15 @@ int main ()
             }
 			if (SAVE_TO_END == state)
 			{
-				if (' ' == ch && saveStart == (i - 1))
+				if (' ' == ch && saveStart == (int)(i - 1))
 				{
 					saveStart = i;
 					continue;
 				}
-                else if ('0x0D' == ch)
+                else if ('\r' == ch)
                 {
 					assert(saveStart != -1);
-					cout << "key id:" << keyId << ", out:" << input.substr(saveStart, i - saveStart);
+					std::cout << "key id:" << keyId << ", out:" << input.substr(saveStart, i - saveStart);
 					state = IGNORE_LINE;
                     continue;
                 }
@@ -92,7 +94,7 @@ int main ()
 			}
 			if (SAVE_TO_BLANK == state)
 			{
-				if (' ' == ch && saveStart == (i - 1))
+				if (' ' == ch && saveStart == (int)(i - 1))
 				{
 					saveStart = i;
 					continue;
@@ -100,7 +102,7 @@ int main ()
 				else if (' ' == ch)
 				{
 					assert(saveStart != -1);
-					cout << "key id:" << keyId << ", out:" << input.substr(saveStart, i - saveStart);
+					std::cout << "key id:" << keyId << ", out:" << input.substr(saveStart, i - saveStart);
 					state = IGNORE_LINE;
                     continue;
 				}
@@ -110,7 +112,7 @@ int main ()
 				}
 			}
 
-			state = subStates.getRule(ch, state);
+			state = rulesTable.getRule(ch, state);
 			if (USER_AGENT == state)
 			{
 				keyId = USER_AGENT;
