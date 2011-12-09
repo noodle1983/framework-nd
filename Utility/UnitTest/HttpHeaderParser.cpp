@@ -1,6 +1,7 @@
 #include "RulesTable.hpp"
 #include <string>
 #include <map>
+#include <vector>
 #include <assert.h>
 #include <utility>
 
@@ -10,14 +11,17 @@ using namespace std;
 
 enum ParseState
 {
-    NONE = 0,
-    USER_AGENT,
+    PARSE_STATE_NONE = 0,
+    PARSE_STATE_METHOD_GET,
+    PARSE_STATE_METHOD_POST,
+    PARSE_STATE_HOST,
+    PARSE_STATE_USER_AGENT,
 
 	//special purpose
-    IGNORE_LINE,
-	SAVE_TO_END,
-	SAVE_TO_BLANK,
-    STATE_CNT
+    PARSE_STATE_IGNORE_LINE,
+	PARSE_STATE_SAVE_TO_END,
+	PARSE_STATE_SAVE_TO_BLANK,
+    PARSE_STATE_STATE_CNT
 };
 
 int main ()
@@ -50,56 +54,65 @@ int main ()
         "Connection: close\r\n"
         ;
 
-    std::pair<ParseState, string> keyPair = make_pair(USER_AGENT, "User-Agent:"); 
+    typedef std::pair<ParseState, string> HttpHeaderDef;
+    typedef std::vector< HttpHeaderDef > HttpHeaderDefs;
+    HttpHeaderDefs httpHeaderDefs;
+    httpHeaderDefs.push_back(make_pair(PARSE_STATE_USER_AGENT, "User-Agent:")); 
+    httpHeaderDefs.push_back(make_pair(PARSE_STATE_METHOD_GET, "GET ")); 
+    httpHeaderDefs.push_back(make_pair(PARSE_STATE_METHOD_POST, "POST ")); 
 
 	RulesTable2<char, int, int> rulesTable;
-    rulesTable.setDefaultRule(IGNORE_LINE);
+    rulesTable.setDefaultRule(PARSE_STATE_IGNORE_LINE);
 
     map<string, int> subStates;
     int nextSubState = -1;
 
-    string key = keyPair.second;
-    int preState = NONE;
-    int curState = NONE;
-    for (unsigned i = 1; i < key.length(); i++) 
+    HttpHeaderDefs::iterator it = httpHeaderDefs.begin();
+    for (; it != httpHeaderDefs.end(); it++)
     {
-        string preStr = key.substr(0, i);
-        map<string, int>::iterator it = subStates.find(preStr);
-        if (it != subStates.end())
+        string key = it->second;
+        int preState = PARSE_STATE_NONE;
+        int curState = PARSE_STATE_NONE;
+        for (unsigned i = 1; i < key.length(); i++) 
         {
-            curState = it->second;            
+            string preStr = key.substr(0, i);
+            map<string, int>::iterator it = subStates.find(preStr);
+            if (it != subStates.end())
+            {
+                curState = it->second;            
+            }
+            else
+            {
+                subStates[preStr] = nextSubState;
+                curState = nextSubState;
+                nextSubState--;
+            }
+            rulesTable.setRule(key.at(i-1), preState, curState);
+            preState = curState;
         }
-        else
-        {
-            subStates[preStr] = nextSubState;
-            curState = nextSubState;
-            nextSubState--;
-        }
-        rulesTable.setRule(key.at(i-1), preState, curState);
-        preState = curState;
+        rulesTable.setRule(key.at(key.length()-1), preState, it->first);
     }
-    rulesTable.setRule(key.at(key.length()-1), preState, keyPair.first);
 
 
     {
-        int state = NONE;
+        int state = PARSE_STATE_NONE;
 		int saveStart = -1;
-		int keyId = NONE;
+		int keyId = PARSE_STATE_NONE;
         for (unsigned i = 0; i < input.length(); i++)
         {
             char ch = input[i];
 			if ('\n' == ch)
 			{
-				state = NONE;
+				state = PARSE_STATE_NONE;
 				saveStart = -1;
 				continue;
 			}
 
-            if (IGNORE_LINE == state) 
+            if (PARSE_STATE_IGNORE_LINE == state) 
             {
 				continue;
             }
-			if (SAVE_TO_END == state)
+			if (PARSE_STATE_SAVE_TO_END == state)
 			{
 				if (' ' == ch && saveStart == (int)i)
 				{
@@ -109,8 +122,8 @@ int main ()
                 else if ('\r' == ch)
                 {
 					assert(saveStart != -1);
-					std::cout << "key id:" << keyId << ", out:" << input.substr(saveStart, i - saveStart);
-					state = IGNORE_LINE;
+					std::cout << "key id:" << keyId << ", out:" << input.substr(saveStart, i - saveStart) << endl;
+					state = PARSE_STATE_IGNORE_LINE;
                     continue;
                 }
                 else
@@ -119,7 +132,7 @@ int main ()
                 }
 
 			}
-			if (SAVE_TO_BLANK == state)
+			if (PARSE_STATE_SAVE_TO_BLANK == state)
 			{
 				if (' ' == ch && saveStart == (int)i)
 				{
@@ -129,8 +142,8 @@ int main ()
 				else if (' ' == ch)
 				{
 					assert(saveStart != -1);
-					std::cout << "key id:" << keyId << ", out:" << input.substr(saveStart, i - saveStart);
-					state = IGNORE_LINE;
+					std::cout << "key id:" << keyId << ", out:" << input.substr(saveStart, i - saveStart) << endl;
+					state = PARSE_STATE_IGNORE_LINE;
                     continue;
 				}
 				else
@@ -140,13 +153,20 @@ int main ()
 			}
 
 			state = rulesTable.getRule(ch, state);
-			if (USER_AGENT == state)
+			if (PARSE_STATE_USER_AGENT == state)
 			{
-				keyId = USER_AGENT;
-				state = SAVE_TO_END;
+				keyId = PARSE_STATE_USER_AGENT;
+				state = PARSE_STATE_SAVE_TO_END;
 				saveStart = i + 1;
 				continue;
 			}
+            else if (PARSE_STATE_METHOD_GET == state)
+            {
+                keyId = PARSE_STATE_METHOD_GET;
+                state = PARSE_STATE_SAVE_TO_BLANK;
+				saveStart = i + 1;
+				continue;
+            }
 
         }
     }
