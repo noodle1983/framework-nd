@@ -13,9 +13,10 @@
 
 #include<map>
 #include<sstream>
+using namespace std;
 
 #ifndef MAX_RULES_TABLE_PARAMS
-#define MAX_RULES_TABLE_PARAMS 3 
+#define MAX_RULES_TABLE_PARAMS 10 
 #endif
 
 enum RulesTableReturn
@@ -57,26 +58,27 @@ public:
 		return _value;
 	}
 
-	static void toDefaultString(std::ostringstream& os, int nTab, Value* value)
+	static void toDefaultString(ostringstream& os, int nTab, Value* value)
 	{
 		os << "=>\t";
 		if (NULL != value)
 		{
 			os << *value ;
 		}
-		os << std::endl;
+		os << endl;
 	}
-	void toString(std::ostringstream& os, int nTab, Value* value)
+	void toString(ostringstream& os, int nTab, Value* value)
 	{
-		os << "=>\t" << _value << std::endl;
+		os << "=>\t" << _value << endl;
 	}
 
 	template <typename StreamType>
-	StreamType & operator << (StreamType& os)
+	friend StreamType & operator << (StreamType& os, RulesTable0<Value>& rulesTable)
 	{
-		os << this._value; 
+		os << rulesTable._value; 
 		return os;
 	}
+
 private:
 	Value _value;
 };
@@ -106,14 +108,14 @@ typedef BOOST_PP_CAT(RulesTable, BOOST_PP_DEC(n))<BOOST_PP_ENUM_SHIFTED_PARAMS(n
 	{}\
 \
 	template <typename StreamType> \
-	StreamType & operator << (StreamType& os) \
+	friend StreamType & operator << (StreamType& os, BOOST_PP_CAT(RulesTable, n)<BOOST_PP_ENUM_PARAMS(n, Key), Value>& rulesTable)\
 	{\
-		std::ostringstream ostr;\
-		this->toString(ostr, 0, NULL);\
+		ostringstream ostr;\
+		rulesTable.toString(ostr, 0, NULL);\
 		os << ostr.str();\
 		return  os;\
 	}\
-	void toString(std::ostringstream& os, int nTab, Value* value)\
+	void toString(ostringstream& os, int nTab, Value* value)\
 	{\
 		if (NULL != value) \
 		{\
@@ -121,8 +123,8 @@ typedef BOOST_PP_CAT(RulesTable, BOOST_PP_DEC(n))<BOOST_PP_ENUM_SHIFTED_PARAMS(n
 			return;\
 		}\
 		int first = 1;\
-		typename std::map<Key0, SUB_MAP_TYPE>::iterator it = _rules.begin();\
-		typename std::map<Key0, SUB_MAP_TYPE>::iterator end = _rules.end();\
+		typename map<Key0, SUB_MAP_TYPE>::iterator it = _rules.begin();\
+		typename map<Key0, SUB_MAP_TYPE>::iterator end = _rules.end();\
 		for(;it != end; it++) \
 		{\
 			if (!first)\
@@ -142,7 +144,7 @@ typedef BOOST_PP_CAT(RulesTable, BOOST_PP_DEC(n))<BOOST_PP_ENUM_SHIFTED_PARAMS(n
 			toDefaultString(os, nTab, &_value);\
 		}\
 	}\
-	static void toDefaultString(std::ostringstream& os, int nTab, Value* value)\
+	static void toDefaultString(ostringstream& os, int nTab, Value* value)\
 	{\
 		os << "[N/A]\t";\
 		SUB_MAP_TYPE::toDefaultString(os, nTab + 1, value);\
@@ -158,7 +160,7 @@ BOOST_PP_REPEAT(n,DECL_SET_DEFAULT_VALUE, ~)\
 	int getRule(BOOST_PP_ENUM_BINARY_PARAMS(n, const Key, &key), Value& value)\
 	{\
 		int ret = RULES_TABLE_NOT_FOUND; \
-		typename std::map<Key0, SUB_MAP_TYPE>::iterator lb = _rules.lower_bound(key0); \
+		typename map<Key0, SUB_MAP_TYPE>::iterator lb = _rules.lower_bound(key0); \
 		if (lb != _rules.end()\
 				&& key0 == lb->first)\
 		{\
@@ -184,11 +186,10 @@ BOOST_PP_REPEAT(n,DECL_SET_DEFAULT_VALUE, ~)\
 \
 	SUB_MAP_TYPE& operator[] (const Key0& key0) {return _rules[key0];} \
 private:\
-	std::map<Key0, SUB_MAP_TYPE> _rules; \
+	map<Key0, SUB_MAP_TYPE> _rules; \
 	Value _value; \
 	int   _status; \
 }; \
-
 
 BOOST_PP_REPEAT_FROM_TO(1, MAX_RULES_TABLE_PARAMS, DECL_RULES_TABLE, ~)
 //#define BOOST_PP_LOCAL_MACRO (n) DECL_RULES_TABLE(~, n, ~)
