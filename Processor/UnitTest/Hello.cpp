@@ -19,19 +19,16 @@ void sig_stop(int sig)
 void on_timeout(int theFd, short theEvt, void *theArg)
 {
     LOG_WARN("time end");
-    delete (struct event*) theArg;
     sig_stop(2);
 }
 
 void say(Processor::BoostProcessor* theProcessor)
 {
     std::cout << "Hello, I will exit after 1 second" << std::endl;
-    struct event* timeoutEvt = event_new(NULL, -1, EV_PERSIST, on_timeout, NULL);
-    timeoutEvt->ev_arg = timeoutEvt;
     struct timeval tv;
     tv.tv_sec = 1;
     tv.tv_usec = 0;
-    theProcessor->addLocalTimer(1, tv, timeoutEvt);
+    theProcessor->addLocalTimer(1, tv, on_timeout, NULL);
     LOG_WARN("time begin");
 
 }

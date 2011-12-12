@@ -19,6 +19,7 @@ BoostWorker::BoostWorker()
     : groupTotalM(0)
     , groupIndexM(-1)
     , bufferJobQueueM(24) //2M jobs Max
+	, eventPoolM(1000)
 {
     min_heap_ctor(&timerHeapM);	
     timeNowM.tv_sec = 0;
@@ -66,9 +67,10 @@ int BoostWorker::process(IJob* theJob)
 
 //-----------------------------------------------------------------------------
 
-void BoostWorker::addLocalTimer(
+struct event* BoostWorker::addLocalTimer(
         const struct timeval& theInterval, 
-        struct event* theEvent)
+		event_callback_fn theCallback,
+		void* theArg)
 {
 #ifdef DEBUG
     extern boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
@@ -108,13 +110,14 @@ void BoostWorker::addLocalTimer(
         min_heap_reserve(&timerHeapM, 1000000);
     }
 
-    theEvent->ev_timeout.tv_usec = timeNowM.tv_usec + theInterval.tv_usec;
-    theEvent->ev_timeout.tv_sec = timeNowM.tv_sec 
+	struct event* timeoutEvt = eventPoolM.newEvent(NULL, -1, 0, theCallback, theArg);
+    timeoutEvt->ev_timeout.tv_usec = timeNowM.tv_usec + theInterval.tv_usec;
+    timeoutEvt->ev_timeout.tv_sec = timeNowM.tv_sec 
         + theInterval.tv_sec 
-        + theEvent->ev_timeout.tv_usec/1000000;
-    theEvent->ev_timeout.tv_usec %= 1000000;
+        + timeoutEvt->ev_timeout.tv_usec/1000000;
+    timeoutEvt->ev_timeout.tv_usec %= 1000000;
 
-    if (-1 == min_heap_push(&timerHeapM, theEvent))
+    if (-1 == min_heap_push(&timerHeapM, timeoutEvt))
     {
         LOG_FATAL("not enough memory!");
         exit(-1);
@@ -123,13 +126,16 @@ void BoostWorker::addLocalTimer(
 	{
         queueCondM.notify_one();
 	}
+	return timeoutEvt;
 }
 
 //-----------------------------------------------------------------------------
 
-void BoostWorker::cancelLocalTimer(struct event* theEvent)
+void BoostWorker::cancelLocalTimer(struct event*& theEvent)
 {
     min_heap_erase(&timerHeapM, theEvent);
+	eventPoolM.freeEvent(theEvent);
+	theEvent = NULL;
 }
 
 
@@ -174,6 +180,7 @@ void BoostWorker::run()
                 {
                     (topEvent->ev_callback)(-1, 0, topEvent->ev_arg);
                     min_heap_pop(&timerHeapM);
+					eventPoolM.freeEvent(topEvent);
                 }
                 else
                 {

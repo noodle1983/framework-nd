@@ -3,6 +3,7 @@
 
 #include "ProcessorJob.hpp"
 #include "KfifoBuffer.h"
+#include "EventPool.hpp"
 
 #include <boost/function.hpp>
 #include <boost/thread.hpp>
@@ -29,8 +30,11 @@ namespace Processor
         void stop();
 
         int process(IJob* theJob);
-		void addLocalTimer(const struct timeval& theInterval, struct event* theEvent);
-		void cancelLocalTimer(struct event*);
+		struct event* addLocalTimer(
+				const struct timeval& theInterval, 
+				event_callback_fn theCallback,
+				void* theArg);
+		void cancelLocalTimer(struct event*& theEvent);
 
         void run();
     private:
@@ -44,6 +48,7 @@ namespace Processor
         boost::condition_variable queueCondM;
 
 		//integrate timer handling
+		Data::EventPool eventPoolM;
 		min_heap_t timerHeapM;
 		struct timeval timeNowM;	
 
