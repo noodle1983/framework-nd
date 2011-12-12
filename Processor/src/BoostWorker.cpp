@@ -20,6 +20,7 @@ BoostWorker::BoostWorker()
     , groupIndexM(-1)
     , bufferJobQueueM(24) //2M jobs Max
 	, eventPoolM(1000)
+    , isToStopM(false)
 {
     min_heap_ctor(&timerHeapM);	
     timeNowM.tv_sec = 0;
@@ -41,7 +42,7 @@ BoostWorker::~BoostWorker()
 
 void BoostWorker::stop()
 {
-
+    isToStopM = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -147,7 +148,7 @@ void BoostWorker::run()
     g_threadGroupIndex.reset(new unsigned(groupIndexM));
     IJob* job;
     boost::unique_lock<boost::mutex> lock(nullMutexM);
-    while (true)
+    while (!isToStopM)
     {
         /*
         {

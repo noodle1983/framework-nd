@@ -138,6 +138,10 @@ void BoostProcessor::waitStop()
 
 void BoostProcessor::stop()
 {
+    for (unsigned i = 0; i < threadCountM; i++)
+    {
+        workersM[i].stop();
+    }
     threadsM.interrupt_all();
     threadsM.join_all();
 }

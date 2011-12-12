@@ -52,6 +52,7 @@ namespace Processor
 		min_heap_t timerHeapM;
 		struct timeval timeNowM;	
 
+        mutable bool isToStopM;
 #ifdef DEBUG
 		int64_t tidM;
 #endif
