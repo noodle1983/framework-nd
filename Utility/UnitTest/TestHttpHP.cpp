@@ -22,7 +22,6 @@ int main ()
         "Accept-Encoding: gzip,deflate,sdch\r\n"
         "Accept-Language: zh-CN,zh;q=0.8\r\n"
         "Accept-Charset: GBK,utf-8;q=0.7,*;q=0.3\r\n"
-        "Cookie: U_TRS1=00000034.1eb51011.4e802baa.3ee7a4d7; UOR=www.google.se,tech,; vjuids=-6d518a352.132a8b4272e.0.29523f79; SINAGLOBAL=b73e094c.b80c56c4.4e813499.3a23ae1b; ALLYESID4=00110927124248568603354; mvsign=v%3D2K%5E-dqb%3D0xCCO%3AN%27n6Mm; user_survey=-1; SGUP=0; U_TRS2=000000d3.b986704c.4edec157.79d78b9a; SinaRot//=83; tblogt=0; Apache=000000d3.458528a1.4edef248.f8e543e4; ULV=1323233746111:75:7:4:000000d3.458528a1.4edef248.f8e543e4:1323145903192; StreamMediaCookiehttp://mil.news.sina.com.cn/=1; vjlast=1323233748.1323234260.10; _s_upa=18\r\n"
         "If-Modified-Since: Wed, 07 Dec 2011 04:54:59 GMT\r\n"
         "\r\n"
         ;
@@ -43,6 +42,7 @@ int main ()
         "Connection: close\r\n"
         "\r\n"
         ;
+        //"Cookie: U_TRS1=00000034.1eb51011.4e802baa.3ee7a4d7; UOR=www.google.se,tech,; vjuids=-6d518a352.132a8b4272e.0.29523f79; SINAGLOBAL=b73e094c.b80c56c4.4e813499.3a23ae1b; ALLYESID4=00110927124248568603354; mvsign=v%3D2K%5E-dqb%3D0xCCO%3AN%27n6Mm; user_survey=-1; SGUP=0; U_TRS2=000000d3.b986704c.4edec157.79d78b9a; SinaRot//=83; tblogt=0; Apache=000000d3.458528a1.4edef248.f8e543e4; ULV=1323233746111:75:7:4:000000d3.458528a1.4edef248.f8e543e4:1323145903192; StreamMediaCookiehttp://mil.news.sina.com.cn/=1; vjlast=1323233748.1323234260.10; _s_upa=18\r\n"
     HttpHeaderParser parser;
     HttpHeader header;
     unsigned long long i = 100 * 10000;
