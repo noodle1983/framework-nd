@@ -11,6 +11,7 @@ using namespace Config;
 
 Sniffer::Sniffer()
 	: pcapHandlerM(NULL)
+    , isInPromiscuousModeM(0)
     , isToStopM(false)
 {
 }
@@ -34,6 +35,7 @@ void Sniffer::start()
     //std::string filterExpM; /* The filter expression */
     devNameM = ConfigCenter::instance()->get("pcap.dev", "eth0");
     filterExpM = ConfigCenter::instance()->get("pcap.filter", "tcp port 22");
+    isInPromiscuousModeM = ConfigCenter::instance()->get("pcap.promiscuous", 0);
 
     if (pcap_lookupnet(devNameM.c_str(), &net, &mask, errbuf) == -1) 
     {
@@ -42,7 +44,7 @@ void Sniffer::start()
         mask = 0;
     }
 
-    pcapHandlerM = pcap_open_live(devNameM.c_str(), BUFSIZ, 0, 1000, errbuf);
+    pcapHandlerM = pcap_open_live(devNameM.c_str(), BUFSIZ, isInPromiscuousModeM, 1000, errbuf);
     if (pcapHandlerM == NULL) 
     {
         LOG_FATAL("Couldn't open device " << devNameM << ":" << errbuf);

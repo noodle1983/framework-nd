@@ -29,6 +29,7 @@ namespace Pcap
         pcap_t *pcapHandlerM;        /* Session handle */
         std::string devNameM;               /* Device to sniff on */
         std::string filterExpM; /* The filter expression */
+        int isInPromiscuousModeM;
         boost::thread_group threadsM;
 		
 		bool isToStopM; 

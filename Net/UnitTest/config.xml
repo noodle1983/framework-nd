@@ -1,5 +1,33 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <Configuration>
+    <Group name="Pcap Group">
+		<Parameter name="Pcap Device" id="pcap.dev">
+            <Description>specify the network device which pcap should listen to</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>em1</DefaultValue>
+			<Value>em1</Value>
+		</Parameter>
+		<Parameter name="Pcap Filter" id="pcap.filter">
+            <Description>specify the package filter</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>udp or sctp</DefaultValue>
+			<Value>udp or sctp</Value>
+		</Parameter>
+		<Parameter name="Pcap Promiscuous Mode" id="pcap.promiscuous">
+            <Description>specify if the pcap works on promiscuous mode. 0:no; 1:yes</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>0-1</ValueRange>
+			<DefaultValue>0</DefaultValue>
+			<Value>0</Value>
+		</Parameter>
+		<Parameter name="Pcap File's Directory and the prefix" id="pcap.file.pre">
+            <Description>specify the dumped file's directory and the prefix.</Description>
+			<ValueType>String</ValueType>
+            <DefaultValue>./Test_</DefaultValue>
+            <Value>./Test_</Value>
+		</Parameter>
+	</Group>
+
     <Group name="Echo Client Protocol Group">
 		<Parameter name="Echo protocol Peer Address" id="echo.c.addr">
             <Description>specify the address which the protocol will connect to</Description>
