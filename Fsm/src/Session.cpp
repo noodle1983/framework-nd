@@ -189,24 +189,13 @@ State& Session::toNextState(const int theNextStateId)
 
 void onFsmTimeOut(int theFd, short theEvt, void *theArg)
 {
-    TimerPair* timerPair = (TimerPair*) theArg;
-    Session* session = timerPair->first;
-    int timerId = timerPair->second;
-    session->asynHandleTimeout(timerId);
-    // the timerPair will be deleted in the fsm's thread
-    //delete timerPair;
-}
-//-----------------------------------------------------------------------------
-
-void Session::asynHandleTimeout(const unsigned char theTimerId)
-{
-    Processor::BoostProcessor::fsmInstance()->process(sessionIdM,
-        &Session::handleTimeout, this, theTimerId);
+    Session* session = (Session*)theArg;
+    session->handleTimeout();
 }
 
 //-----------------------------------------------------------------------------
 
-void Session::handleTimeout(const unsigned char theTimerId)
+void Session::handleTimeout()
 {
 #ifdef DEBUG
     extern boost::thread_specific_ptr<unsigned> g_threadGroupTotal;
@@ -232,14 +221,8 @@ void Session::handleTimeout(const unsigned char theTimerId)
         assert(false);
     }
 #endif
-    if (fsmTimeoutEvtM && theTimerId == timerIdM)
-    {
-        //otherwise it is another timer and the previous one is freed already
-        TimerPair* timePair = (TimerPair*)event_get_callback_arg(fsmTimeoutEvtM);
-        Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
-        delete timePair;
-        handleEvent(TIMEOUT_EVT);
-    }
+    fsmTimeoutEvtM = NULL; 
+    handleEvent(TIMEOUT_EVT);
 }
 
 //-----------------------------------------------------------------------------
@@ -248,17 +231,13 @@ void Session::newTimer(const long long theUsec)
 {
     if (fsmTimeoutEvtM)
     {
-        TimerPair* timePair = (TimerPair*)event_get_callback_arg(fsmTimeoutEvtM);
-        Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
-        delete timePair;
+        cancelTimer();
     }
-    timerIdM++;
-    TimerPair* timerPair = new TimerPair(this, timerIdM);
-    fsmTimeoutEvtM = Net::Reactor::Reactor::instance()->newTimer(onFsmTimeOut, timerPair);
     struct timeval tv;
     tv.tv_sec = theUsec/1000000;
     tv.tv_usec = theUsec%1000000;
-    event_add(fsmTimeoutEvtM, &tv);
+    fsmTimeoutEvtM = Processor::BoostProcessor::fsmInstance()->addLocalTimer(
+                sessionIdM, tv, onFsmTimeOut, (void*)this);
 }
 
 //-----------------------------------------------------------------------------
@@ -267,9 +246,9 @@ void Session::cancelTimer()
 {
     if (fsmTimeoutEvtM)
     {
-        TimerPair* timePair = (TimerPair*)event_get_callback_arg(fsmTimeoutEvtM);
-        Net::Reactor::Reactor::instance()->delEvent(fsmTimeoutEvtM);
-        delete timePair;
+        Processor::BoostProcessor::fsmInstance()->cancelLocalTimer(
+                sessionIdM, fsmTimeoutEvtM);
+        fsmTimeoutEvtM = NULL;
     }
 }
 

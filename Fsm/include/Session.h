@@ -32,8 +32,7 @@ namespace Fsm
 		int asynHandleEvent(const int theEventId);
         void handleEvent(const int theEventId);
         void newTimer(const long long theUsec);
-        void asynHandleTimeout(const unsigned char theTimerId);
-        void handleTimeout(const unsigned char theTimerId);
+        void handleTimeout();
         void cancelTimer();
 
 
