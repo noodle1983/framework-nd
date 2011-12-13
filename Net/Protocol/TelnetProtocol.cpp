@@ -1,5 +1,6 @@
 #include "TelnetProtocol.h"
 #include "ConfigCenter.h"
+#include "SocketConnection.h"
 
 using namespace Net::Protocol;
 using namespace Config;
@@ -19,8 +20,9 @@ TelnetProtocol::~TelnetProtocol()
 
 //-----------------------------------------------------------------------------
 
-void TelnetProtocol::handleInput(Connection::SocketConnectionPtr connection)
+void TelnetProtocol::handleInput(Connection::SocketConnectionPtr theConnection)
 {
+	CmdHandlerStack& handlerStack = con2CmdStackM[theConnection->getFd()];
 	return ;
 }
 

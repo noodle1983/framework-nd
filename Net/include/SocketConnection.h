@@ -77,6 +77,10 @@ namespace Connection
 
         void setLowWaterMarkWatcher(Watcher* theWatcher);
 
+		//attribute
+		int getFd(){return fdM;}
+		void setPeerAddr(const struct sockaddr_in* theAddr){peerAddrM = *theAddr;}
+		const struct sockaddr_in& getPeerAddr(){return peerAddrM;}
     private:
         friend class boost::function<void ()>;
         void addReadEvent();
@@ -123,7 +127,8 @@ namespace Connection
         boost::mutex clientMutexM;
         bool isConnectedNotified;
 
-
+		struct sockaddr_in peerAddrM;
+		struct sockaddr_in localAddrM;
     };
 
 }
