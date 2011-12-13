@@ -45,7 +45,8 @@ SubMessageList
     UrlIEI               Uint16      0x18
     PropertiesIEI        Uint16      0x20
     StrategyIEI          Uint16      0x21
-    RtdIEI               Uint16      0x22
+    HttpHeaderIEI        Uint16      0x22
+
     TriggerIEI           Uint16      0x23
     CauseIEI             Uint16      0x24
 
@@ -142,10 +143,9 @@ Message ServiceNotification
     Timestamp      DateTimeIEI             M
     MSISDN         PhoneNumberIEI          O
     Imei           MobileIdentityIEI       O
-    UserAgent      UserAgentIEI            O
     Apn            ApnIEI                  O
-    Url            UrlIEI                  O
-    Rtd            RtdIEI                  O
+    HttpHeader     HttpHeaderIEI           O
+
 
 Message AddOrModifyUser
     include MsgCHeader

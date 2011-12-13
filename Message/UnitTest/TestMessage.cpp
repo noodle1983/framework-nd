@@ -49,10 +49,7 @@ int main()
         serviceNotification1.timestamp.fraction.valueM = 14;           
         serviceNotification1.mSISDN.reset(PhoneNumberIEI("13800138000"));           
         serviceNotification1.imei.reset(serviceNotification1.userId);           
-        serviceNotification1.userAgent.reset(UserAgentIEI("Firefox"));           
         serviceNotification1.apn.reset(ApnIEI("CMNET"));           
-        serviceNotification1.url.reset(UrlIEI("http://www.google.se"));           
-        serviceNotification1.rtd.reset(RtdIEI("rtd"));           
 
 
         char buffer[1024];
