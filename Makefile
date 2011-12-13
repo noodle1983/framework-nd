@@ -17,6 +17,7 @@ SUBDIR= Log \
 		Data  \
 		DesignPattern \
 		Utility \
+		WinPort \
 
 RELEASE_DIR = $(PROJBASE)/release
 #########################################
