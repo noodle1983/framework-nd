@@ -3,7 +3,7 @@
 
 #include <boost/function.hpp>
 #include <boost/thread.hpp>
-#include <list>
+#include <map>
 #include <string>
 
 namespace Config
@@ -16,14 +16,15 @@ namespace Config
         ~IntParameter();
 
         typedef boost::function<void (const int)> Watcher;
-        typedef std::list<Watcher> WatcherList;
+        typedef std::map<void*, Watcher> WatcherMap;
 
         int get();
         int set(const std::string& theValue);
         int set(const int theValue);
         void setRange(const std::string& theRange);
         void setRange(const int theMin, const int theMax);
-        void registerWatcher(Watcher& theWatcher);
+        void registerWatcher(void* theKey, Watcher& theWatcher);
+        void unregisterWatcher(void* theKey);
 
         const std::string& _getName()const {return nameM;}
         bool  _getCheckRange()const {return checkRangeM;}
@@ -36,7 +37,7 @@ namespace Config
         int minValueM;
         int maxValueM;
         int valueM;
-        WatcherList changesWatchersM;
+        WatcherMap changesWatchersM;
         boost::shared_mutex valueMutexM;
         boost::mutex watcherMutexM;
     };

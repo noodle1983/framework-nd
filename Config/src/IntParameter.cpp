@@ -83,10 +83,10 @@ int IntParameter::set(const int theValue)
     if (notifyWatcher)
     {
         boost::unique_lock<boost::mutex> lock(watcherMutexM);
-        for (WatcherList::iterator it = changesWatchersM.begin();
+        for (WatcherMap::iterator it = changesWatchersM.begin();
                 it != changesWatchersM.end(); it++)
         {
-            (*it)(theValue);
+            (it->second)(theValue);
         }
     }
     CFG_DEBUG("set config[" << nameM << "=" << theValue << "]");
@@ -130,13 +130,20 @@ void IntParameter::setRange(const int theMin, const int theMax)
 
 //-----------------------------------------------------------------------------
 
-void IntParameter::registerWatcher(Watcher& theWatcher)
+void IntParameter::registerWatcher(void* theKey, Watcher& theWatcher)
 {
     boost::unique_lock<boost::mutex> lock(watcherMutexM);
-    changesWatchersM.push_back(theWatcher);
+    changesWatchersM[theKey] = theWatcher;
 }
 
 //-----------------------------------------------------------------------------
 
+void IntParameter::unregisterWatcher(void* theKey)
+{
+    boost::unique_lock<boost::mutex> lock(watcherMutexM);
+    changesWatchersM.erase(theKey);
+}
+
+//-----------------------------------------------------------------------------
 
 

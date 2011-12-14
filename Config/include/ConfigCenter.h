@@ -51,14 +51,21 @@ namespace Config
         void setInt(const std::string& theKey, const std::string& theValue);
         void registValueWatcher(
                 const std::string& theKey,
+                void* theWatcherKey,
                 IntWatcher theWatcher);
+        void unregistIntValueWatcher(
+                const std::string& theKey,
+                void* theWatcherKey);
 
         const std::string get(const std::string& theKey, const std::string& theDefault);
         void set(const std::string& theKey, const std::string& theValue);
         void registValueWatcher(
                 const std::string& theKey,
+                void* theWatcherKey,
                 StringWatcher theWatcher);
-
+        void unregistStrValueWatcher(
+                const std::string& theKey,
+                void* theWatcherKey);
 
         int loadXml(const std::string& theXmlPath);
         int saveXml(const std::string& theXmlPath);

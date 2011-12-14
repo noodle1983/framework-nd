@@ -202,12 +202,31 @@ void ConfigCenter::setInt(const std::string& theKey, const std::string& theValue
 
 void ConfigCenter::registValueWatcher(
         const std::string& theKey, 
+        void* theWatcherKey,
         IntWatcher theWatcher)
 {
     IntParamMap::iterator it = intParamMapM.find(theKey);
     if (it != intParamMapM.end())
     {
-        it->second.registerWatcher(theWatcher);
+        it->second.registerWatcher(theWatcherKey, theWatcher);
+    }
+    else
+    {
+        CFG_ERROR("can't regist watcher, config not found:" << theKey);
+    }
+
+}
+
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::unregistIntValueWatcher(
+        const std::string& theKey, 
+        void* theWatcherKey)
+{
+    IntParamMap::iterator it = intParamMapM.find(theKey);
+    if (it != intParamMapM.end())
+    {
+        it->second.unregisterWatcher(theWatcherKey);
     }
     else
     {
@@ -250,12 +269,31 @@ void ConfigCenter::set(const std::string& theKey, const std::string& theValue)
 
 void ConfigCenter::registValueWatcher(
         const std::string& theKey, 
+        void* theWatcherKey,
         StringWatcher theWatcher)
 {
     StringParamMap::iterator it = strParamMapM.find(theKey);
     if (it != strParamMapM.end())
     {
-        it->second.registerWatcher(theWatcher);
+        it->second.registerWatcher(theWatcherKey, theWatcher);
+    }
+    else
+    {
+        CFG_ERROR("can't regist watcher, config not found:" << theKey);
+    }
+
+}
+
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::unregistStrValueWatcher(
+        const std::string& theKey, 
+        void* theWatcherKey)
+{
+    StringParamMap::iterator it = strParamMapM.find(theKey);
+    if (it != strParamMapM.end())
+    {
+        it->second.unregisterWatcher(theWatcherKey);
     }
     else
     {

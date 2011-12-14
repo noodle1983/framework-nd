@@ -45,10 +45,10 @@ int StringParameter::set(const std::string& theValue)
     }
     {
         boost::unique_lock<boost::mutex> lock(watcherMutexM);
-        for (WatcherList::iterator it = changesWatchersM.begin();
+        for (WatcherMap::iterator it = changesWatchersM.begin();
                 it != changesWatchersM.end(); it++)
         {
-            (*it)(theValue);
+            (it->second)(theValue);
         }
     }
     CFG_DEBUG("set config[" << nameM << "=" << theValue << "]");
@@ -57,13 +57,22 @@ int StringParameter::set(const std::string& theValue)
 
 //-----------------------------------------------------------------------------
 
-void StringParameter::registerWatcher(Watcher& theWatcher)
+void StringParameter::registerWatcher(void *theKey, Watcher& theWatcher)
 {
     boost::unique_lock<boost::mutex> lock(watcherMutexM);
-    changesWatchersM.push_back(theWatcher);
+    changesWatchersM[theKey] = theWatcher;
 }
 
 //-----------------------------------------------------------------------------
+
+void StringParameter::unregisterWatcher(void *theKey)
+{
+    boost::unique_lock<boost::mutex> lock(watcherMutexM);
+    changesWatchersM.erase(theKey);
+}
+
+//-----------------------------------------------------------------------------
+
 
 
 

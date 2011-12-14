@@ -20,7 +20,7 @@ int main()
     cout << "str:" << str << endl;
 
     Config::ConfigCenter::instance()->
-        registValueWatcher("test.test0", Config::IntParameter::Watcher(intChange));
+        registValueWatcher("test.test0", (void*)0, Config::IntParameter::Watcher(intChange));
 
     Config::ConfigCenter::instance()->set("test.test0", test0 + 1);
     Config::ConfigCenter::instance()->set("test.test1", test1 + 1);

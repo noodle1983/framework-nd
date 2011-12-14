@@ -3,7 +3,7 @@
 
 #include <boost/function.hpp>
 #include <boost/thread.hpp>
-#include <list>
+#include <map>
 #include <string>
 
 namespace Config
@@ -16,18 +16,19 @@ namespace Config
         ~StringParameter();
 
         typedef boost::function<void (const std::string&)> Watcher;
-        typedef std::list<Watcher> WatcherList;
+        typedef std::map<void*, Watcher> WatcherMap;
 
         const std::string get();
         int set(const std::string& theValue);
-        void registerWatcher(Watcher& theWatcher);
+        void registerWatcher(void *theKey, Watcher& theWatcher);
+        void unregisterWatcher(void *theKey);
 
         const std::string& _getName()const {return nameM;}
         const std::string& _getValue()const {return valueM;}
     private:
         const std::string nameM;
         std::string valueM;
-        WatcherList changesWatchersM;
+        WatcherMap changesWatchersM;
         boost::shared_mutex valueMutexM;
         boost::mutex watcherMutexM;
     };
