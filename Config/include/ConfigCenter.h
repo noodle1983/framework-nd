@@ -15,8 +15,8 @@ namespace Config
     class ConfigCenter;
 
     typedef boost::shared_ptr<ConfigCenter> ConfigCenterPtr;
-    typedef boost::unordered_map<std::string, IntParameter> IntParamMap;
-    typedef boost::unordered_map<std::string, StringParameter> StringParamMap;
+    typedef std::map<std::string, IntParameter> IntParamMap;
+    typedef std::map<std::string, StringParameter> StringParamMap;
 
     typedef IntParameter::Watcher IntWatcher;
     typedef StringParameter::Watcher StringWatcher;
@@ -45,6 +45,8 @@ namespace Config
          *              with the data stored in the input xml file.
          */
         static void loadConfig(const std::string& theInputXmlFile = "config.xml");
+
+        void borrowFrom(ConfigCenterPtr theOtherConfig);
 
         int get(const std::string& theKey, const int theDefault);
         void set(const std::string& theKey, const int theValue);

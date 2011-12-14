@@ -42,21 +42,87 @@ void ConfigCenter::loadConfig(const std::string& theInputXmlFile)
     ConfigCenterPtr newConfigCenter(new ConfigCenter());
     if (0 == newConfigCenter->loadXml(theInputXmlFile))
     {
+        {
+            boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
+            configCenterM = newConfigCenter;
+        }
         CFG_DEBUG("loaded config file:" << theInputXmlFile);
-        boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
-        configCenterM = newConfigCenter;
+        
     }
     else if (NULL == configCenterM.get())
     {
         CFG_ERROR("load xml file failed, the default config will be applied.");
         boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
-        configCenterM = newConfigCenter;
+        configCenterM->borrowFrom(newConfigCenter);
     }
     else 
     {
         CFG_ERROR("config center is not changed.");
     }
 
+}
+
+//-----------------------------------------------------------------------------
+
+void ConfigCenter::borrowFrom(ConfigCenterPtr theOtherConfig)
+{
+    {
+        IntParamMap::iterator it1 = intParamMapM.begin();
+        IntParamMap::iterator last1 = intParamMapM.end();
+        IntParamMap::iterator it2 = theOtherConfig->intParamMapM.begin();
+        IntParamMap::iterator last2 = theOtherConfig->intParamMapM.end();
+        IntParamMap::key_compare cmp = intParamMapM.key_comp();
+        IntParamMap moreIntParams;
+        while (it1!=last1 && it2!=last2)
+        {
+            if (cmp(it1->first, it2->first))
+            {
+                ++it1;
+            }
+            else if (cmp(it2->first,it1->first))
+            {
+                moreIntParams.insert(*it2);
+                ++it2;
+            }
+            else 
+            { 
+                if (it2->second._getCheckRange())
+                {
+                    it1->second.setRange(it2->second._getMinValue(), it2->second._getMaxValue());
+                }
+                it2->second.set(it1->second._getValue());
+                it1++; it2++; 
+            }
+        }
+        intParamMapM.insert(moreIntParams.begin(), moreIntParams.end());
+    }
+    {
+        StringParamMap::iterator it1 = strParamMapM.begin();
+        StringParamMap::iterator last1 = strParamMapM.end();
+        StringParamMap::iterator it2 = theOtherConfig->strParamMapM.begin();
+        StringParamMap::iterator last2 = theOtherConfig->strParamMapM.end();
+        StringParamMap::key_compare cmp = strParamMapM.key_comp();
+        StringParamMap moreStringParams;
+        while (it1!=last1 && it2!=last2)
+        {
+            if (cmp(it1->first, it2->first))
+            {
+                ++it1;
+            }
+            else if (cmp(it2->first,it1->first))
+            {
+                moreStringParams.insert(*it2);
+                ++it2;
+            }
+            else 
+            { 
+                it2->second.set(it1->second._getValue());
+                it1++; it2++; 
+            }
+        }
+        strParamMapM.insert(moreStringParams.begin(), moreStringParams.end());
+    }
+    *topGroupM = *theOtherConfig->topGroupM;
 }
 
 //-----------------------------------------------------------------------------

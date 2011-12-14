@@ -9,14 +9,14 @@
 #include <rapidxml_utils.hpp>
 #include <vector>
 #include <string>
-#include <boost/unordered_map.hpp>
+#include <map>
 
 namespace Config
 {
     class ConfigCenter;
 
-    typedef boost::unordered_map<std::string, IntParameter> IntParamMap;
-    typedef boost::unordered_map<std::string, StringParameter> StringParamMap;
+    typedef std::map<std::string, IntParameter> IntParamMap;
+    typedef std::map<std::string, StringParameter> StringParamMap;
     class XmlGroup 
     {
     public:
