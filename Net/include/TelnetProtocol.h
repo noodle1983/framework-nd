@@ -2,10 +2,13 @@
 #define TelnetProtocol_h
 
 #include "Protocol.h"
+#include "SocketConnection.h"
 
 #include <list>
 #include <map>
 #include <string>
+#include <boost/thread.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace Processor
 {
@@ -16,12 +19,7 @@ namespace Net
 {
 namespace Protocol
 {
-	class ICmdHandler;
-	class TelnetProtocol;
 	typedef std::list<std::string> CmdArgsList;
-	typedef std::list<ICmdHandler*> CmdHandlerStack;
-	typedef std::map<int, CmdHandlerStack> Con2CmdStack;
-	typedef std::map<std::string, ICmdHandler*> CmdMap;
 
 	class ICmdHandler
 	{
@@ -31,21 +29,32 @@ namespace Protocol
 		virtual int handle(CmdArgsList& theArgs) = 0;
 		virtual const char* getUsage() = 0;
 	};
+	typedef std::list<ICmdHandler*> CmdHandlerStack;
+	typedef std::map<std::string, ICmdHandler*> CmdMap;
 
-	class TelnetTopCmd: public ICmdHandler
+	class TelnetCmdManager
 	{
-		TelnetTopCmd();
-		~TelnetTopCmd();
+	public:
+		TelnetCmdManager(const struct sockaddr_in& thePeerAddr,
+				Connection::SocketConnectionPtr theConnection);
+		~TelnetCmdManager();
 
-		int registCmd(
+		bool validate(const sockaddr_in& thePeerAddr);
+
+		static int registCmd(
 			const std::string& theCmdName,
 			ICmdHandler* theHandler);
 		int handle(CmdArgsList& theArgs);
+		int handle();
 
 		const char* getUsage() {return "";};
 	private:
-		CmdMap allTopCmdsM;
+		static CmdMap allTopCmdsM;
+		CmdHandlerStack subCmdStackM;
+		struct sockaddr_in peerAddrM;
+		Connection::SocketConnectionWPtr connectionM;
 	};
+	typedef std::map<int, TelnetCmdManager*> Con2CmdManagerMap;
 
     class TelnetProtocol : public Net::IProtocol
     {
@@ -61,7 +70,7 @@ namespace Protocol
         virtual int getRBufferSizePower();
         virtual int getWBufferSizePower();
     private:
-		Con2CmdStack con2CmdStackM;
+		Con2CmdManagerMap con2CmdManagerMapM;
     };
 
 }
