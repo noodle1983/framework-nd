@@ -9,6 +9,7 @@ SUBDIR=Connection \
 		Client \
         Reactor \
         Protocol \
+        TelnetProtocol \
         Buffer \
         Pcap \
 
