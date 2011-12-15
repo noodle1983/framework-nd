@@ -5,6 +5,7 @@
 #include "SocketConnection.h"
 #include "ICmdHandler.h"
 #include "QuitHandler.h"
+#include "HelpHandler.h"
 
 #include <list>
 #include <map>
@@ -44,11 +45,13 @@ namespace Protocol
         void sendPrompt(); 
 
         void exitCurCmd();
+        void printUsage();
 	private:
 		static bool isTopCmdsMInitedM;
 		static CmdMap allTopCmdsM;
         static boost::shared_mutex topCmdMutexM;
         static QuitHandler quitHandlerM;
+        static HelpHandler helpHandlerM;
 
 		CmdHandlerStack subCmdStackM;
         char cmdBufferM[256];

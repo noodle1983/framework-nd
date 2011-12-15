@@ -1,6 +1,7 @@
 #include "TelnetCmdManager.h"
 #include "SocketConnection.h"
 #include "Log.h"
+#include <set>
 
 using namespace Net;
 using namespace Net::Protocol;
@@ -9,6 +10,7 @@ bool TelnetCmdManager::isTopCmdsMInitedM = false;
 CmdMap TelnetCmdManager::allTopCmdsM;
 boost::shared_mutex TelnetCmdManager::topCmdMutexM;
 QuitHandler TelnetCmdManager::quitHandlerM;
+HelpHandler TelnetCmdManager::helpHandlerM;
 //-----------------------------------------------------------------------------
 
 void TelnetCmdManager::initTopCmd()
@@ -21,6 +23,8 @@ void TelnetCmdManager::initTopCmd()
             allTopCmdsM["quit"] = &quitHandlerM;
             allTopCmdsM["exit"] = &quitHandlerM;
             allTopCmdsM["q"] = &quitHandlerM;
+            allTopCmdsM["help"] = &helpHandlerM;
+            allTopCmdsM["h"] = &helpHandlerM;
             isTopCmdsMInitedM = true;
         }
     }
@@ -57,6 +61,14 @@ void TelnetCmdManager::registCmd(
 	const std::string& theCmdName,
 	ICmdHandler* theHandler)
 {
+    boost::unique_lock<boost::shared_mutex> lock(topCmdMutexM);
+    CmdMap::iterator it = allTopCmdsM.find(theCmdName);
+    if(it != allTopCmdsM.end())
+    {
+        LOG_WARN("redefine telnet command:" << theCmdName);
+        return;
+    }
+    allTopCmdsM[theCmdName] = theHandler;
 }
 
 //-----------------------------------------------------------------------------
@@ -244,4 +256,29 @@ void TelnetCmdManager::exitCurCmd()
 }
 
 //-----------------------------------------------------------------------------
+
+void TelnetCmdManager::printUsage()
+{
+    std::set<std::string> outSet;
+    {
+        boost::shared_lock<boost::shared_mutex> lock(topCmdMutexM);
+        CmdMap::iterator it = allTopCmdsM.begin();     
+        for (; it != allTopCmdsM.end(); it++)
+        {
+            outSet.insert(it->second->getDesc());
+        }
+    }
+    std::string out;
+    std::set<std::string>::iterator it = outSet.begin();
+    for (; it != outSet.end(); it++)
+    {
+        out.append(*it);
+        out.append("\r\n");
+    }
+    send(out.c_str(), out.length());
+    sendPrompt();
+}
+
+//-----------------------------------------------------------------------------
+
 
