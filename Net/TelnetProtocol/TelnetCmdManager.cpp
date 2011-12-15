@@ -5,8 +5,27 @@
 using namespace Net;
 using namespace Net::Protocol;
 
+bool TelnetCmdManager::isTopCmdsMInitedM = false;
 CmdMap TelnetCmdManager::allTopCmdsM;
 boost::shared_mutex TelnetCmdManager::topCmdMutexM;
+QuitHandler TelnetCmdManager::quitHandlerM;
+//-----------------------------------------------------------------------------
+
+void TelnetCmdManager::initTopCmd()
+{
+    if (!isTopCmdsMInitedM)
+    {
+        boost::unique_lock<boost::shared_mutex> lock(topCmdMutexM);
+        if(!isTopCmdsMInitedM)
+        {
+            allTopCmdsM["quit"] = &quitHandlerM;
+            allTopCmdsM["exit"] = &quitHandlerM;
+            allTopCmdsM["q"] = &quitHandlerM;
+            isTopCmdsMInitedM = true;
+        }
+    }
+}
+
 //-----------------------------------------------------------------------------
 TelnetCmdManager::TelnetCmdManager(const struct sockaddr_in& thePeerAddr,
 				Connection::SocketConnectionPtr theConnection)
@@ -14,7 +33,7 @@ TelnetCmdManager::TelnetCmdManager(const struct sockaddr_in& thePeerAddr,
     , peerAddrM(thePeerAddr)
 	, connectionM(theConnection)
 {
-
+    initTopCmd();
 }
 
 //-----------------------------------------------------------------------------
@@ -34,11 +53,10 @@ bool TelnetCmdManager::validate(const sockaddr_in& thePeerAddr)
 
 //-----------------------------------------------------------------------------
 
-int TelnetCmdManager::registCmd(
+void TelnetCmdManager::registCmd(
 	const std::string& theCmdName,
 	ICmdHandler* theHandler)
 {
-	return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -131,7 +149,6 @@ int TelnetCmdManager::handleCmd(const unsigned theStart, const unsigned theEnd)
     argsList.pop_front();
     ICmdHandler* cmdHandler = NULL; 
     {
-		static CmdMap allTopCmdsM;
         boost::shared_lock<boost::shared_mutex> lock(topCmdMutexM);
         CmdMap::iterator it = allTopCmdsM.find(cmd);
         if (it == allTopCmdsM.end())
@@ -163,6 +180,12 @@ int TelnetCmdManager::handleInput()
         if (0 == getLen)
         {
             break;
+        }
+        //Ctrl + C
+        if (5 == getLen && 0 == memcmp(cmdBufferM + bufferLenM, "\377\364\377\375\006", 5))
+        {
+            connection->close();
+            return 0;
         }
         bufferLenM += getLen;
         unsigned cmdStart = 0;
@@ -198,6 +221,26 @@ int TelnetCmdManager::handleInput()
 
     }
 	return 0;
+}
+
+//-----------------------------------------------------------------------------
+
+void TelnetCmdManager::exitCurCmd()
+{
+    if (!subCmdStackM.empty())
+    {
+        subCmdStackM.pop_back();
+        sendPrompt();
+    }
+    else
+    {
+        Net::Connection::SocketConnectionPtr connection = connectionM.lock();
+        if (connection.get())
+        {
+            connection->close();
+        }
+    }
+
 }
 
 //-----------------------------------------------------------------------------

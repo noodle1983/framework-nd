@@ -15,8 +15,9 @@ namespace Protocol
 	public:
 		ICmdHandler(){}
 		virtual ~ICmdHandler(){}
-		virtual int handle(TelnetCmdManager* theManager, CmdArgsList& theArgs) = 0;
-		virtual const char* getUsage() = 0;
+		virtual void handle(TelnetCmdManager* theManager, CmdArgsList& theArgs) = 0;
+        //////////////////desc intent///////////////////////////////////////|
+		virtual const char* getDesc() = 0;
 		virtual const char* getPrompt() = 0;
 	};
 

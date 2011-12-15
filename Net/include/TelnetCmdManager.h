@@ -4,6 +4,7 @@
 #include "Protocol.h"
 #include "SocketConnection.h"
 #include "ICmdHandler.h"
+#include "QuitHandler.h"
 
 #include <list>
 #include <map>
@@ -30,19 +31,24 @@ namespace Protocol
 				Connection::SocketConnectionPtr theConnection);
 		~TelnetCmdManager();
 
-		bool validate(const sockaddr_in& thePeerAddr);
-
-		static int registCmd(
+		static void registCmd(
 			const std::string& theCmdName,
 			ICmdHandler* theHandler);
+        static void initTopCmd();
+
+		bool validate(const sockaddr_in& thePeerAddr);
+
 		int handleInput();
         int handleCmd(const unsigned theStart, const unsigned theEnd);
         void send(const char* const theStr, unsigned theLen);
         void sendPrompt(); 
 
+        void exitCurCmd();
 	private:
+		static bool isTopCmdsMInitedM;
 		static CmdMap allTopCmdsM;
         static boost::shared_mutex topCmdMutexM;
+        static QuitHandler quitHandlerM;
 
 		CmdHandlerStack subCmdStackM;
         char cmdBufferM[256];
@@ -50,6 +56,7 @@ namespace Protocol
 
 		struct sockaddr_in peerAddrM;
 		Connection::SocketConnectionWPtr connectionM;
+
 	};
 }
 }

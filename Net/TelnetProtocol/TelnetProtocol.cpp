@@ -108,14 +108,14 @@ void TelnetProtocol::handleConnected(Connection::SocketConnectionPtr theConnecti
 
 const std::string TelnetProtocol::getAddr()
 {
-    return ConfigCenter::instance()->get("cmd.addr", "127.0.0.1");
+    return ConfigCenter::instance()->get("cmd.s.addr", "127.0.0.1");
 }
 
 //-----------------------------------------------------------------------------
 
 int TelnetProtocol::getPort()
 {
-    return ConfigCenter::instance()->get("cmd.port", 7510);
+    return ConfigCenter::instance()->get("cmd.s.port", 7510);
 }
 
 //-----------------------------------------------------------------------------
