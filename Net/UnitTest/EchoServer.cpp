@@ -2,6 +2,7 @@
 #include "TcpServer.h"
 #include "Reactor.h"
 #include "EchoProtocol.h"
+#include "TelnetProtocol.h"
 #include "Log.h"
 
 #include <event.h>
@@ -44,8 +45,11 @@ int main()
     processor.start();
     Net::Reactor::Reactor reactor;
     Net::Protocol::EchoProtocol echoProtocol(&reactor, &processor);
+    Net::Protocol::TelnetProtocol telnetProtocol(Processor::BoostProcessor::manInstance());
     Net::Server::TcpServer server(&echoProtocol, &reactor, &processor);
+    Net::Server::TcpServer telnetServer(&telnetProtocol, &reactor, &processor);
     server.start();
+    telnetServer.start();
     reactor.start();
 
     boost::unique_lock<boost::mutex> lock(closedMutexM);

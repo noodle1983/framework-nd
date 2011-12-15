@@ -111,7 +111,7 @@ void TcpClient::onConnected(int theFd, Connection::SocketConnectionPtr theConnec
 {
     LOG_DEBUG("connected to " << peerAddrM
             << ":" << peerPortM);
-    protocolM->onConnected(theFd, theConnection);
+    protocolM->asynHandleConnected(theFd, theConnection);
 }
 
 //-----------------------------------------------------------------------------

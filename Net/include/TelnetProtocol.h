@@ -28,6 +28,7 @@ namespace Protocol
 		virtual ~ICmdHandler(){}
 		virtual int handle(CmdArgsList& theArgs) = 0;
 		virtual const char* getUsage() = 0;
+		virtual const char* getPrompt() = 0;
 	};
 	typedef std::list<ICmdHandler*> CmdHandlerStack;
 	typedef std::map<std::string, ICmdHandler*> CmdMap;
@@ -44,13 +45,19 @@ namespace Protocol
 		static int registCmd(
 			const std::string& theCmdName,
 			ICmdHandler* theHandler);
-		int handle(CmdArgsList& theArgs);
-		int handle();
+		int handleInput();
+        int handleCmd(const unsigned theStart, const unsigned theEnd);
+        void send(const char* const theStr, unsigned theLen);
+        void sendPrompt(); 
 
-		const char* getUsage() {return "";};
 	private:
 		static CmdMap allTopCmdsM;
+        static boost::shared_mutex topCmdMutexM;
+
 		CmdHandlerStack subCmdStackM;
+        char cmdBufferM[256];
+        unsigned bufferLenM;
+
 		struct sockaddr_in peerAddrM;
 		Connection::SocketConnectionWPtr connectionM;
 	};
@@ -64,6 +71,8 @@ namespace Protocol
         ~TelnetProtocol();
 
         void handleInput(Connection::SocketConnectionPtr theConnection);
+        void handleClose(Net::Connection::SocketConnectionPtr theConnection); 
+        void handleConnected(Connection::SocketConnectionPtr theConnection);
 
         virtual const std::string getAddr();
         virtual int getPort();
@@ -71,6 +80,7 @@ namespace Protocol
         virtual int getWBufferSizePower();
     private:
 		Con2CmdManagerMap con2CmdManagerMapM;
+        boost::shared_mutex manMapMutexM;
     };
 
 }

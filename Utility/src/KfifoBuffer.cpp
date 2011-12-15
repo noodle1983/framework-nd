@@ -67,8 +67,11 @@ unsigned KfifoBuffer::get(char* const theBuffer, const unsigned theLen)
 
     unsigned readIndexToEnd = sizeM - (readIndexM & maskM);
     unsigned firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
-    memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
-    memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
+    if (theBuffer)
+    {
+        memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
+        memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
+    }
     readIndexM += getLen;
     return getLen;
 }
@@ -115,8 +118,11 @@ unsigned KfifoBuffer::getn(char* const theBuffer, const unsigned theLen)
 
     unsigned readIndexToEnd = sizeM - (readIndexM & maskM);
     unsigned firstPartLen = (getLen < readIndexToEnd) ? getLen : readIndexToEnd;
-    memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
-    memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
+    if (theBuffer)
+    {
+        memcpy(theBuffer, rawM + (readIndexM & maskM), firstPartLen);
+        memcpy(theBuffer + firstPartLen, rawM, getLen - firstPartLen);
+    }
     readIndexM += getLen;
     return getLen;
 }

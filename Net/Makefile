@@ -10,8 +10,7 @@ SUBDIR=Connection \
         Reactor \
         Protocol \
         Buffer \
-		
-#        Pcap \
+        Pcap \
 
 #########################################
 #      header and lib dependancy        #

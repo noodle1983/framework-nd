@@ -40,9 +40,20 @@ namespace Net
             return processorM->process(theFd + 1,
                     &IProtocol::handleInput, this, theConnection);
         }
+        int asynHandleClose(int theFd, Connection::SocketConnectionPtr theConnection)
+        {
+            return processorM->process(theFd + 1,
+                    &IProtocol::handleClose, this, theConnection);
+        }
+        int asynHandleConnected(int theFd, Connection::SocketConnectionPtr theConnection)
+        {
+            return processorM->process(theFd + 1,
+                    &IProtocol::handleConnected, this, theConnection);
+        }
         
         virtual void handleInput(Net::Connection::SocketConnectionPtr theConnection) = 0;
         virtual void handleClose(Net::Connection::SocketConnectionPtr theConnection) {}
+        virtual void handleConnected(Connection::SocketConnectionPtr theConnection) {}
 
         //Config
         virtual const std::string getAddr(){ return "0.0.0.0"; }
@@ -62,18 +73,6 @@ namespace Net
         {
         }
         virtual ~IClientProtocol() {};
-
-        /**
-         *
-         * interface: asynHandleInput
-         * Description: the net framework will notify the protocol object the input event,
-         *         For the performance, Protocol should handle the input in another thread.
-         * the Args:
-         *         theFd: which socket the input is from
-         *         connection: the socket connection which can be write to
-         *
-         */
-        virtual int onConnected(int theFd, Connection::SocketConnectionPtr theConnection) {return 0;}
 
         virtual const std::string getAddr(){ return "127.0.0.1"; }
     };

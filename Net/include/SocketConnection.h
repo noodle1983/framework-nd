@@ -73,7 +73,7 @@ namespace Connection
         unsigned getInput(char* const theBuffer, const unsigned theLen);
         unsigned getnInput(char* const theBuffer, const unsigned theLen);
         unsigned peeknInput(char* const theBuffer, const unsigned theLen);
-        unsigned sendn(char* const theBuffer, const unsigned theLen);
+        unsigned sendn(const char* const theBuffer, const unsigned theLen);
 
         void setLowWaterMarkWatcher(Watcher* theWatcher);
 

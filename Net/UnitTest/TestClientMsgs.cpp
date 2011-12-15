@@ -57,13 +57,12 @@ public:
         tcpClientM.connect();
     }
 
-    int onConnected(int theFd, Net::Connection::SocketConnectionPtr theConnection)
+    void handleConnected(Net::Connection::SocketConnectionPtr theConnection)
     {
         struct timeval tv;
         evutil_gettimeofday(&tv, NULL);
         starttimeM = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-        asynSend(theFd, theConnection);
-        return 0;
+        asynSend(theConnection->getFd(), theConnection);
     }
 
     int asynSend(int theFd, Net::Connection::SocketConnectionPtr theConnection)

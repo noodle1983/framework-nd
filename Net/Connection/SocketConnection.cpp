@@ -52,6 +52,7 @@ SocketConnection::SocketConnection(
     readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
     writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
     addReadEvent();
+    protocolM->asynHandleConnected(fdM, selfM);
 }
 
 //-----------------------------------------------------------------------------
@@ -251,7 +252,7 @@ unsigned SocketConnection::peeknInput(char* const theBuffer, const unsigned theL
 
 //-----------------------------------------------------------------------------
 
-unsigned SocketConnection::sendn(char* const theBuffer, const unsigned theLen)
+unsigned SocketConnection::sendn(const char* const theBuffer, const unsigned theLen)
 {
     if (CloseE == statusM)
         return 0;
@@ -386,7 +387,7 @@ void SocketConnection::_close()
     if (CloseE == statusM)
         return;
     statusM = CloseE;
-	protocolM->handleClose(selfM);
+	protocolM->asynHandleClose(fdM, selfM);
     if (clientM)
     {
         boost::lock_guard<boost::mutex> lock(clientMutexM);
