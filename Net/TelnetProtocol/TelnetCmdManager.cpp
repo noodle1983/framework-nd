@@ -153,7 +153,7 @@ int TelnetCmdManager::handleCmd(const unsigned theStart, const unsigned theEnd)
         CmdMap::iterator it = allTopCmdsM.find(cmd);
         if (it == allTopCmdsM.end())
         {
-            const char* const errstr = "command not found!\n";
+            const char* const errstr = "command not found!\r\n";
             send(errstr, strlen(errstr));
             sendPrompt();
             return 0;
@@ -213,7 +213,7 @@ int TelnetCmdManager::handleInput()
             connection->getInput(NULL, connection->getRBufferSize());
             
             //report error
-            const char* const errstr = "cmd is too long!\n";
+            const char* const errstr = "cmd is too long!\r\n";
             connection->sendn(errstr, strlen(errstr));
             sendPrompt();
             return 0;
