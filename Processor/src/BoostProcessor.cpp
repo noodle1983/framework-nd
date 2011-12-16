@@ -156,7 +156,7 @@ void BoostProcessor::stop()
 //-----------------------------------------------------------------------------
 
 /*
-int BoostProcessor::process(const unsigned theId, Job* job)
+int BoostProcessor::process(const unsigned long long theId, Job* job)
 {
     unsigned workerId = theId % threadCountM;
     return workersM[workerId].process(job);
@@ -166,7 +166,7 @@ int BoostProcessor::process(const unsigned theId, Job* job)
 //-----------------------------------------------------------------------------
 
 int BoostProcessor::process(
-        const unsigned theId, 
+        const unsigned long long theId, 
         void (*theFunc)())
 {
     NullParamJob* job = 
