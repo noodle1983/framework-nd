@@ -7,9 +7,9 @@ using namespace Utility;
 
 KfifoBuffer::KfifoBuffer(const int theSizePower)
 {
-    // limit the size to 1k ~ 16M
+    // limit the size to 1k ~ 64M
     int sizePower = theSizePower < 10 ? 10
-              : theSizePower > 24 ? 24
+              : theSizePower > 26 ? 26
               : theSizePower;
     sizeM = 1 << sizePower; //1MB
     maskM = sizeM - 1;

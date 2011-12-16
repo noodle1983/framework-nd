@@ -18,7 +18,7 @@ boost::thread_specific_ptr<unsigned> g_threadGroupIndex;
 BoostWorker::BoostWorker()
     : groupTotalM(0)
     , groupIndexM(-1)
-    , bufferJobQueueM(24) //2M jobs Max
+    , bufferJobQueueM(25) //(32M/8) jobs Max
 	, eventPoolM(1000)
     , isToStopM(false)
 {
