@@ -133,6 +133,7 @@ Message ServiceInfoIEI
     DownPktCnt     Uint32                  M
     UpBytes        Uint32                  M
     DownBytes      Uint32                  M
+    Rtd            Uint32                  M
 
 Message ServiceNotification
     include MsgBHeader
