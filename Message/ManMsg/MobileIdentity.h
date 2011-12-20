@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <Log.h>
 
 namespace Msg
 {
@@ -23,7 +24,7 @@ namespace Msg
 
         enum {TAG = theTag};
         enum {MIN_BYTES = 10};
-        enum 
+        enum
         {
             IMSI_E   = 1,
             IMEI_E   = 2,
@@ -47,14 +48,14 @@ namespace Msg
             int ret = SUCCESS_E;
             Uint8 tag;
             ret = tag.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
             if (tag.valueM != TAG)
                 return ERROR_E;
 
             Uint8 length;
             ret = length.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
             if (theIndex + length.valueM > theLen)
                 return NOT_ENOUGH_BUFFER_E;
@@ -68,20 +69,29 @@ namespace Msg
             case IMEI_E:
             case IMSI_E:
                 if (8 != length.valueM)
-                    return ERROR_E;
+                {
+                    LOG_WARN("expect len:8, actual:" << (int)length.valueM
+                            << ", type:" << typeM);
+                }
                 return decodeBcdCode(content, length.valueM);
-            
+
             case IMEISV_E:
                 if (9 != length.valueM)
-                    return ERROR_E;
+                {
+                    LOG_WARN("expect len:9, actual:" << (int)length.valueM
+                            << ", type:" << typeM);
+                }
                 return decodeBcdCode(content, length.valueM);
-            
+
             case TMSI_E:
                 if (5 != length.valueM)
-                    return ERROR_E;
-                
-                valueM = combine_bits2(content, 1, 8, 32); 
-                return SUCCESS_E; 
+                {
+                    LOG_WARN("expect len:5, actual:" << (int)length.valueM
+                            << ", type:" << typeM);
+                }
+
+                valueM = combine_bits2(content, 1, 8, 32);
+                return SUCCESS_E;
             default:
                 return ERROR_E;
             }
@@ -108,22 +118,22 @@ namespace Msg
             {
                 if (halfbyte)
                 {
-                    msgContent[msgContentEncIndex] |= (mobileIdentityStr[i] - '0') << 4; 
+                    msgContent[msgContentEncIndex] |= (mobileIdentityStr[i] - '0') << 4;
                     msgContentEncIndex++;
-                    halfbyte = 0; 
+                    halfbyte = 0;
                 }
                 else
                 {
-                    msgContent[msgContentEncIndex] = mobileIdentityStr[i] - '0'; 
-                    halfbyte = 1; 
+                    msgContent[msgContentEncIndex] = mobileIdentityStr[i] - '0';
+                    halfbyte = 1;
                 }
-                
+
             }
             if (halfbyte)
             {
-                msgContent[msgContentEncIndex] |= 0xf0; 
+                msgContent[msgContentEncIndex] |= 0xf0;
                 msgContentEncIndex++;
-                halfbyte = 0; 
+                halfbyte = 0;
             }
 
             Uint8 length;
@@ -159,7 +169,7 @@ namespace Msg
                        : IMEI_E == typeM ? "IMEI"
                        : IMEISV_E == typeM ? "IMEISV"
                        : TMSI_E == typeM ? "TMSI"
-                       : "UNKNOW") 
+                       : "UNKNOW")
                    << "=" << valueM;
             return theOut;
         }
@@ -197,7 +207,7 @@ namespace Msg
         {
             guint64 ull;
 
-            if (str && *str) 
+            if (str && *str)
             {
                 char *ptr;
 
@@ -212,7 +222,7 @@ namespace Msg
                 if (*ptr == 0)
                     return ull;
 #endif
-                
+
             }
 
             return 0;//llu;
@@ -226,7 +236,7 @@ namespace Msg
         }
         */
 
-        int decodeBcdCode(const char* theData, const unsigned theLen) 
+        int decodeBcdCode(const char* theData, const unsigned theLen)
         {
             char imsiStr[32] = {0};
             int imsiLen = convert_bcd_string(theData, theLen, 1, imsiStr, *theData & 0x08);
@@ -265,7 +275,7 @@ namespace Msg
         }
 
     public:
-        int typeM;
+        unsigned char typeM;
         guint64 valueM;
     };
 

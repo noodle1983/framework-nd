@@ -50,7 +50,7 @@ namespace Msg
 
 
     public:
-        guint8 valueM;
+        unsigned char valueM;
     };
     typedef Uint8 Length8;
 

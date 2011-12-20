@@ -30,26 +30,26 @@ int main()
         serviceNotification1.transactionId.valueM = 0;
         serviceNotification1.userId.typeM = MobileIdentityIEI::IMSI_E;
         serviceNotification1.userId.valueM = 13800138000;//it is not imsi actually, test only
-        serviceNotification1.serviceType.valueM = SERVICE_TYPE_SUMMERY_E;           
-        serviceNotification1.serviceInfo.srcIpAddr.valueM = 1;            
-        serviceNotification1.serviceInfo.destIpAddr.valueM = 2;           
-        serviceNotification1.serviceInfo.srcPort.valueM = 3;           
-        serviceNotification1.serviceInfo.descPort.valueM = 4;           
-        serviceNotification1.serviceInfo.protocol.valueM = 5;           
-        serviceNotification1.serviceInfo.catalogId.valueM = 6;           
-        serviceNotification1.serviceInfo.appId.valueM = 7;           
-        serviceNotification1.serviceInfo.behaviorId.valueM = 8;           
-        serviceNotification1.serviceInfo.upPktCnt.valueM = 9;           
-        serviceNotification1.serviceInfo.downPktCnt.valueM = 10;           
-        serviceNotification1.serviceInfo.upBytes.valueM = 11;           
-        serviceNotification1.serviceInfo.downBytes.valueM = 12;           
+        serviceNotification1.serviceType.valueM = SERVICE_TYPE_SUMMERY_E;
+        serviceNotification1.serviceInfo.srcIpAddr.valueM = 1;
+        serviceNotification1.serviceInfo.destIpAddr.valueM = 2;
+        serviceNotification1.serviceInfo.srcPort.valueM = 3;
+        serviceNotification1.serviceInfo.descPort.valueM = 4;
+        serviceNotification1.serviceInfo.protocol.valueM = 5;
+        serviceNotification1.serviceInfo.catalogId.valueM = 6;
+        serviceNotification1.serviceInfo.appId.valueM = 7;
+        serviceNotification1.serviceInfo.behaviorId.valueM = 8;
+        serviceNotification1.serviceInfo.upPktCnt.valueM = 9;
+        serviceNotification1.serviceInfo.downPktCnt.valueM = 10;
+        serviceNotification1.serviceInfo.upBytes.valueM = 11;
+        serviceNotification1.serviceInfo.downBytes.valueM = 12;
 
-        //serviceNotification1.location.valueM = "location";           
-        serviceNotification1.timestamp.seconds.valueM = 13;           
-        serviceNotification1.timestamp.fraction.valueM = 14;           
-        serviceNotification1.mSISDN.reset(PhoneNumberIEI("13800138000"));           
-        serviceNotification1.imei.reset(serviceNotification1.userId);           
-        serviceNotification1.apn.reset(ApnIEI("CMNET"));           
+        //serviceNotification1.location.valueM = "location";
+        serviceNotification1.timestamp.seconds.valueM = 13;
+        serviceNotification1.timestamp.fraction.valueM = 14;
+        serviceNotification1.mSISDN.reset(PhoneNumberIEI(13800138000));
+        serviceNotification1.imei.reset(serviceNotification1.userId);
+        serviceNotification1.apn.reset(ApnIEI("CMNET"));
 
 
         char buffer[1024];
@@ -64,13 +64,13 @@ int main()
     {
         UserDataNotification msg;
         msg.init();
-        msg.userId.valueM = 123456789012345;           
-        msg.ip.valueM = 1;           
-        msg.lac.valueM = 2;           
-        msg.rac.valueM = 3;           
-        msg.ci.valueM = 4;           
-        msg.status.valueM = 5;           
-        msg.content.valueM = "abc";           
+        msg.userId.valueM = 123456789012345;
+        msg.ip.valueM = 1;
+        msg.lac.valueM = 2;
+        msg.rac.valueM = 3;
+        msg.ci.valueM = 4;
+        msg.status.valueM = 5;
+        msg.content.valueM = "abc";
 
         char buffer[1024];
         unsigned wIndex = 0;

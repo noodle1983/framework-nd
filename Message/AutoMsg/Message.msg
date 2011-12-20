@@ -39,7 +39,7 @@ SubMessageList
     QosIEI               Qos         0x12
 #    ServiceInfoIEI              0x13
     DateTimeIEI          Timestamp   0x14
-    PhoneNumberIEI       Uint8       0x15
+#    PhoneNumberIEI       Uint8       0x15
     UserAgentIEI         Uint16      0x16
     ApnIEI               Uint16      0x17
     UrlIEI               Uint16      0x18

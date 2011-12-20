@@ -1,5 +1,5 @@
-#ifndef BCDSTRING_H
-#define BCDSTRING_H
+#ifndef TLVBCDSTRING_H
+#define TLVBCDSTRING_H
 
 #include "IntMsg.h"
 #include "MsgErrorCode.h"
@@ -11,16 +11,20 @@
 
 namespace Msg
 {
-    template<int theFixLen>
-    class BcdString
+    template<char theTag, typename Uintx>
+    class TlvBcdString
     {
     public:
-        BcdString()
+        TlvBcdString(const gint64 theValue)
+            : valueM(theValue)
+        {}
+        TlvBcdString()
             : valueM(0)
         {}
-        ~BcdString(){}
+        ~TlvBcdString(){}
 
-        enum {MIN_BYTES = theFixLen};
+        enum {TAG = theTag};
+        enum {MIN_BYTES = Uintx::MIN_BYTES + 1};
 
         void init()
         {
@@ -28,19 +32,28 @@ namespace Msg
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
-            if (theIndex + MIN_BYTES > theLen)
+            int ret = SUCCESS_E;
+            Uint8 tag;
+            ret = tag.decode(theBuffer, theLen, theIndex);
+            if (SUCCESS_E != ret)
+                return ret;
+            if (tag.valueM != TAG)
+                return ERROR_E;
+
+            Uintx length;
+            ret = length.decode(theBuffer, theLen, theIndex);
+            if (SUCCESS_E != ret)
+                return ret;
+            if (theIndex + length.valueM > theLen)
                 return NOT_ENOUGH_BUFFER_E;
 
             unsigned oriIndex = theIndex;
-            theIndex += MIN_BYTES;
-            return decodeBcdCode(theBuffer + oriIndex, MIN_BYTES);
+            theIndex += length.valueM;
+            return decodeBcdCode(theBuffer + oriIndex, length.valueM);
         }
 
         int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
-            if (theIndex + MIN_BYTES > theLen)
-                return NOT_ENOUGH_BUFFER_E;
-
             char bcdStr[32] = {0};
             char msgContent[32];
             memset(msgContent, 0xff, sizeof(msgContent));
@@ -71,14 +84,17 @@ namespace Msg
                 halfbyte = 0;
             }
 
-            memcpy(theBuffer + theIndex, msgContent, MIN_BYTES);
-            theIndex += MIN_BYTES;
+            //encode
+            if (theIndex + MIN_BYTES + msgContentEncIndex > theLen)
+                return NOT_ENOUGH_BUFFER_E;
 
-            if (msgContentEncIndex > MIN_BYTES)
-            {
-                //valueM is too large
-                return ERROR_E;
-            }
+            Uintx length;
+            length.valueM = msgContentEncIndex;
+            theBuffer[theIndex++] = TAG;
+            length.encode(theBuffer, theLen, theIndex);
+
+            memcpy(theBuffer + theIndex, msgContent, msgContentEncIndex);
+            theIndex += msgContentEncIndex;
 
             return SUCCESS_E;
         }
@@ -162,9 +178,9 @@ namespace Msg
     public:
         guint64 valueM;
     };
+    typedef TlvBcdString<0x15, Uint8> PhoneNumberIEI;
 
-    typedef BcdString<8> BcdUserId;
 }
-#endif  /*BCDSTRING_H*/
+#endif  /*TLVBCDSTRING_H*/
 
 

@@ -1,7 +1,7 @@
 #ifndef MSGERRORCODE_H
 #define MSGERRORCODE_H
 
-namespace Msg 
+namespace Msg
 {
     enum ErrorCode
     {

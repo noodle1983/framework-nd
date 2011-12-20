@@ -31,14 +31,14 @@ namespace Msg
             int ret = SUCCESS_E;
             Uint8 tag;
             ret = tag.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
             if (tag.valueM != TAG)
                 return ERROR_E;
 
             Uintx length;
             ret = length.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
             if (theIndex + length.valueM > theLen)
                 return NOT_ENOUGH_BUFFER_E;

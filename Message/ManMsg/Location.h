@@ -26,7 +26,7 @@ namespace Msg
                         Uint16::MIN_BYTES +
                         0
         };
-        enum 
+        enum
         {
            MNC_MASK_E = 0x80,
            MCC_MASK_E = 0x40,
@@ -38,13 +38,13 @@ namespace Msg
 
         void init()
         {
-            flag.init();            
-            mnc.init();            
-            mcc.init();            
-            lac.init();            
-            rac.init();            
-            ci.init();            
-            si.init();            
+            flag.init();
+            mnc.init();
+            mcc.init();
+            lac.init();
+            rac.init();
+            ci.init();
+            si.init();
         }
 
         void setMNC(const guint16 theMNC)
@@ -102,7 +102,7 @@ namespace Msg
         {
             return (flag.valueM & CI_MASK_E) ? ci.valueM : 0;
         }
-        
+
         void setSI(const guint16 theSI)
         {
             flag.valueM |= SI_MASK_E;
@@ -119,14 +119,14 @@ namespace Msg
             int ret = SUCCESS_E;
             Uint8 tag;
             ret = tag.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
             if (tag.valueM != TAG)
                 return ERROR_E;
 
             Uint8 length;
             ret = length.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
             if (theIndex + length.valueM > theLen)
                 return NOT_ENOUGH_BUFFER_E;
@@ -134,31 +134,31 @@ namespace Msg
                 return ERROR_E;
 
             ret = flag.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = mnc.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = mcc.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = lac.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = rac.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = ci.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = si.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             return ret;
@@ -177,31 +177,31 @@ namespace Msg
 
             int ret = SUCCESS_E;
             ret = flag.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = mnc.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = mcc.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = lac.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = rac.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = ci.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = si.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             return ret;
@@ -243,13 +243,13 @@ namespace Msg
             return theOut;
         }
     public:
-        Uint8 flag;           
-        Uint16 mnc;           
-        Uint16 mcc;           
-        Uint16 lac;           
-        Uint16 rac;           
-        Uint16 ci;           
-        Uint16 si;           
+        Uint8 flag;
+        Uint16 mnc;
+        Uint16 mcc;
+        Uint16 lac;
+        Uint16 rac;
+        Uint16 ci;
+        Uint16 si;
     };
 }
 #endif /* LOCATION_H */

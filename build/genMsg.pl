@@ -54,6 +54,7 @@ print CMSG_HANDLE<<END_OF_HEADER;
 #include "IntMsg.h"
 #include "MsgErrorCode.h"
 #include "MobileIdentity.h"
+#include "TlvBcdString.h"
 #include "Qos.h"
 #include "Location.h"
 #include "Timestamp.h"

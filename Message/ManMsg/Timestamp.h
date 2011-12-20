@@ -24,8 +24,8 @@ namespace Msg
 
         void init()
         {
-            seconds.init();            
-            fraction.init();            
+            seconds.init();
+            fraction.init();
         }
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
@@ -36,17 +36,17 @@ namespace Msg
             int ret = SUCCESS_E;
             Uint8 tag;
             ret = tag.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
             if (tag.valueM != TAG)
                 return ERROR_E;
 
             ret = seconds.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = fraction.decode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             return ret;
@@ -61,11 +61,11 @@ namespace Msg
 
             int ret = SUCCESS_E;
             ret = seconds.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             ret = fraction.encode(theBuffer, theLen, theIndex);
-            if (SUCCESS_E != ret)            
+            if (SUCCESS_E != ret)
                 return ret;
 
             return ret;
@@ -87,8 +87,8 @@ namespace Msg
             return theOut;
         }
     public:
-        Uint32 seconds;           
-        Uint32 fraction;           
+        Uint32 seconds;
+        Uint32 fraction;
     };
 }
 #endif /* TIMESTAMP_H */
