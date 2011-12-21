@@ -32,14 +32,14 @@ void TelnetProtocol::handleInput(Connection::SocketConnectionPtr theConnection)
         Con2CmdManagerMap::iterator it = con2CmdManagerMapM.find(fd);
         if (it == con2CmdManagerMapM.end())
         {
-            cmdManager = new TelnetCmdManager(theConnection->getPeerAddr(), theConnection);		
+            cmdManager = new TelnetCmdManager(theConnection->getPeerAddr(), theConnection, this);		
             boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
             con2CmdManagerMapM[fd] = cmdManager;
         }
         else if (!it->second->validate(theConnection->getPeerAddr()))
         {
             delete it->second;
-            cmdManager = new TelnetCmdManager(theConnection->getPeerAddr(), theConnection);		
+            cmdManager = new TelnetCmdManager(theConnection->getPeerAddr(), theConnection, this);		
             it->second = cmdManager;
         }
         else
@@ -89,14 +89,14 @@ void TelnetProtocol::handleConnected(Connection::SocketConnectionPtr theConnecti
         Con2CmdManagerMap::iterator it = con2CmdManagerMapM.find(fd);
         if (it == con2CmdManagerMapM.end())
         {
-            cmdManager = new TelnetCmdManager(theConnection->getPeerAddr(), theConnection);		
+            cmdManager = new TelnetCmdManager(theConnection->getPeerAddr(), theConnection, this);		
             boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
             con2CmdManagerMapM[fd] = cmdManager;
         }
         else
         {
             delete it->second;
-            cmdManager = new TelnetCmdManager(theConnection->getPeerAddr(), theConnection);		
+            cmdManager = new TelnetCmdManager(theConnection->getPeerAddr(), theConnection, this);		
             it->second = cmdManager;
         }
     }

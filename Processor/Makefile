@@ -14,10 +14,13 @@ SUBDIR=src
 INC_DIR=-I. \
      -I./include \
      -I./src \
+	 -I$(PROJBASE)/Net/include \
 	 -I$(PROJBASE)/Data/include \
 	 -I$(PROJBASE)/Utility/include \
 
-STATIC_LIB= $(PROJBASE)/.lib/libUtility.a \
+STATIC_LIB= \
+	$(PROJBASE)/.lib/libNet.a \
+	$(PROJBASE)/.lib/libUtility.a \
 
 SHARED_LIB_DIR=
 SHARED_LIB= -pthread

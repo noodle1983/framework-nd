@@ -29,7 +29,8 @@ namespace Protocol
 	{
 	public:
 		TelnetCmdManager(const struct sockaddr_in& thePeerAddr,
-				Connection::SocketConnectionPtr theConnection);
+				Connection::SocketConnectionPtr theConnection,
+				IProtocol* theProtocol);
 		~TelnetCmdManager();
 
 		static void registCmd(
@@ -44,6 +45,21 @@ namespace Protocol
         void send(const char* const theStr, unsigned theLen);
         void sendPrompt(); 
 
+		struct event* addLocalTimer(
+				const struct timeval& theInterval, 
+				event_callback_fn theCallback,
+				void* theArg)
+        {
+			return protocolM->addLocalTimer(fdM, 
+					theInterval, theCallback, theArg);
+        }
+		void cancelLocalTimer(
+                struct event*& theEvent)
+        {
+			return protocolM->cancelLocalTimer(fdM,theEvent);
+		}
+
+        void takeOverInputHandler(ICmdHandler* theHandler);
         void exitCurCmd();
         void printUsage();
 	private:
@@ -59,6 +75,8 @@ namespace Protocol
 
 		struct sockaddr_in peerAddrM;
 		Connection::SocketConnectionWPtr connectionM;
+		int fdM;
+		IProtocol* protocolM;
 
 	};
 }

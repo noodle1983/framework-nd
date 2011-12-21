@@ -4,6 +4,8 @@
 #include "BoostProcessor.h"
 #include <boost/bind.hpp>
 
+struct event;
+
 namespace Net
 {
     namespace Connection
@@ -35,21 +37,36 @@ namespace Net
          *         connection: the socket connection which can be write to
          *
          */
-        int asynHandleInput(int theFd, Connection::SocketConnectionPtr theConnection)
+        int asynHandleInput(const int theFd, Connection::SocketConnectionPtr theConnection)
         {
             return processorM->process(theFd + 1,
                     &IProtocol::handleInput, this, theConnection);
         }
-        int asynHandleClose(int theFd, Connection::SocketConnectionPtr theConnection)
+        int asynHandleClose(const int theFd, Connection::SocketConnectionPtr theConnection)
         {
             return processorM->process(theFd + 1,
                     &IProtocol::handleClose, this, theConnection);
         }
-        int asynHandleConnected(int theFd, Connection::SocketConnectionPtr theConnection)
+        int asynHandleConnected(const int theFd, Connection::SocketConnectionPtr theConnection)
         {
             return processorM->process(theFd + 1,
                     &IProtocol::handleConnected, this, theConnection);
         }
+		inline struct event* addLocalTimer(
+				const int theFd,
+				const struct timeval& theInterval, 
+				event_callback_fn theCallback,
+				void* theArg)
+        {
+			return processorM->addLocalTimer(theFd + 1, 
+					theInterval, theCallback, theArg);
+        }
+		inline void cancelLocalTimer(
+                const int theFd, 
+                struct event*& theEvent)
+        {
+			return processorM->cancelLocalTimer(theFd + 1,theEvent);
+		}
         
         virtual void handleInput(Net::Connection::SocketConnectionPtr theConnection) = 0;
         virtual void handleClose(Net::Connection::SocketConnectionPtr theConnection) {}

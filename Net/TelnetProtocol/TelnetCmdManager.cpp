@@ -31,11 +31,15 @@ void TelnetCmdManager::initTopCmd()
 }
 
 //-----------------------------------------------------------------------------
+
 TelnetCmdManager::TelnetCmdManager(const struct sockaddr_in& thePeerAddr,
-				Connection::SocketConnectionPtr theConnection)
+				Connection::SocketConnectionPtr theConnection,
+				IProtocol* theProtocol)
 	: bufferLenM(0)
     , peerAddrM(thePeerAddr)
 	, connectionM(theConnection)
+	, fdM(theConnection->getFd()) 
+	, protocolM(theProtocol)
 {
     initTopCmd();
 }
@@ -149,31 +153,37 @@ int TelnetCmdManager::handleCmd(const unsigned theStart, const unsigned theEnd)
         argsList.push_back(std::string(cmdBufferM + argsStart, cmdBufferM + i));
     }
     
-    if (argsList.empty())
-    {
-        sendPrompt();
-        return 0;
-    }
+	if (subCmdStackM.empty())
+	{
+		if (argsList.empty())
+		{
+			sendPrompt();
+			return 0;
+		}
 
-    // the cmdHandler is not thread-safe, 
-    // please make sure it is valid until the man Processor stops
-    std::string cmd = argsList.front();
-    argsList.pop_front();
-    ICmdHandler* cmdHandler = NULL; 
-    {
-        boost::shared_lock<boost::shared_mutex> lock(topCmdMutexM);
-        CmdMap::iterator it = allTopCmdsM.find(cmd);
-        if (it == allTopCmdsM.end())
-        {
-            const char* const errstr = "command not found!\r\n";
-            send(errstr, strlen(errstr));
-            sendPrompt();
-            return 0;
-        }
-        cmdHandler = it->second;
-    }
-    cmdHandler->handle(this, argsList);
-
+		// the cmdHandler is not thread-safe, 
+		// please make sure it is valid until the man Processor stops
+		std::string cmd = argsList.front();
+		argsList.pop_front();
+		ICmdHandler* cmdHandler = NULL; 
+		{
+			boost::shared_lock<boost::shared_mutex> lock(topCmdMutexM);
+			CmdMap::iterator it = allTopCmdsM.find(cmd);
+			if (it == allTopCmdsM.end())
+			{
+				const char* const errstr = "command not found!\r\n";
+				send(errstr, strlen(errstr));
+				sendPrompt();
+				return 0;
+			}
+			cmdHandler = it->second;
+		}
+		cmdHandler->handle(this, argsList);
+	}
+	else
+	{
+		subCmdStackM.back()->handle(this, argsList);
+	}
     return 0;
 }
 
@@ -233,6 +243,13 @@ int TelnetCmdManager::handleInput()
 
     }
 	return 0;
+}
+
+//-----------------------------------------------------------------------------
+
+void TelnetCmdManager::takeOverInputHandler(ICmdHandler* theHandler)
+{
+	subCmdStackM.push_back(theHandler);
 }
 
 //-----------------------------------------------------------------------------
