@@ -4,6 +4,8 @@
 #include <list>
 #include <string>
 
+#include <assert.h>
+
 namespace Net
 {
 namespace Protocol
@@ -19,6 +21,11 @@ namespace Protocol
         //////////////////desc intent///////////////////////////////////////|
 		virtual const char* getDesc() = 0;
 		virtual const char* getPrompt() = 0;
+
+        //stateful cmd, define all or not to define any
+        virtual void* newCmdSessionData(){assert(0); return NULL;}
+        virtual void freeCmdSessionData(void* theData){assert(0);} 
+		virtual void handle(TelnetCmdManager* theManager, CmdArgsList& theArgs, void* theSessionData) {assert(0);}
 	};
 
 }

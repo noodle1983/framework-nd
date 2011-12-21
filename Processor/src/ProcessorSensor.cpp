@@ -5,10 +5,6 @@ using namespace Net::Protocol;
 //-----------------------------------------------------------------------------
 
 ProcessorSensor::ProcessorSensor()
-	: isRunningM(false)
-	, telnetManagerM(NULL)
-	, statCountM(0)
-	, intervalM(3)
 {
 }
 
@@ -23,59 +19,65 @@ ProcessorSensor::~ProcessorSensor()
 
 void ProcessorSensor::handle(TelnetCmdManager* theManager, CmdArgsList& theArgs)
 {
-	if (isRunningM)
-	{
-		isRunningM = false;
-		if (timeoutEvtM)
-		{
-			theManager->cancelLocalTimer(timeoutEvtM);
-			timeoutEvtM = NULL;
-		}
-		telnetManagerM = NULL;
-		statCountM = 0;
-		intervalM = 3;
-	}
-	else
-	{
-		isRunningM = true;
-		statCountM = 0;
-		intervalM = 3;
-		telnetManagerM = theManager;
-		telnetManagerM->takeOverInputHandler(this);
-		stat();
-	}
+    ProcessorSensorData* data = (ProcessorSensorData*)theManager->takeOverInputHandler(this);
+    data->telnetManagerM = theManager;
+    data->statCountM = 0;
+    data->intervalM = 3;
+    data->timeoutEvtM = NULL;
+    data->sensorM = this;
+    stat(data);
 }
 
 //-----------------------------------------------------------------------------
 
-void ProcessorSensor::stat()
+void ProcessorSensor::handle(
+        TelnetCmdManager* theManager, 
+        CmdArgsList& theArgs, 
+        void* theSessionData)
 {
-	char str[] = "hahahha          haha\r\n";
-	telnetManagerM->send(str, strlen(str));
+    ProcessorSensorData* data = (ProcessorSensorData*) theSessionData;
+    if (data->timeoutEvtM)
+    {
+        theManager->cancelLocalTimer(data->timeoutEvtM);
+        data->timeoutEvtM = NULL;
+    }
+    data->telnetManagerM = NULL;
+    data->statCountM = 0;
+    data->intervalM = 3;
+    theManager->exitCurCmd();
+}
 
-	statCountM++;
-	addTimer();
+//-----------------------------------------------------------------------------
+
+void ProcessorSensor::stat(ProcessorSensorData* theData)
+{
+    assert(theData != NULL);
+	char str[] = "hahahha          haha\r\n";
+	theData->telnetManagerM->send(str, strlen(str));
+
+	theData->statCountM++;
+	addTimer(theData);
 }
 
 //-----------------------------------------------------------------------------
 
 static void onProcessorSensorTimeOut(int theFd, short theEvt, void *theArg)
 {
-    ProcessorSensor* sensor = (ProcessorSensor*)theArg;
-    sensor->stat();
+    ProcessorSensorData* data = (ProcessorSensorData*)theArg;
+    data->sensorM->stat(data);
 }
 
-void ProcessorSensor::addTimer()
+void ProcessorSensor::addTimer(ProcessorSensorData* theData)
 {
-	if (timeoutEvtM)
+	if (theData->timeoutEvtM)
 	{
-		telnetManagerM->cancelLocalTimer(timeoutEvtM);
-		timeoutEvtM = NULL;
+		theData->telnetManagerM->cancelLocalTimer(theData->timeoutEvtM);
+		theData->timeoutEvtM = NULL;
 	}
     struct timeval tv;
-    tv.tv_sec = intervalM;
+    tv.tv_sec = theData->intervalM;
     tv.tv_usec = 0;
-    timeoutEvtM = telnetManagerM->addLocalTimer(tv, onProcessorSensorTimeOut, (void*)this);
+    theData->timeoutEvtM = theData->telnetManagerM->addLocalTimer(tv, onProcessorSensorTimeOut, theData);
 }
 
 //-----------------------------------------------------------------------------

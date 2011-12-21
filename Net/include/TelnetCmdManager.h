@@ -23,6 +23,7 @@ namespace Net
 namespace Protocol
 {
 	typedef std::list<ICmdHandler*> CmdHandlerStack;
+	typedef std::list<void*>        CmdSessionDataStack;
 	typedef std::map<std::string, ICmdHandler*> CmdMap;
 
 	class TelnetCmdManager
@@ -59,7 +60,7 @@ namespace Protocol
 			return protocolM->cancelLocalTimer(fdM,theEvent);
 		}
 
-        void takeOverInputHandler(ICmdHandler* theHandler);
+        void* takeOverInputHandler(ICmdHandler* theHandler);
         void exitCurCmd();
         void printUsage();
 	private:
@@ -70,6 +71,7 @@ namespace Protocol
         static HelpHandler helpHandlerM;
 
 		CmdHandlerStack subCmdStackM;
+		CmdSessionDataStack subCmdDataStackM;
         char cmdBufferM[256];
         unsigned bufferLenM;
 

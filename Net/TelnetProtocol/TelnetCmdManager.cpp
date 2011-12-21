@@ -2,6 +2,7 @@
 #include "SocketConnection.h"
 #include "Log.h"
 #include <set>
+#include <assert.h>
 
 using namespace Net;
 using namespace Net::Protocol;
@@ -182,7 +183,8 @@ int TelnetCmdManager::handleCmd(const unsigned theStart, const unsigned theEnd)
 	}
 	else
 	{
-		subCmdStackM.back()->handle(this, argsList);
+        assert(!subCmdDataStackM.empty());
+		subCmdStackM.back()->handle(this, argsList, subCmdDataStackM.back());
 	}
     return 0;
 }
@@ -247,9 +249,12 @@ int TelnetCmdManager::handleInput()
 
 //-----------------------------------------------------------------------------
 
-void TelnetCmdManager::takeOverInputHandler(ICmdHandler* theHandler)
+void* TelnetCmdManager::takeOverInputHandler(ICmdHandler* theHandler)
 {
 	subCmdStackM.push_back(theHandler);
+    void* data = theHandler->newCmdSessionData();
+    subCmdDataStackM.push_back(data);
+    return data;
 }
 
 //-----------------------------------------------------------------------------
@@ -258,7 +263,9 @@ void TelnetCmdManager::exitCurCmd()
 {
     if (!subCmdStackM.empty())
     {
+        subCmdStackM.back()->freeCmdSessionData(subCmdDataStackM.back());
         subCmdStackM.pop_back();
+        subCmdDataStackM.pop_back();
         sendPrompt();
     }
     else
