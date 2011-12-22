@@ -179,8 +179,8 @@ void BoostWorker::run()
                 struct event* topEvent = min_heap_top(&timerHeapM);
                 if (evutil_timercmp(&topEvent->ev_timeout, &timeNowM, <=))
                 {
-                    (topEvent->ev_callback)(-1, 0, topEvent->ev_arg);
                     min_heap_pop(&timerHeapM);
+                    (topEvent->ev_callback)(-1, 0, topEvent->ev_arg);
 					eventPoolM.freeEvent(topEvent);
                 }
                 else

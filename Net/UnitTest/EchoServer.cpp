@@ -3,6 +3,8 @@
 #include "Reactor.h"
 #include "EchoProtocol.h"
 #include "TelnetProtocol.h"
+#include "TelnetCmdManager.h"
+#include "ProcessorSensor.h"
 #include "Log.h"
 
 #include <event.h>
@@ -36,6 +38,9 @@ int main()
     }
     setsid();
 
+	{
+		Net::Protocol::TelnetCmdManager::registCmd("prcstat", Net::Protocol::ProcessorSensorSingleton::instance());
+	}
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, SIG_IGN);
     signal(SIGTERM, sig_stop);
