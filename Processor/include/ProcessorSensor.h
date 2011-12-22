@@ -3,6 +3,12 @@
 
 #include "ICmdHandler.h"
 #include "Singleton.hpp"
+#include "BoostProcessor.h"
+
+#include <map>
+#include <string>
+#include <boost/thread.hpp>
+
 struct event;
 
 namespace Net
@@ -29,6 +35,8 @@ namespace Protocol
     class ProcessorSensor: public ICmdHandler
     {
 	public:
+		typedef std::map<std::string, Processor::BoostProcessor*> ProcessorMap;
+
 		ProcessorSensor();
 		virtual ~ProcessorSensor();
         //////////////////desc intent///////////////////////////////////////|
@@ -42,6 +50,14 @@ namespace Protocol
 
 		void stat(ProcessorSensorData* theData);
 		void addTimer(ProcessorSensorData* theData);
+
+		void registProcessor(
+				const std::string& theName, 
+				Processor::BoostProcessor* theProcessor);
+
+	private:
+		ProcessorMap processorMapM;
+        boost::shared_mutex processorMapMutexM;
     };
     typedef class DesignPattern::Singleton<ProcessorSensor> ProcessorSensorSingleton; 
 }

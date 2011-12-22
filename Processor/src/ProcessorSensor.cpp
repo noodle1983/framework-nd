@@ -1,6 +1,8 @@
 #include "ProcessorSensor.h"
 #include "TelnetCmdManager.h"
 
+#include <sstream>
+
 using namespace Net::Protocol;
 //-----------------------------------------------------------------------------
 
@@ -52,8 +54,19 @@ void ProcessorSensor::handle(
 void ProcessorSensor::stat(ProcessorSensorData* theData)
 {
     assert(theData != NULL);
-	char str[] = "hahahha          haha\r\n";
-	theData->telnetManagerM->send(str, strlen(str));
+	std::ostringstream oss;
+	oss << std::setw(15) << "ProcessorName" << std::setw(10) << "QueueSize" << std::endl;
+	oss << std::setw(15) << "Man" << std::setw(10) << 1 << std::endl;
+	{
+		boost::shared_lock<boost::shared_mutex> lock(processorMapMutexM);
+		ProcessorMap::iterator it = processorMapM.begin();
+		for (; it != processorMapM.end(); it++)
+		{
+
+		}
+	}
+	std::string str = oss.str();
+	theData->telnetManagerM->send(str.c_str(), str.length());
 
 	theData->statCountM++;
 	addTimer(theData);
@@ -79,6 +92,16 @@ void ProcessorSensor::addTimer(ProcessorSensorData* theData)
     tv.tv_sec = theData->intervalM;
     tv.tv_usec = 0;
     theData->timeoutEvtM = theData->telnetManagerM->addLocalTimer(tv, onProcessorSensorTimeOut, theData);
+}
+
+//-----------------------------------------------------------------------------
+
+void ProcessorSensor::registProcessor(
+		const std::string& theName, 
+		Processor::BoostProcessor* theProcessor)
+{
+	boost::unique_lock<boost::shared_mutex> lock(processorMapMutexM);
+	processorMapM[theName] = theProcessor;
 }
 
 //-----------------------------------------------------------------------------
