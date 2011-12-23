@@ -4,6 +4,26 @@
 #include <sstream>
 
 using namespace Net::Protocol;
+
+//-----------------------------------------------------------------------------
+
+ProcessorSensorData::ProcessorSensorData()
+	: telnetManagerM(NULL)
+	, statCountM(0)
+	, intervalM(3)
+	, sensorM(NULL)
+{}
+
+//-----------------------------------------------------------------------------
+
+ProcessorSensorData::~ProcessorSensorData()
+{
+	if (timeoutEvtM)
+	{
+		telnetManagerM->cancelLocalTimer(timeoutEvtM);
+	}
+}
+
 //-----------------------------------------------------------------------------
 
 ProcessorSensor::ProcessorSensor()
@@ -55,14 +75,30 @@ void ProcessorSensor::stat(ProcessorSensorData* theData)
 {
     assert(theData != NULL);
 	std::ostringstream oss;
-	oss << std::setw(15) << "ProcessorName" << std::setw(10) << "QueueSize" << std::endl;
-	oss << std::setw(15) << "Man" << std::setw(10) << 1 << std::endl;
+	if (theData->statCountM % 3 == 0)
+	{
+		oss << "-------------------------" << "\r\n";
+		oss << std::setiosflags(std::ios_base::left) 
+			<< std::setw(15) << "ProcessorName" 
+		    << std::setiosflags(std::ios_base::right) 
+			<< std::setw(10) << "QueueSize" << "\r\n";
+	}
 	{
 		boost::shared_lock<boost::shared_mutex> lock(processorMapMutexM);
 		ProcessorMap::iterator it = processorMapM.begin();
 		for (; it != processorMapM.end(); it++)
 		{
-
+			const std::string& name = it->first;
+			Processor::BoostProcessor* processor = it->second;
+			for (unsigned i = 0; i < processor->threadCountM; i++)
+			{
+				std::ostringstream ossName;
+				ossName << name << i;
+				oss << std::setiosflags(std::ios_base::left) 
+				    << std::setw(15) << ossName.str() 
+					<< std::setiosflags(std::ios_base::right) 
+					<< std::setw(10) << processor->workersM[i].getQueueSize() << "\r\n";
+			}
 		}
 	}
 	std::string str = oss.str();

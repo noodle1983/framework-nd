@@ -49,6 +49,10 @@ TelnetCmdManager::TelnetCmdManager(const struct sockaddr_in& thePeerAddr,
 
 TelnetCmdManager::~TelnetCmdManager()
 {
+	while(!subCmdStackM.empty())
+	{
+		exitCurCmd();
+	}
 }
 
 //-----------------------------------------------------------------------------

@@ -7,6 +7,14 @@
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
 
+namespace Net
+{
+namespace Protocol
+{
+	class ProcessorSensor;
+}
+}
+
 namespace Processor
 {
     class BoostWorker;
@@ -14,6 +22,8 @@ namespace Processor
     class BoostProcessor
     {
     public:
+		friend class Net::Protocol::ProcessorSensor;
+
         BoostProcessor(const unsigned theThreadCount);
         ~BoostProcessor();
 

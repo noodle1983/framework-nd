@@ -18,13 +18,8 @@ namespace Protocol
     class ProcessorSensor;
     struct ProcessorSensorData
     {
-        ProcessorSensorData()
-            : telnetManagerM(NULL)
-            , statCountM(0)
-            , intervalM(3)
-            , sensorM(NULL)
-        {}
-        ~ProcessorSensorData(){}
+        ProcessorSensorData();
+        ~ProcessorSensorData();
 		struct event* timeoutEvtM;
 		TelnetCmdManager* telnetManagerM;
 		int statCountM;

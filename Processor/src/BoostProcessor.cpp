@@ -2,6 +2,7 @@
 #include "BoostWorker.h"
 #include "ConfigCenter.h"
 #include "ProcessorJob.hpp"
+#include "ProcessorSensor.h"
 
 #include <boost/bind.hpp>
 
@@ -33,6 +34,8 @@ BoostProcessor* BoostProcessor::fsmInstance()
             fsmProcessorInstanceReleaser.reset(fsmProcessor);
             fsmProcessor->start();
             fsmProcessorM = fsmProcessor;
+			Net::Protocol::ProcessorSensorSingleton::instance()->registProcessor(
+					"FsmProcessor", fsmProcessorM);
         }
     }
     return fsmProcessorM;
@@ -53,6 +56,8 @@ BoostProcessor* BoostProcessor::netInstance()
             netProcessorInstanceReleaser.reset(netProcessor);
             netProcessor->start();
             netProcessorM = netProcessor;
+			Net::Protocol::ProcessorSensorSingleton::instance()->registProcessor(
+					"NetProcessor", netProcessorM);
         }
     }
     return netProcessorM;
@@ -72,6 +77,8 @@ BoostProcessor* BoostProcessor::manInstance()
             manProcessorInstanceReleaser.reset(manProcessor);
             manProcessor->start();
             manProcessorM = manProcessor;
+			Net::Protocol::ProcessorSensorSingleton::instance()->registProcessor(
+					"ManProcessor", manProcessorM);
         }
     }
     return manProcessorM;

@@ -27,6 +27,8 @@ namespace Processor
 
         inline bool isJobQueueEmpty()
         {return bufferJobQueueM.empty();}
+		inline unsigned getQueueSize()
+		{return bufferJobQueueM.size()/sizeof(void*);}
         void stop();
 
         int process(IJob* theJob);
