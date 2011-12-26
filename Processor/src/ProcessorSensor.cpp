@@ -142,3 +142,12 @@ void ProcessorSensor::registProcessor(
 
 //-----------------------------------------------------------------------------
 
+void ProcessorSensor::unregistProcessor(
+		const std::string& theName)
+{
+	boost::unique_lock<boost::shared_mutex> lock(processorMapMutexM);
+	processorMapM.erase(theName);
+}
+
+//-----------------------------------------------------------------------------
+

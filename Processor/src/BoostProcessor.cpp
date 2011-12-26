@@ -85,10 +85,25 @@ BoostProcessor* BoostProcessor::manInstance()
 }
 
 //-----------------------------------------------------------------------------
+
 BoostProcessor::BoostProcessor(const unsigned theThreadCount)
-    :threadCountM(theThreadCount),
-     workersM(NULL)
+    : threadCountM(theThreadCount)
+    , workersM(NULL)
 {
+}
+
+//-----------------------------------------------------------------------------
+
+BoostProcessor::BoostProcessor(const std::string& theName, const unsigned theThreadCount)
+    : threadCountM(theThreadCount)
+    , workersM(NULL)
+    , nameM(theName)
+{
+    if (!nameM.empty())
+    {
+        Net::Protocol::ProcessorSensorSingleton::instance()->registProcessor(
+            nameM, this);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -96,6 +111,10 @@ BoostProcessor::BoostProcessor(const unsigned theThreadCount)
 BoostProcessor::~BoostProcessor()
 {
     //threadsM.interrupt_all();
+    if (!nameM.empty())
+    {
+        Net::Protocol::ProcessorSensorSingleton::instance()->unregistProcessor(nameM);
+    }
     stop();
     delete []workersM;
 }

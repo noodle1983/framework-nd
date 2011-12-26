@@ -4,6 +4,7 @@
 #include "ProcessorJob.hpp"
 #include "BoostWorker.h"
 
+#include <string>
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -25,6 +26,7 @@ namespace Processor
 		friend class Net::Protocol::ProcessorSensor;
 
         BoostProcessor(const unsigned theThreadCount);
+        BoostProcessor(const std::string& theName, const unsigned theThreadCount);
         ~BoostProcessor();
 
         static BoostProcessor* fsmInstance();
@@ -94,6 +96,7 @@ namespace Processor
         unsigned threadCountM;
         BoostWorker* workersM;
         boost::thread_group threadsM;
+        std::string nameM;
 
         static BoostProcessor* fsmProcessorM;
         static BoostProcessor* netProcessorM;

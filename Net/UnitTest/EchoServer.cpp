@@ -46,7 +46,7 @@ int main()
     signal(SIGTERM, sig_stop);
     signal(SIGINT, sig_stop);
     evthread_use_pthreads();
-    Processor::BoostProcessor processor(4);
+    Processor::BoostProcessor processor("NetProcessor", 4);
     processor.start();
     Net::Reactor::Reactor reactor;
     Net::Protocol::EchoProtocol echoProtocol(&reactor, &processor);

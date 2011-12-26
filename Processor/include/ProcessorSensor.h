@@ -49,6 +49,8 @@ namespace Protocol
 		void registProcessor(
 				const std::string& theName, 
 				Processor::BoostProcessor* theProcessor);
+		void unregistProcessor(
+				const std::string& theName);
 
 	private:
 		ProcessorMap processorMapM;
