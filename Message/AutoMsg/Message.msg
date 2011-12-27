@@ -28,8 +28,8 @@ MessageList
     UserStatusNotification      0x32
 #    InjectSignalingREQ          0x41
 #    InjectSignalingAck          0x42
-    Cdr                          0xF0
-    SignalEvent                  0xF1
+    CdrMsg                       0xF0
+    SignalEventMsg               0xF1
 
 ##############################################
 #MessageList
@@ -249,7 +249,7 @@ Message CdrMsg
     AuthenticationAndCipheringRejectCause   Uint16        M
     AuthenticationFlag                      Uint8         M
 
-Message SignalEvent
+Message SignalEventMsg
     Type               Uint8         M
     Subtype            Uint8         M
     Protocol           Uint8         M
