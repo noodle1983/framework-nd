@@ -28,6 +28,8 @@ MessageList
     UserStatusNotification      0x32
 #    InjectSignalingREQ          0x41
 #    InjectSignalingAck          0x42
+    Cdr                          0xF0
+    SignalEvent                  0xF1
 
 ##############################################
 #MessageList
@@ -203,4 +205,75 @@ Message QosSubMsg
     TrafficHandlingPriority   Uint8        M
     GuaranteedBitRateUp       Uint8        M
     GuaranteedBitRateDown     Uint8        M
+
+Message CdrMsg
+    Type                                    Uint8         M
+    Subtype                                 Uint8         M
+    Protocol                                Uint8         M
+    StatusControl                           Uint8         M
+    ReportTime                              DateTimeIEI   M
+    Device                                  Uint16        M
+    Channel                                 Uint16        M
+    ID                                      Uint32        M
+    StartTime                               DateTimeIEI   M
+    TMSI                                    Uint64        M
+    IMSI                                    Uint64        M
+    IMEI                                    Uint64        M
+    MSISDN                                  Uint64        M
+    CDRType                                 Uint8         M
+    CDRResult                               Uint8         M
+    CDRIndicator                            Uint32        M
+    RABAssignmentRequestTime                Uint32        M
+    RABAssignmentResponseTime               Uint32        M
+    RABReleaseTime                          Uint32        M
+    IdentityRequestTime                     Uint32        M
+    IdentityResponseTime                    Uint32        M
+    AuthenticationRequestTime               Uint32        M
+    AuthenticationResponseTime              Uint32        M
+    PDPActive                               Uint32        M
+    PDPDeactive                             Uint32        M
+    IMSIAttachTime                          Uint32        M
+    IMSIDetachTime                          Uint32        M
+    MCC                                     Uint16        M
+    MNC                                     Uint8         M
+    LAC                                     Uint16        M
+    CI                                      Uint16        M
+    LastMCC                                 Uint16        M
+    LastMNC                                 Uint8         M
+    LastLAC                                 Uint16        M
+    LastCI                                  Uint16        M
+    PCMTS                                   Uint16        M
+    AttachRejectCause                       Uint16        M
+    RoutingAreaUpdateRejectCause            Uint16        M
+    ServiceRejectCause                      Uint16        M
+    AuthenticationAndCipheringRejectCause   Uint16        M
+    AuthenticationFlag                      Uint8         M
+
+Message SignalEvent
+    Type               Uint8         M
+    Subtype            Uint8         M
+    Protocol           Uint8         M
+    StatusControl      Uint8         M
+    ReportTime         DateTimeIEI   M
+    StartTime          DateTimeIEI   M
+    Device             Uint16        M
+    Channel            Uint16        M
+    TMSI               Uint32        M
+    IMSI               Uint64        M
+    IMEI               Uint64        M
+    MSISDN             Uint64        M
+    SequenceNumber     Uint32        M
+    CDRType            Uint8         M
+    MCC                Uint16        M
+    MNC                Uint8         M
+    LAC                Uint16        M
+    CI                 Uint16        M
+    RAC                Uint8         M
+    RequestTime        Uint32        M
+    RequestType        Uint8         M
+    AcceptTime         Uint32        M
+    CompleteTime       Uint32        M
+    RejectedTime       Uint32        M
+    RejectedCause      Uint16        M
+    BaseCdrId          Uint32        M
 
