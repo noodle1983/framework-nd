@@ -75,14 +75,10 @@ void ProcessorSensor::stat(ProcessorSensorData* theData)
 {
     assert(theData != NULL);
 	std::ostringstream oss;
-	if (theData->statCountM % 3 == 0)
-	{
-		oss << "-------------------------" << "\r\n";
-		oss << std::setiosflags(std::ios_base::left) 
-			<< std::setw(15) << "ProcessorName" 
-		    << std::setiosflags(std::ios_base::right) 
-			<< std::setw(10) << "QueueSize" << "\r\n";
-	}
+    oss << "-------------------------" << "\r\n";
+    oss << std::setiosflags(std::ios_base::left) 
+        << std::setw(15) << "ProcessorName" 
+        << std::setw(10) << "QueueSize" << "\r\n";
 	{
 		boost::shared_lock<boost::shared_mutex> lock(processorMapMutexM);
 		ProcessorMap::iterator it = processorMapM.begin();
@@ -96,7 +92,6 @@ void ProcessorSensor::stat(ProcessorSensorData* theData)
 				ossName << name << i;
 				oss << std::setiosflags(std::ios_base::left) 
 				    << std::setw(15) << ossName.str() 
-					<< std::setiosflags(std::ios_base::right) 
 					<< std::setw(10) << processor->workersM[i].getQueueSize() << "\r\n";
 			}
 		}
