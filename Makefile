@@ -18,6 +18,7 @@ SUBDIR= Log \
 		DesignPattern \
 		Utility \
 		WinPort \
+		LibTest \
 
 RELEASE_DIR = $(PROJBASE)/release
 #########################################
@@ -46,7 +47,7 @@ all: $(SUBDIR)
 		make -C $$DIR || exit -1; \
 	done                  
 
-test: all $(SUBDIR) $(OUTDIR)
+test: release $(SUBDIR) $(OUTDIR)
 	@for DIR in $(SUBDIR);  \
 	do                     \
 		make test -C $$DIR || exit -1; \
@@ -68,12 +69,13 @@ release: all
 		$(RELEASE_DIR)/lib 
 	@for DIR in $(SUBDIR);  \
 	do                     \
-		cd $(RELEASE_DIR)/include/ && \
-		cp ../../$$DIR/include/* . && \
-		cd $(PROJBASE) ; \
+		if [ -d "$(PROJBASE)/$$DIR/include" ]; then \
+			cd $(RELEASE_DIR)/include/ && \
+			cp ../../$$DIR/include/* . && \
+			cd $(PROJBASE) ; \
+		fi; \
 	done                  
 	cd $(RELEASE_DIR)/lib && \
-	cp ../../.lib/*.a . && \
 	$(AR) $(ARFLAGS) $(TARGET).a $(ALL_OBJECT_LIST) && \
 	$(RANLIB) $(TARGET).a  \
 	#$(CC) $(SHAREDFLAG)  -o $(TARGET).so $(ALL_OBJECT_LIST) $(STATIC_LIB) $(SHSRED_LIB)
