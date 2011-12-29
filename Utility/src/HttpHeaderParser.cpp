@@ -153,7 +153,6 @@ int HttpHeaderParser::parse(
         }
 
         state = rulesTableM.getRule(ch, state);
-        state = PARSE_STATE_IGNORE_LINE;
         if (PARSE_STATE_METHOD_GET == state)
         {
             keyId = PARSE_STATE_METHOD_GET;

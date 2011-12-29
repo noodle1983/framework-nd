@@ -1,0 +1,1294 @@
+Index	PrimaryKey	SubsequentKey	Render	Model	OS	TerminalType(0:MobilePhone;1:NotMobilePhone)
+1	Acer	A1	Acer	A1	Android	0
+2	Acer	A500	Acer	A500	Android	0
+3	Acer	S200	Acer	S200	Windows Mobile	0
+4	Amoi	E70	Amoi	E70	Windows Mobile	0
+5	Amoi	E78	Amoi	E78	Windows Mobile	0
+6	Amoi	N810	Amoi	N810	Windows Mobile	0
+7	Apanda	A60	Apanda	A60	Android	0
+8	Apple	iPad	Apple	iPad	ios	0
+9	Apple	iPod	Apple	iPod	ios	0
+10	Asus	Galaxy	Asus	Galaxy	Windows Mobile	0
+11	Asus	P535	Asus	P535	Windows Mobile	0
+12	Asus	P550	Asus	P550	Windows Mobile	0
+13	ASUS	T10	ASUS	T10	OMS	0
+14	BenQ	E72	BenQ	E72	Windows Mobile	0
+15	BestSonny	TD902	BestSonny	TD902	Unsmartphone	0
+16	BIRD	D608	BIRD	D608	Unsmartphone	0
+17	BIRD	D716	BIRD	D716	Unsmartphone	0
+18	BIRD	D720	BIRD	D720	Unsmartphone	0
+19	BIRD	D730	BIRD	D730	Unsmartphone	0
+20	BIRD	V750	BIRD	V750	Unsmartphone	0
+21	BlackBerry	8100	BlackBerry	8100	BlackBerry OS	0
+22	BlackBerry	8120	BlackBerry	8120	BlackBerry OS	0
+23	BlackBerry	8220	BlackBerry	8220	BlackBerry OS	0
+24	BlackBerry	8310	BlackBerry	8310	BlackBerry OS	0
+25	BlackBerry	8320	BlackBerry	8320	BlackBerry OS	0
+26	BlackBerry	8520	BlackBerry	8520	BlackBerry OS	0
+27	BlackBerry	8700	BlackBerry	8700	BlackBerry OS	0
+28	BlackBerry	8800	BlackBerry	8800	BlackBerry OS	0
+29	BlackBerry	8900	BlackBerry	8900	BlackBerry OS	0
+30	BlackBerry	9000	BlackBerry	9000	BlackBerry OS	0
+31	BlackBerry	9630	BlackBerry	9630	BlackBerry OS	0
+32	CECT	A1000	CECT	A1000	Unsmartphone	0
+33	CECT	A900	CECT	A900	Unsmartphone	0
+34	CoolPad	6168H	CoolPad	6168H	Windows Mobile	0
+35	CoolPad	6268H	CoolPad	6268H	Windows Mobile	0
+36	CoolPad	728	CoolPad	728	Windows Mobile	0
+37	CoolPad	8830	CoolPad	8830	Windows Mobile	0
+38	CoolPad	8900	CoolPad	8900	Windows Mobile	0
+39	CoolPad	8910	CoolPad	8910	Windows Mobile	0
+40	CoolPad	F600	CoolPad	F600	Windows Mobile	0
+41	CoolPad	F603	CoolPad	F603	Windows Mobile	0
+42	CoolPad	F608	CoolPad	F608	Windows Mobile	0
+43	CoolPad	F61	CoolPad	F61	Windows Mobile	0
+44	CoolPad	F63	CoolPad	F63	Windows Mobile	0
+45	CoolPad	F668	CoolPad	F668	Windows Mobile	0
+46	CoolPad	F69	CoolPad	F69	Windows Mobile	0
+47	CoolPad	F69	CoolPad	F69	Unsmartphone	0
+48	CoolPad	F800	CoolPad	F800	Windows Mobile	0
+49	CoolPad	F801	CoolPad	F801	Windows Mobile	0
+50	CoolPad	N900	CoolPad	N900	Windows Mobile	0
+51	CoolPad	T60	CoolPad	T60	Windows Mobile	0
+52	Dell	3T1	Dell	3T1	Unsmartphone	0
+53	Dell	Thunder	Dell	Thunder	Android	0
+54	Dopod	595	Dopod	595	Windows Mobile	0
+55	Dopod	830	Dopod	830	Windows Mobile	0
+56	Dopod	838	Dopod	838	Windows Mobile	0
+57	Dopod	A3288	Dopod	A3288	Windows Mobile	0
+58	Dopod	A6388	Dopod	A6388	Android	0
+59	Dopod	A8188	Dopod	A8188	Android	0
+60	Dopod	C720	Dopod	C720	Windows Mobile	0
+61	Dopod	C730	Dopod	C730	Windows Mobile	0
+62	Dopod	C750	Dopod	C750	Windows Mobile	0
+63	Dopod	C858	Dopod	C858	Windows Mobile	0
+64	Dopod	D600	Dopod	D600	Windows Mobile	0
+65	Dopod	D700	Dopod	D700	Windows Mobile	0
+66	Dopod	D805	Dopod	D805	Windows Mobile	0
+67	Dopod	P660	Dopod	P660	Windows Mobile	0
+68	Dopod	P800	Dopod	P800	Windows Mobile	0
+69	Dopod	P860	Dopod	P860	Windows Mobile	0
+70	Dopod	S1	Dopod	S1	Android	0
+71	Dopod	S600	Dopod	S600	Windows Mobile	0
+72	Dopod	S700	Dopod	S700	Windows Mobile	0
+73	Dopod	S900	Dopod	S900	Windows Mobile	0
+74	Dopod	S910w	Dopod	S910w	Windows Mobile	0
+75	Dopod	T2222	Dopod	T2222	Windows Mobile	0
+76	Dopod	T3238	Dopod	T3238	Windows Mobile	0
+77	Dopod	T3333	Dopod	T3333	Windows Mobile	0
+78	Dopod	T4288	Dopod	T4288	Windows Mobile	0
+79	Dopod	T5388	Dopod	T5388	Windows Mobile	0
+80	Dopod	T5588	Dopod	T5588	Android	0
+81	Dopod	T7278	Dopod	T7278	Windows Mobile	0
+82	Dopod	T8288	Dopod	T8288	Windows Mobile	0
+83	Dopod	T8388	Dopod	T8388	Windows Mobile	0
+84	Dopod	T8588	Dopod	T8588	Windows Mobile	0
+85	GIGABYTE	g-Smart	GIGABYTE	g-Smart	WindowsMobile	0
+86	GIGABYTE	MS800	GIGABYTE	MS800	WindowsMobile	0
+87	GIGABYTE	MS802	GIGABYTE	MS802	WindowsMobile	0
+88	GIGABYTE	MW702	GIGABYTE	MW702	WindowsMobile	0
+89	GIONEE	A535	GIONEE	A535	Unsmartphone	0
+90	GIONEE	A539	GIONEE	A539	Unsmartphone	0
+91	GIONEE	H66	GIONEE	H66	Unsmartphone	0
+92	GIONEE	H90	GIONEE	H90	Unsmartphone	0
+93	GIONEE	L906	GIONEE	L906	Unsmartphone	0
+94	GIONEE	S300	GIONEE	S300	Unsmartphone	0
+95	Gionee	TD103	Gionee	TD103	Unsmartphone	0
+96	Gionee	TD105	Gionee	TD105	Unsmartphone	0
+97	Gionee	TD106	Gionee	TD106	Unsmartphone	0
+98	Gionee	TD108	Gionee	TD108	Unsmartphone	0
+99	Gionee	TD168	Gionee	TD168	Unsmartphone	0
+100	GIONEE	Z6	GIONEE	Z6	Unsmartphone	0
+101	Google	Nexus One	Google	Nexus One	Android	0
+102	Haier	E53	Haier	E53	Unsmartphone	0
+103	Haier	HG-M710	Haier	HG-M710	Unsmartphone	0
+104	Hair	U55T	Hair	U55T	Unsmartphone	0
+105	Hair	U56T	Hair	U56T	Unsmartphone	0
+106	Hair	U67T	Hair	U67T	Unsmartphone	0
+107	Hair	U90T	Hair	U90T	Unsmartphone	0
+108	Hisense	N51	Hisense	N51	Unsmartphone	0
+109	Hisense	N52	Hisense	N52	Unsmartphone	0
+110	Hisense	T35	Hisense	T35	Unsmartphone	0
+111	Hisense	T66	Hisense	T66	Unsmartphone	0
+112	Holleycomm	H8800	Holleycomm	H8800	Unsmartphone	0
+113	HOSIN	M100	HOSIN	M100	Unsmartphone	0
+114	HP	iPAQ 610c	HP	iPAQ 610c	WindowsMobile	0
+115	HP	iPAQ rw6800	HP	iPAQ rw6800	WindowsMobile	0
+116	HTC	A3360 	HTC	A3360 	Android	0
+117	HTC	A3361	HTC	A3361	Android	0
+118	HTC	A3380	HTC	A3380	Android	0
+119	HTC	A3381	HTC	A3381	Android	0
+120	HTC	A510e	HTC	A510e	Android	0
+121	HTC	A6262	HTC	A6262	Windows Mobile	0
+122	HTC	A9188	HTC	A9188	Android	0
+123	HTC	A9191	HTC	A9191	Android	0
+124	HTC	A9293	HTC	A9293	Android	0
+125	HTC	Aria 	HTC	Aria 	Android	0
+126	HTC	bravo	HTC	bravo	Android	0
+127	HTC	Descire	HTC	Descire	Android	0
+128	HTC	Desire	HTC	Desire	Android	0
+129	HTC	Desire HD	HTC	Desire HD	Android	0
+130	HTC	Desire S	HTC	Desire S	Android	0
+131	HTC	Dream	HTC	Dream	Android	0
+132	HTC	Espresso	HTC	Espresso	Android	0
+133	HTC	Flame	HTC	Flame	Android	0
+134	HTC	Flyer	HTC	Flyer	Android	0
+135	HTC	Gratia	HTC	Gratia	Android	0
+136	HTC	HD_mini	HTC	HD_mini	Windows Phone	0
+137	HTC	HD2	HTC	HD2	Android	0
+138	HTC	Hero	HTC	Hero	Android	0
+139	HTC	hero	HTC	hero	Android	0
+140	HTC	Incredible S	HTC	Incredible S	Android	0
+141	HTC	liberty	HTC	liberty	Android	0
+142	HTC	Magic	HTC	Magic	Android	0
+143	HTC	P3300	HTC	P3300	Windows Mobile	0
+144	HTC	P3450	HTC	P3450	Windows Mobile	0
+145	HTC	P3600i	HTC	P3600i	Windows Mobile	0
+146	HTC	P3700	HTC	P3700	Windows Mobile	0
+147	HTC	P4350	HTC	P4350	Windows Mobile	0
+148	HTC	P5500	HTC	P5500	Windows Mobile	0
+149	HTC	Passion	HTC	Passion	Android	0
+150	HTC	S521	HTC	S521	Windows Mobile	0
+151	HTC	S710	HTC	S710	Windows Mobile	0
+152	HTC	S710d	HTC	S710d	Android	0
+153	HTC	Sensation	HTC	Sensation	Android	0
+154	HTC	T3333	HTC	T3333	Windows Mobile	0
+155	HTC	T5353	HTC	T5353	Windows Mobile	0
+156	HTC	T5555	HTC	T5555	Windows Mobile	0
+157	HTC	T7272	HTC	T7272	Windows Mobile	0
+158	HTC	T8282	HTC	T8282	Windows Mobile	0
+159	HTC	T8585	HTC	T8585	Windows Mobile	0
+160	HTC	T9188	HTC	T9188	Windows Mobile	0
+161	HTC	Tattoo	HTC	Tattoo	Android	0
+162	HTC	Touch HD2	HTC	Touch HD2	Windows Phone	0
+163	HTC	Touch Pro 	HTC	Touch Pro 	Windows Mobile	0
+164	HTC	TyTN_II	HTC	TyTN_II	Windows Mobile	0
+165	HTC	Universal	HTC	Universal	Windows Mobile	0
+166	HTC	Wildfire	HTC	Wildfire	Android	0
+167	HTC	Wildfire	HTC	Wildfire	Android	0
+168	HTC	X7510	HTC	X7510	Windows Mobile	0
+169	HTC	Xperia	HTC	Xperia	Windows Mobile	0
+170	HUAWEI	C8600	HUAWEI	C8600	Android	0
+171	HUAWEI	T1201	HUAWEI	T1201	Unsmartphone	0
+172	HUAWEI	T1600	HUAWEI	T1600	Unsmartphone	0
+173	HUAWEI	T2010	HUAWEI	T2010	Unsmartphone	0
+174	HUAWEI	T2211	HUAWEI	T2211	Unsmartphone	0
+175	HUAWEI	T2281	HUAWEI	T2281	Unsmartphone	0
+176	HUAWEI	T5211	HUAWEI	T5211	Unsmartphone	0
+177	HUAWEI	T550	HUAWEI	T550	Unsmartphone	0
+178	HUAWEI	T552	HUAWEI	T552	Unsmartphone	0
+179	HUAWEI	U5700	HUAWEI	U5700	Unsmartphone	0
+180	HUAWEI	U7200	HUAWEI	U7200	Unsmartphone	0
+181	HUAWEI	U8110	HUAWEI	U8110	Android	0
+182	HUAWEI	U8220	HUAWEI	U8220	Android	0
+183	Knoka	v903	Knoka	v903	Unsmartphone	0
+184	Konka	D316	Konka	D316	Unsmartphone	0
+185	Konka	D319	Konka	D319	Unsmartphone	0
+186	Konka	D363	Konka	D363	Unsmartphone	0
+187	Konka	X9	Konka	X9	Unsmartphone	0
+188	KPT	KP800T	KPT	KP800T	Unsmartphone	0
+189	K-Touch	E500	K-Touch	E500	Unsmartphone	0
+190	K-Touch	T260	K-Touch	T260	Unsmartphone	0
+191	K-Touch	T360	K-Touch	T360	Unsmartphone	0
+192	K-Touch	T590	K-Touch	T590	Unsmartphone	0
+193	K-Touch	V760	K-Touch	V760	Unsmartphone	0
+194	LCH	N110	LCH	N110	Unsmartphone	0
+195	LCT	D500B	LCT	D500B	Unsmartphone	0
+196	LCT	N480B	LCT	N480B	Unsmartphone	0
+197	LCT	N500B	LCT	N500B	Unsmartphone	0
+198	LCT	TV900B	LCT	TV900B	Unsmartphone	0
+199	LCT	X880B	LCT	X880B	Unsmartphone	0
+200	Lenovo	3GC101	Lenovo	3GC101	Android	0
+201	Lenovo	3GW100	Lenovo	3GW100	Unsmartphone	0
+202	Lenovo	A1	Lenovo	A1	Unsmartphone	0
+203	Lenovo	a180	Lenovo	a180	Unsmartphone	0
+204	Lenovo	A30t_TD	Lenovo	A30t_TD	Unsmartphone	0
+205	Lenovo	A365	Lenovo	A365	Unsmartphone	0
+206	Lenovo	A510	Lenovo	A510	Unsmartphone	0
+207	Lenovo	A589	Lenovo	A589	Unsmartphone	0
+208	Lenovo	A60	Lenovo	A60	Unsmartphone	0
+209	Lenovo	A600	Lenovo	A600	Unsmartphone	0
+210	Lenovo	A610	Lenovo	A610	Unsmartphone	0
+211	Lenovo	A66t_TD	Lenovo	A66t_TD	Unsmartphone	0
+212	Lenovo	A689	Lenovo	A689	Unsmartphone	0
+213	Lenovo	A730	Lenovo	A730	Unsmartphone	0
+214	Lenovo	A900	Lenovo	A900	Unsmartphone	0
+215	Lenovo	E106	Lenovo	E106	Unsmartphone	0
+216	Lenovo	E200	Lenovo	E200	Unsmartphone	0
+217	Lenovo	E210	Lenovo	E210	Unsmartphone	0
+218	Lenovo	E218	Lenovo	E218	Unsmartphone	0
+219	Lenovo	E228	Lenovo	E228	Unsmartphone	0
+220	Lenovo	E268	Lenovo	E268	Unsmartphone	0
+221	Lenovo	E369	Lenovo	E369	Unsmartphone	0
+222	Lenovo	E520	Lenovo	E520	Unsmartphone	0
+223	Lenovo	ET60	Lenovo	ET60	Unsmartphone	0
+224	Lenovo	ET600	Lenovo	ET600	Unsmartphone	0
+225	Lenovo	ET660	Lenovo	ET660	Windows Mobile	0
+226	Lenovo	ET700	Lenovo	ET700	Windows Mobile	0
+227	Lenovo	ET860	Lenovo	ET860	Windows Mobile	0
+228	Lenovo	ET880	Lenovo	ET880	Unsmartphone	0
+229	Lenovo	G811	Lenovo	G811	Unsmartphone	0
+230	Lenovo	i300	Lenovo	i300	Unsmartphone	0
+231	Lenovo	I307	Lenovo	I307	Unsmartphone	0
+232	Lenovo	i320	Lenovo	i320	Unsmartphone	0
+233	Lenovo	i325	Lenovo	i325	Unsmartphone	0
+234	Lenovo	i328TD	Lenovo	i328TD	Unsmartphone	0
+235	Lenovo	i350	Lenovo	i350	Unsmartphone	0
+236	Lenovo	i380	Lenovo	i380	Unsmartphone	0
+237	Lenovo	I389	Lenovo	I389	Unsmartphone	0
+238	Lenovo	I399	Lenovo	I399	Unsmartphone	0
+239	Lenovo	i50	Lenovo	i50	Unsmartphone	0
+240	Lenovo	i510	Lenovo	i510	Unsmartphone	0
+241	Lenovo	i520	Lenovo	i520	Unsmartphone	0
+242	Lenovo	I55	Lenovo	I55	Unsmartphone	0
+243	Lenovo	i62	Lenovo	i62	Unsmartphone	0
+244	Lenovo	i716	Lenovo	i716	Unsmartphone	0
+245	Lenovo	i760	Lenovo	i760	Unsmartphone	0
+246	Lenovo	I880	Lenovo	I880	Unsmartphone	0
+247	Lenovo	I880	Lenovo	I880	Unsmartphone	0
+248	Lenovo	i906	Lenovo	i906	Unsmartphone	0
+249	Lenovo	i907	Lenovo	i907	Unsmartphone	0
+250	Lenovo	i909	Lenovo	i909	Unsmartphone	0
+251	Lenovo	i910	Lenovo	i910	Unsmartphone	0
+252	Lenovo	O1	Lenovo	O1	OMS	0
+253	Lenovo	O1e	Lenovo	O1e	Unsmartphone	0
+254	Lenovo	O1plus_TD	Lenovo	O1plus_TD	Unsmartphone	0
+255	Lenovo	P301	Lenovo	P301	Unsmartphone	0
+256	Lenovo	P330	Lenovo	P330	Unsmartphone	0
+257	Lenovo	P500	Lenovo	P500	Unsmartphone	0
+258	Lenovo	P580	Lenovo	P580	Unsmartphone	0
+259	Lenovo	P609+	Lenovo	P609+	Unsmartphone	0
+260	Lenovo	P609C	Lenovo	P609C	Unsmartphone	0
+261	Lenovo	P618	Lenovo	P618	Unsmartphone	0
+262	Lenovo	P619	Lenovo	P619	Unsmartphone	0
+263	Lenovo	P629	Lenovo	P629	Unsmartphone	0
+264	Lenovo	P636	Lenovo	P636	Unsmartphone	0
+265	Lenovo	P639	Lenovo	P639	Unsmartphone	0
+266	Lenovo	P668	Lenovo	P668	Unsmartphone	0
+267	Lenovo	P70	Lenovo	P70	Unsmartphone	0
+268	Lenovo	P709	Lenovo	P709	Unsmartphone	0
+269	Lenovo	P766	Lenovo	P766	Unsmartphone	0
+270	Lenovo	P768	Lenovo	P768	Unsmartphone	0
+271	Lenovo	P790	Lenovo	P790	Unsmartphone	0
+272	Lenovo	P80+	Lenovo	P80+	Unsmartphone	0
+273	Lenovo	P82	Lenovo	P82	Unsmartphone	0
+274	Lenovo	P851	Lenovo	P851	Unsmartphone	0
+275	Lenovo	P90w	Lenovo	P90w	Unsmartphone	0
+276	Lenovo	P930	Lenovo	P930	Unsmartphone	0
+277	Lenovo	P990	Lenovo	P990	Unsmartphone	0
+278	Lenovo	P992	Lenovo	P992	Unsmartphone	0
+279	Lenovo	S1	Lenovo	S1	Unsmartphone	0
+280	Lenovo	S301	Lenovo	S301	Unsmartphone	0
+281	Lenovo	S320	Lenovo	S320	Unsmartphone	0
+282	Lenovo	S5	Lenovo	S5	Unsmartphone	0
+283	Lenovo	S500	Lenovo	S500	Unsmartphone	0
+284	Lenovo	S520	Lenovo	S520	Unsmartphone	0
+285	Lenovo	S530	Lenovo	S530	Unsmartphone	0
+286	Lenovo	S60	Lenovo	S60	Unsmartphone	0
+287	Lenovo	S600	Lenovo	S600	Unsmartphone	0
+288	Lenovo	S610	Lenovo	S610	Unsmartphone	0
+289	Lenovo	S62	Lenovo	S62	Unsmartphone	0
+290	Lenovo	S660	Lenovo	S660	Unsmartphone	0
+291	Lenovo	S70	Lenovo	S70	Unsmartphone	0
+292	Lenovo	S700	Lenovo	S700	Unsmartphone	0
+293	Lenovo	S708	Lenovo	S708	Unsmartphone	0
+294	Lenovo	S770	Lenovo	S770	Unsmartphone	0
+295	Lenovo	S800	Lenovo	S800	Unsmartphone	0
+296	Lenovo	S900	Lenovo	S900	Unsmartphone	0
+297	Lenovo	S910	Lenovo	S910	Unsmartphone	0
+298	Lenovo	TD10	Lenovo	TD10	Unsmartphone	0
+299	Lenovo	TD100	Lenovo	TD100	Unsmartphone	0
+300	Lenovo	TD106	Lenovo	TD106	Unsmartphone	0
+301	Lenovo	TD16	Lenovo	TD16	Unsmartphone	0
+302	Lenovo	TD19t_TD	Lenovo	TD19t_TD	Unsmartphone	0
+303	Lenovo	TD30t	Lenovo	TD30t	Unsmartphone	0
+304	Lenovo	TD36t	Lenovo	TD36t	Unsmartphone	0
+305	Lenovo	TD36t	Lenovo	TD36t	Unsmartphone	0
+306	Lenovo	TD39t_TD	Lenovo	TD39t_TD	Unsmartphone	0
+307	Lenovo	TD50t	Lenovo	TD50t	Unsmartphone	0
+308	Lenovo	TD60t	Lenovo	TD60t	Unsmartphone	0
+309	Lenovo	TD80t	Lenovo	TD80t	Unsmartphone	0
+310	Lenovo	TD88t	Lenovo	TD88t	Unsmartphone	0
+311	Lenovo	V600	Lenovo	V600	Unsmartphone	0
+312	Lenovo	V608	Lenovo	V608	Unsmartphone	0
+313	Lenovo	V700	Lenovo	V700	Unsmartphone	0
+314	Lenovo	V707	Lenovo	V707	Unsmartphone	0
+315	Lenovo	X1	Lenovo	X1	Unsmartphone	0
+316	LG	BL40	LG	BL40	Unsmartphone	0
+317	LG	BL42	LG	BL42	Unsmartphone	0
+318	LG	GD300s	LG	GD300s	Unsmartphone	0
+319	LG	GD350	LG	GD350	Unsmartphone	0
+320	LG	GD580	LG	GD580	Unsmartphone	0
+321	LG	GD900	LG	GD900	Unsmartphone	0
+322	LG	GM360	LG	GM360	Unsmartphone	0
+323	LG	GM750	LG	GM750	Windows Mobile	0
+324	LG	GS500	LG	GS500	Unsmartphone	0
+325	LG	GT500s	LG	GT500s	Windows Mobile	0
+326	LG	GW880	LG	GW880	OMS	0
+327	LG	KC550	LG	KC550	Unsmartphone	0
+328	LG	KE998	LG	KE998	Unsmartphone	0
+329	LG	KF300	LG	KF300	Unsmartphone	0
+330	LG	KF350	LG	KF350	Unsmartphone	0
+331	LG	KF700	LG	KF700	Unsmartphone	0
+332	LG	KG198	LG	KG198	Unsmartphone	0
+333	LG	KM900	LG	KM900	Unsmartphone	0
+334	LG	KM900e	LG	KM900e	Unsmartphone	0
+335	LG	KP500	LG	KP500	Unsmartphone	0
+336	LG	KS20	LG	KS20	Windows Mobile	0
+337	LG	KS360	LG	KS360	Unsmartphone	0
+338	LG	KS660	LG	KS660	Unsmartphone	0
+339	LG	KT878	LG	KT878	Windows Mobile	0
+340	LG	P500	LG	P500	Android	0
+341	LG	swift	LG	swift	Unsmartphone	0
+342	LG	T310	LG	T310	Unsmartphone	0
+343	LG	TM300	LG	TM300	Unsmartphone	0
+344	LG	U8380	LG	U8380	Unsmartphone	0
+345	LG	U990	LG	U990	Unsmartphone	0
+346	MASTONE	G1 	MASTONE	G1 	Unsmartphone	0
+347	MASTONE	G100	MASTONE	G100	Unsmartphone	0
+348	MEIZU	M8	MEIZU	M8	Mymobile	0
+349	MEIZU	M9	MEIZU	M9	Android	0
+350	Motorola	A1200	Motorola	A1200	Linux	0
+351	Motorola	A1600	Motorola	A1600	Linux	0
+352	Motorola	A853	Motorola	A853	Android	0
+353	Motorola	L800T	Motorola	L800T	Unsmartphone	0
+354	Motorola	MB511	Motorola	MB511	Android	0
+355	Motorola	MB525	Motorola	MB525	Android	0
+356	Motorola	ME600	Motorola	ME600	Android	0
+357	Motorola	ME722	Motorola	ME722	Android	0
+358	Motorola	Milestone	Motorola	Milestone	Android	0
+359	Motorola	MT716	Motorola	MT716	OMS	0
+360	Motorola	MT720	Motorola	MT720	OMS	0
+361	Motorola	MT810	Motorola	MT810	OMS	0
+362	Motorola	ROKR E2	Motorola	ROKR E2	Linux	0
+363	Motorola	ROKR E6	Motorola	ROKR E6	Linux	0
+364	Motorola	XT301	Motorola	XT301	Android	0
+365	Motorola	XT701	Motorola	XT701	Android	0
+366	Motorola	XT702	Motorola	XT702	Android	0
+367	Motorola 	A1800	Motorola 	A1800	Linux	0
+368	Motorola 	A3000	Motorola 	A3000	Windows Mobile	0
+369	Motorola 	A780	Motorola 	A780	Linux	0
+370	Motorola 	E2	Motorola 	E2	Linux	0
+371	Motorola 	EM330	Motorola 	EM330	Unsmartphone	0
+372	Motorola 	Q8	Motorola 	Q8	Windows Mobile	0
+373	Motorola 	V9	Motorola 	V9	Unsmartphone	0
+374	Motorola 	W388	Motorola 	W388	Unsmartphone	0
+375	Motorola 	xt502	Motorola 	xt502	Android	0
+376	Motorona	MT710	Motorona	MT710	OMS	0
+377	NEC	N600	NEC	N600	Unsmartphone	0
+378	NEC	N620	NEC	N620	Unsmartphone	0
+379	Nokia	1680c	Nokia	1680c	Symbian S40	0
+380	Nokia	1681c	Nokia	1681c	Symbian S40	0
+381	Nokia	1682c	Nokia	1682c	Symbian S40	0
+382	Nokia	2220s	Nokia	2220s	Symbian S40	0
+383	Nokia	2320c	Nokia	2320c	Symbian S40	0
+384	Nokia	2322c	Nokia	2322c	Symbian S40	0
+385	Nokia	2323c	Nokia	2323c	Symbian S40	0
+386	Nokia	2330c	Nokia	2330c	Symbian S40	0
+387	Nokia	2332c	Nokia	2332c	Symbian S40	0
+388	Nokia	2610	Nokia	2610	Symbian S40	0
+389	Nokia	2626	Nokia	2626	Symbian S40	0
+390	Nokia	2630	Nokia	2630	Symbian S40	0
+391	Nokia	2680s	Nokia	2680s	Symbian S40	0
+392	Nokia	2690	Nokia	2690	Symbian S40	0
+393	Nokia	2700c	Nokia	2700c	Symbian S40	0
+394	Nokia	2710c	Nokia	2710c	Symbian S40	0
+395	Nokia	2730c	Nokia	2730c	Symbian S40	0
+396	Nokia	3110c	Nokia	3110c	Symbian S40	0
+397	Nokia	3120c	Nokia	3120c	Symbian S40	0
+398	Nokia	3208c	Nokia	3208c	Symbian S40	0
+399	Nokia	3220	Nokia	3220	Symbian S40	0
+400	Nokia	3230	Nokia	3230	Symbian S60	0
+401	Nokia	3250	Nokia	3250	Symbian S60	0
+402	Nokia	3500c	Nokia	3500c	Symbian S40	0
+403	Nokia	3720c	Nokia	3720c	Symbian S40	0
+404	Nokia	5000	Nokia	5000	Symbian S40	0
+405	Nokia	5070	Nokia	5070	Symbian S40	0
+406	Nokia	5130	Nokia	5130	Symbian S60	0
+407	Nokia	5130c	Nokia	5130c	Symbian S60	0
+408	Nokia	5132	Nokia	5132	Symbian S40	0
+409	Nokia	5200	Nokia	5200	Symbian S40	0
+410	Nokia	5208	Nokia	5208	Symbian S40	0
+411	Nokia	5220	Nokia	5220	Symbian S40	0
+412	Nokia	5228	Nokia	5228	Symbian S60	0
+413	Nokia	5230	Nokia	5230	Symbian S60	0
+414	Nokia	5232	Nokia	5232	Symbian S60	0
+415	Nokia	5233	Nokia	5233	Symbian S60	0
+416	Nokia	5235	Nokia	5235	Symbian S60	0
+417	Nokia	5250	Nokia	5250	Symbian S60	0
+418	Nokia	5300	Nokia	5300	Symbian S40	0
+419	Nokia	5310	Nokia	5310	Symbian S40	0
+420	Nokia	5310 xm	Nokia	5310 xm	Symbian S40	0
+421	Nokia	5320	Nokia	5320	Symbian S60	0
+422	Nokia	5320d	Nokia	5320d	Symbian S40	0
+423	Nokia	5330	Nokia	5330	Symbian S40	0
+424	Nokia	5500	Nokia	5500	Symbian S60	0
+425	Nokia	5500Sport	Nokia	5500Sport	Symbian S60	0
+426	Nokia	5530	Nokia	5530	Symbian S60	0
+427	Nokia	5530c	Nokia	5530c	Symbian S60	0
+428	Nokia	5610	Nokia	5610	Symbian S40	0
+429	Nokia	5610 XpressMusic	Nokia	5610 XpressMusic	Symbian S40	0
+430	Nokia	5610d	Nokia	5610d	Symbian S40	0
+431	Nokia	5611	Nokia	5611	Symbian S40	0
+432	Nokia	5630	Nokia	5630	Symbian S60	0
+433	Nokia	5630d	Nokia	5630d	Symbian S60	0
+434	Nokia	5700	Nokia	5700	Symbian S60	0
+435	Nokia	5730	Nokia	5730	Symbian S60	0
+436	Nokia	5800	Nokia	5800	Symbian S60	0
+437	Nokia	5800 XpressMusic	Nokia	5800 XpressMusic	Symbian S60	0
+438	Nokia	5800i XpressMusic	Nokia	5800i XpressMusic	Symbian S60	0
+439	Nokia	5800w	Nokia	5800w	Symbian S60	0
+440	Nokia	5800w XpressMusic	Nokia	5800w XpressMusic	Symbian S60	0
+441	Nokia	5802	Nokia	5802	Symbian S60	0
+442	Nokia	5802 XpressMusic	Nokia	5802 XpressMusic	Symbian S60	0
+443	Nokia	6021	Nokia	6021	Symbian S40	0
+444	Nokia	6030	Nokia	6030	Symbian S40	0
+445	Nokia	6070	Nokia	6070	Symbian S40	0
+446	Nokia	6085	Nokia	6085	Symbian S40	0
+447	Nokia	6101	Nokia	6101	Symbian S40	0
+448	Nokia	6110Navigator	Nokia	6110Navigator	Symbian S60	0
+449	Nokia	6120c	Nokia	6120c	Symbian S60	0
+450	Nokia	6122c	Nokia	6122c	Symbian S60	0
+451	Nokia	6131	Nokia	6131	Symbian S40	0
+452	Nokia	6208c	Nokia	6208c	Symbian S40	0
+453	Nokia	6210N	Nokia	6210N	Symbian S60	0
+454	Nokia	6210s	Nokia	6210s	Symbian S60	0
+455	Nokia	6220c	Nokia	6220c	Symbian S60	0
+456	Nokia	6260s	Nokia	6260s	Symbian S40	0
+457	Nokia	6270	Nokia	6270	Symbian S40	0
+458	Nokia	6288	Nokia	6288	Symbian S40	0
+459	Nokia	6300	Nokia	6300	Symbian S40	0
+460	Nokia	6303c	Nokia	6303c	Symbian S40	0
+461	Nokia	6303ci	Nokia	6303ci	Symbian S40	0
+462	Nokia	6303classic	Nokia	6303classic	Symbian S40	0
+463	Nokia	6500c	Nokia	6500c	Symbian S40	0
+464	Nokia	6500s	Nokia	6500s	Symbian S40	0
+465	Nokia	6600	Nokia	6600	Symbian S60	0
+466	Nokia	6600i	Nokia	6600i	Symbian S40	0
+467	Nokia	6610	Nokia	6610	Symbian S40	0
+468	Nokia	6630	Nokia	6630	Symbian S60	0
+469	Nokia	6650	Nokia	6650	Symbian S60	0
+470	Nokia	6650d	Nokia	6650d	Symbian S60	0
+471	Nokia	6670	Nokia	6670	Symbian S60	0
+472	Nokia	6680	Nokia	6680	Symbian S60	0
+473	Nokia	6681	Nokia	6681	Symbian S60	0
+474	Nokia	6700c	Nokia	6700c	Symbian S60	0
+475	Nokia	6700s	Nokia	6700s	Symbian S60	0
+476	Nokia	6710	Nokia	6710	Symbian S60	0
+477	Nokia	6710s	Nokia	6710s	Symbian S60	0
+478	Nokia	6720c	Nokia	6720c	Symbian S60	0
+479	Nokia	6730c	Nokia	6730c	Symbian S60	0
+480	Nokia	6760s	Nokia	6760s	Symbian S60	0
+481	Nokia	6788	Nokia	6788	Symbian S60	0
+482	Nokia	6788i	Nokia	6788i	Symbian S60	0
+483	Nokia	6790	Nokia	6790	Symbian S60	0
+484	Nokia	7020	Nokia	7020	Symbian S40	0
+485	Nokia	7070	Nokia	7070	Symbian S40	0
+486	Nokia	7100s	Nokia	7100s	Symbian S40	0
+487	Nokia	7210c	Nokia	7210c	Symbian S40	0
+488	Nokia	7230	Nokia	7230	Symbian S40	0
+489	Nokia	7260	Nokia	7260	Symbian S40	0
+490	Nokia	7310	Nokia	7310	Symbian S40	0
+491	Nokia	7310c	Nokia	7310c	Symbian S40	0
+492	Nokia	7360	Nokia	7360	Symbian S40	0
+493	Nokia	7370	Nokia	7370	Symbian S40	0
+494	Nokia	7373	Nokia	7373	Symbian S40	0
+495	Nokia	7390	Nokia	7390	Symbian S40	0
+496	Nokia	7500	Nokia	7500	Symbian S40	0
+497	Nokia	7510a	Nokia	7510a	Symbian S40	0
+498	Nokia	7610	Nokia	7610	Symbian S40	0
+499	Nokia	7610s	Nokia	7610s	Symbian S40	0
+500	Nokia	7650	Nokia	7650	Symbian S60	0
+501	Nokia	8600	Nokia	8600	Symbian S40	0
+502	Nokia	8800	Nokia	8800	Symbian S40	0
+503	Nokia	8800a	Nokia	8800a	Symbian S40	0
+504	Nokia	8800si	Nokia	8800si	Symbian S40	0
+505	Nokia	C5	Nokia	C5	Symbian S60	0
+506	Nokia	C6	Nokia	C6	Symbian S60	0
+507	Nokia	C600	Nokia	C600	Symbian S60	0
+508	Nokia	C7	Nokia	C7	Symbian3	0
+509	Nokia	E5	Nokia	E5	Symbian S60	0
+510	Nokia	E50	Nokia	E50	Symbian S60	0
+511	Nokia	E51	Nokia	E51	Symbian S60	0
+512	Nokia	E52	Nokia	E52	Symbian S60	0
+513	Nokia	E60	Nokia	E60	Symbian S60	0
+514	Nokia	E61	Nokia	E61	Symbian S60	0
+515	Nokia	E61i	Nokia	E61i	Symbian S60	0
+516	Nokia	E62	Nokia	E62	Symbian S60	0
+517	Nokia	E63	Nokia	E63	Symbian S60	0
+518	Nokia	E65	Nokia	E65	Symbian S60	0
+519	Nokia	E66	Nokia	E66	Symbian S60	0
+520	Nokia	E71	Nokia	E71	Symbian S60	0
+521	Nokia	E71x	Nokia	E71x	Symbian S60	0
+522	Nokia	E72	Nokia	E72	Symbian S60	0
+523	Nokia	E75	Nokia	E75	Symbian S60	0
+524	Nokia	E90	Nokia	E90	Symbian S60	0
+525	Nokia	N70	Nokia	N70	Symbian S60	0
+526	Nokia	N72	Nokia	N72	Symbian S60	0
+527	Nokia	N73	Nokia	N73	Symbian S60	0
+528	Nokia	N75	Nokia	N75	Symbian S60	0
+529	Nokia	N76	Nokia	N76	Symbian S60	0
+530	Nokia	N77	Nokia	N77	Symbian S60	0
+531	Nokia	N78	Nokia	N78	Symbian S60	0
+532	Nokia	N79	Nokia	N79	Symbian S60	0
+533	Nokia	N8	Nokia	N8	Symbian3	0
+534	Nokia	N80	Nokia	N80	Symbian S60	0
+535	Nokia	N81	Nokia	N81	Symbian S60	0
+536	Nokia	N81 8GB	Nokia	N81 8GB	Symbian S60	0
+537	Nokia	N82	Nokia	N82	Symbian S60	0
+538	Nokia	N85	Nokia	N85	Symbian S60	0
+539	Nokia	N86	Nokia	N86	Symbian S60	0
+540	Nokia	N86 8MP	Nokia	N86 8MP	Symbian S60	0
+541	Nokia	N90	Nokia	N90	Symbian S60	0
+542	Nokia	N93	Nokia	N93	Symbian S60	0
+543	Nokia	N93i	Nokia	N93i	Symbian S60	0
+544	Nokia	N95	Nokia	N95	Symbian S60	0
+545	Nokia	N95 8GB	Nokia	N95 8GB	Symbian S60	0
+546	Nokia	N96	Nokia	N96	Symbian S60	0
+547	Nokia	N97	Nokia	N97	Symbian S60	0
+548	Nokia	N97 mini	Nokia	N97 mini	Symbian S60	0
+549	Nokia	N97i	Nokia	N97i	Symbian S60	0
+550	Nokia	N-Gage QD	Nokia	N-Gage QD	Symbian S60	0
+551	Nokia	NXX	Nokia	NXX	Symbian S60	0
+552	Nokia	T7	Nokia	T7	Symbian^3	0
+553	Nokia	X2	Nokia	X2	Symbian S60	0
+554	Nokia	X3	Nokia	X3	Symbian S60	0
+555	Nokia	X5	Nokia	X5	Symbian S60	0
+556	Nokia	X6	Nokia	X6	Symbian S60	0
+557	O2	Xda Orbit	O2	Xda Orbit	Windows Mobile	0
+558	OPPO	A125	OPPO	A125	Unsmartphone	0
+559	Palm	Treo680	Palm	Treo680	Palm OS	0
+560	Palm 	Treo500	Palm 	Treo500	Windows Mobile	0
+561	Panda	TD988	Panda	TD988	unsmartphone	0
+562	Philips	9@9q	Philips	9@9q	Unsmartphone	0
+563	Philips	9@9r	Philips	9@9r	Unsmartphone	0
+564	Philips	T910	Philips	T910	OMS	0
+565	Philips	X530	Philips	X530	Unsmartphone	0
+566	Philips	X620	Philips	X620	Unsmartphone	0
+567	Philips	X650	Philips	X650	Unsmartphone	0
+568	Rayhov	X3	Rayhov	X3	Android	0
+569	SAMSUNG	B3210	SAMSUNG	B3210	Unsmartphone	0
+570	SAMSUNG	B3410	SAMSUNG	B3410	Unsmartphone	0
+571	SAMSUNG	B5722	SAMSUNG	B5722	Unsmartphone	0
+572	SAMSUNG	B5722c	SAMSUNG	B5722c	Unsmartphone	0
+573	SAMSUNG	B7610	SAMSUNG	B7610	Windows Phone	0
+574	SAMSUNG	B7702C	SAMSUNG	B7702C	Unsmartphone	0
+575	SAMSUNG	C3050	SAMSUNG	C3050	Unsmartphone	0
+576	SAMSUNG	C3230 	SAMSUNG	C3230 	Unsmartphone	0
+577	SAMSUNG	C3310c	SAMSUNG	C3310c	Unsmartphone	0
+578	SAMSUNG	C3510	SAMSUNG	C3510	Unsmartphone	0
+579	SAMSUNG	C3518	SAMSUNG	C3518	Unsmartphone	0
+580	SAMSUNG	C3610c	SAMSUNG	C3610c	Unsmartphone	0
+581	SAMSUNG	C3630C	SAMSUNG	C3630C	Unsmartphone	0
+582	SAMSUNG	C3730c	SAMSUNG	C3730c	Unsmartphone	0
+583	SAMSUNG	C5510U	SAMSUNG	C5510U	Unsmartphone	0
+584	SAMSUNG	C5530 	SAMSUNG	C5530 	Unsmartphone	0
+585	SAMSUNG	C6112	SAMSUNG	C6112	Unsmartphone	0
+586	SAMSUNG	D528	SAMSUNG	D528	Unsmartphone	0
+587	SAMSUNG	D780	SAMSUNG	D780	Unsmartphone	0
+588	SAMSUNG	D808	SAMSUNG	D808	Unsmartphone	0
+589	SAMSUNG	D838	SAMSUNG	D838	Unsmartphone	0
+590	SAMSUNG	D880	SAMSUNG	D880	Unsmartphone	0
+591	SAMSUNG	D908	SAMSUNG	D908	Unsmartphone	0
+592	SAMSUNG	D908i	SAMSUNG	D908i	Unsmartphone	0
+593	SAMSUNG	D980	SAMSUNG	D980	Unsmartphone	0
+594	SAMSUNG	E218	SAMSUNG	E218	Unsmartphone	0
+595	SAMSUNG	E258	SAMSUNG	E258	Unsmartphone	0
+596	SAMSUNG	E398	SAMSUNG	E398	Unsmartphone	0
+597	SAMSUNG	E768	SAMSUNG	E768	Unsmartphone	0
+598	SAMSUNG	E840	SAMSUNG	E840	Unsmartphone	0
+599	SAMSUNG	E878	SAMSUNG	E878	Unsmartphone	0
+600	SAMSUNG	E908	SAMSUNG	E908	Unsmartphone	0
+601	SAMSUNG	E958	SAMSUNG	E958	Unsmartphone	0
+602	SAMSUNG	F258	SAMSUNG	F258	Unsmartphone	0
+603	SAMSUNG	F268	SAMSUNG	F268	Unsmartphone	0
+604	SAMSUNG	F278	SAMSUNG	F278	Unsmartphone	0
+605	SAMSUNG	F488E	SAMSUNG	F488E	Unsmartphone	0
+606	SAMSUNG	G508E	SAMSUNG	G508E	Unsmartphone	0
+607	SAMSUNG	G608	SAMSUNG	G608	Unsmartphone	0
+608	SAMSUNG	G618	SAMSUNG	G618	Unsmartphone	0
+609	SAMSUNG	i450	SAMSUNG	i450	Symbian S60	0
+610	SAMSUNG	i458	SAMSUNG	i458	Symbian S60	0
+611	SAMSUNG	i550	SAMSUNG	i550	Symbian S60	0
+612	SAMSUNG	I5508	SAMSUNG	I5508	Android	0
+613	SAMSUNG	i5700	SAMSUNG	i5700	Android	0
+614	SAMSUNG	i5801	SAMSUNG	i5801	Android	0
+615	SAMSUNG	i600	SAMSUNG	i600	Windows Mobile	0
+616	SAMSUNG	i607	SAMSUNG	i607	Windows Mobile	0
+617	SAMSUNG	i617	SAMSUNG	i617	Windows Mobile	0
+618	SAMSUNG	i6320C	SAMSUNG	i6320C	Unsmartphone	0
+619	SAMSUNG	I6330C	SAMSUNG	I6330C	Unsmartphone	0
+620	SAMSUNG	i6410	SAMSUNG	i6410	Linux	0
+621	SAMSUNG	i688	SAMSUNG	i688	Windows Mobile	0
+622	SAMSUNG	i718	SAMSUNG	i718	Windows Mobile	0
+623	SAMSUNG	i728	SAMSUNG	i728	Windows Mobile	0
+624	SAMSUNG	i7500	SAMSUNG	i7500	Android	0
+625	SAMSUNG	I7680 	SAMSUNG	I7680 	OMS	0
+626	SAMSUNG	i8000	SAMSUNG	i8000	Windows Phone	0
+627	SAMSUNG	i8000U	SAMSUNG	i8000U	Windows Phone	0
+628	SAMSUNG	I8180C	SAMSUNG	I8180C	Windows Mobile	0
+629	SAMSUNG	i8320	SAMSUNG	i8320	Linux	0
+630	SAMSUNG	i8910	SAMSUNG	i8910	Symbian S60	0
+631	SAMSUNG	i900	SAMSUNG	i900	Windows Phone	0
+632	SAMSUNG	i9000	SAMSUNG	i9000	Android	0
+633	SAMSUNG	I9003	SAMSUNG	I9003	Android	0
+634	SAMSUNG	i908E	SAMSUNG	i908E	Windows Phone	0
+635	SAMSUNG	I909	SAMSUNG	I909	Android	0
+636	SAMSUNG	J708	SAMSUNG	J708	Unsmartphone	0
+637	SAMSUNG	J708i	SAMSUNG	J708i	Unsmartphone	0
+638	SAMSUNG	J808E	SAMSUNG	J808E	Unsmartphone	0
+639	SAMSUNG	L708	SAMSUNG	L708	Unsmartphone	0
+640	SAMSUNG	L708E	SAMSUNG	L708E	Unsmartphone	0
+641	SAMSUNG	L878	SAMSUNG	L878	Unsmartphone	0
+642	SAMSUNG	M3510	SAMSUNG	M3510	Unsmartphone	0
+643	SAMSUNG	M3510C	SAMSUNG	M3510C	Unsmartphone	0
+644	SAMSUNG	M5650U	SAMSUNG	M5650U	Unsmartphone	0
+645	SAMSUNG	M618	SAMSUNG	M618	Unsmartphone	0
+646	SAMSUNG	M628	SAMSUNG	M628	Unsmartphone	0
+647	SAMSUNG	M8800C	SAMSUNG	M8800C	Unsmartphone	0
+648	SAMSUNG	N330	SAMSUNG	N330	unsmartphone	0
+649	SAMSUNG	S3310C	SAMSUNG	S3310C	Unsmartphone	0
+650	SAMSUNG	S3370	SAMSUNG	S3370	Unsmartphone	0
+651	SAMSUNG	S3550	SAMSUNG	S3550	Unsmartphone	0
+652	SAMSUNG	S3600	SAMSUNG	S3600	Unsmartphone	0
+653	SAMSUNG	S3650	SAMSUNG	S3650	Unsmartphone	0
+654	SAMSUNG	S3650C	SAMSUNG	S3650C	Unsmartphone	0
+655	SAMSUNG	S3930C	SAMSUNG	S3930C	Unsmartphone	0
+656	SAMSUNG	S5150	SAMSUNG	S5150	Unsmartphone	0
+657	SAMSUNG	S5200C	SAMSUNG	S5200C	Symbian S60	0
+658	SAMSUNG	S5230C	SAMSUNG	S5230C	Unsmartphone	0
+659	SAMSUNG	S5550U	SAMSUNG	S5550U	Unsmartphone	0
+660	SAMSUNG	S5560C	SAMSUNG	S5560C	Unsmartphone	0
+661	SAMSUNG	S5570	SAMSUNG	S5570	Android	0
+662	SAMSUNG	S5603	SAMSUNG	S5603	Unsmartphone	0
+663	SAMSUNG	S5608u	SAMSUNG	S5608u	Unsmartphone	0
+664	SAMSUNG	S5628	SAMSUNG	S5628	Unsmartphone	0
+665	SAMSUNG	S5628i	SAMSUNG	S5628i	Unsmartphone	0
+666	SAMSUNG	S5630C	SAMSUNG	S5630C	Unsmartphone	0
+667	SAMSUNG	S5660	SAMSUNG	S5660	Android	0
+668	SAMSUNG	S5680	SAMSUNG	S5680	Unsmartphone	0
+669	SAMSUNG	S5830	SAMSUNG	S5830	Android	0
+670	SAMSUNG	S6700C	SAMSUNG	S6700C	Unsmartphone	0
+671	SAMSUNG	S7070C	SAMSUNG	S7070C	Unsmartphone	0
+672	SAMSUNG	S7330	SAMSUNG	S7330	Unsmartphone	0
+673	SAMSUNG	S7350	SAMSUNG	S7350	Unsmartphone	0
+674	SAMSUNG	S7350C	SAMSUNG	S7350C	Unsmartphone	0
+675	SAMSUNG	S7350H	SAMSUNG	S7350H	Unsmartphone	0
+676	SAMSUNG	S8300	SAMSUNG	S8300	Unsmartphone	0
+677	SAMSUNG	S8300C	SAMSUNG	S8300C	Unsmartphone	0
+678	SAMSUNG	S8300H	SAMSUNG	S8300H	Unsmartphone	0
+679	SAMSUNG	S8500	SAMSUNG	S8500	Bada	0
+680	SAMSUNG	S8500C	SAMSUNG	S8500C	Bada	0
+681	SAMSUNG	U600	SAMSUNG	U600	Unsmartphone	0
+682	SAMSUNG	U608	SAMSUNG	U608	Unsmartphone	0
+683	SAMSUNG	U708	SAMSUNG	U708	Unsmartphone	0
+684	SAMSUNG	U708E	SAMSUNG	U708E	Unsmartphone	0
+685	SAMSUNG	U808	SAMSUNG	U808	Unsmartphone	0
+686	SAMSUNG	U808E	SAMSUNG	U808E	Unsmartphone	0
+687	SAMSUNG	W629	SAMSUNG	W629	Unsmartphone	0
+688	SAMSUNG	Z240	SAMSUNG	Z240	Unsmartphone	0
+689	Sharp	SH800M	Sharp	SH800M	unsmartphone	0
+690	SHARP	SH9020c	SHARP	SH9020c	Unsmartphone	0
+691	SHARP	SH9110C	SHARP	SH9110C	Unsmartphone	0
+692	SHARP	SH9120c	SHARP	SH9120c	Unsmartphone	0
+693	SHARP	SH9130C	SHARP	SH9130C	Unsmartphone	0
+694	SonyEricsson	A8i	SonyEricsson	A8i	OMS	0
+695	SonyEricsson	C510	SonyEricsson	C510	Unsmartphone	0
+696	SonyEricsson	C702	SonyEricsson	C702	Unsmartphone	0
+697	SonyEricsson	C702c	SonyEricsson	C702c	Unsmartphone	0
+698	SonyEricsson	C901	SonyEricsson	C901	Unsmartphone	0
+699	SonyEricsson	C902	SonyEricsson	C902	Unsmartphone	0
+700	SonyEricsson	C902c	SonyEricsson	C902c	Unsmartphone	0
+701	SonyEricsson	C903	SonyEricsson	C903	Unsmartphone	0
+702	SonyEricsson	C905	SonyEricsson	C905	Unsmartphone	0
+703	SonyEricsson	E10i	SonyEricsson	E10i	Unsmartphone	0
+704	SonyEricsson	E15i	SonyEricsson	E15i	Unsmartphone	0
+705	SonyEricsson	F305	SonyEricsson	F305	Unsmartphone	0
+706	SonyEricsson	G502	SonyEricsson	G502	Unsmartphone	0
+707	SonyEricsson	G700c	SonyEricsson	G700c	Unsmartphone	0
+708	SonyEricsson	G705	SonyEricsson	G705	Unsmartphone	0
+709	SonyEricsson	J105i	SonyEricsson	J105i	Unsmartphone	0
+710	SonyEricsson	J20	SonyEricsson	J20	Unsmartphone	0
+711	SonyEricsson	J20i	SonyEricsson	J20i	Unsmartphone	0
+712	SonyEricsson	k510c	SonyEricsson	k510c	Unsmartphone	0
+713	SonyEricsson	K510i	SonyEricsson	K510i	Unsmartphone	0
+714	SonyEricsson	K530i	SonyEricsson	K530i	Unsmartphone	0
+715	SonyEricsson	K550c	SonyEricsson	K550c	Unsmartphone	0
+716	SonyEricsson	K618i	SonyEricsson	K618i	Unsmartphone	0
+717	SonyEricsson	K660i	SonyEricsson	K660i	Unsmartphone	0
+718	SonyEricsson	K700c	SonyEricsson	K700c	Unsmartphone	0
+719	SonyEricsson	K750c	SonyEricsson	K750c	Unsmartphone	0
+720	SonyEricsson	K790c	SonyEricsson	K790c	Unsmartphone	0
+721	SonyEricsson	K800i	SonyEricsson	K800i	Unsmartphone	0
+722	SonyEricsson	K810i	SonyEricsson	K810i	Unsmartphone	0
+723	SonyEricsson	K850i	SonyEricsson	K850i	Unsmartphone	0
+724	SonyEricsson	M600i	SonyEricsson	M600i	Symbian S60	0
+725	SonyEricsson	P1c	SonyEricsson	P1c	Symbian S60	0
+726	SonyEricsson	P1i	SonyEricsson	P1i	Symbian S60	0
+727	SonyEricsson	P990i	SonyEricsson	P990i	Symbian S60	0
+728	SonyEricsson	S302c	SonyEricsson	S302c	Unsmartphone	0
+729	SonyEricsson	S312	SonyEricsson	S312	Unsmartphone	0
+730	SonyEricsson	S500c	SonyEricsson	S500c	Unsmartphone	0
+731	SonyEricsson	S500i	SonyEricsson	S500i	Unsmartphone	0
+732	SonyEricsson	T700	SonyEricsson	T700	Unsmartphone	0
+733	SonyEricsson	T707	SonyEricsson	T707	Unsmartphone	0
+734	SonyEricsson	T707a	SonyEricsson	T707a	Unsmartphone	0
+735	SonyEricsson	T715	SonyEricsson	T715	Unsmartphone	0
+736	SonyEricsson	U1	SonyEricsson	U1	Symbian S60	0
+737	SonyEricsson	U100i	SonyEricsson	U100i	Unsmartphone	0
+738	SonyEricsson	U10i	SonyEricsson	U10i	Unsmartphone	0
+739	SonyEricsson	U20i	SonyEricsson	U20i	Unsmartphone	0
+740	SonyEricsson	U5	SonyEricsson	U5	Symbian S60	0
+741	SonyEricsson	U5i	SonyEricsson	U5i	Symbian S60	0
+742	SonyEricsson	W20	SonyEricsson	W20	Unsmartphone	0
+743	SonyEricsson	W302c	SonyEricsson	W302c	Unsmartphone	0
+744	SonyEricsson	W350c	SonyEricsson	W350c	Unsmartphone	0
+745	SonyEricsson	W380c	SonyEricsson	W380c	Unsmartphone	0
+746	SonyEricsson	W380i	SonyEricsson	W380i	Unsmartphone	0
+747	SonyEricsson	W395	SonyEricsson	W395	Unsmartphone	0
+748	SonyEricsson	W395c	SonyEricsson	W395c	Unsmartphone	0
+749	SonyEricsson	W508	SonyEricsson	W508	Unsmartphone	0
+750	SonyEricsson	W508a	SonyEricsson	W508a	Unsmartphone	0
+751	SonyEricsson	W550c	SonyEricsson	W550c	Unsmartphone	0
+752	SonyEricsson	W580i	SonyEricsson	W580i	Unsmartphone	0
+753	SonyEricsson	W595	SonyEricsson	W595	Unsmartphone	0
+754	SonyEricsson	W595c	SonyEricsson	W595c	Unsmartphone	0
+755	SonyEricsson	W610c	SonyEricsson	W610c	Unsmartphone	0
+756	SonyEricsson	W660i	SonyEricsson	W660i	Unsmartphone	0
+757	SonyEricsson	W705	SonyEricsson	W705	Unsmartphone	0
+758	SonyEricsson	W705a	SonyEricsson	W705a	Unsmartphone	0
+759	SonyEricsson	W715	SonyEricsson	W715	Unsmartphone	0
+760	SonyEricsson	W760c	SonyEricsson	W760c	Unsmartphone	0
+761	SonyEricsson	W760i	SonyEricsson	W760i	Unsmartphone	0
+762	SonyEricsson	W800c	SonyEricsson	W800c	Unsmartphone	0
+763	SonyEricsson	W800i	SonyEricsson	W800i	Unsmartphone	0
+764	SonyEricsson	W810c	SonyEricsson	W810c	Unsmartphone	0
+765	SonyEricsson	W810i	SonyEricsson	W810i	Unsmartphone	0
+766	SonyEricsson	W830c	SonyEricsson	W830c	Unsmartphone	0
+767	SonyEricsson	W850i	SonyEricsson	W850i	Unsmartphone	0
+768	SonyEricsson	W888c	SonyEricsson	W888c	Unsmartphone	0
+769	SonyEricsson	W890i	SonyEricsson	W890i	Unsmartphone	0
+770	SonyEricsson	W902	SonyEricsson	W902	Unsmartphone	0
+771	SonyEricsson	W908c	SonyEricsson	W908c	Unsmartphone	0
+772	SonyEricsson	W910i	SonyEricsson	W910i	Unsmartphone	0
+773	SonyEricsson	W950i	SonyEricsson	W950i	Symbian S60	0
+774	SonyEricsson	W958c	SonyEricsson	W958c	Unsmartphone	0
+775	SonyEricsson	W980	SonyEricsson	W980	Unsmartphone	0
+776	SonyEricsson	W995	SonyEricsson	W995	Unsmartphone	0
+777	SonyEricsson	X10i	SonyEricsson	X10i	Android	0
+778	SonyEricsson	X10i	SonyEricsson	X10i	Unsmartphone	0
+779	SonyEricsson	X2i	SonyEricsson	X2i	Windows Phone	0
+780	SonyEricsson	X8	SonyEricsson	X8	Android	0
+781	SonyEricsson	Z610i	SonyEricsson	Z610i	Unsmartphone	0
+782	SonyEricsson	Z710c	SonyEricsson	Z710c	Unsmartphone	0
+783	SonyEricsson	Z750i	SonyEricsson	Z750i	Unsmartphone	0
+784	STELCOM	T6	STELCOM	T6	Unsmartphone	0
+785	TCL	E300	TCL	E300	Unsmartphone	0
+786	TCL	E787	TCL	E787	Unsmartphone	0
+787	TCL	M361	TCL	M361	Unsmartphone	0
+788	TCL	M365	TCL	M365	Unsmartphone	0
+789	TCL	M530	TCL	M530	Unsmartphone	0
+790	TCL	M686	TCL	M686	Unsmartphone	0
+791	TCL	M70	TCL	M70	Unsmartphone	0
+792	TELSDA	T042	TELSDA	T042	Unsmartphone	0
+793	TIANYU-KTOUCH	A608	TIANYU-KTOUCH	A608	Unsmartphone	0
+794	TIANYU-KTOUCH	A635	TIANYU-KTOUCH	A635	Unsmartphone	0
+795	TIANYU-KTOUCH	A650	TIANYU-KTOUCH	A650	Unsmartphone	0
+796	TIANYU-KTOUCH	A691	TIANYU-KTOUCH	A691	Unsmartphone	0
+797	TIANYU-KTOUCH	A695	TIANYU-KTOUCH	A695	Unsmartphone	0
+798	TIANYU-KTOUCH	A696	TIANYU-KTOUCH	A696	Unsmartphone	0
+799	TIANYU-KTOUCH	A7726	TIANYU-KTOUCH	A7726	Unsmartphone	0
+800	TIANYU-KTOUCH	A903	TIANYU-KTOUCH	A903	Unsmartphone	0
+801	TIANYU-KTOUCH	A908	TIANYU-KTOUCH	A908	Unsmartphone	0
+802	TIANYU-KTOUCH	A915	TIANYU-KTOUCH	A915	Unsmartphone	0
+803	TIANYU-KTOUCH	A995	TIANYU-KTOUCH	A995	Unsmartphone	0
+804	TIANYU-KTOUCH	B832	TIANYU-KTOUCH	B832	Unsmartphone	0
+805	TIANYU-KTOUCH	B892	TIANYU-KTOUCH	B892	Unsmartphone	0
+806	TIANYU-KTOUCH	B926	TIANYU-KTOUCH	B926	Unsmartphone	0
+807	TIANYU-KTOUCH	D171	TIANYU-KTOUCH	D171	Unsmartphone	0
+808	TIANYU-KTOUCH	D175	TIANYU-KTOUCH	D175	Unsmartphone	0
+809	TIANYU-KTOUCH	D210	TIANYU-KTOUCH	D210	Unsmartphone	0
+810	TIANYU-KTOUCH	V209	TIANYU-KTOUCH	V209	Unsmartphone	0
+811	TIANYU-KTOUCH	V908	TIANYU-KTOUCH	V908	Unsmartphone	0
+812	TIANYU-KTOUCH	V958	TIANYU-KTOUCH	V958	Unsmartphone	0
+813	Toshiba	G810 	Toshiba	G810 	Windows Mobile	0
+814	Toshiba	TG01	Toshiba	TG01	Windows Mobile	0
+815	T-smar	F18	T-smar	F18	Unsmartphone	0
+816	T-smar	Q1	T-smar	Q1	Unsmartphone	0
+817	T-smar	T98	T-smar	T98	Unsmartphone	0
+818	ZTE	F850	ZTE	F850	Unsmartphone	0
+819	ZTE	N61	ZTE	N61	Windows Mobile	0
+820	ZTE	U210	ZTE	U210	Unsmartphone	0
+821	ZTE	U215	ZTE	U215	Unsmartphone	0
+822	ZTE	U218	ZTE	U218	Unsmartphone	0
+823	ZTE	U230	ZTE	U230	Unsmartphone	0
+824	ZTE	U232	ZTE	U232	Unsmartphone	0
+825	ZTE	U235	ZTE	U235	Unsmartphone	0
+826	ZTE	U235B	ZTE	U235B	Unsmartphone	0
+827	ZTE	U236	ZTE	U236	Unsmartphone	0
+828	ZTE	U260	ZTE	U260	Unsmartphone	0
+829	ZTE	U500	ZTE	U500	Unsmartphone	0
+830	ZTE	U600	ZTE	U600	Unsmartphone	0
+831	ZTE	U720	ZTE	U720	Unsmartphone	0
+832	ZTE	U722	ZTE	U722	Unsmartphone	0
+833	ZTE	U862	ZTE	U862	Unsmartphone	0
+834	ZTE	U981	ZTE	U981	Linux	0
+835	Bird	D610	Bird	D610	Unsmartphone	0
+836	Bird	D615	Bird	D615	Unsmartphone	0
+837	Bird	D630	Bird	D630	Unsmartphone	0
+838	Bird	D660	Bird	D660	Unsmartphone	0
+839	Bird	D717	Bird	D717	Unsmartphone	0
+840	Bird	D758	Bird	D758	Unsmartphone	0
+841	Bird	D765	Bird	D765	Unsmartphone	0
+842	Bird	D769	Bird	D769	Unsmartphone	0
+843	Bird	DV10	Bird	DV10	Unsmartphone	0
+844	Bird	F527	Bird	F527	Unsmartphone	0
+845	Bird	F988	Bird	F988	Unsmartphone	0
+846	Bird	G118	Bird	G118	Unsmartphone	0
+847	Bird	K298	Bird	K298	Unsmartphone	0
+848	Bird	K506	Bird	K506	Unsmartphone	0
+849	Bird	K509	Bird	K509	Unsmartphone	0
+850	Bird	K808	Bird	K808	Unsmartphone	0
+851	Bird	M05	Bird	M05	Unsmartphone	0
+852	Bird	M27	Bird	M27	Unsmartphone	0
+853	Bird	M29	Bird	M29	Unsmartphone	0
+854	Bird	M35	Bird	M35	Unsmartphone	0
+855	Bird	S169	Bird	S169	Unsmartphone	0
+856	Bird	S302	Bird	S302	Unsmartphone	0
+857	Bird	S305	Bird	S305	Unsmartphone	0
+858	Bird	S306	Bird	S306	Unsmartphone	0
+859	Bird	S918	Bird	S918	Unsmartphone	0
+860	Bird	T9	Bird	T9	Unsmartphone	0
+861	Bird	V706	Bird	V706	Unsmartphone	0
+862	Bird	V758	Bird	V758	Unsmartphone	0
+863	Bird	V780L	Bird	V780L	Unsmartphone	0
+864	Bird	V780	Bird	V780	Unsmartphone	0
+865	Bird	Z150	Bird	Z150		0
+866	HTC		HTC			0
+867	HTC	A310e	HTC	A310e	Android	0
+868	HTC	A3360	HTC	A3360	Android	0
+869	HTC	A3380	HTC	A3380	Android	0
+870	HTC	A510	HTC	A510	Android	0
+871	HTC	A510e	HTC	A510e	Android	0
+872	HTC	A6262	HTC	A6262	Android	0
+873	HTC	A9188	HTC	A9188	Android	0
+874	HTC	A9191	HTC	A9191	Android	0
+875	HTC	A9192	HTC	A9192	Android	0
+876	HTC	A9293	HTC	A9293	Android	0
+877	HTC	Android	HTC	Android	Android	0
+878	HTC	Aria	HTC	Aria	Android	0
+879	HTC	Blade	HTC	Blade	Android	0
+880	HTC	bravo	HTC	bravo	Android	0
+881	HTC	Bravo	HTC	Bravo	Android	0
+882	HTC	C510e	HTC	C510e	Android	0
+883	HTC	ChaCha A810e	HTC	ChaCha A810e	Android	0
+884	HTC	ChaCha_A810e	HTC	ChaCha_A810e	Android	0
+885	HTC	Desire	HTC	Desire	Android	0
+886	HTC	Desire HD	HTC	Desire HD	Android	0
+887	HTC	Desire S	HTC	Desire S	Android	0
+888	HTC	Desire Z	HTC	Desire Z	Android	0
+889	HTC	Diamond2	HTC	Diamond2	Android	0
+890	HTC	Dream	HTC	Dream	Android	0
+891	HTC	EVO 3D	HTC	EVO 3D	Android	0
+892	HTC	EVO 4G	HTC	EVO 4G	Android	0
+893	HTC	Flame	HTC	Flame	Windows Mobile	0
+894	HTC	Flyer	HTC	Flyer	Android	0
+895	HTC	Glacier	HTC	Glacier	Android	0
+896	HTC	Gratia	HTC	Gratia	Android	0
+897	HTC	HD2	HTC	HD2	Android	0
+898	HTC	HD7	HTC	HD7	Windows Phone	0
+899	HTC	HD7	HTC	HD7	Windows Phone 7	0
+900	HTC	HD_mini	HTC	HD_mini	Android	0
+901	HTC	Hero	HTC	Hero	Android	0
+902	HTC	Imagio	HTC	Imagio	Windows Mobile	0
+903	HTC	Incredible	HTC	Incredible	Android	0
+904	HTC	Incredible S	HTC	Incredible S	Android	0
+905	HTC	Legend	HTC	Legend	Android	0
+906	HTC	Liberty	HTC	Liberty	Android	0
+907	HTC	LT15i	HTC	LT15i	Android	0
+908	HTC	M9	HTC	M9	Android	0
+909	HTC	Magic	HTC	Magic	Android	0
+910	HTC	MB200	HTC	MB200	Android	0
+911	HTC	MB525	HTC	MB525	Android	0
+912	HTC	Mozart	HTC	Mozart	Windows Phone 7	0
+913	HTC	MT15a	HTC	MT15a	Android	0
+914	HTC	My Touch 4G	HTC	My Touch 4G	Android	0
+915	HTC	P3400	HTC	P3400	Windows Mobile	0
+916	HTC	P3470	HTC	P3470	Windows Mobile	0
+917	HTC	P3650	HTC	P3650	Windows Mobile	0
+918	HTC	P3700	HTC	P3700	Windows Mobile	0
+919	HTC	P3702	HTC	P3702	Windows Mobile	0
+920	HTC	P4350	HTC	P4350	Windows Mobile	0
+921	HTC	P4550 Kaiser	HTC	P4550 Kaiser	Windows Mobile	0
+922	HTC	P5500	HTC	P5500	Windows Mobile	0
+923	HTC	P5520	HTC	P5520	Windows Mobile	0
+924	HTC	Panache	HTC	Panache	Android	0
+925	HTC	Pyramid	HTC	Pyramid	Android	0
+926	HTC	Radar C110e	HTC	Radar C110e	Windows phone 7.5	0
+927	HTC	Runnymede	HTC	Runnymede	Android	0
+928	HTC	S510b	HTC	S510b	Android	0
+929	HTC	S521	HTC	S521	Windows Mobile	0
+930	HTC	S610d	HTC	S610d	Android	0
+931	HTC	S620	HTC	S620	Windows Mobile	0
+932	HTC	S710d	HTC	S710d	Android	0
+933	HTC	S710E	HTC	S710E	Android	0
+934	HTC	S730	HTC	S730	Windows Mobile	0
+935	HTC	S910m	HTC	S910m	Android	0
+936	HTC	saga	HTC	saga	Android	0
+937	HTC	Schubert	HTC	Schubert	Windows Phone 7	0
+938	HTC	Sensation 4G	HTC	Sensation 4G	Android	0
+939	HTC	Sensation	HTC	Sensation	Android	0
+940	HTC	Sensation XE	HTC	Sensation XE	Android	0
+941	HTC	Sensation XL	HTC	Sensation XL	Android	0
+942	HTC	SK17i	HTC	SK17i	Android	0
+943	HTC	Slide	HTC	Slide	Android	0
+944	HTC	Spark	HTC	Spark	Windows phone 7	0
+945	HTC	T4242	HTC	T4242	Windows Mobile	0
+946	HTC	T8697	HTC	T8697	Windows Phone 7	0
+947	HTC	T8698	HTC	T8698	Windows Phone 7	0
+948	HTC	T8788	HTC	T8788	Windows Phone 7	0
+949	HTC	T9188	HTC	T9188	Windows Mobile	0
+950	HTC	T9199	HTC	T9199	Windows Mobile	0
+951	HTC	T9298	HTC	T9298	Android	0
+952	HTC	Tattoo	HTC	Tattoo	Android	0
+953	HTC	Touch2	HTC	Touch2	Windows Mobile	0
+954	HTC	TOUCH_DUAL	HTC	TOUCH_DUAL	Windows Mobile	0
+955	HTC	Touch_HD	HTC	Touch_HD	Android	0
+956	HTC	Touch HD	HTC	Touch HD	Windows Mobile	0
+957	HTC	Touch_HD	HTC	Touch_HD	Windows Mobile	0
+958	HTC	Touch_Pro2	HTC	Touch_Pro2	Windows Mobile	0
+959	HTC	Touch Pro	HTC	Touch Pro	Windows Mobile	0
+960	HTC	Touch_Pro	HTC	Touch_Pro	Windows Mobile	0
+961	HTC	TyTN_II	HTC	TyTN_II	Windows Mobile	0
+962	HTC	TyTN	HTC	TyTN	Windows Mobile	0
+963	HTC	Vision	HTC	Vision	Android	0
+964	HTC	Viva	HTC	Viva	Windows Mobile	0
+965	HTC	Wildfire	HTC	Wildfire	Android	0
+966	HTC	Wildfire S	HTC	Wildfire S	Android	0
+967	HTC	X515E	HTC	X515E	Android	0
+968	HTC	X710e	HTC	X710e	Android	0
+969	HTC	X7510	HTC	X7510	Windows Mobile	0
+970	HTC	Z710e	HTC	Z710e	Android	0
+971	HTC	Z710t	HTC	Z710t	Android	0
+972	Nokia	1680c	Nokia	1680c	symbian S40	0
+973	Nokia	1681c	Nokia	1681c	Symbian S40	0
+974	Nokia	1682c	Nokia	1682c	Symbian S40	0
+975	Nokia	2220s	Nokia	2220s	symbian s40	0
+976	Nokia	2320c	Nokia	2320c	symbian s40	0
+977	Nokia	2322c	Nokia	2322c	symbian s40	0
+978	Nokia	2330c	Nokia	2330c	Symbian s40	0
+979	Nokia	2332c	Nokia	2332c	Symbian S40	0
+980	Nokia	2600c	Nokia	2600c	symbian S40	0
+981	Nokia	2610	Nokia	2610	Unsmartphone	0
+982	Nokia	2630	Nokia	2630	symbian S40	0
+983	Nokia	2680s	Nokia	2680s	symbian S40	0
+984	Nokia	2690	Nokia	2690	Symbian S40	0
+985	Nokia	2692	Nokia	2692	Unsmartphone	0
+986	Nokia	2700c	Nokia	2700c	symbian S40	0
+987	Nokia	2710c	Nokia	2710c	symbian s40	0
+988	Nokia	2720a	Nokia	2720a	symbian S40	0
+989	Nokia	2730c	Nokia	2730c	Symbian S40	0
+990	Nokia	2760	Nokia	2760	symbian s40	0
+991	Nokia	3109c	Nokia	3109c	symbian S40	0
+992	Nokia	3110c	Nokia	3110c	Symbian s40	0
+993	Nokia	3120c	Nokia	3120c	symbian s40	0
+994	Nokia	3120	Nokia	3120	symbian s40	0
+995	Nokia	3208c	Nokia	3208c	Symbian S40	0
+996	Nokia	3230	Nokia	3230	Symbian S60	0
+997	Nokia	3250	Nokia	3250	symbian S60	0
+998	Nokia	3500c	Nokia	3500c	symbian s40	0
+999	Nokia	3600s	Nokia	3600s	symbian s40	0
+1000	Nokia	3602s	Nokia	3602s	symbian s40	0
+1001	Nokia	3602s	Nokia	3602s	symbian S40	0
+1002	Nokia	3610a	Nokia	3610a	symbian S40	0
+1003	Nokia	3710fold	Nokia	3710fold	symbian S40	0
+1004	Nokia	5000	Nokia	5000	Symbian S40	0
+1005	Nokia	5000	Nokia	5000	symbian S60	0
+1006	Nokia	500	Nokia	500	symbian S60	0
+1007	Nokia	5070	Nokia	5070	symbian s40	0
+1008	Nokia	5130	Nokia	5130	Symbian S40	0
+1009	Nokia	5132	Nokia	5132	Symbian S40	0
+1010	Nokia	5200	Nokia	5200	symbian S40	0
+1011	Nokia	5208	Nokia	5208	symbian s40	0
+1012	Nokia	5220	Nokia	5220	Symbian S40	0
+1013	Nokia	5228	Nokia	5228	symbian S60	0
+1014	Nokia	5230	Nokia	5230	symbian S60	0
+1015	Nokia	5232	Nokia	5232	symbian S60	0
+1016	Nokia	5233	Nokia	5233	symbian S60	0
+1017	Nokia	5235	Nokia	5235	symbian S60	0
+1018	Nokia	5236	Nokia	5236	symbian S60	0
+1019	Nokia	5238	Nokia	5238	symbian S60	0
+1020	Nokia	5250	Nokia	5250	symbian S60	0
+1021	Nokia	5300	Nokia	5300	symbian s40	0
+1022	Nokia	5310	Nokia	5310	symbian S60	0
+1023	Nokia	5320di	Nokia	5320di	Symbian S40	0
+1024	Nokia	5320di	Nokia	5320di	symbian S60	0
+1025	Nokia	5320	Nokia	5320	Symbian S40	0
+1026	Nokia	5320	Nokia	5320	symbian S60	0
+1027	Nokia	5330	Nokia	5330	symbian s40	0
+1028	Nokia	5500	Nokia	5500	Symbian S60	0
+1029	Nokia	5530	Nokia	5530	symbian S60	0
+1030	Nokia	5610 XM	Nokia	5610 XM	Symbian s40	0
+1031	Nokia	5611	Nokia	5611	symbian S40	0
+1032	Nokia	5630XM	Nokia	5630XM	symbian S60	0
+1033	Nokia	5700	Nokia	5700	symbian S60	0
+1034	Nokia	5800	Nokia	5800	Symbian S60	0
+1035	Nokia	5800w	Nokia	5800w	Symbian S60	0
+1036	Nokia	5800 XpressMusic	Nokia	5800 XpressMusic	Symbian S60	0
+1037	Nokia	5802XM	Nokia	5802XM	symbian S60	0
+1038	Nokia	6020	Nokia	6020	Symbian S40	0
+1039	Nokia	6021	Nokia	6021	symbian s40	0
+1040	Nokia	6030	Nokia	6030		0
+1041	Nokia	6030	Nokia	6030	symbian S40	0
+1042	Nokia	6060	Nokia	6060	symbian s40	0
+1043	Nokia	6070	Nokia	6070	symbian S40	0
+1044	Nokia	6080	Nokia	6080	symbian S40	0
+1045	Nokia	6085	Nokia	6085	Symbian S40	0
+1046	Nokia	6100	Nokia	6100	symbian S40	0
+1047	Nokia	6108	Nokia	6108	symbian s40	0
+1048	Nokia	6110	Nokia	6110	symbian S60	0
+1049	Nokia	6111	Nokia	6111	Symbian S40	0
+1050	Nokia	6120Ci	Nokia	6120Ci	symbian S60	0
+1051	Nokia	6120C	Nokia	6120C	symbian S60	0
+1052	Nokia	6121c	Nokia	6121c	symbian S60	0
+1053	Nokia	6122c	Nokia	6122c	symbian S60	0
+1054	Nokia	6202c	Nokia	6202c	symbian s40	0
+1055	Nokia	6208c	Nokia	6208c	symbian S40	0
+1056	Nokia	6210N	Nokia	6210N	symbian s60	0
+1057	Nokia	6210s	Nokia	6210s	symbian s60	0
+1058	Nokia	6220c	Nokia	6220c	symbian S60	0
+1059	Nokia	6220	Nokia	6220	symbian S40	0
+1060	Nokia	6230	Nokia	6230	symbian S40	0
+1061	Nokia	6233	Nokia	6233	symbian s40	0
+1062	Nokia	6260s	Nokia	6260s	symbian s40	0
+1063	Nokia	6267	Nokia	6267	symbian s40	0
+1064	Nokia	6270	Nokia	6270	Symbian S40	0
+1065	Nokia	6280	Nokia	6280	symbian S40	0
+1066	Nokia	6288	Nokia	6288	symbian s40	0
+1067	Nokia	6290	Nokia	6290	symbian s60	0
+1068	Nokia	6300	Nokia	6300	symbian s40	0
+1069	Nokia	6301	Nokia	6301	Symbian S40	0
+1070	Nokia	6303ci	Nokia	6303ci	symbian S40	0
+1071	Nokia	6303ci	Nokia	6303ci	Symbian S40	0
+1072	Nokia	6303c	Nokia	6303c	symbian S40	0
+1073	Nokia	6500c	Nokia	6500c	symbian s40	0
+1074	Nokia	6500s	Nokia	6500s	Symbian S40	0
+1075	Nokia	6600f	Nokia	6600f	Symbian S40	0
+1076	Nokia	6600i	Nokia	6600i	Symbian S40	0
+1077	Nokia	6600s	Nokia	6600s	Symbian S40	0
+1078	Nokia	6600	Nokia	6600	symbian S60	0
+1079	Nokia	6610	Nokia	6610	symbian s40	0
+1080	Nokia	6630	Nokia	6630	symbian S60	0
+1081	Nokia	6670	Nokia	6670	Symbian S60	0
+1082	Nokia	6680	Nokia	6680	symbian S60	0
+1083	Nokia	6681	Nokia	6681	symbian S60	0
+1084	Nokia	6700c	Nokia	6700c	Symbian S40	0
+1085	Nokia	6700s	Nokia	6700s	symbian S60	0
+1086	Nokia	6702s	Nokia	6702s	symbian S60	0
+1087	Nokia	6708	Nokia	6708	symbian S60	0
+1088	Nokia	6710	Nokia	6710	symbian S60	0
+1089	Nokia	6720c	Nokia	6720c	symbian S60	0
+1090	Nokia	6730c	Nokia	6730c	symbian S60	0
+1091	Nokia	6760s	Nokia	6760s	symbian S60	0
+1092	Nokia	6788i	Nokia	6788i	symbian S60	0
+1093	Nokia	6788	Nokia	6788	symbian S60	0
+1094	Nokia	6820	Nokia	6820	symbian s40	0
+1095	Nokia	700	Nokia	700	Symbian Belle	0
+1096	Nokia	7020	Nokia	7020	Symbian S40	0
+1097	Nokia	7100s	Nokia	7100s	symbian s40	0
+1098	Nokia	7210c	Nokia	7210c	symbian s40	0
+1099	Nokia	7210	Nokia	7210	symbian s40	0
+1100	Nokia	7212c	Nokia	7212c	symbian S40	0
+1101	Nokia	7230	Nokia	7230	symbian s40	0
+1102	Nokia	7250I	Nokia	7250I	Unsmartphone	0
+1103	Nokia	7310c	Nokia	7310c	symbian s40	0
+1104	Nokia	7360	Nokia	7360	symbian s40	0
+1105	Nokia	7370	Nokia	7370	symbian s40	0
+1106	Nokia	7370	Nokia	7370	symbian S60	0
+1107	Nokia	7500	Nokia	7500	symbian s40	0
+1108	Nokia	7600	Nokia	7600	Unsmartphone	0
+1109	Nokia	7610s	Nokia	7610s	symbian S60	0
+1110	Nokia	7610	Nokia	7610	symbian S60	0
+1111	Nokia	7612s	Nokia	7612s	Symbian S40	0
+1112	Nokia	7650	Nokia	7650	symbian S60	0
+1113	Nokia	8600	Nokia	8600	symbian s40	0
+1114	Nokia	8800a	Nokia	8800a	symbian s40	0
+1115	Nokia	8800e	Nokia	8800e	symbian S40	0
+1116	Nokia	C1-01	Nokia	C1-01	symbian s40	0
+1117	Nokia	C1-02	Nokia	C1-02	symbian S40	0
+1118	Nokia	C1-03	Nokia	C1-03	symbian s40	0
+1119	Nokia	C2-00	Nokia	C2-00	symbian S40	0
+1120	Nokia	C2-01	Nokia	C2-01	symbian S40	0
+1121	Nokia	C2-02	Nokia	C2-02	symbian S40	0
+1122	Nokia	C2-03	Nokia	C2-03	symbian S40	0
+1123	Nokia	C2-06	Nokia	C2-06	Symbian S40	0
+1124	Nokia	C2-07	Nokia	C2-07	Symbian S40	0
+1125	Nokia	C2-08	Nokia	C2-08	symbian S40	0
+1126	Nokia	C3-00	Nokia	C3-00	Symbian S40	0
+1127	Nokia	C3-01	Nokia	C3-01	Symbian S40	0
+1128	Nokia	C5-00	Nokia	C5-00	symbian S60	0
+1129	Nokia	C5-03	Nokia	C5-03	symbian S60	0
+1130	Nokia	C6-00	Nokia	C6-00	symbian S60	0
+1131	Nokia	C6-01	Nokia	C6-01	Symbian^3	0
+1132	Nokia	C6-01	Nokia	C6-01	symbian S60	0
+1133	Nokia	C7-00	Nokia	C7-00	Symbian^3	0
+1134	Nokia	E5-00	Nokia	E5-00	symbian S60	0
+1135	Nokia	E50	Nokia	E50	symbian S60	0
+1136	Nokia	E51	Nokia	E51	symbian S60	0
+1137	Nokia	E52	Nokia	E52	symbian S60	0
+1138	Nokia	E61i	Nokia	E61i	Symbian S60	0
+1139	Nokia	E61	Nokia	E61	Symbian S60	0
+1140	Nokia	E63	Nokia	E63	Symbian S60	0
+1141	Nokia	E65	Nokia	E65	Symbian s60	0
+1142	Nokia	E66	Nokia	E66	symbian S60	0
+1143	Nokia	E66	Nokia	E66	Symbian s60	0
+1144	Nokia	E6	Nokia	E6	Symbian Anna	0
+1145	Nokia	E70	Nokia	E70	symbian S60	0
+1146	Nokia	E71	Nokia	E71	symbian S60	0
+1147	Nokia	E72	Nokia	E72	symbian S60	0
+1148	Nokia	E72	Nokia	E72	Symbian s60	0
+1149	Nokia	E73	Nokia	E73	symbian S60	0
+1150	Nokia	E75	Nokia	E75	Symbian S60	0
+1151	Nokia	E7	Nokia	E7	Symbian^3	0
+1152	Nokia	N70	Nokia	N70	symbian S60	0
+1153	Nokia	N71	Nokia	N71	symbian S60	0
+1154	Nokia	N72	Nokia	N72	symbian S60	0
+1155	Nokia	N73	Nokia	N73	symbian S60	0
+1156	Nokia	N75	Nokia	N75	symbian S60	0
+1157	Nokia	N76	Nokia	N76	symbian S60	0
+1158	Nokia	N78	Nokia	N78	symbian S60	0
+1159	Nokia	N79	Nokia	N79	symbian S60	0
+1160	Nokia	N80	Nokia	N80	symbian S60	0
+1161	Nokia	N810	Nokia	N810	symbian S60	0
+1162	Nokia	N81	Nokia	N81	symbian S60	0
+1163	Nokia	N82	Nokia	N82	Symbian S60	0
+1164	Nokia	N85	Nokia	N85	symbian S60	0
+1165	Nokia	N86	Nokia	N86	symbian S60	0
+1166	Nokia	N8	Nokia	N8	Symbian^3	0
+1167	Nokia	N90	Nokia	N90	symbian S60	0
+1168	Nokia	N91	Nokia	N91	symbian S60	0
+1169	Nokia	N93	Nokia	N93	symbian S60	0
+1170	Nokia	N95	Nokia	N95	symbian S60	0
+1171	Nokia	N96	Nokia	N96	symbian S60	0
+1172	Nokia	N97i	Nokia	N97i	Symbian S60	0
+1173	Nokia	N97mini	Nokia	N97mini	Symbian S60	0
+1174	Nokia	N97	Nokia	N97	symbian S60	0
+1175	Nokia	N-GageQD	Nokia	N-GageQD	symbian S60	0
+1176	Nokia	T7-00	Nokia	T7-00	Symbian Anna	0
+1177	Nokia	X2-00	Nokia	X2-00	symbian s40	0
+1178	Nokia	x2-01	Nokia	x2-01	symbian s40	0
+1179	Nokia	X2-03	Nokia	X2-03	symbian s40	0
+1180	Nokia	X3-02	Nokia	X3-02	symbian s40	0
+1181	Nokia	X3	Nokia	X3	Symbian S40	0
+1182	Nokia	X5-00	Nokia	X5-00	symbian S60	0
+1183	Nokia	X5-01	Nokia	X5-01	symbian S60	0
+1184	Nokia	x6	Nokia	x6	symbian S60	0
+1185	Nokia	X6	Nokia	X6	symbian S60	0
+1186	Nokia	X7	Nokia	X7	Symbian Anna	0
+1187	SAMSUNG	S7230E	SAMSUNG	S7230E	Bada bada OS	0
+1188	SAMSUNG	S8530	SAMSUNG	S8530	Bada bada OS	0
+1189	SonyEricsson	1682c	SonyEricsson	1682c	Symbian S40	0
+1190	SonyEricsson	2220s	SonyEricsson	2220s	symbian s40	0
+1191	SonyEricsson	2690	SonyEricsson	2690	Symbian S40	0
+1192	SonyEricsson	2692	SonyEricsson	2692	Unsmartphone	0
+1193	SonyEricsson	2700c	SonyEricsson	2700c	symbian S40	0
+1194	SonyEricsson	2730c	SonyEricsson	2730c	Symbian S40	0
+1195	SonyEricsson	3208c	SonyEricsson	3208c	Symbian S40	0
+1196	SonyEricsson	5000	SonyEricsson	5000	Symbian S40	0
+1197	SonyEricsson	5130	SonyEricsson	5130	Symbian S40	0
+1198	SonyEricsson	5200	SonyEricsson	5200	symbian S40	0
+1199	SonyEricsson	5300	SonyEricsson	5300	symbian s40	0
+1200	SonyEricsson	5610 XM	SonyEricsson	5610 XM	Symbian s40	0
+1201	SonyEricsson	5611	SonyEricsson	5611	symbian S40	0
+1202	SonyEricsson	6120C	SonyEricsson	6120C	symbian S60	0
+1203	SonyEricsson	6208c	SonyEricsson	6208c	symbian S40	0
+1204	SonyEricsson	6220	SonyEricsson	6220	symbian S40	0
+1205	SonyEricsson	6300	SonyEricsson	6300	symbian s40	0
+1206	SonyEricsson	6303ci	SonyEricsson	6303ci	Symbian S40	0
+1207	SonyEricsson	6500c	SonyEricsson	6500c	symbian s40	0
+1208	SonyEricsson	6500s	SonyEricsson	6500s	Symbian S40	0
+1209	SonyEricsson	7210c	SonyEricsson	7210c	symbian s40	0
+1210	SonyEricsson	7230	SonyEricsson	7230	symbian s40	0
+1211	SonyEricsson	Android	SonyEricsson	Android		0
+1212	SonyEricsson	C2-01	SonyEricsson	C2-01	symbian S40	0
+1213	SonyEricsson	C2-02	SonyEricsson	C2-02	symbian S40	0
+1214	SonyEricsson	C3-00	SonyEricsson	C3-00	Symbian S40	0
+1215	SonyEricsson	E16i	SonyEricsson	E16i	Android	0
+1216	SonyEricsson	E52	SonyEricsson	E52	symbian S60	0
+1217	SonyEricsson	J105a	SonyEricsson	J105a	Unsmartphone	0
+1218	SonyEricsson	J105i	SonyEricsson	J105i	Unsmartphone	0
+1219	SonyEricsson	J108i	SonyEricsson	J108i	Unsmartphone	0
+1220	SonyEricsson	J10i	SonyEricsson	J10i	Unsmartphone	0
+1221	SonyEricsson	J10	SonyEricsson	J10	Unsmartphone	0
+1222	SonyEricsson	K550i	SonyEricsson	K550i	Unsmartphone	0
+1223	SonyEricsson	K750c	SonyEricsson	K750c	Unsmartphone	0
+1224	SonyEricsson	K750i	SonyEricsson	K750i	Unsmartphone	0
+1225	SonyEricsson	K810c	SonyEricsson	K810c	Unsmartphone	0
+1226	SonyEricsson	K810i	SonyEricsson	K810i	Unsmartphone	0
+1227	SonyEricsson	K810	SonyEricsson	K810	Unsmartphone	0
+1228	SonyEricsson	K850i	SonyEricsson	K850i	Unsmartphone	0
+1229	SonyEricsson	N72	SonyEricsson	N72	symbian S60	0
+1230	SonyEricsson	N95	SonyEricsson	N95	symbian S60	0
+1231	SonyEricsson	S700c	SonyEricsson	S700c	Unsmartphone	0
+1232	SonyEricsson	S700i	SonyEricsson	S700i	Unsmartphone	0
+1233	SonyEricsson	S700	SonyEricsson	S700	Unsmartphone	0
+1234	SonyEricsson	ST15i	SonyEricsson	ST15i	Android	0
+1235	SonyEricsson	ST17i	SonyEricsson	ST17i	Android	0
+1236	SonyEricsson	T303C	SonyEricsson	T303C	Unsmartphone	0
+1237	SonyEricsson	T650i	SonyEricsson	T650i	Unsmartphone	0
+1238	SonyEricsson	U10i	SonyEricsson	U10i	Android	0
+1239	SonyEricsson	W20i	SonyEricsson	W20i	symbian s40	0
+1240	SonyEricsson	w20	SonyEricsson	w20	symbian s40	0
+1241	SonyEricsson	W580c	SonyEricsson	W580c	Android	0
+1242	SonyEricsson	w700c	SonyEricsson	w700c	Unsmartphone	0
+1243	SonyEricsson	W700c	SonyEricsson	W700c	Unsmartphone	0
+1244	SonyEricsson	W700i	SonyEricsson	W700i	Unsmartphone	0
+1245	SonyEricsson	W760i	SonyEricsson	W760i	Symbian S40	0
+1246	SonyEricsson	w810c	SonyEricsson	w810c	Unsmartphone	0
+1247	SonyEricsson	W810i	SonyEricsson	W810i	Unsmartphone	0
+1248	SonyEricsson	W810	SonyEricsson	W810	Unsmartphone	0
+1249	SonyEricsson	w959	SonyEricsson	w959	symbian s40	0
+1250	SonyEricsson	WT19i	SonyEricsson	WT19i	Android	0
+1251	SonyEricsson	X2-00	SonyEricsson	X2-00	symbian s40	0
+1252	SonyEricsson	x2-01	SonyEricsson	x2-01	symbian s40	0
+1253	SonyEricsson	X3-02	SonyEricsson	X3-02	symbian s40	0
+1254	SonyEricsson	X3	SonyEricsson	X3	Symbian S40	0
+1255	SonyEricsson	Z750i	SonyEricsson	Z750i		0
+1256	A16		GIONEE	A16	Unsmartphone	0
+1257	A280		GIONEE	A280	Unsmartphone	0
+1258	A30		GIONEE	A30	Unsmartphone	0
+1259	N9		GIONEE	N9	Unsmartphone	0
+1260	T18		GIONEE	T18	Unsmartphone	0
+1261	Legend		HTC	Legend	Android	0
+1262	V60S		Knoka	V60S	Unsmartphone	0
+1263	P50		Lenovo	P50	Unsmartphone	0
+1264	P60		Lenovo	P60	Unsmartphone	0
+1265	P609		Lenovo	P609	Unsmartphone	0
+1266	P612		Lenovo	P612	Unsmartphone	0
+1267	KG70		LG	KG70	Unsmartphone	0
+1268	ME525		Motorola	ME525	Android	0
+1269	2600c		Nokia	2600c	Symbian S40	0
+1270	3600s		Nokia	3600s	Symbian S40	0
+1271	5220 xm		Nokia	5220 xm	Symbian S40	0
+1272	5320diXpressMusic		Nokia	5320diXpressMusic	Symbian S40	0
+1273	6120ci		Nokia	6120ci	Symbian S60	0
+1274	6202c		Nokia	6202c	Symbian S40	0
+1275	6210si		Nokia	6210si	Symbian S60	0
+1276	6230i		Nokia	6230i	Symbian S40	0
+1277	6600s		Nokia	6600s	Symbian S40	0
+1278	T610		OKWAP	T610	Unsmartphone	0
+1279	A203		OPPO	A203	Unsmartphone	0
+1280	699		Philips	699	Unsmartphone	0
+1281	X600		Philips	X600	Unsmartphone	0
+1282	B5310U		SAMSUNG	B5310U	Unsmartphone	0
+1283	B7300		SAMSUNG	B7300	Windows Phone	0
+1284	E1100		SAMSUNG	E1100	Unsmartphone	0
+1285	E848		SAMSUNG	E848	Unsmartphone	0
+1286	F480		SAMSUNG	F480	Unsmartphone	0
+1287	G808		SAMSUNG	G808	Unsmartphone	0
+1288	i780		SAMSUNG	i780	Windows Mobile	0
+1289	i8000H		SAMSUNG	i8000H	Unsmartphone	0
+1290	i8510		SAMSUNG	i8510	Symbian S60	0
+1291	S8000C		SAMSUNG	S8000C	Unsmartphone	0
+						
+						
