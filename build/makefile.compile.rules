@@ -65,11 +65,11 @@ TESTDEPENDTARGET=$(patsubst %.d, %.d.tmp, $(TESTDEPENDFILES))
 all:$(TARGET)
 test:$(TESTTARGET)
 
-$(STATIC_TARGET):$(AUTOTARGET) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
+$(STATIC_TARGET):$(AUTOTARGET) depend dependdir $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
 	$(AR) $(ARFLAGS) $(OUTDIR_PREFIX)/$(STATIC_TARGET) $(OBJECTS)
 	@echo " $(OBJECTS) " > $(OUTDIR_PREFIX)/$(MOD_NAME).objectlist
 
-$(SHARED_TARGET):$(AUTOTARGET) depend $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
+$(SHARED_TARGET):$(AUTOTARGET) depend dependdir $(OUTDIR) $(OUTSUBDIR) $(OBJECTS)
 	$(CC) $(SHAREDFLAG) -o $(OUTDIR_PREFIX)/$(SHARED_TARGET) $(OBJECTS)
 	@echo " $(OBJECTS) " > $(OUTDIR_PREFIX)/$(MOD_NAME).objectlist
 
@@ -121,12 +121,19 @@ AutoMsg/%.h:AutoMsg/%.msg $(PROJBASE)/build/genMsg.pl
 LuaObject/%.cpp: LuaObject/%.pkg
 	$(PROJBASE)/3PP/tolua++/bin/tolua++ -o $@ $<
 
+dependdir:
+	@for DIR in $(DEPEND_DIR);  \
+	do                     \
+		make -C $$DIR || exit -1;  \
+	done                  
+
 depend: $(OUTDIR) $(OUTSUBDIR) $(DEPENDTARGET)
 testdepend: $(OUTDIR) $(TESTOUTSUBDIR) $(TESTDEPENDTARGET)
 
+
 FORCE:
 
-.PHONY:clean depend test testdepend
+.PHONY:clean depend test testdepend dependdir
 clean:
 	@rm -rf $(OUTDIR) $(AUTOTARGET) \
 		$(OUTDIR_PREFIX)/$(MOD_NAME).objectlist \
