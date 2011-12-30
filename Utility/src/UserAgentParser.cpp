@@ -167,6 +167,7 @@ void UserAgentParser::initStateForAString(
         theRulesTable.setRule(theKey.at(i-1), preState, curState);
         preState = curState;
     }
+    theString2StateMap[theKey] = theKeyState;
     theRulesTable.setRule(theKey.at(theKey.length()-1), preState, theKeyState);
 }
 
@@ -180,6 +181,7 @@ bool UserAgentParser::match(
 {
     int state = PARSE_STATE_NONE;
     int matchedPrimaryKey = -1;
+    bool matchedSubKey = false; //for longest match
     int nodeSize = stateNodeVectorM.size();
     for (unsigned i = 0; i < theLen; i++)
     {
@@ -210,10 +212,20 @@ bool UserAgentParser::match(
             {
                 assert(unsigned(state) <= stateNode->subPhoneInfoVectorM.size());
                 thePhoneInfo = stateNode->subPhoneInfoVectorM[state];
+                //we don't return in order to match the longest str
+                //and set the isDoneM to false to bapass the reset
+                //return true;
+                matchedSubKey = true;
+            }
+            else if (matchedSubKey && PARSE_STATE_NONE == state)
+            {
                 return true;
             }
         }
     }
+    if (matchedSubKey)
+        return true;
+
     if (matchedPrimaryKey >= 0 && stateNodeVectorM[matchedPrimaryKey].isDoneM)
     {
         thePhoneInfo = stateNodeVectorM[matchedPrimaryKey].localPhoneInfoM;
