@@ -176,7 +176,7 @@ void UserAgentParser::initStateForAString(
 bool UserAgentParser::match(
                 const char* theInputStr,
                 const unsigned theLen,
-                PhoneInfo* thePhoneInfo)
+                PhoneInfo& thePhoneInfo)
 {
     int state = PARSE_STATE_NONE;
     int matchedPrimaryKey = -1;
