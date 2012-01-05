@@ -34,9 +34,9 @@ namespace Msg
         };
         enum
         {
-            IMSI_LEN = 8,
-            IMEI_LEN = 8,
-            IMEISV_LEN = 9
+            IMSI_LEN_E = 8,
+            IMEI_LEN_E = 8,
+            IMEISV_LEN_E = 9
         };
 
         void init()
@@ -139,11 +139,11 @@ namespace Msg
             Uint8 length;
             if (typeM == IMSI_E || typeM == IMEI_E)
             {
-                length.valueM = IMSI_LEN;
+                length.valueM = IMSI_LEN_E;
             }
             else if (typeM == IMEISV_E)
             {
-                length.valueM = IMEISV_LEN;
+                length.valueM = IMEISV_LEN_E;
             }
             else
             {
