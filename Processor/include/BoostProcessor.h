@@ -92,6 +92,18 @@ namespace Processor
                 ClassType* theObj,
                 ParamType1 theParam1,
                 ParamType2 theParam2);
+
+        template<typename ClassType, 
+                 typename ParamType1,
+                 typename ParamType2,
+                 typename ParamType3>
+        int process(
+                const unsigned long long theId, 
+                void (ClassType::*theFunc)(ParamType1, ParamType2, ParamType3),
+                ClassType* theObj,
+                ParamType1 theParam1,
+                ParamType2 theParam2,
+                ParamType3 theParam3);
     private:
         unsigned threadCountM;
         BoostWorker* workersM;
@@ -184,6 +196,27 @@ namespace Processor
 		TwoParamClassJob<ClassType, ParamType1, ParamType2>* job = 
 			TwoParamClassJob<ClassType, ParamType1, ParamType2>::AllocatorSingleton::instance()->newData(theId);
 		job->init(theFunc, theObj, theParam1, theParam2);
+
+		unsigned workerId = theId % threadCountM;
+		return workersM[workerId].process(job);
+
+    }
+//-----------------------------------------------------------------------------
+    template<typename ClassType, 
+             typename ParamType1,
+             typename ParamType2,
+             typename ParamType3>
+    int BoostProcessor::process(
+            const unsigned long long theId, 
+            void (ClassType::*theFunc)(ParamType1, ParamType2, ParamType3),
+            ClassType* theObj,
+            ParamType1 theParam1,
+            ParamType2 theParam2,
+            ParamType3 theParam3)
+    {
+		ThreeParamClassJob<ClassType, ParamType1, ParamType2, ParamType3>* job = 
+			ThreeParamClassJob<ClassType, ParamType1, ParamType2, ParamType3>::AllocatorSingleton::instance()->newData(theId);
+		job->init(theFunc, theObj, theParam1, theParam2, theParam3);
 
 		unsigned workerId = theId % threadCountM;
 		return workersM[workerId].process(job);

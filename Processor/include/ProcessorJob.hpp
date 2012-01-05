@@ -327,6 +327,76 @@ namespace Processor
             CacheData* nextFreeM;
 		};
 	};
+
+	template<typename ClassType, 
+        typename ParamType1, 
+        typename ParamType2,
+        typename ParamType3>
+	class ThreeParamClassJob: public IJob
+	{
+	public:
+		typedef Data::ThreadSafeAllocator<ThreeParamClassJob, 10000> Allocator;
+        typedef typename Allocator::AllocatorType AllocatorType;
+		typedef DesignPattern::Singleton<Allocator> AllocatorSingleton;
+        typedef ThreeParamClassJob<ClassType, ParamType1, ParamType2, ParamType3> CacheData;
+		typedef void (ClassType::*Func)(ParamType1, ParamType2, ParamType3);
+
+		ThreeParamClassJob(
+				Func theFunc, 
+				ClassType*const theObj, 
+				ParamType1 theParam1,
+				ParamType2 theParam2,
+                ParamType3 theParam3)
+			: funcM(theFunc)
+			, objM(theObj)
+			, param1M(theParam1)
+			, param2M(theParam2)
+			, param3M(theParam3)
+		{}
+		~ThreeParamClassJob(){}
+		ThreeParamClassJob()
+			: funcM(NULL)
+			, objM(NULL)
+		{}
+		void init(
+				Func theFunc, 
+				ClassType*const theObj, 
+				ParamType1 theParam1,
+				ParamType2 theParam2,
+                ParamType3 theParam3)
+        {
+			funcM = theFunc;
+			objM = theObj;
+			param1M = theParam1;
+			param2M = theParam2;
+			param3M = theParam3;
+		}
+
+		virtual void operator()()
+		{
+			(objM->*funcM)(param1M, param2M, param3M);
+		}
+
+		virtual void returnToPool()
+		{
+			finiObject(param1M);
+			finiObject(param2M);
+			finiObject(param3M);
+			allocatorM->freeData(this);
+		}
+	private:
+		Func funcM;
+        ClassType* objM;
+		ParamType1 param1M;
+		ParamType2 param2M;
+		ParamType3 param3M;
+	public:
+		union
+		{
+            AllocatorType* allocatorM; 
+            CacheData* nextFreeM;
+		};
+	};
 }
 #endif /* PROCESSORJOB_HPP */
 
