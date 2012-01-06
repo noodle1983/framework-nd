@@ -33,6 +33,11 @@ public:
 	{
 		cout << "A talk " << sth << " and " << andSth << endl;
 	}
+
+	void talkBla(const char* sth, const char* andSth, const char* andBlabla)
+	{
+		cout << "A talk " << sth << " and " << andSth << " and "<< "blabla" << endl;
+	}
 };
 
 int main()
@@ -93,6 +98,19 @@ int main()
 		ATwoParamJob* job = ATwoParamJob::AllocatorSingleton::instance()->newData(0);
 		cout << "pool used " << ATwoParamJob::AllocatorSingleton::instance()->getUsed() << endl;
 		job->init(&A::talk, &a, "something", "sth");
+		IJob* job2 = job;
+		(*job2)();
+		job2->returnToPool();
+		cout << "pool used " << ATwoParamJob::AllocatorSingleton::instance()->getUsed() << endl;
+	}
+	{
+		A a;
+		//TwoParamClassJob<A, const char*, const char*> job(&A::talk, &a, "something", " and something");
+		//job();
+        typedef ThreeParamClassJob<A, const char*, const char*, const char*> ATwoParamJob;
+		ATwoParamJob* job = ATwoParamJob::AllocatorSingleton::instance()->newData(0);
+		cout << "pool used " << ATwoParamJob::AllocatorSingleton::instance()->getUsed() << endl;
+		job->init(&A::talkBla, &a, "something", "sth", "bla");
 		IJob* job2 = job;
 		(*job2)();
 		job2->returnToPool();
