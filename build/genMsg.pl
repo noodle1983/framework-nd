@@ -291,6 +291,13 @@ print  CMSG_HANDLE<<END_OF_INIT_BODY;
             ${fieldName}.init();            
 END_OF_INIT_BODY
         }
+        elsif ($fieldOption eq "O")
+        {
+print  CMSG_HANDLE<<END_OF_INIT_BODY;
+            ${fieldName}.reset();            
+END_OF_INIT_BODY
+
+        }
     }
 
 print CMSG_HANDLE <<END_OF_INIT_END;
