@@ -33,7 +33,7 @@ void UserAgentParser::initRuleDef(std::vector<RuleDef>& theRuleDefVector)
     {
         std::vector<std::string> attrVector;
         boost::split(attrVector, ruleStr, boost::is_any_of("\t"));
-        assert(attrVector.size() == 7);
+        assert(attrVector.size() == 12);
 
         RuleDef ruleDef;
         ruleDef.phoneInfoM.idM = atoi(attrVector[0].c_str());
@@ -41,10 +41,17 @@ void UserAgentParser::initRuleDef(std::vector<RuleDef>& theRuleDefVector)
         boost::trim(ruleDef.primaryKeyM);
         ruleDef.subKeyM = boost::to_upper_copy(attrVector[2]);
         boost::trim(ruleDef.subKeyM);
-        ruleDef.phoneInfoM.renderM = attrVector[3];
-        ruleDef.phoneInfoM.modelM = attrVector[4];
-        ruleDef.phoneInfoM.osM = attrVector[5];
-        ruleDef.phoneInfoM.terminalTypeM = atoi(attrVector[6].c_str());
+
+        ruleDef.phoneInfoM.renderIdM = atoi(attrVector[3].c_str()); 
+        ruleDef.phoneInfoM.modelIdM = atoi(attrVector[4].c_str());
+        ruleDef.phoneInfoM.osIdM = atoi(attrVector[5].c_str());
+        ruleDef.phoneInfoM.supportEdgeM = atoi(attrVector[6].c_str());
+        ruleDef.phoneInfoM.supportTdM = atoi(attrVector[7].c_str());
+        ruleDef.phoneInfoM.supportWcdmaM = atoi(attrVector[8].c_str());
+        ruleDef.phoneInfoM.supportHspaM = atoi(attrVector[9].c_str());
+        ruleDef.phoneInfoM.supportLteM = atoi(attrVector[10].c_str());
+        ruleDef.phoneInfoM.supportCdmaM = atoi(attrVector[11].c_str());
+
         if (!ruleDef.primaryKeyM.empty())
         {
             theRuleDefVector.push_back(ruleDef);

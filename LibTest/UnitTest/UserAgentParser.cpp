@@ -12,9 +12,9 @@ int main()
     string userAgentStr = "Android_CellLocation_1.0;000000000000001;;htccn_chs;HTC Wildfire S;8";
     if (parser.match(userAgentStr.c_str(), userAgentStr.length(), phoneInfo))
     { 
-        cout << "render: " << phoneInfo.renderM
-            << ", model: " << phoneInfo.modelM
-            << ", os: " << phoneInfo.osM << endl;
+        cout << "render: " << phoneInfo.renderIdM
+            << ", model: " << phoneInfo.modelIdM
+            << ", os: " << phoneInfo.osIdM << endl;
     }
     else
     {

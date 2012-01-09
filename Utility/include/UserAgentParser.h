@@ -12,16 +12,32 @@ namespace Utility
     struct PhoneInfo
     {
         PhoneInfo()
-            : idM(-1)
-            , terminalTypeM(0)
-        {}
+        {init();}
+        void init()
+        {
+            idM = -1;
+            renderIdM = -1; 
+            modelIdM = -1;
+            osIdM = -1;
+            supportEdgeM = -1;
+            supportTdM = -1;
+            supportWcdmaM = -1;
+            supportHspaM = -1;
+            supportLteM = -1;
+            supportCdmaM = -1;
+        }
         ~PhoneInfo()
         {}
         int idM;
-        std::string renderM;
-        std::string modelM;
-        std::string osM;
-        int terminalTypeM;
+        int renderIdM; 
+        int modelIdM;
+        int osIdM;
+        bool supportEdgeM;
+        bool supportTdM;
+        bool supportWcdmaM;
+        bool supportHspaM;
+        bool supportLteM;
+        bool supportCdmaM;
     };
 
     class UserAgentParser
