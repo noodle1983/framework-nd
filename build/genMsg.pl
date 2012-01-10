@@ -60,6 +60,8 @@ print CMSG_HANDLE<<END_OF_HEADER;
 #include "Timestamp.h"
 #include "BcdString.h"
 #include "Log.h"
+
+#include <sstream>
 #include <boost/optional.hpp>
 
 namespace Msg
@@ -332,6 +334,9 @@ print  CMSG_HANDLE<<END_OF_DECODE_BODY;
             if (SUCCESS_E != ret)            
             {
                 LOG_ERROR("failed to parse ${msgName}.${fieldName}");
+                std::ostringstream oss;    
+                dump(oss);
+                LOG_DEBUG(oss.str());
                 return ret;
             }
 
@@ -342,7 +347,7 @@ print  CMSG_HANDLE<<END_OF_DECODE_LENGTH;
             unsigned endIndex = theIndex - ${fieldType}::MIN_BYTES + ${fieldName}.valueM;
             if (theLen < endIndex)
             {
-                LOG_ERROR("failed to parse ${msgName}.${fieldName}");
+                LOG_ERROR("${msgName}.${fieldName} not enough buffer");
                 return NOT_ENOUGH_BUFFER_E;
             }
 END_OF_DECODE_LENGTH
@@ -363,6 +368,9 @@ print  CMSG_HANDLE<<END_OF_DECODE_WOBODY;
                     if (SUCCESS_E != ret)            
                     {
                         LOG_ERROR("failed to parse ${msgName}.${fieldName}");
+                        std::ostringstream oss;    
+                        dump(oss);
+                        LOG_DEBUG(oss.str());
                         return ret;
                     }
                 }
@@ -378,6 +386,9 @@ print  CMSG_HANDLE<<END_OF_DECODE_OBODY;
                     if (SUCCESS_E != ret)            
                     {
                         LOG_ERROR("failed to parse ${msgName}.${fieldName}");
+                        std::ostringstream oss;    
+                        dump(oss);
+                        LOG_DEBUG(oss.str());
                         return ret; 
                     }
                 }
@@ -391,7 +402,11 @@ END_OF_DECODE_OBODY
 print  CMSG_HANDLE<<END_OF_DECODE_OBODY_E;
                 else
                 {
-                    LOG_ERROR("failed to parse structure at index" << theIndex);
+                    LOG_ERROR("failed to parse structure at index:" << theIndex
+                                << ", tag:" << (unsigned)theBuffer[theIndex]);
+                    std::ostringstream oss;    
+                    dump(oss);
+                    LOG_DEBUG(oss.str());
                     return ERROR_E;
                 }
            } 
@@ -437,6 +452,9 @@ print  CMSG_HANDLE<<END_OF_ENCODE_LEN_B;
             if (SUCCESS_E != ret)            
             {
                 LOG_ERROR("failed to encode ${msgName}.${fieldName}");
+                std::ostringstream oss;    
+                dump(oss);
+                LOG_DEBUG(oss.str());
                 return ret;
             }
 
@@ -456,6 +474,9 @@ print  CMSG_HANDLE<<END_OF_ENCODE_BODY;
             if (SUCCESS_E != ret)            
             {
                 LOG_ERROR("failed to encode ${msgName}.${fieldName}");
+                std::ostringstream oss;    
+                dump(oss);
+                LOG_DEBUG(oss.str());
                 return ret;
             }
 
@@ -470,6 +491,9 @@ print  CMSG_HANDLE<<END_OF_ENCODE_OBODY;
                 if (SUCCESS_E != ret)            
                 {
                     LOG_ERROR("failed to encode ${msgName}.${fieldName}");
+                    std::ostringstream oss;    
+                    dump(oss);
+                    LOG_DEBUG(oss.str());
                     return ret;
                 }
             }
