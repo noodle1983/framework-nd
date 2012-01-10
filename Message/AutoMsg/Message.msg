@@ -148,6 +148,8 @@ Message ServiceNotification
     Imei           MobileIdentityIEI       O
     Apn            ApnIEI                  O
     HttpHeader     HttpHeaderIEI           O
+	UserAgent      UserAgentIEI            O
+	Url            UrlIEI                  O
 
 
 Message AddOrModifyUser
