@@ -64,6 +64,12 @@ namespace Msg
             const char* content = theBuffer + theIndex;
             theIndex += length.valueM;
 
+			if (length.valueM <= 1)
+			{
+				typeM = NONE_E;
+				return SUCCESS_E;
+			}
+
             typeM = content[0] & 0x07;
             switch (typeM)
             {
