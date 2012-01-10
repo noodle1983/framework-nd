@@ -26,6 +26,7 @@ namespace Msg
         enum {MIN_BYTES = 10};
         enum
         {
+            NONE_E   = 0,
             IMSI_E   = 1,
             IMEI_E   = 2,
             IMEISV_E = 3,
@@ -91,6 +92,9 @@ namespace Msg
                 }
 
                 valueM = combine_bits2(content, 1, 8, 32);
+                return SUCCESS_E;
+            case NONE_E:
+                valueM = 0;
                 return SUCCESS_E;
             default:
                 return ERROR_E;
@@ -169,6 +173,7 @@ namespace Msg
                        : IMEI_E == typeM ? "IMEI"
                        : IMEISV_E == typeM ? "IMEISV"
                        : TMSI_E == typeM ? "TMSI"
+                       : NONE_E == typeM ? "NONE"
                        : "UNKNOW")
                    << "=" << valueM;
             return theOut;
