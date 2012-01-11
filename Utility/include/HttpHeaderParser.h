@@ -2,6 +2,7 @@
 #define HTTPHEADERPARSER_H
 
 #include "RulesTable.hpp"
+#include "Singleton.hpp"
 
 #include <map>
 #include <vector>
@@ -19,6 +20,13 @@ namespace Utility
             METHOD_POST,
             METHOD_RSP,
             METHOD_CNT
+        };
+
+        enum Attribute
+        {
+            ATTR_HOST = 0,
+            ATTR_UA = 1,
+            ATTR_REFERED = 2
         };
 
         Method methodM;
@@ -59,6 +67,8 @@ namespace Utility
         HttpHeaderDefs httpHeaderDefsM;
         RulesTable rulesTableM;
     };
+    typedef DesignPattern::Singleton<HttpHeaderParser> HttpHeaderParserSingleton;
+
 }
 
 

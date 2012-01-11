@@ -29,6 +29,7 @@ void HttpHeaderParser::init()
     int attrId = 0;
     httpHeaderDefsM[attrId++] = "Host:"; 
     httpHeaderDefsM[attrId++] =  "User-Agent:"; 
+    httpHeaderDefsM[attrId++] =  "Referer:"; 
 
     rulesTableM.clear();
     rulesTableM.setDefaultRule(PARSE_STATE_IGNORE_LINE);

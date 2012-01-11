@@ -126,7 +126,7 @@ Message ServiceInfoIEI
     SrcIpAddr      Uint32                  M
     DestIpAddr     Uint32                  M
     SrcPort        Uint16                  M
-    DescPort       Uint16                  M
+    DestPort       Uint16                  M
     Protocol       Uint8                   M
     CatalogId      Uint48                  M
     AppId          Uint32                  M

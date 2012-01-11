@@ -76,9 +76,14 @@ namespace Msg
             lac.valueM = theLAC;
         }
 
-        guint16 getLAC()
+        bool isLacAvailable() const
         {
-            return (flag.valueM & LAC_MASK_E) ? lac.valueM : 0;
+            return (flag.valueM & LAC_MASK_E);
+        }
+
+        guint16 getLAC() const
+        {
+            return lac.valueM;
         }
 
         void setRAC(const guint16 theRAC)
@@ -86,10 +91,15 @@ namespace Msg
             flag.valueM |= RAC_MASK_E;
             rac.valueM = theRAC;
         }
-
-        guint16 getRAC()
+        
+        bool isRacAvailable() const
         {
-            return (flag.valueM & RAC_MASK_E) ? rac.valueM : 0;
+            return (flag.valueM & RAC_MASK_E) ;
+        }
+
+        guint16 getRAC() const 
+        {
+            return rac.valueM;
         }
 
         void setCI(const guint16 theCI)
@@ -98,9 +108,14 @@ namespace Msg
             ci.valueM = theCI;
         }
 
-        guint16 getCI()
+        bool isCiAvailable() const
         {
-            return (flag.valueM & CI_MASK_E) ? ci.valueM : 0;
+            return (flag.valueM & CI_MASK_E) ;
+        }
+
+        guint16 getCI() const
+        {
+            return ci.valueM;
         }
 
         void setSI(const guint16 theSI)
@@ -109,9 +124,14 @@ namespace Msg
             si.valueM = theSI;
         }
 
-        guint16 getSI()
+        bool isSiAvailable() const
         {
-            return (flag.valueM & SI_MASK_E) ? si.valueM : 0;
+            return (flag.valueM & SI_MASK_E);
+        }
+
+        guint16 getSI() const
+        {
+            return si.valueM;
         }
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
