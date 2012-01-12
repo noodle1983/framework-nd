@@ -2,6 +2,7 @@
 #define USERAGENTPARSER_H
 
 #include "RulesTable.hpp"
+#include "Singleton.hpp"
 
 #include <map>
 #include <vector>
@@ -97,6 +98,7 @@ namespace Utility
         StateNodeVector stateNodeVectorM;
         RulesTable rulesTableM;
     };
+    typedef DesignPattern::Singleton<UserAgentParser> UserAgentParserSingleton;
 }
 
 
