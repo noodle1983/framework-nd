@@ -209,6 +209,7 @@ Message QosSubMsg
     GuaranteedBitRateDown     Uint8        M
 
 Message CdrMsg
+    include Header
     IMSI                      Uint64        M
     NE_MscId                  Uint32        M
     NE_BscId                  Uint32        M
@@ -255,6 +256,7 @@ Message CdrMsg
 
 
 Message SignalEventMsg
+    include Header
     IMSI                  Uint64         M
     NE_MscId              Uint32         M
     NE_BscId              Uint32         M

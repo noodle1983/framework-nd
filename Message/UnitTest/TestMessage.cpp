@@ -34,7 +34,7 @@ int main()
         serviceNotification1.serviceInfo.srcIpAddr.valueM = 1;
         serviceNotification1.serviceInfo.destIpAddr.valueM = 2;
         serviceNotification1.serviceInfo.srcPort.valueM = 3;
-        serviceNotification1.serviceInfo.descPort.valueM = 4;
+        serviceNotification1.serviceInfo.destPort.valueM = 4;
         serviceNotification1.serviceInfo.protocol.valueM = 5;
         serviceNotification1.serviceInfo.catalogId.valueM = 6;
         serviceNotification1.serviceInfo.appId.valueM = 7;
