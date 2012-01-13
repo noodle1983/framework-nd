@@ -9,8 +9,12 @@ using namespace Config;
 
 //-----------------------------------------------------------------------------
 
-FileWriter::FileWriter(const std::string& theModelName, const int64_t theIndex)
-    : modelNameM(theModelName)
+FileWriter::FileWriter(
+        const std::string& theModelName, 
+        const int64_t theIndex,
+        const std::string& theHeaderLine)
+    : headerLineM(theHeaderLine)
+    , modelNameM(theModelName)
     , indexM(theIndex)
     , switchTimeM(0)
     , curWriteTimeM(0)
@@ -65,6 +69,7 @@ void FileWriter::switchFile()
         curFileNameM = std::string(filename);
         std::string filePath = outDirM + "/" + curFileNameM + ".txt";
         fileStreamM.open(filePath.c_str(), std::ios_base::out|std::ios_base::app);
+        fileStreamM << headerLineM;
     }
 }
 

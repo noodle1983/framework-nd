@@ -10,7 +10,10 @@ namespace Utility
     class FileWriter
     {
     public:
-        FileWriter(const std::string& theModelName, const int64_t theIndex);
+        FileWriter(
+                const std::string& theModelName, 
+                const int64_t theIndex, 
+                const std::string& theHeaderLine = "");
         ~FileWriter();
 
         void write(const std::string& theContent);
@@ -20,6 +23,7 @@ namespace Utility
         void switchFile();
 
     private:
+        std::string headerLineM;
         std::string modelNameM;
         unsigned indexM;
         unsigned switchTimeM;
