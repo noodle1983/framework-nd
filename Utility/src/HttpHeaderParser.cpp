@@ -26,6 +26,7 @@ void HttpHeaderParser::init()
     httpHeaderDefsM.clear();
     httpHeaderDefsM[PARSE_STATE_METHOD_GET]  = "GET "; 
     httpHeaderDefsM[PARSE_STATE_METHOD_POST] = "POST "; 
+    httpHeaderDefsM[PARSE_STATE_METHOD_RSP] = "HTTP/1."; 
     int attrId = 0;
     httpHeaderDefsM[attrId++] = "Host:"; 
     httpHeaderDefsM[attrId++] =  "User-Agent:"; 
@@ -141,6 +142,14 @@ int HttpHeaderParser::parse(
                     saveStart = i + 1;
                     state = PARSE_STATE_SAVE_TO_END;
                 }
+                else if (PARSE_STATE_METHOD_RSP == keyId)
+                {
+                    std::string errorCode = 
+                        theHeaderStr.substr(saveStart, i - saveStart);
+                    theOutputHeader.errorCodeM = atoi(errorCode.c_str());
+                    saveStart = i + 1;
+                    state = PARSE_STATE_IGNORE_LINE;
+                }
                 else
                 {
                     state = PARSE_STATE_IGNORE_LINE;
@@ -168,6 +177,14 @@ int HttpHeaderParser::parse(
             state = PARSE_STATE_SAVE_TO_BLANK;
             saveStart = i + 1;
             theOutputHeader.methodM = HttpHeader::METHOD_POST;
+            continue;
+        }
+        if (PARSE_STATE_METHOD_RSP == state)
+        {
+            keyId = PARSE_STATE_METHOD_RSP;
+            state = PARSE_STATE_SAVE_TO_BLANK;
+            saveStart = i + 2;
+            theOutputHeader.methodM = HttpHeader::METHOD_RSP;
             continue;
         }
 

@@ -44,6 +44,7 @@ namespace Utility
             PARSE_STATE_NONE = 10000,
             PARSE_STATE_METHOD_GET,
             PARSE_STATE_METHOD_POST,
+            PARSE_STATE_METHOD_RSP,
             PARSE_STATE_HOST,
 
             //special purpose
