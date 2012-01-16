@@ -21,7 +21,6 @@ INC_DIR=-I. \
      -I$(PROJBASE)/Processor/include \
 
 STATIC_LIB= $(PROJBASE)/.lib/libLog.a \
-	$(PROJBASE)/.lib/libProcessor.a \
 	$(PROJBASE)/.lib/libConfig.a \
 
 SHARED_LIB_DIR=
