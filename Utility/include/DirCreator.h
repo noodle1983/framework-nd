@@ -5,7 +5,7 @@
 
 namespace Utility
 {
-    void creatDir(const std::string& thePath);
+    void createDir(const std::string& thePath);
 }
 
 #endif /* DIRCREATOR_H */

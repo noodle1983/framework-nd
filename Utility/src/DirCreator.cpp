@@ -9,7 +9,7 @@
 using namespace Utility;
 
 //-----------------------------------------------------------------------------
-void Utility::creatDir(const std::string& thePath)
+void Utility::createDir(const std::string& thePath)
 {
     if (thePath.empty())
         return;

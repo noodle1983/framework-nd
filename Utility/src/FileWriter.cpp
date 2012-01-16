@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <Log.h>
 #include <ConfigCenter.h>
+#include <DirCreator.h>
 
 using namespace Utility;
 using namespace Config;
@@ -20,7 +21,8 @@ FileWriter::FileWriter(
     , curWriteTimeM(0)
 {
     switchTimeM = ConfigCenter::instance()->get(modelNameM+ ".swtTime", 3600);
-    outDirM = ConfigCenter::instance()->get(modelNameM+ ".outDir", "./");
+    outDirM = ConfigCenter::instance()->get(modelNameM+ ".outDir", "./OutputFiles");
+    createDir(outDirM);
 }
 
 //-----------------------------------------------------------------------------

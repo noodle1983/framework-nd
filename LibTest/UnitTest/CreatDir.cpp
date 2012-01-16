@@ -6,8 +6,8 @@ using namespace Utility;
 
 int main()
 {
-    creatDir(std::string("abc"));
-    creatDir("abc/a");
+    createDir(std::string("abc"));
+    createDir("abc/a");
     return 0;
 }
 
