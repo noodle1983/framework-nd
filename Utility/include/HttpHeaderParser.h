@@ -28,6 +28,12 @@ namespace Utility
             ATTR_UA = 1,
             ATTR_REFERED = 2
         };
+        HttpHeader()
+            : methodM(METHOD_CNT)
+            , errorCodeM(0)
+        {}
+        ~HttpHeader()
+        {}
 
         Method methodM;
         int errorCodeM;
