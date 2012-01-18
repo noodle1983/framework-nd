@@ -1,15 +1,23 @@
 #ifndef FILEWRITER_H
 #define FILEWRITER_H
 
+#include "BoostProcessor.h"
 #include <fstream>
 #include <string>
 #include <stdint.h>
+
+struct event;
 
 namespace Utility
 {
     class FileWriter
     {
     public:
+        FileWriter(
+                Processor::BoostProcessor* theProcessor,
+                const std::string& theModelName, 
+                const int64_t theIndex, 
+                const std::string& theHeaderLine = "");
         FileWriter(
                 const std::string& theModelName, 
                 const int64_t theIndex, 
@@ -19,18 +27,25 @@ namespace Utility
         void write(const std::string& theContent);
 
     private:
+        void startTimer();
+        static void onTimeout(int theFd, short theEvt, void *theArg);
         void closeFile();
         void switchFile();
+
 
     private:
         std::string headerLineM;
         std::string modelNameM;
         unsigned indexM;
-        unsigned switchTimeM;
+        int64_t switchTimeM;
         std::ofstream fileStreamM;
         unsigned curWriteTimeM;
         std::string curFileNameM;
         std::string outDirM;
+
+        Processor::BoostProcessor* processorM;
+        struct event* timerHandlerM;
+
     };
 
 }

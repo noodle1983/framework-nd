@@ -11,6 +11,26 @@ using namespace Config;
 //-----------------------------------------------------------------------------
 
 FileWriter::FileWriter(
+        Processor::BoostProcessor* theProcessor,
+        const std::string& theModelName, 
+        const int64_t theIndex, 
+        const std::string& theHeaderLine)
+    : headerLineM(theHeaderLine)
+    , modelNameM(theModelName)
+    , indexM(theIndex)
+    , switchTimeM(0)
+    , curWriteTimeM(0)
+    , processorM(theProcessor)
+    , timerHandlerM(NULL)
+{
+    switchTimeM = ConfigCenter::instance()->get(modelNameM+ ".swtTime", 3600);
+    outDirM = ConfigCenter::instance()->get(modelNameM+ ".outDir", "./OutputFiles");
+    createDir(outDirM);
+}
+
+//-----------------------------------------------------------------------------
+
+FileWriter::FileWriter(
         const std::string& theModelName, 
         const int64_t theIndex,
         const std::string& theHeaderLine)
@@ -19,6 +39,8 @@ FileWriter::FileWriter(
     , indexM(theIndex)
     , switchTimeM(0)
     , curWriteTimeM(0)
+    , processorM(NULL)
+    , timerHandlerM(NULL)
 {
     switchTimeM = ConfigCenter::instance()->get(modelNameM+ ".swtTime", 3600);
     outDirM = ConfigCenter::instance()->get(modelNameM+ ".outDir", "./OutputFiles");
@@ -30,17 +52,54 @@ FileWriter::FileWriter(
 FileWriter::~FileWriter()
 {
     closeFile();
+    if (timerHandlerM)
+    {
+        processorM->cancelLocalTimer(indexM, timerHandlerM);
+    }
 }
 
 //-----------------------------------------------------------------------------
 
 void FileWriter::write(const std::string& theContent)
 {
+    startTimer();
     switchFile();
     fileStreamM << theContent;
 }
 
 //-----------------------------------------------------------------------------
+
+void FileWriter::startTimer()
+{
+    if (NULL == processorM)
+        return;
+    
+    if (NULL != timerHandlerM)
+    {
+        processorM->cancelLocalTimer(
+            indexM, timerHandlerM);
+    }
+
+    time_t now = time((time_t*)NULL);
+    struct timeval tv;
+    tv.tv_sec = switchTimeM - now % switchTimeM;
+    tv.tv_usec = 0;
+    timerHandlerM = processorM->addLocalTimer(
+            indexM, tv, FileWriter::onTimeout, (void*)this);
+}
+
+//-----------------------------------------------------------------------------
+
+void FileWriter::onTimeout(int theFd, short theEvt, void *theArg)
+{
+    FileWriter* writer = (FileWriter*) theArg;
+    writer->timerHandlerM = NULL;
+    writer->switchFile();
+    writer->startTimer();
+}
+
+//-----------------------------------------------------------------------------
+
 
 void FileWriter::switchFile()
 {
