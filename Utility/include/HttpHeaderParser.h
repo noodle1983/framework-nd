@@ -26,7 +26,8 @@ namespace Utility
         {
             ATTR_HOST = 0,
             ATTR_UA = 1,
-            ATTR_REFERED = 2
+            ATTR_REFERED = 2,
+            ATTR_CONTENT_TYPE = 3
         };
         HttpHeader()
             : methodM(METHOD_CNT)
