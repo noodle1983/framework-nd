@@ -114,7 +114,7 @@ void FileWriter::switchFile()
         localtime_r(&now, &tmTime);
         char filename[128] = {0};
         snprintf(filename, sizeof(filename), 
-                "%04d%02d%02d%02d%02d%02d_%02d_%s_%04d%02d%02d",
+                "%04d%02d%02d%02d%02d%02d_%02d__%s_%04d%02d%02d",
                 tmTime.tm_year + 1900,
                 tmTime.tm_mon + 1,
                 tmTime.tm_mday,
