@@ -1,0 +1,11 @@
+#########################################
+#      header and lib dependancy        #
+#########################################
+INC_DIR+= -I$(PROJBASE)/3PP/google-breakpad/include
+
+STATIC_LIB+= \
+    $(PROJBASE)/3PP/google-breakpad/lib/libbreakpad_client.a \
+
+SHARED_LIB_DIR+=
+SHARED_LIB+= 
+
