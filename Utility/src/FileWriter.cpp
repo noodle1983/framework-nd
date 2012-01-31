@@ -20,6 +20,7 @@ FileWriter::FileWriter(
     , indexM(theIndex)
     , switchTimeM(0)
     , curWriteTimeM(0)
+    , curTimerTimeM(0)
     , processorM(theProcessor)
     , timerHandlerM(NULL)
 {
@@ -39,6 +40,7 @@ FileWriter::FileWriter(
     , indexM(theIndex)
     , switchTimeM(0)
     , curWriteTimeM(0)
+    , curTimerTimeM(0)
     , processorM(NULL)
     , timerHandlerM(NULL)
 {
@@ -60,16 +62,20 @@ FileWriter::~FileWriter()
 
 //-----------------------------------------------------------------------------
 
-void FileWriter::write(const std::string& theContent)
+void FileWriter::write(const std::string& theContent, const time_t theTime)
 {
-    startTimer();
-    switchFile();
+    if (NULL == timerHandlerM)
+    {
+        startTimer(theTime);
+    }
+    switchFile(theTime);
     fileStreamM << theContent;
 }
 
 //-----------------------------------------------------------------------------
 
-void FileWriter::startTimer()
+
+void FileWriter::startTimer(const time_t &theTime)
 {
     if (NULL == processorM)
         return;
@@ -82,10 +88,13 @@ void FileWriter::startTimer()
 
     time_t now = time((time_t*)NULL);
     struct timeval tv;
-    tv.tv_sec = switchTimeM - now % switchTimeM;
+    //delay 60s
+    tv.tv_sec = switchTimeM - now % switchTimeM + 60;
     tv.tv_usec = 0;
     timerHandlerM = processorM->addLocalTimer(
             indexM, tv, FileWriter::onTimeout, (void*)this);
+
+    curTimerTimeM = (theTime / switchTimeM * switchTimeM + switchTimeM);
 }
 
 //-----------------------------------------------------------------------------
@@ -94,38 +103,42 @@ void FileWriter::onTimeout(int theFd, short theEvt, void *theArg)
 {
     FileWriter* writer = (FileWriter*) theArg;
     writer->timerHandlerM = NULL;
-    writer->switchFile();
-    writer->startTimer();
+    writer->switchFile(writer->curTimerTimeM);
+    writer->startTimer(writer->curTimerTimeM);
 }
 
 //-----------------------------------------------------------------------------
 
 
-void FileWriter::switchFile()
+void FileWriter::switchFile(const time_t& theTime)
 {
     time_t now = time((time_t*)NULL);
-    unsigned newWriteTime = now / switchTimeM * switchTimeM;
-    if (newWriteTime != curWriteTimeM)
+    time_t tableTimestamp = theTime;
+    unsigned newWriteTime = tableTimestamp / switchTimeM * switchTimeM;
+    if (newWriteTime > curWriteTimeM || !fileStreamM.is_open())
     {
         closeFile();
 
         curWriteTimeM = newWriteTime;
-        struct tm tmTime;
-        localtime_r(&now, &tmTime);
+        struct tm tmWriteTime;
+        localtime_r(&now, &tmWriteTime);
+        struct tm tmTableTime;
+        localtime_r(&tableTimestamp, &tmTableTime);
+
         char filename[128] = {0};
         snprintf(filename, sizeof(filename), 
                 "%04d%02d%02d%02d%02d%02d_%02d__%s_%04d%02d%02d",
-                tmTime.tm_year + 1900,
-                tmTime.tm_mon + 1,
-                tmTime.tm_mday,
-                tmTime.tm_hour,
-                tmTime.tm_min,
-                tmTime.tm_sec,
+                tmWriteTime.tm_year + 1900,
+                tmWriteTime.tm_mon + 1,
+                tmWriteTime.tm_mday,
+                tmWriteTime.tm_hour,
+                tmWriteTime.tm_min,
+                tmWriteTime.tm_sec,
                 indexM,
                 modelNameM.c_str(),
-                tmTime.tm_year + 1900,
-                tmTime.tm_mon + 1,
-                tmTime.tm_mday
+                tmTableTime.tm_year + 1900,
+                tmTableTime.tm_mon + 1,
+                tmTableTime.tm_mday
                 );
         curFileNameM = std::string(filename);
         std::string filePath = outDirM + "/" + curFileNameM + ".txt";

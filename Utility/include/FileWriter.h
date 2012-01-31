@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <stdint.h>
+#include <unistd.h>
 
 struct event;
 
@@ -24,13 +25,13 @@ namespace Utility
                 const std::string& theHeaderLine = "");
         ~FileWriter();
 
-        void write(const std::string& theContent);
+        void write(const std::string& theContent, const time_t theTime);
 
     private:
-        void startTimer();
+        void startTimer(const time_t &theTime);
         static void onTimeout(int theFd, short theEvt, void *theArg);
         void closeFile();
-        void switchFile();
+        void switchFile(const time_t &theTime);
 
 
     private:
@@ -40,6 +41,7 @@ namespace Utility
         int64_t switchTimeM;
         std::ofstream fileStreamM;
         unsigned curWriteTimeM;
+        unsigned curTimerTimeM;
         std::string curFileNameM;
         std::string outDirM;
 
