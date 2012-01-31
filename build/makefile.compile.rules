@@ -52,6 +52,12 @@ TEST_FILE=$(foreach DIR, $(TESTDIR), $(wildcard $(DIR)/*.lua) \
 TEST_OUT_FILE=$(addprefix $(TEST_OUTDIR)/, $(notdir $(TEST_FILE)))
 
 #########################################
+#          Crash Dump                   #
+#########################################
+SYMBOL_DIR=symbols
+SYMBOL_OUTDIR=$(OUTDIR_PREFIX)/$(SYMBOL_DIR)
+
+#########################################
 #               Depend                  #
 #########################################
 DEPENDFILES=$(patsubst %.o, %.d, $(OBJECTS))
@@ -73,9 +79,14 @@ $(SHARED_TARGET):$(AUTOTARGET) depend dependdir $(OUTDIR) $(OUTSUBDIR) $(OBJECTS
 	$(CC) $(SHAREDFLAG) -o $(OUTDIR_PREFIX)/$(SHARED_TARGET) $(OBJECTS)
 	@echo " $(OBJECTS) " > $(OUTDIR_PREFIX)/$(MOD_NAME).objectlist
 
-$(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS) $(TEST_OUTDIR) $(TEST_OUT_FILE)
+$(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS) $(TEST_OUTDIR) $(TEST_OUT_FILE) $(SYMBOL_OUTDIR)
 	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OBJECTS) $(LDFLAGS) -o $(TEST_OUTDIR)/$(MOD_NAME)$@
-#	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OUTDIR_PREFIX)/$(STATIC_TARGET) $(LDFLAGS) -o $(TEST_OUTDIR)/$(MOD_NAME)$@
+	$(SYMBOL_DUMPPER) $(TEST_OUTDIR)/$(MOD_NAME)$@ > $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym
+	RT_SYMBOL_DIR=$(SYMBOL_OUTDIR)/`head -n1 $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym | awk '{print $$5;}'`/`head -n1 $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym | awk '{print $$4;}'`; \
+	echo  $$RT_SYMBOL_DIR ; \
+	if [ ! -d "$$RT_SYMBOL_DIR" ]; then mkdir -p "$$RT_SYMBOL_DIR"; fi; \
+	cp $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym "$$RT_SYMBOL_DIR"/; \
+	rm $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym;
 
 $(TEST_OUTDIR)/%:FORCE
 	cp $(TESTDIR)/$* $@
@@ -93,6 +104,9 @@ $(TESTOUTSUBDIR):
 	@if [ ! -d $@ ]; then mkdir -p $@; fi;
 
 $(OUTSUBDIR):
+	@if [ ! -d $@ ]; then mkdir -p $@; fi;
+
+$(SYMBOL_OUTDIR):$(OUTDIR_PREFIX)
 	@if [ ! -d $@ ]; then mkdir -p $@; fi;
 
 -include $(DEPENDFILES)
@@ -139,6 +153,7 @@ clean:
 		$(OUTDIR_PREFIX)/$(MOD_NAME).objectlist \
 		$(ALL_TARGET) \
         $(TEST_OUT_FILE) \
+        $(SYMBOL_OUTDIR) \
         $(TEST_OUTDIR)/$(MOD_NAME)* 
 	@if [ "1" = `ls -l $(OUTDIR_PREFIX)/ 2>/dev/null | wc -l` ]; then \
 		rm -rf $(OUTDIR_PREFIX); \

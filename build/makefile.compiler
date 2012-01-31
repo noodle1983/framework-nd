@@ -3,6 +3,7 @@ cc=gcc
 AR=ar
 RANLIB=ranlib 
 ARFLAGS=rcs
+SYMBOL_DUMPPER=$(PROJBASE)/3PP/google-breakpad/bin/dump_syms
 SHAREDFLAG= -fPIC -shared
 CXXFLAGS=-DDEBUG -Wall -Wno-write-strings -g $(INC_DIR) 
 CFLAGs=-DDEBUG -Wall -Wno-write-strings -g $(INC_DIR)
