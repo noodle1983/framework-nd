@@ -1,8 +1,10 @@
 #ifndef APP_H
 #define APP_H
 
+#include "BoostProcessor.h"
 #include "Singleton.hpp"
-#include "client/linux/handler/exception_handler.h"
+
+#include <client/linux/handler/exception_handler.h>
 
 namespace Utility
 {
@@ -14,6 +16,7 @@ namespace Utility
 
         void setRunInBackground();
         void setDumpWhenCrash();
+        static void wait();
 
     private:
         App();
@@ -22,9 +25,13 @@ namespace Utility
             const char* minidump_id,
             void* context,
             bool succeeded);
+        static void sigStop(int sig);
 
     private:
         google_breakpad::ExceptionHandler* crashDumpHandlerM;
+        static int closedM;
+        static boost::mutex closedMutexM;
+        static boost::condition_variable closedCondM;
     };
 
     typedef DesignPattern::Singleton<App> AppSingleton;

@@ -6,6 +6,9 @@
 #include <signal.h>
 
 using namespace Utility;
+int App::closedM = false;
+boost::mutex App::closedMutexM;
+boost::condition_variable App::closedCondM;
 
 //-----------------------------------------------------------------------------
 
@@ -58,6 +61,22 @@ void App::setDumpWhenCrash()
 
 //-----------------------------------------------------------------------------
 
+void App::wait()
+{
+    signal(SIGPIPE, SIG_IGN);
+    signal(SIGALRM, SIG_IGN);
+    signal(SIGTERM, App::sigStop);
+    signal(SIGINT, App::sigStop);
+
+    boost::unique_lock<boost::mutex> lock(closedMutexM);
+    while(!closedM)
+    {
+        closedCondM.wait(lock);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
 bool App::dumpCallback(const char* dump_path,
                         const char* minidump_id,
                         void* context,
@@ -67,6 +86,15 @@ bool App::dumpCallback(const char* dump_path,
     return succeeded;
 }
 
+//-----------------------------------------------------------------------------
+
+void App::sigStop(int sig)
+{
+    LOG_DEBUG("receive signal " << sig << ". stopping...");
+    boost::lock_guard<boost::mutex> lock(closedMutexM);
+    closedM = true;
+    closedCondM.notify_one();
+}
 
 
 
