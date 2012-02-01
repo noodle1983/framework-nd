@@ -28,6 +28,7 @@ namespace Client
          */
         int connect();
         int close();
+        bool isClose(){return !connectionM.get() || connectionM->isClose();}
         unsigned sendn(char* const theBuffer, const unsigned theLen);
 
 
