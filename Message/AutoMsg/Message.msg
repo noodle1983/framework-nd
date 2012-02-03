@@ -250,6 +250,7 @@ Message CdrMsg
     Service_Reject_Cause      Uint32        M
     AnC_Reject_Cause          Uint32        M
     Auth_Flag                 Uint8         M
+    PDP_Activation_Direction  Uint8         M
     Reserved1                 Uint32        M
     Reserved2                 Uint32        M
     Reserved3                 Uint32        M
@@ -285,6 +286,8 @@ Message SignalEventMsg
     Rejected_Time         Uint32         M
     Rejected_Cause        Uint8          M
     Base_CDRID            Uint64         M
+    PDP_Activation_Direction  Uint8      M
+    Routing_Area_Update_Flag  Uint8      M
     Reserved1             Uint32         M
     Reserved2             Uint32         M
     Reserved3             Uint32         M
