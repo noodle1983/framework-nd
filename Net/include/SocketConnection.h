@@ -81,6 +81,11 @@ namespace Connection
 		int getFd(){return fdM;}
 		void setPeerAddr(const struct sockaddr_in* theAddr){peerAddrM = *theAddr;}
 		const struct sockaddr_in& getPeerAddr(){return peerAddrM;}
+
+        //heartbeatTimeoutCounterM
+        void resetHeartbeatTimeoutCounter(){heartbeatTimeoutCounterM = 0;}
+        int incHeartbeatTimeoutCounter(){return heartbeatTimeoutCounterM++;}
+        int getHeartbeatTimeoutCounter(){return heartbeatTimeoutCounterM;}
     private:
         friend class boost::function<void ()>;
         void addReadEvent();
@@ -107,6 +112,7 @@ namespace Connection
         struct event* readEvtM;
         struct event* writeEvtM;
         struct event* heartbeatTimerEvtM;
+        int heartbeatTimeoutCounterM;
 
         IProtocol* protocolM;
         Reactor::Reactor* reactorM;

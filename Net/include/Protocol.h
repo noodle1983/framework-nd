@@ -88,6 +88,7 @@ namespace Net
         virtual int getRBufferSizePower(){ return 20; }
         virtual int getWBufferSizePower(){ return 20; }
         virtual int getHeartbeatInterval(){ return 0; }
+        virtual int getMaxHeartbeatTimeout(){ return 3; }
         
     private:
         Processor::BoostProcessor* processorM;

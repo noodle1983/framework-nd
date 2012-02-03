@@ -31,6 +31,7 @@ void EchoProtocol::handleInput(Connection::SocketConnectionPtr connection)
     char buffer[1024];
     unsigned len = 1;
 	bool canWrite = true;
+    connection->resetHeartbeatTimeoutCounter();
     while (len > 0 && (canWrite = connection->isWBufferHealthy()))
     {
         len = connection->getInput(buffer, sizeof(buffer));
@@ -74,14 +75,27 @@ int EchoProtocol::getWBufferSizePower()
 
 int EchoProtocol::getHeartbeatInterval()
 { 
-    return 10; 
+    return ConfigCenter::instance()->get("echo.s.hbi", 10);
+}
+
+//-----------------------------------------------------------------------------
+
+int getMaxHeartbeatTimeout()
+{
+    return ConfigCenter::instance()->get("echo.s.hbm", 3);
 }
 
 //-----------------------------------------------------------------------------
 
 void EchoProtocol::handleHeartbeat(Connection::SocketConnectionPtr theConnection)
 {
-    LOG_TRACE("handleHeartbeat");
+    int timeoutCounter = theConnection->incHeartbeatTimeoutCounter();
+    LOG_TRACE("handleHeartbeat time:" << timeoutCounter);
+    if (timeoutCounter >= getMaxHeartbeatTimeout())
+    {
+        LOG_DEBUG("reach max heartbeat timeout:" << getMaxHeartbeatTimeout());
+        theConnection->close();
+    }
 }
 
 //-----------------------------------------------------------------------------

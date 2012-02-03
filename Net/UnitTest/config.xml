@@ -86,6 +86,20 @@
 			<DefaultValue>20</DefaultValue>
 			<Value>20</Value>
 		</Parameter>
+		<Parameter name="Echo Server Connection Heartbeat Interval" id="echo.s.hbi">
+            <Description>specify the seconds of connection's Heartbeat Interval.</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>0-60</ValueRange>
+			<DefaultValue>10</DefaultValue>
+			<Value>10</Value>
+		</Parameter>
+		<Parameter name="Echo Server Connection Max Heartbeat Timeout times" id="echo.s.hbm">
+            <Description>specify the max times of connection's Heartbeat Timeout.</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>0-60</ValueRange>
+			<DefaultValue>3</DefaultValue>
+			<Value>3</Value>
+		</Parameter>
 	</Group>
 
     <Group name="Processor/ThreadPool Group">
