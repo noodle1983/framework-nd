@@ -54,7 +54,7 @@ SocketConnection::SocketConnection(
     writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
     addReadEvent();
     protocolM->asynHandleConnected(fdM, selfM);
-    startHeartbeatTimer();
+    processorM->process(fdM, &SocketConnection::startHeartbeatTimer, this);
 }
 
 //-----------------------------------------------------------------------------
