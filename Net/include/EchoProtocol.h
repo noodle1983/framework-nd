@@ -31,6 +31,8 @@ namespace Protocol
         virtual int getPort();
         virtual int getRBufferSizePower();
         virtual int getWBufferSizePower();
+        virtual int getHeartbeatInterval();
+        virtual void handleHeartbeat(Connection::SocketConnectionPtr theConnection); 
     private:
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;

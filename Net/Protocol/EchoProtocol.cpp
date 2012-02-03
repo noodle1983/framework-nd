@@ -3,6 +3,7 @@
 #include "SocketConnection.h"
 #include "Reactor.h"
 #include "ConfigCenter.h"
+#include "Log.h"
 
 using namespace Net::Protocol;
 using namespace Config;
@@ -71,5 +72,17 @@ int EchoProtocol::getWBufferSizePower()
 
 //-----------------------------------------------------------------------------
 
+int EchoProtocol::getHeartbeatInterval()
+{ 
+    return 10; 
+}
 
+//-----------------------------------------------------------------------------
+
+void EchoProtocol::handleHeartbeat(Connection::SocketConnectionPtr theConnection)
+{
+    LOG_TRACE("handleHeartbeat");
+}
+
+//-----------------------------------------------------------------------------
 

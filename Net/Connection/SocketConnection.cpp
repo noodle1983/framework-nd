@@ -37,6 +37,7 @@ SocketConnection::SocketConnection(
             Processor::BoostProcessor* theProcessor,
             evutil_socket_t theFd)
     : selfM(this)
+    , heartbeatTimerEvtM(NULL)
     , protocolM(theProtocol)
     , reactorM(theReactor)
     , processorM(theProcessor)
@@ -53,6 +54,7 @@ SocketConnection::SocketConnection(
     writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
     addReadEvent();
     protocolM->asynHandleConnected(fdM, selfM);
+    startHeartbeatTimer();
 }
 
 //-----------------------------------------------------------------------------
@@ -64,6 +66,7 @@ SocketConnection::SocketConnection(
             evutil_socket_t theFd,
             Client::TcpClient* theClient)
     : selfM(this)
+    , heartbeatTimerEvtM(NULL)
     , protocolM(theProtocol)
     , reactorM(theReactor)
     , processorM(theProcessor)
@@ -194,6 +197,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
     }
     protocolM->asynHandleInput(fdM, selfM);
 }
+
 //-----------------------------------------------------------------------------
 
 unsigned SocketConnection::getInput(char* const theBuffer, const unsigned theLen)
@@ -320,6 +324,7 @@ void SocketConnection::onWrite(int theFd, short theEvt)
         {
             clientM->onConnected(theFd, selfM);
             isConnectedNotified = true;
+            startHeartbeatTimer();
         }
     }
     char buffer[1024]= {0};
@@ -366,6 +371,35 @@ void SocketConnection::onWrite(int theFd, short theEvt)
 
 //-----------------------------------------------------------------------------
 
+void SocketConnection::startHeartbeatTimer()
+{
+    struct timeval tv;
+    tv.tv_sec = protocolM->getHeartbeatInterval(); 
+    if (tv.tv_sec <= 0)
+        tv.tv_sec = 60;
+    tv.tv_usec = 0;
+
+    heartbeatTimerEvtM = processorM->addLocalTimer(fdM, tv, SocketConnection::onHeartbeat, this);
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::onHeartbeat(int theFd, short theEvt, void *theArg)
+{
+    SocketConnection* connection = (SocketConnection*) theArg;
+    connection->heartbeatTimerEvtM = NULL;
+
+    int heartbeatInterval = connection->protocolM->getHeartbeatInterval();
+    if (heartbeatInterval > 0)
+    {
+        connection->protocolM->asynHandleHeartbeat(connection->fdM, connection->selfM);
+    }
+
+    connection->startHeartbeatTimer();
+}
+
+//-----------------------------------------------------------------------------
+
 void SocketConnection::close()
 {
     if (CloseE == statusM)
@@ -387,6 +421,11 @@ void SocketConnection::_close()
     if (CloseE == statusM)
         return;
     statusM = CloseE;
+
+    if (heartbeatTimerEvtM)
+    {
+        processorM->cancelLocalTimer(fdM, heartbeatTimerEvtM);
+    }
 	protocolM->asynHandleClose(fdM, selfM);
     if (clientM)
     {

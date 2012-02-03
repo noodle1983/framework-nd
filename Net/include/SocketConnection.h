@@ -87,6 +87,10 @@ namespace Connection
         void addWriteEvent();
         void onRead(int theFd, short theEvt);
         void onWrite(int theFd, short theEvt);
+
+        void startHeartbeatTimer();
+        static void onHeartbeat(int theFd, short theEvt, void *theArg);
+
         void _close();
         void _release();
 
@@ -102,6 +106,7 @@ namespace Connection
 
         struct event* readEvtM;
         struct event* writeEvtM;
+        struct event* heartbeatTimerEvtM;
 
         IProtocol* protocolM;
         Reactor::Reactor* reactorM;

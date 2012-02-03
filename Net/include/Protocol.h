@@ -52,6 +52,11 @@ namespace Net
             return processorM->process(theFd + 1,
                     &IProtocol::handleConnected, this, theConnection);
         }
+        int asynHandleHeartbeat(const int theFd, Connection::SocketConnectionPtr theConnection) 
+        {
+            return processorM->process(theFd + 1,
+                    &IProtocol::handleHeartbeat, this, theConnection);
+        }
 		inline struct event* addLocalTimer(
 				const int theFd,
 				const struct timeval& theInterval, 
@@ -71,12 +76,18 @@ namespace Net
         virtual void handleInput(Net::Connection::SocketConnectionPtr theConnection) = 0;
         virtual void handleClose(Net::Connection::SocketConnectionPtr theConnection) {}
         virtual void handleConnected(Connection::SocketConnectionPtr theConnection) {}
+        /*
+         * send heartbeat msg in heartbeat 
+         * or close the Connection if the connection is no response.
+         */
+        virtual void handleHeartbeat(Connection::SocketConnectionPtr theConnection) {}
 
         //Config
         virtual const std::string getAddr(){ return "0.0.0.0"; }
         virtual int getPort(){ return 5460; }
         virtual int getRBufferSizePower(){ return 20; }
         virtual int getWBufferSizePower(){ return 20; }
+        virtual int getHeartbeatInterval(){ return 0; }
         
     private:
         Processor::BoostProcessor* processorM;
