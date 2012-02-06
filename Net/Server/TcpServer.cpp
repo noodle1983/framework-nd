@@ -138,7 +138,8 @@ int TcpServer::start()
     if (bind(fdM, (struct sockaddr *)&listenAddr,
         sizeof(listenAddr)) < 0)
     {
-        LOG_FATAL("bind failed");
+        LOG_FATAL("bind failed on " << protocolM->getAddr() 
+                << ":" << protocolM->getPort());
         exit(-1);
     }
 
