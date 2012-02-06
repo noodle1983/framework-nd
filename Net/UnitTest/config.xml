@@ -102,6 +102,22 @@
 		</Parameter>
 	</Group>
 
+    <Group name="Telnet Server Protocol Group">
+		<Parameter name="Telnet Server Listen Address" id="cmd.s.addr">
+            <Description>specify the address which the protocol will listen to</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>127.0.0.1</DefaultValue>
+			<Value>127.0.0.1</Value>
+		</Parameter>
+		<Parameter name="Echo Server Listen Port" id="cmd.s.port">
+            <Description>specify the port which the protocol will listen to</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-65535</ValueRange>
+			<DefaultValue>7510</DefaultValue>
+			<Value>7510</Value>
+		</Parameter>
+	</Group>
+
     <Group name="Processor/ThreadPool Group">
 		<Parameter name="Net Processor Thread Number" id="prc.netTno">
             <Description>specify the thread number for Net Processor/ThreadPool</Description>
