@@ -7,7 +7,7 @@
 #    MessageName                TypeValue
 ##############################################
 MessageList
-    Heartbeat                   0x00
+    HeartbeatReq                0x00
     PDPActivateNotification     0x01
     QosModifyREQ                0x02
     QosModifyAccept             0x03
@@ -15,6 +15,7 @@ MessageList
 #    ServiceQuery                0x05
     ServiceNotification         0x06
     PDPDeactivateNotification   0x07
+    HeartbeatRsp                0x08
     AddOrModifyUser             0x10
     AddOrModifyUserAck          0x11
     StrategyModifyREQ           0x13
@@ -96,7 +97,10 @@ Message MsgHeader
     TransactionId    Uint32    M
     MessageType      Uint32    M
 
-Message  Heartbeat
+Message  HeartbeatReq
+    include Header
+
+Message  HeartbeatRsp
     include Header
 
 Message PDPActivateNotification
@@ -128,7 +132,7 @@ Message ServiceInfoIEI
     SrcPort        Uint16                  M
     DestPort       Uint16                  M
     Protocol       Uint8                   M
-    CatalogId      Uint48                  M
+    CatalogId      Uint32                  M
     AppId          Uint32                  M
     BehaviorId     Uint32                  M
     UpPktCnt       Uint32                  M
