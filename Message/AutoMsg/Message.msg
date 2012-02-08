@@ -51,7 +51,6 @@ SubMessageList
     HttpHeaderIEI        Uint16      0x22
 
     TriggerIEI           Uint16      0x23
-    CauseIEI             Uint16      0x24
 
 ##############################################
 #SubMessage Name
@@ -124,7 +123,7 @@ Message QosModifyAccept
 
 Message QosModifyReject
     include MsgBHeader
-    Cause          CauseIEI                M
+    Cause          Uint8                   M
 
 Message ServiceInfoIEI
     SrcIpAddr      Uint32                  M
@@ -173,7 +172,7 @@ Message StrategyModifyAccept
 
 Message StrategyModifyReject
     include MsgCHeader
-    Cause          CauseIEI                M
+    Cause          Uint8                   M
 
 Message UserDataNotification
     include MsgE1Header
