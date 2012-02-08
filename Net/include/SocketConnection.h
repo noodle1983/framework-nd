@@ -86,6 +86,10 @@ namespace Connection
         void resetHeartbeatTimeoutCounter(){heartbeatTimeoutCounterM = 0;}
         int incHeartbeatTimeoutCounter(){return heartbeatTimeoutCounterM++;}
         int getHeartbeatTimeoutCounter(){return heartbeatTimeoutCounterM;}
+
+        void* getUpperData(){return uppperDataM;}
+        void setUpperData(void* theUpperData){uppperDataM = theUpperData;}
+
     private:
         friend class boost::function<void ()>;
         void addReadEvent();
@@ -140,6 +144,9 @@ namespace Connection
 
 		struct sockaddr_in peerAddrM;
 		struct sockaddr_in localAddrM;
+        
+        //upper data
+        void* uppperDataM;
     };
 
 }

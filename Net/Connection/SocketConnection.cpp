@@ -50,6 +50,7 @@ SocketConnection::SocketConnection(
     , watcherM(NULL)
     , clientM(NULL)
     , isConnectedNotified(true)
+    , uppperDataM(NULL)
 {
     readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
     writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
@@ -80,6 +81,7 @@ SocketConnection::SocketConnection(
     , watcherM(NULL)
     , clientM(theClient)
     , isConnectedNotified(false)
+    , uppperDataM(NULL)
 {
     readEvtM = reactorM->newEvent(fdM, EV_READ, on_read, this);
     writeEvtM = reactorM->newEvent(fdM, EV_WRITE, on_write, this);
@@ -95,6 +97,10 @@ SocketConnection::~SocketConnection()
     {
         delete watcherM;
         watcherM = NULL;
+    }
+    if (uppperDataM != NULL)
+    {
+        LOG_WARN("uppperDataM is not NULL and may leek, please free it and set to NULL in upper handling while connection is closed.");
     }
     LOG_DEBUG("close fd:" << fdM);
 }
