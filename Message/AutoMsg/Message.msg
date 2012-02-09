@@ -27,8 +27,8 @@ MessageList
 #    CancelSubscribeAck          0x24
     UserDataNotification        0x31
     UserStatusNotification      0x32
-#    InjectSignalingREQ          0x41
-#    InjectSignalingAck          0x42
+    InjectSignalingREQ          0x41
+    InjectSignalingAck          0x42
     CdrMsg                       0xF0
     SignalEventMsg               0xF1
 
@@ -63,8 +63,6 @@ SubMessage Header
 
 SubMessage MsgAHeader
     include Header
-    Imsi             Uint64    M
-    Nsapi            Uint32    M
 
 SubMessage MsgBHeader
     include Header
@@ -101,6 +99,20 @@ Message  HeartbeatReq
 
 Message  HeartbeatRsp
     include Header
+
+Message  InjectSignalingREQ
+    include MsgAHeader
+    Imsi             Uint64    M
+    Nsapi            Uint32    M
+    StatusCode       Uint8     M
+    AContent         PlainString             M
+
+Message  InjectSignalingAck
+    include MsgAHeader
+    Imsi             Uint64    M
+    Nsapi            Uint32    M
+    StatusCode       Uint8     M
+    AContent         PlainString             M
 
 Message PDPActivateNotification
     include MsgBHeader
