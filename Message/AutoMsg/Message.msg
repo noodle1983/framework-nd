@@ -102,14 +102,14 @@ Message  HeartbeatRsp
 
 Message  InjectSignalingREQ
     include MsgAHeader
-    Imsi             Uint64    M
+    Imsi             BcdUserId M
     Nsapi            Uint32    M
     StatusCode       Uint8     M
     AContent         PlainString             M
 
 Message  InjectSignalingAck
     include MsgAHeader
-    Imsi             Uint64    M
+    Imsi             BcdUserId M
     Nsapi            Uint32    M
     StatusCode       Uint8     M
     AContent         PlainString             M
