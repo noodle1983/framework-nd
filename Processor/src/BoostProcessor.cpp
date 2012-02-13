@@ -115,8 +115,11 @@ BoostProcessor::~BoostProcessor()
     {
         Net::Protocol::ProcessorSensorSingleton::instance()->unregistProcessor(nameM);
     }
-    stop();
-    delete []workersM;
+    if (workersM)
+    {
+        stop();
+        delete []workersM;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -141,6 +144,9 @@ void BoostProcessor::start()
 
 void BoostProcessor::waitStop()
 {
+    if (NULL == workersM)
+        return;
+
     unsigned int i = 0;
     while(true)
     {
@@ -164,6 +170,9 @@ void BoostProcessor::waitStop()
 
 void BoostProcessor::stop()
 {
+    if (NULL == workersM)
+        return;
+
     for (unsigned i = 0; i < threadCountM; i++)
     {
         workersM[i].stop();
