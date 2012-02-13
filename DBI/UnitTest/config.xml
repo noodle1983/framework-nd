@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<Configuration>
+
+    <Group name="Mysql Client Group">
+        <Parameter name="Mysql Server Hostname/Ip Address" id="mysql.host">
+            <Description>specify the hostname/address of mysql server</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>127.0.0.1</DefaultValue>
+			<Value>127.0.0.1</Value>
+		</Parameter>
+		<Parameter name="Mysql Server Port" id="mysql.port">
+            <Description>specify the mysql server's port which  the client should connect to</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-65535</ValueRange>
+			<DefaultValue>3306</DefaultValue>
+			<Value>3306</Value>
+		</Parameter>
+		<Parameter name="user name" id="mysql.user">
+            <Description>specify the user's name the client should connect with</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>test</DefaultValue>
+			<Value>test</Value>
+		</Parameter>
+		<Parameter name="user password" id="mysql.pswd">
+            <Description>specify the user's password the client should connect with</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>test</DefaultValue>
+			<Value>test</Value>
+		</Parameter>
+		<Parameter name="database name" id="mysql.db">
+            <Description>specify the database the client should use</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>test</DefaultValue>
+            <Value>test</Value>
+		</Parameter>
+	</Group>
+
+    <Group name="Telnet Server Protocol Group">
+		<Parameter name="Telnet Server Listen Address" id="cmd.s.addr">
+            <Description>specify the address which the protocol will listen to</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>127.0.0.1</DefaultValue>
+			<Value>127.0.0.1</Value>
+		</Parameter>
+		<Parameter name="Echo Server Listen Port" id="cmd.s.port">
+            <Description>specify the port which the protocol will listen to</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-65535</ValueRange>
+			<DefaultValue>7510</DefaultValue>
+			<Value>7510</Value>
+		</Parameter>
+	</Group>
+
+    <Group name="Processor/ThreadPool Group">
+		<Parameter name="Net Processor Thread Number" id="prc.netTno">
+            <Description>specify the thread number for Net Processor/ThreadPool</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>3</DefaultValue>
+			<Value>3</Value>
+		</Parameter>
+		<Parameter name="Fsm Processor Thread Number" id="prc.fsmTno">
+            <Description>specify the thread number for Fsm Processor/ThreadPool</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>3</DefaultValue>
+			<Value>3</Value>
+		</Parameter>
+	</Group>
+
+	<Group name="Traffic Log Group">
+		<Parameter name="Log Level" id="log.level">
+            <Description>specify the log level: 0:TRACE/ALL; 1:DEBUG; 2:INFO; 3:WARN; 4:ERROR; 5:FATAL; 6:NONE</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>0-6</ValueRange>
+			<DefaultValue>3</DefaultValue>
+			<Value>3</Value>
+		</Parameter>
+		<Parameter name="Log pattern" id="log.pattern">
+			<Description>specify how to log a message. please refer to log4plus' manual.</Description>
+			<ValueType>String</ValueType>
+            <DefaultValue>%D{%y-%m-%d %H:%M:%S.%q} %-5p [%l] %m%n</DefaultValue>
+            <Value>%D{%y-%m-%d %H:%M:%S.%q} %-5p [%l] %m%n</Value>
+		</Parameter>
+		<Parameter name="Log File Name" id="log.filename">
+			<Description>specify the file which will be logged to</Description>
+			<ValueType>String</ValueType>
+			<DefaultValue>trouble_shooting.log</DefaultValue>
+			<Value>trouble_shooting.log</Value>
+		</Parameter>
+		<Parameter name="Log File Size" id="log.fileSize">
+            <Description>specify the max size(MB) for a single file.</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>10</DefaultValue>
+			<Value>10</Value>
+		</Parameter>
+		<Parameter name="Log File No." id="log.fileNum">
+            <Description>specify the max file number which the log files should keep.</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>10</DefaultValue>
+			<Value>10</Value>
+		</Parameter>
+	</Group>
+</Configuration>
+

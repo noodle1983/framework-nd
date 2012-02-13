@@ -1,0 +1,8 @@
+#########################################
+#      header and lib dependancy        #
+#########################################
+INC_DIR+= -I$(PROJBASE)/3PP/MYSQL/include 
+STATIC_LIB+= $(PROJBASE)/3PP/MYSQL/lib/libmysqlclient_r.a
+SHARED_LIB_DIR+=
+SHARED_LIB+=
+
