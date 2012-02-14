@@ -22,6 +22,8 @@ namespace DBI
         int connect();
         void close();
 
+        int processStatement();
+
 
     private:
         MYSQL* mysqlM;

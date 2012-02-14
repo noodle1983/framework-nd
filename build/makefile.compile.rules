@@ -81,9 +81,8 @@ $(SHARED_TARGET):$(AUTOTARGET) depend dependdir $(OUTDIR) $(OUTSUBDIR) $(OBJECTS
 
 $(TESTTARGET):$(AUTOTARGET) $(TARGET) testdepend $(TESTOUTSUBDIR) $(TESTOBJECTS) $(TEST_OUTDIR) $(TEST_OUT_FILE) $(SYMBOL_OUTDIR)
 	$(CC) $(CXXFLAGS) $(OUTDIR)/$(TESTDIR)/$@.o $(OBJECTS) $(LDFLAGS) -o $(TEST_OUTDIR)/$(MOD_NAME)$@
-	$(SYMBOL_DUMPPER) $(TEST_OUTDIR)/$(MOD_NAME)$@ > $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym
-	RT_SYMBOL_DIR=$(SYMBOL_OUTDIR)/`head -n1 $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym | awk '{print $$5;}'`/`head -n1 $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym | awk '{print $$4;}'`; \
-	echo  $$RT_SYMBOL_DIR ; \
+	@$(SYMBOL_DUMPPER) $(TEST_OUTDIR)/$(MOD_NAME)$@ > $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym
+	@RT_SYMBOL_DIR=$(SYMBOL_OUTDIR)/`head -n1 $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym | awk '{print $$5;}'`/`head -n1 $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym | awk '{print $$4;}'`; \
 	if [ ! -d "$$RT_SYMBOL_DIR" ]; then mkdir -p "$$RT_SYMBOL_DIR"; fi; \
 	cp $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym "$$RT_SYMBOL_DIR"/; \
 	rm $(SYMBOL_OUTDIR)/$(MOD_NAME)$@.sym;

@@ -6,6 +6,7 @@ int main()
 {
     MysqlConnection connection;
     connection.connect();
+    connection.processStatement();
     return 0;
 }
 
