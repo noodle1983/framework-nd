@@ -44,7 +44,7 @@ namespace Config
          * Description: it will safely replace the ConfigCenterPtr::instance
          *              with the data stored in the input xml file.
          */
-        static void loadConfig(const std::string& theInputXmlFile = "config.xml");
+        static int loadConfig(const std::string& theInputXmlFile = "config.xml");
 
         void borrowFrom(ConfigCenterPtr theOtherConfig);
 

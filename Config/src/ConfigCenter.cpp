@@ -37,7 +37,7 @@ ConfigCenterPtr ConfigCenter::instance()
 
 //-----------------------------------------------------------------------------
 
-void ConfigCenter::loadConfig(const std::string& theInputXmlFile)
+int ConfigCenter::loadConfig(const std::string& theInputXmlFile)
 {
     ConfigCenterPtr newConfigCenter(new ConfigCenter());
     if (0 == newConfigCenter->loadXml(theInputXmlFile))
@@ -47,6 +47,7 @@ void ConfigCenter::loadConfig(const std::string& theInputXmlFile)
             configCenterM = newConfigCenter;
         }
         CFG_DEBUG("loaded config file:" << theInputXmlFile);
+        return 0;
         
     }
     else if (NULL == configCenterM.get())
@@ -54,11 +55,14 @@ void ConfigCenter::loadConfig(const std::string& theInputXmlFile)
         CFG_ERROR("load xml file failed, the default config will be applied.");
         boost::unique_lock<boost::shared_mutex> lock(configCenterMutexM);
         configCenterM->borrowFrom(newConfigCenter);
+        return -1;
     }
     else 
     {
         CFG_ERROR("config center is not changed.");
+        return -1;
     }
+    return -1;
 
 }
 
