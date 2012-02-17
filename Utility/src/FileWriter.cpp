@@ -153,6 +153,7 @@ void FileWriter::closeFile()
 {
     if (fileStreamM.is_open())
     {
+        fileStreamM.flush();
         fileStreamM.close();
         std::string fromFilePath = outDirM + "/" + curFileNameM + ".txt";
         std::string toFilePath = outDirM + "/" + curFileNameM + ".ss7";
