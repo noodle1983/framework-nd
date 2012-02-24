@@ -1,0 +1,153 @@
+#!/bin/bash
+# chkconfig: 2345 80 05
+# description: Blablabla....
+
+# build target
+BUILD_TARGET_PATH=
+BUILD_TARGET=
+
+# running target
+RUNNING_TARGET_PATH=
+RUNNING_TARGET=
+
+LOCKFILE=.lockserver
+
+#add these 5 lines in ismapctrl for SSH.
+cd $RUNNING_TARGET_PATH
+
+PATH=.:$PATH
+export PATH
+
+#function defination
+function wait {
+    while [ true ]
+    do
+        PID=`ps  -e -af | grep $RUNNING_TARGET | grep -v grep | awk '{print $2}'`
+        if [ -n "$PID" ]
+        then
+            echo "wait $RUNNING_TARGET:$PID to stop..."
+            sleep 2
+        else
+            return 0
+        fi
+    done
+
+}
+
+function start {
+    echo -e "\nstart the $RUNNING_TARGET...."
+    if [ -f $LOCKFILE ] ; then
+        echo "sorry, the $RUNNING_TARGET already started."
+        exit 1
+    fi
+
+    wait
+
+    ./$RUNNING_TARGET &
+    PID=`ps  -e -af | grep $RUNNING_TARGET | grep -v grep | awk '{print $2}'`
+    echo "$RUNNING_TARGET: $PID" >> $LOCKFILE
+
+    cat $LOCKFILE
+    echo -e "start ok\n"
+    echo "start $RUNNING_TARGET" `date` >> .ctrl_history.log
+}
+
+function stop {
+    echo -e "\nstop the $RUNNING_TARGET...."
+    if [ ! -f $LOCKFILE ] ; then
+        echo "sorry, $RUNNING_TARGET seems like down now"
+        return 0 
+    fi
+
+    PID=`ps  -e -af | grep $RUNNING_TARGET | grep -v grep | awk '{print $2}'`
+    if [ "$PID" != "" ] ; then
+        kill -2 $PID
+    fi
+
+    rm $LOCKFILE
+    echo -e "stop ok\n"
+    echo "stop " `date` >> .ctrl_history.log
+}
+
+function restart {
+    stop
+
+    wait
+
+    start
+}
+
+function deploy {
+    stop
+
+    wait
+
+    if [ "$BUILD_TARGET" != "" ] ; then
+        echo "cp $RUNNING_TARGET_PATH/$RUNNING_TARGET $RUNNING_TARGET_PATH/$RUNNING_TARGET.bak" 
+        echo `cp $RUNNING_TARGET_PATH/$RUNNING_TARGET $RUNNING_TARGET_PATH/$RUNNING_TARGET.bak`
+        echo "cp $BUILD_TARGET_PATH/$BUILD_TARGET $RUNNING_TARGET_PATH/$RUNNING_TARGET"
+        echo `cp $BUILD_TARGET_PATH/$BUILD_TARGET $RUNNING_TARGET_PATH/$RUNNING_TARGET`
+    fi
+
+    start
+}
+
+case "$1" in
+'start')
+    start
+        exit 0
+    ;; # Fall through -- rest of script is the initialization code
+
+'stop')
+    stop
+    exit 0
+    ;;
+
+'restart')
+    restart
+    exit 0
+    ;;
+
+'deploy')
+    deploy
+    exit 0
+    ;;
+
+'pid')
+        PID=`ps  -e -af | grep $RUNNING_TARGET | grep -v grep | awk '{print $2}'`
+        if [ -f $LOCKFILE ] ; then
+             LKPID=`cat $LOCKFILE`
+        else
+             LKPID=xxx
+        fi
+        
+        if [ "$PID" != "" ] ; then
+             echo "running process is $PID"
+        else
+             echo "no running process"
+        fi 
+
+        if [ "$LKPID" != "xxx" ] ; then
+             echo $LKPID
+        else
+             echo "no registed process"
+        fi 
+
+        exit 0
+        ;;
+
+'status')
+        PID=`ps  -e -af | grep $RUNNING_TARGET | grep -v grep | awk '{print $2}'`
+        if [ "$PID" != "" ] ; then
+             echo "$RUNNING_TARGET is working"
+        else
+             echo "$RUNNING_TARGET is down"
+        fi 
+
+        exit 0
+        ;;    
+*)
+    echo "Usage: $0 { start | stop | status | pid | restart | deploy}"
+    exit 1
+    ;;
+esac
