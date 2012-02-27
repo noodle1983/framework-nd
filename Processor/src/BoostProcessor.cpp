@@ -14,12 +14,15 @@ using namespace Config;
 static boost::mutex fsmProcessorInstanceMutex;
 static boost::mutex netProcessorInstanceMutex;
 static boost::mutex manProcessorInstanceMutex;
+static boost::mutex ioProcessorInstanceMutex;
 static boost::shared_ptr<BoostProcessor> fsmProcessorInstanceReleaser;
 static boost::shared_ptr<BoostProcessor> netProcessorInstanceReleaser;
 static boost::shared_ptr<BoostProcessor> manProcessorInstanceReleaser;
+static boost::shared_ptr<BoostProcessor> ioProcessorInstanceReleaser;
 BoostProcessor* BoostProcessor::fsmProcessorM = NULL;
 BoostProcessor* BoostProcessor::netProcessorM = NULL;
 BoostProcessor* BoostProcessor::manProcessorM = NULL;
+BoostProcessor* BoostProcessor::ioProcessorM = NULL;
 //-----------------------------------------------------------------------------
 
 BoostProcessor* BoostProcessor::fsmInstance()
@@ -82,6 +85,27 @@ BoostProcessor* BoostProcessor::manInstance()
         }
     }
     return manProcessorM;
+}
+
+//-----------------------------------------------------------------------------
+
+BoostProcessor* BoostProcessor::ioInstance()
+{
+    if (NULL == ioProcessorM)
+    {
+        boost::lock_guard<boost::mutex> lock(ioProcessorInstanceMutex);
+        if (NULL == ioProcessorM)
+        {
+            int threadCount = ConfigCenter::instance()->get("prc.ioTno", 1);
+            BoostProcessor* ioProcessor = new BoostProcessor(threadCount);
+            ioProcessorInstanceReleaser.reset(ioProcessor);
+            ioProcessor->start();
+            ioProcessorM = ioProcessor;
+			Net::Protocol::ProcessorSensorSingleton::instance()->registProcessor(
+					"IoProcessor", ioProcessorM);
+        }
+    }
+    return ioProcessorM;
 }
 
 //-----------------------------------------------------------------------------

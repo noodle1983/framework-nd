@@ -32,6 +32,7 @@ namespace Processor
         static BoostProcessor* fsmInstance();
         static BoostProcessor* netInstance();
         static BoostProcessor* manInstance();
+        static BoostProcessor* ioInstance();
 
         void start();
         void waitStop();
@@ -113,6 +114,7 @@ namespace Processor
         static BoostProcessor* fsmProcessorM;
         static BoostProcessor* netProcessorM;
         static BoostProcessor* manProcessorM;
+        static BoostProcessor* ioProcessorM;
     };
 	
         

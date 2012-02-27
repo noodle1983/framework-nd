@@ -74,6 +74,15 @@ void FileWriter::write(const std::string& theContent, const time_t theTime)
 
 //-----------------------------------------------------------------------------
 
+void FileWriter::_write(const std::string* theContent, const time_t theTime)
+{
+    write(*theContent, theTime);
+    delete theContent;
+}
+
+//-----------------------------------------------------------------------------
+
+
 
 void FileWriter::startTimer(const time_t &theTime)
 {

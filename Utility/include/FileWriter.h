@@ -27,6 +27,7 @@ namespace Utility
 
         void write(const std::string& theContent, const time_t theTime);
 
+        void _write(const std::string* theContent, const time_t theTime);
     private:
         void startTimer(const time_t &theTime);
         static void onTimeout(int theFd, short theEvt, void *theArg);
