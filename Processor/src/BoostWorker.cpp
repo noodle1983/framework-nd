@@ -43,6 +43,7 @@ BoostWorker::~BoostWorker()
 void BoostWorker::stop()
 {
     isToStopM = true;
+    queueCondM.notify_one();
 }
 
 //-----------------------------------------------------------------------------
@@ -194,7 +195,7 @@ void BoostWorker::run()
 		{
 			continue;
 		}
-        else if (bufferJobQueueM.empty() && !min_heap_empty(&timerHeapM))
+        else if (!isToStopM && bufferJobQueueM.empty() && !min_heap_empty(&timerHeapM))
         {
             queueCondM.timed_wait(lock, 
                     boost::posix_time::from_time_t(timeNowM.tv_sec) 
@@ -203,7 +204,7 @@ void BoostWorker::run()
         else
         {
             boost::unique_lock<boost::mutex> queueLock(queueMutexM);
-            while (bufferJobQueueM.empty() && min_heap_empty(&timerHeapM))
+            while (!isToStopM && bufferJobQueueM.empty() && min_heap_empty(&timerHeapM))
             {
                 queueCondM.wait(queueLock); 
             }
