@@ -21,10 +21,13 @@ FileWriter::FileWriter(
     , switchTimeM(0)
     , curWriteTimeM(0)
     , curTimerTimeM(0)
+    , curSizeM(0)
     , processorM(theProcessor)
     , timerHandlerM(NULL)
 {
     switchTimeM = ConfigCenter::instance()->get(modelNameM+ ".swtTime", 3600);
+    switchSizeM = ConfigCenter::instance()->get(modelNameM+ ".swtSize", 100);
+    switchSizeM *= 1024 * 1024;
     outDirM = ConfigCenter::instance()->get(modelNameM+ ".outDir", "./OutputFiles");
     createDir(outDirM);
 }
@@ -41,10 +44,13 @@ FileWriter::FileWriter(
     , switchTimeM(0)
     , curWriteTimeM(0)
     , curTimerTimeM(0)
+    , curSizeM(0)
     , processorM(NULL)
     , timerHandlerM(NULL)
 {
     switchTimeM = ConfigCenter::instance()->get(modelNameM+ ".swtTime", 3600);
+    switchSizeM = ConfigCenter::instance()->get(modelNameM+ ".swtSize", 100);
+    switchSizeM *= 1024 * 1024;
     outDirM = ConfigCenter::instance()->get(modelNameM+ ".outDir", "./OutputFiles");
     createDir(outDirM);
 }
@@ -68,6 +74,7 @@ void FileWriter::write(const std::string& theContent, const time_t theTime)
     {
         startTimer(theTime);
     }
+    curSizeM += theContent.length();
     switchFile(theTime);
     fileStreamM << theContent;
 }
@@ -124,7 +131,8 @@ void FileWriter::switchFile(const time_t& theTime)
     time_t now = time((time_t*)NULL);
     time_t tableTimestamp = theTime;
     unsigned newWriteTime = tableTimestamp / switchTimeM * switchTimeM;
-    if (newWriteTime > curWriteTimeM || !fileStreamM.is_open())
+    if (newWriteTime > curWriteTimeM || !fileStreamM.is_open()
+            || (switchSizeM > 0 && curSizeM > switchSizeM))
     {
         closeFile();
 
@@ -152,6 +160,7 @@ void FileWriter::switchFile(const time_t& theTime)
         curFileNameM = std::string(filename);
         std::string filePath = outDirM + "/" + curFileNameM + ".txt";
         fileStreamM.open(filePath.c_str(), std::ios_base::out|std::ios_base::app);
+        curSizeM = headerLineM.length();;
         fileStreamM << headerLineM;
     }
 }
@@ -160,6 +169,7 @@ void FileWriter::switchFile(const time_t& theTime)
 
 void FileWriter::closeFile()
 {
+    curSizeM = 0;
     if (fileStreamM.is_open())
     {
         fileStreamM.flush();

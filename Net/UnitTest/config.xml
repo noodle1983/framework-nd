@@ -133,6 +133,13 @@
 			<DefaultValue>3</DefaultValue>
 			<Value>3</Value>
 		</Parameter>
+		<Parameter name="Fsm Processor Thread Number" id="prc.ioTno">
+            <Description>specify the thread number for I/O Processor/ThreadPool</Description>
+			<ValueType>Int</ValueType>
+			<ValueRange>1-100</ValueRange>
+			<DefaultValue>1</DefaultValue>
+			<Value>1</Value>
+		</Parameter>
 	</Group>
 
 	<Group name="Traffic Log Group">

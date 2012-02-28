@@ -40,9 +40,11 @@ namespace Utility
         std::string modelNameM;
         unsigned indexM;
         int64_t switchTimeM;
+        int64_t switchSizeM;
         std::ofstream fileStreamM;
         unsigned curWriteTimeM;
         unsigned curTimerTimeM;
+        int64_t curSizeM;
         std::string curFileNameM;
         std::string outDirM;
 
