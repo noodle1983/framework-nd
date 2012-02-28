@@ -163,7 +163,7 @@ void SocketConnection::onRead(int theFd, short theEvt)
     }
 
     int len = read(theFd, buffer, readLen);
-    if (len <= 0)
+    if ((0 == len) ||(len < 0 && errno != EWOULDBLOCK))
     {
         LOG_DEBUG("Client disconnected. fd:" << fdM);
         _close();
@@ -175,11 +175,15 @@ void SocketConnection::onRead(int theFd, short theEvt)
         _close();
         return;
     }
+    else if (len < 0 && errno == EWOULDBLOCK)
+    {
+        len = 0;
+    }
     unsigned putLen = inputQueueM.put(buffer, len);
     assert(putLen == (unsigned)len);
 
-    while(Utility::BufferOkE == inputQueueM.getStatus()
-        || Utility::BufferLowE == inputQueueM.getStatus() )
+    while(len > 0 && (Utility::BufferOkE == inputQueueM.getStatus()
+                    || Utility::BufferLowE == inputQueueM.getStatus() ))
     {
         readBufferLeft = inputQueueM.unusedSize();
         readLen = (readBufferLeft < sizeof(buffer)) ? readBufferLeft : sizeof(buffer);
@@ -223,7 +227,8 @@ unsigned SocketConnection::getInput(char* const theBuffer, const unsigned theLen
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            processorM->process(fdM, &SocketConnection::addReadEvent, selfM);
+            asynRead(fdM, 0);
+            //processorM->process(fdM, &SocketConnection::addReadEvent, selfM);
         }
     }
     return len;
@@ -246,7 +251,8 @@ unsigned SocketConnection::getnInput(char* const theBuffer, const unsigned theLe
                 boost::lock_guard<boost::mutex> lock(stopReadingMutexM);
                 stopReadingM = false;
             }
-            processorM->process(fdM, &SocketConnection::addReadEvent, selfM);
+            asynRead(fdM, 0);
+            //processorM->process(fdM, &SocketConnection::addReadEvent, selfM);
         }
     }
     return len;
