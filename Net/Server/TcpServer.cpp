@@ -125,6 +125,8 @@ int TcpServer::start()
         LOG_FATAL("failed to set server socket to non-blocking");
         exit(-1);
     }
+    int nRecvBuf=32*1024;
+    setsockopt (fdM, SOL_SOCKET, SO_RCVBUF,(const char*)&nRecvBuf, sizeof(int));
 
     //bind local addr
     struct sockaddr_in listenAddr;
