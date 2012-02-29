@@ -4,6 +4,7 @@
 #include "SocketConnection.h"
 #include <string>
 #include <boost/shared_ptr.hpp>
+#include <event.h>
 
 
 namespace Net
@@ -29,6 +30,7 @@ namespace Client
         int connect();
         int close();
         bool isClose(){return !connectionM.get() || connectionM->isClose();}
+        bool isConnected(){return !connectionM.get() || isConnectedM;}
         unsigned sendn(char* const theBuffer, const unsigned theLen);
 
 
@@ -39,7 +41,11 @@ namespace Client
         void onConnected(int theFd, Connection::SocketConnectionPtr theConnection);
         void onError();
 
+        static void checkConnecting(int theFd, short theEvt, void *theArg);
     private:
+        void startConnectTimer();
+        int _connect();
+
         IClientProtocol* protocolM;
         Reactor::Reactor* reactorM;
         Processor::BoostProcessor* processorM;
@@ -51,6 +57,9 @@ namespace Client
         int confReconIntervelM;
         int leftReconTimesM;
         int nextReconIntervelM;
+        mutable bool isClosedM;
+        mutable bool isConnectedM;
+        mutable struct event* connectTimerM;
 
         Net::Connection::SocketConnectionPtr connectionM;
     };
@@ -58,7 +67,7 @@ namespace Client
     inline unsigned
     TcpClient::sendn(char* const theBuffer, const unsigned theLen)
     {
-        if (connectionM.get())
+        if (isConnectedM && connectionM.get())
         {
             return connectionM->sendn(theBuffer, theLen);
         }

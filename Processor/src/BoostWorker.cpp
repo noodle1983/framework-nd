@@ -148,7 +148,6 @@ void BoostWorker::run()
     g_threadGroupTotal.reset(new unsigned(groupTotalM));
     g_threadGroupIndex.reset(new unsigned(groupIndexM));
     IJob* job;
-    boost::unique_lock<boost::mutex> lock(nullMutexM);
     while (!isToStopM)
     {
         /*
@@ -197,7 +196,8 @@ void BoostWorker::run()
 		}
         else if (!isToStopM && bufferJobQueueM.empty() && !min_heap_empty(&timerHeapM))
         {
-            queueCondM.timed_wait(lock, 
+            boost::unique_lock<boost::mutex> queueLock(queueMutexM);
+            queueCondM.timed_wait(queueLock, 
                     boost::posix_time::from_time_t(timeNowM.tv_sec) 
                         + boost::posix_time::microseconds(timeNowM.tv_usec + 500));
         }

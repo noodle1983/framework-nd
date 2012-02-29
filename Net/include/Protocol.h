@@ -103,6 +103,8 @@ namespace Net
         }
         virtual ~IClientProtocol() {};
 
+        //Config
+        virtual const unsigned getReConnectInterval(){ return 5; }
         virtual const std::string getAddr(){ return "127.0.0.1"; }
     };
 

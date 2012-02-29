@@ -175,8 +175,10 @@ void BoostProcessor::waitStop()
     while(true)
     {
         /* check the worker once only */
-        for (; i < threadCountM && workersM[i].isJobQueueEmpty(); i++)
+        if(i < threadCountM && workersM[i].isJobQueueEmpty())
         {
+            workersM[i].stop();
+            i++;
         }
         if (i == threadCountM)
         {
@@ -188,6 +190,7 @@ void BoostProcessor::waitStop()
         }
     }
     threadsM.interrupt_all();
+    threadsM.join_all();
 }
 
 //-----------------------------------------------------------------------------
