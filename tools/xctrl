@@ -37,8 +37,14 @@ function wait {
 function start {
     echo -e "\nstart the $RUNNING_TARGET...."
     if [ -f $LOCKFILE ] ; then
-        echo "sorry, the $RUNNING_TARGET already started."
-        exit 1
+        PID=`ps  -e -af | grep $RUNNING_TARGET | grep -v grep | awk '{print $2}'`
+        if [ -n "$PID" ]
+        then
+	    echo "sorry, the $RUNNING_TARGET already started."
+	    exit 1
+	else
+	    stop
+        fi
     fi
 
     wait
