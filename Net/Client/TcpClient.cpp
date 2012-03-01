@@ -41,7 +41,7 @@ TcpClient::TcpClient(
     , connectTimerM(NULL)
 {
     confReconTimesM = -1;
-    confReconIntervelM = protocolM->getReConnectInterval();
+    confReconIntervelM = 5;
 
     leftReconTimesM = -1;
     nextReconIntervelM = 0;
@@ -78,7 +78,7 @@ int TcpClient::close()
 int TcpClient::connect()
 {
     //start timer
-    startConnectTimer();
+    //startConnectTimer();
 
     return _connect();
 }
@@ -169,7 +169,7 @@ void TcpClient::startConnectTimer()
         connectTimerM = reactorM->newTimer(&TcpClient::checkConnecting, this);
     }
     struct timeval tv;
-    tv.tv_sec = confReconIntervelM;
+    tv.tv_sec = 5;
     tv.tv_usec = 0;
     event_add(connectTimerM, &tv);
 }
