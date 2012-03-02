@@ -38,6 +38,7 @@ SocketConnection::SocketConnection(
             evutil_socket_t theFd)
     : selfM(this)
     , heartbeatTimerEvtM(NULL)
+    , clientTimerEvtM(NULL)
     , heartbeatTimeoutCounterM(0)
     , protocolM(theProtocol)
     , reactorM(theReactor)
@@ -69,6 +70,7 @@ SocketConnection::SocketConnection(
             Client::TcpClient* theClient)
     : selfM(this)
     , heartbeatTimerEvtM(NULL)
+    , clientTimerEvtM(NULL)
     , heartbeatTimeoutCounterM(0)
     , protocolM(theProtocol)
     , reactorM(theReactor)
@@ -414,6 +416,48 @@ void SocketConnection::onHeartbeat(int theFd, short theEvt, void *theArg)
 
 //-----------------------------------------------------------------------------
 
+void SocketConnection::addClientTimer(unsigned theSec)
+{
+    processorM->process(fdM, &SocketConnection::_addClientTimer, this, theSec);
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::_addClientTimer(unsigned theSec)
+{
+    if (NULL == clientM || 0 == theSec)
+    {
+        return;
+    }
+    if (clientTimerEvtM)
+    {
+        processorM->cancelLocalTimer(fdM, clientTimerEvtM);
+    }
+
+    struct timeval tv;
+    tv.tv_sec = theSec; 
+    tv.tv_usec = 0;
+
+    clientTimerEvtM = processorM->addLocalTimer(fdM, tv, &SocketConnection::onClientTimeout, this);
+
+}
+
+//-----------------------------------------------------------------------------
+
+void SocketConnection::onClientTimeout(int theFd, short theEvt, void *theArg)
+{
+    SocketConnection* connection = (SocketConnection*) theArg;
+    boost::lock_guard<boost::mutex> lock(connection->clientMutexM);
+    connection->clientTimerEvtM = NULL;
+    if (connection->clientM)
+    {
+        connection->clientM->onClientTimeout();
+    }
+
+}
+
+//-----------------------------------------------------------------------------
+
 void SocketConnection::close()
 {
     if (CloseE == statusM)
@@ -439,6 +483,10 @@ void SocketConnection::_close()
     if (heartbeatTimerEvtM)
     {
         processorM->cancelLocalTimer(fdM, heartbeatTimerEvtM);
+    }
+    if (clientTimerEvtM)
+    {
+        processorM->cancelLocalTimer(fdM, clientTimerEvtM);
     }
 	protocolM->asynHandleClose(fdM, selfM);
     if (clientM)

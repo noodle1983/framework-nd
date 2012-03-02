@@ -61,6 +61,9 @@ namespace Connection
         int asynWrite(int theFd, short theEvt);
 
         //interface for upper protocol
+        void addClientTimer(unsigned theSec);
+        static void onClientTimeout(int theFd, short theEvt, void *theArg);
+
         void rmClient();
         SocketConnectionPtr self(){return selfM;}
         void close();
@@ -97,6 +100,8 @@ namespace Connection
         void onRead(int theFd, short theEvt);
         void onWrite(int theFd, short theEvt);
 
+        void _addClientTimer(unsigned theSec);
+
         void startHeartbeatTimer();
         static void onHeartbeat(int theFd, short theEvt, void *theArg);
 
@@ -116,6 +121,7 @@ namespace Connection
         struct event* readEvtM;
         struct event* writeEvtM;
         struct event* heartbeatTimerEvtM;
+        struct event* clientTimerEvtM;
         int heartbeatTimeoutCounterM;
 
         IProtocol* protocolM;

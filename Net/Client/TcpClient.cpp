@@ -38,13 +38,7 @@ TcpClient::TcpClient(
     , processorM(theProcessor)
     , isClosedM(0)
     , isConnectedM(0)
-    , connectTimerM(NULL)
 {
-    confReconTimesM = -1;
-    confReconIntervelM = 5;
-
-    leftReconTimesM = -1;
-    nextReconIntervelM = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -65,8 +59,10 @@ int TcpClient::close()
     }
     isConnectedM = false;
 
+    boost::lock_guard<boost::mutex> lock(connectionMutexM);
     if (connectionM.get())
     {
+        connectionM->rmClient();
         connectionM->close();
         connectionM.reset();
     }
@@ -77,27 +73,21 @@ int TcpClient::close()
 
 int TcpClient::connect()
 {
-    //start timer
-    //startConnectTimer();
-
-    return _connect();
-}
-
-//-----------------------------------------------------------------------------
-
-int TcpClient::_connect()
-{
-    //init attr
-    if (isConnectedM)
-    {
-        close();
-    }
-    isConnectedM = false;
-    isClosedM = false;
-
+    boost::lock_guard<boost::mutex> lock(connectionMutexM);
     //connect
     peerAddrM = protocolM->getAddr();
     peerPortM = protocolM->getPort();
+
+    if (isClosedM)
+    {
+        LOG_ERROR("TcpClient to[" << peerAddrM << ":" << peerPortM << "is already closed");
+        return -1;
+    }
+    LOG_DEBUG("connecting to " << peerAddrM
+            << ":" << peerPortM);
+
+    //init attr
+    isConnectedM = false;
 
     evutil_socket_t sock;
     struct sockaddr_in sin;
@@ -132,11 +122,19 @@ int TcpClient::_connect()
             return -1;
         }
     }
+    else
+    {
+        //connected
+        isConnectedM = true;
+    }
     Net::Connection::SocketConnection* connection =
         new Net::Connection::SocketConnection(protocolM, reactorM, processorM, sock, this);
     connectionM = connection->self();
+    if (!isConnectedM)
+    {
+        connectionM->addClientTimer(protocolM->getReConnectInterval());
+    }
     return 0;
-
 }
 
 //-----------------------------------------------------------------------------
@@ -145,7 +143,10 @@ void TcpClient::onConnected(int theFd, Connection::SocketConnectionPtr theConnec
 {
     LOG_DEBUG("connected to " << peerAddrM
             << ":" << peerPortM);
-    isConnectedM = true;
+    {
+        boost::lock_guard<boost::mutex> lock(connectionMutexM);
+        isConnectedM = true;
+    }
     protocolM->asynHandleConnected(theFd, theConnection);
 }
 
@@ -155,39 +156,30 @@ void TcpClient::onError()
 {
     LOG_WARN("connection lost from " << peerAddrM
             << ":" << peerPortM);
-    connectionM.reset();
-    //reconnect
-    isConnectedM = false;
-}
-
-//-----------------------------------------------------------------------------
-
-void TcpClient::startConnectTimer()
-{
-    if (!connectTimerM)
     {
-        connectTimerM = reactorM->newTimer(&TcpClient::checkConnecting, this);
+        boost::lock_guard<boost::mutex> lock(connectionMutexM);
+        connectionM.reset();
+        //reconnect
+        isConnectedM = false;
     }
-    struct timeval tv;
-    tv.tv_sec = 5;
-    tv.tv_usec = 0;
-    event_add(connectTimerM, &tv);
+    if (!isClosedM)
+    {
+        connect();
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-void TcpClient::checkConnecting(int theFd, short theEvt, void *theArg)
+void TcpClient::onClientTimeout()
 {
-    TcpClient* tcpClient = (TcpClient*) theArg;
-    if (tcpClient->isClosedM)
+    if (isClosedM)
     {
         return;
     }
-    if (!tcpClient->isConnectedM)
+    if (!isConnectedM)
     {
-        tcpClient->connect();
+        connect();
     }
-    tcpClient->startConnectTimer();
 }
 
 //-----------------------------------------------------------------------------

@@ -2,7 +2,9 @@
 #define TCPCLIENT_H
 
 #include "SocketConnection.h"
+
 #include <string>
+#include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
 #include <event.h>
 
@@ -37,14 +39,13 @@ namespace Client
         /**
          * onXxx
          * Description: TcpClient will be notified if it is xxx.
+         * And do not rmClient in these functions
          */
+        void onClientTimeout();
         void onConnected(int theFd, Connection::SocketConnectionPtr theConnection);
         void onError();
 
-        static void checkConnecting(int theFd, short theEvt, void *theArg);
     private:
-        void startConnectTimer();
-        int _connect();
 
         IClientProtocol* protocolM;
         Reactor::Reactor* reactorM;
@@ -53,20 +54,18 @@ namespace Client
         std::string peerAddrM;
         int peerPortM;
 
-        int confReconTimesM;
-        int confReconIntervelM;
-        int leftReconTimesM;
-        int nextReconIntervelM;
         mutable bool isClosedM;
-        mutable bool isConnectedM;
         mutable struct event* connectTimerM;
 
+        boost::mutex connectionMutexM;
+        bool isConnectedM;
         Net::Connection::SocketConnectionPtr connectionM;
     };
 
     inline unsigned
     TcpClient::sendn(char* const theBuffer, const unsigned theLen)
     {
+        boost::lock_guard<boost::mutex> lock(connectionMutexM);
         if (isConnectedM && connectionM.get())
         {
             return connectionM->sendn(theBuffer, theLen);
