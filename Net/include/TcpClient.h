@@ -31,8 +31,20 @@ namespace Client
          */
         int connect();
         int close();
-        bool isClose(){return !connectionM.get() || connectionM->isClose();}
-        bool isConnected(){return !connectionM.get() || isConnectedM;}
+        bool isClose()
+        {
+            boost::lock_guard<boost::mutex> lock(connectionMutexM);
+            if (connectionM.get())
+            {
+                return connectionM->isClose();
+            }
+            return true;
+        }
+        bool isConnected()
+        {
+            boost::lock_guard<boost::mutex> lock(connectionMutexM);
+            return connectionM.get() && isConnectedM;
+        }
         unsigned sendn(char* const theBuffer, const unsigned theLen);
 
 
@@ -55,7 +67,6 @@ namespace Client
         int peerPortM;
 
         mutable bool isClosedM;
-        mutable struct event* connectTimerM;
 
         boost::mutex connectionMutexM;
         bool isConnectedM;

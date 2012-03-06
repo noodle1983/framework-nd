@@ -53,10 +53,6 @@ TcpClient::~TcpClient()
 int TcpClient::close()
 {
     isClosedM = true;
-    if (connectTimerM)
-    {
-        reactorM->delEvent(connectTimerM);
-    }
     isConnectedM = false;
 
     boost::lock_guard<boost::mutex> lock(connectionMutexM);
