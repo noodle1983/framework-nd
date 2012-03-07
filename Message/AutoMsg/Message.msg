@@ -138,8 +138,8 @@ Message QosModifyReject
     Cause          Uint8                   M
 
 Message ServiceInfoIEI
-    SrcIpAddr      Uint32                  M
-    DestIpAddr     Uint32                  M
+    SrcIpAddr      PlainInt32                  M
+    DestIpAddr     PlainInt32                  M
     SrcPort        Uint16                  M
     DestPort       Uint16                  M
     Protocol       Uint8                   M

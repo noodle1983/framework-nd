@@ -153,6 +153,52 @@ namespace Msg
     typedef Uint32 Length32;
     typedef Uint32 MsgId32;
 
+    class PlainInt32
+    {
+    public:
+        PlainInt32(){}
+        ~PlainInt32(){}
+
+        enum {MIN_BYTES = 4};
+
+        void init()
+        {
+            valueM = 0;
+        }
+
+        int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
+        {
+            if (theIndex + sizeof(guint32) > theLen)
+                return NOT_ENOUGH_BUFFER_E;
+
+            memcpy(&valueM, theBuffer + theIndex, sizeof(guint32));
+            theIndex += sizeof(guint32);
+            return SUCCESS_E;
+        }
+
+        int encode(char* theBuffer, const unsigned theLen, unsigned& theIndex)
+        {
+            if (theIndex + sizeof(guint32) > theLen)
+                return NOT_ENOUGH_BUFFER_E;
+
+            guint32 netInt = valueM;
+            memcpy(theBuffer + theIndex, &netInt, sizeof(guint32));
+            theIndex += sizeof(guint32);
+
+            return SUCCESS_E;
+        }
+
+        template<typename StreamType>
+        StreamType& dump(StreamType& theOut, unsigned theLayer = 0)
+        {
+            theOut << valueM;
+            return theOut;
+        }
+
+    public:
+        guint32 valueM;
+    };
+
     class Uint48
     {
     public:
