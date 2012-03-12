@@ -1,4 +1,5 @@
 #include "MysqlConnection.h"
+#include "MysqlStatementStruct.h"
 #include "ConfigCenter.h"
 #include "Log.h"
 
@@ -75,14 +76,29 @@ int MysqlConnection::processStatement()
     MYSQL_STMT* stmt = mysql_stmt_init(mysqlM);
     if (NULL == stmt)
     {
-        LOG_ERROR("mysql_stmt_init failed!");
+        LOG_ERROR("mysql_stmt_init failed. errmsg:" << mysql_stmt_error(stmt));
         return -1;
     }
 
-    std::string sql = "select name, owner, species, sex from pet";
+    std::string sql = "select name, owner, species, sex, age from pet where name = ? and age = ?"; 
     if (0 != mysql_stmt_prepare(stmt, sql.c_str(), sql.length()))
     {
         LOG_ERROR("mysql_stmt_prepare failed. errmsg:" << mysql_stmt_error(stmt));
+        mysql_stmt_close(stmt);
+        return -1;
+    }
+
+    LOG_ERROR("param cout:"  << mysql_stmt_param_count(stmt));
+
+    MYSQL_BIND    bindParam[2];
+    memset(bindParam, 0, sizeof(bindParam));
+    
+    DBI::Mysql::String param0(&bindParam[0], "a", 1);
+    DBI::Mysql::Long param1(&bindParam[1], 1);
+
+    if (mysql_stmt_bind_param(stmt, bindParam))
+    {
+        LOG_ERROR("mysql_stmt_bind_param failed. errmsg:" << mysql_stmt_error(stmt));
         mysql_stmt_close(stmt);
         return -1;
     }
@@ -94,39 +110,17 @@ int MysqlConnection::processStatement()
         return -1;
     }
 
-    MYSQL_BIND    bind[4];
-    unsigned long length[4];
-    my_bool       is_null[4];
-    char outBuffer[4][16];
-
-    memset(bind, 0, sizeof(bind));
+    MYSQL_BIND    bindResult[4];
+    memset(bindResult, 0, sizeof(bindResult));
+    DBI::Mysql::String field0(&bindResult[0], 16);
+    DBI::Mysql::String field1(&bindResult[1], 16);
+    DBI::Mysql::String field2(&bindResult[2], 16);
+    DBI::Mysql::String field3(&bindResult[3], 16);
+    DBI::Mysql::Long field4(&bindResult[4]);
      
-    bind[0].buffer_type= MYSQL_TYPE_STRING;
-    bind[0].buffer= outBuffer[0];
-    bind[0].buffer_length= 16;
-    bind[0].is_null= &is_null[0];
-    bind[0].length= &length[0];
-     
-    bind[1].buffer_type= MYSQL_TYPE_STRING;
-    bind[1].buffer= outBuffer[1];
-    bind[1].buffer_length= 16;
-    bind[1].is_null= &is_null[1];
-    bind[1].length= &length[1];
-     
-    bind[2].buffer_type= MYSQL_TYPE_STRING;
-    bind[2].buffer= outBuffer[2];
-    bind[2].buffer_length= 16;
-    bind[2].is_null= &is_null[2];
-    bind[2].length= &length[2];
-     
-    bind[3].buffer_type= MYSQL_TYPE_STRING;
-    bind[3].buffer= outBuffer[3];
-    bind[3].buffer_length= 16;
-    bind[3].is_null= &is_null[3];
-    bind[3].length= &length[3];
 
     /* Bind the result buffers */
-    if (0 != mysql_stmt_bind_result(stmt, bind))
+    if (0 != mysql_stmt_bind_result(stmt, bindResult))
     {
         LOG_ERROR("mysql_stmt_bind_result failed. errmsg:" << mysql_stmt_error(stmt));
         mysql_stmt_close(stmt);
@@ -143,10 +137,12 @@ int MysqlConnection::processStatement()
 
     while (!mysql_stmt_fetch(stmt))
     {
-        LOG_ERROR("get:" << outBuffer[0] << "\t"
-                <<outBuffer[1] << "\t"
-                <<outBuffer[2] << "\t"
-                <<outBuffer[3] );
+        LOG_ERROR("get:" << field0 << "\t"
+                << field1 << "\t"
+                << field2 << "\t"
+                << field3 << "\t"
+                << field4 << "\t"
+                );
     }
     mysql_stmt_close(stmt);
     return 0;
