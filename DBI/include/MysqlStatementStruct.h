@@ -3,38 +3,39 @@
 
 #include <string>
 #include <string.h>
+#include <mysql.h>
 
 namespace DBI
 {
 namespace Mysql
 {
     template<typename IntType, enum_field_types MysqlTypeId>
-    class Integer
+    class Number
     {
     public:
 
-        Integer()
+        Number()
             : valueM(0)
             , isNullM(0)
         {}
-        Integer(const IntType theValue)
+        Number(const IntType theValue)
             : valueM(theValue)
             , isNullM(0)
         {}
-        Integer(MYSQL_BIND* theBindHandler)
+        Number(MYSQL_BIND* theBindHandler)
             : valueM(0)
             , isNullM(0)
         {
             bind(theBindHandler);
         }
-        Integer(MYSQL_BIND* theBindHandler, const IntType theValue)
+        Number(MYSQL_BIND* theBindHandler, const IntType theValue)
             : valueM(theValue)
             , isNullM(0)
         {
             bind(theBindHandler);
         }
 
-        ~Integer(){};
+        ~Number(){};
 
         operator IntType()
         { return isNullM ? 0 : valueM; }
@@ -42,8 +43,8 @@ namespace Mysql
         const IntType get(const IntType theDefault = 0)
         { return isNullM ? theDefault : valueM; }
 
-        void set(const IntType theValue, const char theNullFlag = 0)
-        { valueM = theValue; isNullM = theNullFlag;}
+        void set(const IntType theValue)
+        { valueM = theValue; isNullM = false;}
 
         void setNull()
         { valueM = 0; isNullM = 1;}
@@ -61,54 +62,49 @@ namespace Mysql
         my_bool isNullM;
     };
 
-    typedef Integer<char,  MYSQL_TYPE_TINY>  Char;
-    typedef Integer<short, MYSQL_TYPE_SHORT> ShortInt;
-    typedef Integer<long,  MYSQL_TYPE_LONG>  Long;
-    typedef Integer<long long, MYSQL_TYPE_LONGLONG>  LongLong;
-    typedef Integer<float, MYSQL_TYPE_FLOAT> Float;
-    typedef Integer<double, MYSQL_TYPE_DOUBLE> Double;
+    typedef Number<char,  MYSQL_TYPE_TINY>          CharParam;
+    typedef Number<short, MYSQL_TYPE_SHORT>         ShortIntParam;
+    typedef Number<long,  MYSQL_TYPE_LONG>          LongParam;
+    typedef Number<long long, MYSQL_TYPE_LONGLONG>  LongLongParam;
+    typedef Number<float, MYSQL_TYPE_FLOAT>         FloatParam;
+    typedef Number<double, MYSQL_TYPE_DOUBLE>       DoubleParam;
 
-    class String
+    typedef Number<char,  MYSQL_TYPE_TINY>          CharResult;
+    typedef Number<short, MYSQL_TYPE_SHORT>         ShortIntResult;
+    typedef Number<long,  MYSQL_TYPE_LONG>          LongResult;
+    typedef Number<long long, MYSQL_TYPE_LONGLONG>  LongLongResult;
+    typedef Number<float, MYSQL_TYPE_FLOAT>         FloatResult;
+    typedef Number<double, MYSQL_TYPE_DOUBLE>       DoubleResult;
+
+    class StringParam
     {
     public:
-        enum{PRE_ALLOC_LENGTH = 64};
+        enum { PRE_ALLOC_LENGTH = 32 };
 
-//        String(const unsigned theFieldLen)
-//            : resultLengthM(0)
-//            , isNullM(0)
-//        {
-//            init(NULL, theFieldLen);
-//        }
-//
-//        String(const char* theValue, const unsigned theFieldLen)
-//            : resultLengthM(0)
-//            , isNullM(0)
-//        {
-//            init(theValue, theFieldLen);
-//        }
+        StringParam()
+        { init(NULL, 0); }
+        StringParam(const char* theValue)
+        { init(theValue); }
+        StringParam(const char* theValue, const unsigned theFieldLen)
+        { init(theValue, theFieldLen); }
 
-        String(MYSQL_BIND* theBindHandler, const unsigned theFieldLen)
-        {
-            init(NULL, theFieldLen);
-            bind(theBindHandler);
-        }
+        StringParam(MYSQL_BIND* theBindHandler)
+        { init(NULL, 0); bind(theBindHandler); }
+        StringParam(MYSQL_BIND* theBindHandler, const char* theFieldValue)
+        { init(theFieldValue); bind(theBindHandler); }
+        StringParam(MYSQL_BIND* theBindHandler, const char* theFieldValue, const unsigned theFieldLen)
+        { init(theFieldValue, theFieldLen); bind(theBindHandler); }
 
-        String(MYSQL_BIND* theBindHandler, const char* theFieldValue, const unsigned theFieldLen)
-            : resultLengthM(0)
-            , isNullM(0)
-        {
-            init(theFieldValue, theFieldLen);
-            bind(theBindHandler);
-        }
-
-        ~String()
+        ~StringParam()
         {
             if (bufferLengthM > PRE_ALLOC_LENGTH)
             { delete[] pBufferM; }
         }
 
+        void init(const char* theValue){init(theValue, strlen(theValue));}
         void init(const char* theValue, const unsigned theFieldLen)
         {
+            isNullM = 0;      //set to not NULL by default
             if (theFieldLen > PRE_ALLOC_LENGTH)
             {
                 bufferLengthM = theFieldLen;
@@ -137,20 +133,17 @@ namespace Mysql
         { return isNullM ? theDefault : pBufferM; }
 
         const std::string getString(const char* theDefault = "")
-        { return isNullM ? theDefault : std::string(pBufferM, resultLengthM); }
+        { return isNullM ? theDefault : std::string(pBufferM, bufferLengthM); }
 
-        void set(const char* theValue, const char theNullFlag = 0)
+        void set(const char* theValue)
+        { set(theValue, strlen(theValue));}
+        void set(const char* theValue, const unsigned theFieldLen)
         { 
-            if (NULL != theValue)
-            {
-                strncpy(pBufferM, theValue, bufferLengthM);
+            if (bufferLengthM > PRE_ALLOC_LENGTH)
+            { 
+                delete[] pBufferM; 
             }
-            else
-            {
-                memset(pBufferM, 0, bufferLengthM);
-            }
-
-            isNullM = theNullFlag;
+            init(theValue, theFieldLen);
         }
 
         void setNull()
@@ -166,15 +159,60 @@ namespace Mysql
             theMysqlStruct->buffer= pBufferM;
             theMysqlStruct->buffer_length= bufferLengthM;
             theMysqlStruct->is_null= &isNullM;
-            theMysqlStruct->length= (*pBufferM) ? NULL : &resultLengthM;
         }
 
     private:
         char bufferM[PRE_ALLOC_LENGTH];
         char* pBufferM;
         unsigned long bufferLengthM;
-        unsigned long resultLengthM;
         my_bool isNullM;
+    };
+
+    template<unsigned TheFieldLen>
+    class StringResult
+    {
+    public:
+        enum 
+        { FIXED_LENGTH = TheFieldLen };
+
+        StringResult()
+        { init(); }
+
+        StringResult(MYSQL_BIND* theBindHandler)
+        { init(); bind(theBindHandler); }
+
+        ~StringResult() {}
+
+        void init()
+        { 
+            memset(bufferM, 0, sizeof(bufferM)); 
+            resultLengthM = 0;
+            isNullM = 0;
+        }
+
+        operator const char*()
+        { return isNullM ? "" : bufferM; }
+
+        const char* get(const char* theDefault = "")
+        { return isNullM ? theDefault : bufferM; }
+
+        const std::string getString(const char* theDefault = "")
+        { return isNullM ? theDefault : std::string(bufferM, resultLengthM); }
+
+        void bind(MYSQL_BIND* theMysqlStruct)
+        {
+            memset((void*)theMysqlStruct, 0, sizeof(MYSQL_BIND));
+            theMysqlStruct->buffer_type= MYSQL_TYPE_STRING;
+            theMysqlStruct->buffer= bufferM;
+            theMysqlStruct->buffer_length= FIXED_LENGTH;
+            theMysqlStruct->is_null= &isNullM;
+            theMysqlStruct->length= &resultLengthM;
+        }
+
+    private:
+        char bufferM[FIXED_LENGTH + 1];
+        my_bool isNullM;
+        unsigned long resultLengthM;
     };
 
     

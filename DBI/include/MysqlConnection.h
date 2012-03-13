@@ -1,6 +1,8 @@
 #ifndef MYSQLCONNECTION_H
 #define MYSQLCONNECTION_H
 
+#include "MysqlStatement.h"
+
 #include <string>
 #include <mysql.h>
 
@@ -22,8 +24,7 @@ namespace DBI
         int connect();
         void close();
 
-        int processStatement();
-
+        int processStatement(MysqlStatement* theStatement);
 
     private:
         MYSQL* mysqlM;

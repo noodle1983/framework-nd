@@ -1,4 +1,5 @@
 #include "MysqlConnection.h"
+#include "MysqlStatementExample.h"
 
 using namespace DBI;
 
@@ -6,7 +7,8 @@ int main()
 {
     MysqlConnection connection;
     connection.connect();
-    connection.processStatement();
+    MysqlStatementExample statementFindBy("a", 1);
+    connection.processStatement(&statementFindBy);
     return 0;
 }
 
