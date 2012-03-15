@@ -144,7 +144,7 @@ void FileWriter::switchFile(const time_t& theTime)
 
         char filename[128] = {0};
         snprintf(filename, sizeof(filename), 
-                "%04d%02d%02d%02d%02d%02d_%02d__%s_%04d%02d%02d",
+                "%04d%02d%02d%02d%02d%02d_%02d__%s_%04d%02d%02d%02d",
                 tmWriteTime.tm_year + 1900,
                 tmWriteTime.tm_mon + 1,
                 tmWriteTime.tm_mday,
@@ -155,7 +155,8 @@ void FileWriter::switchFile(const time_t& theTime)
                 modelNameM.c_str(),
                 tmTableTime.tm_year + 1900,
                 tmTableTime.tm_mon + 1,
-                tmTableTime.tm_mday
+                tmTableTime.tm_mday,
+                tmTableTime.tm_hour
                 );
         curFileNameM = std::string(filename);
         std::string filePath = outDirM + "/" + curFileNameM + ".txt";
