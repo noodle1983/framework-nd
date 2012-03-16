@@ -18,6 +18,7 @@ SUBDIR= Log \
 		DesignPattern \
 		Utility \
 		WinPort \
+		DBI \
 		LibTest \
 
 RELEASE_DIR = $(PROJBASE)/release
