@@ -54,6 +54,7 @@ namespace Mysql
             ::memset((void*)theMysqlStruct, 0, sizeof(MYSQL_BIND));
             theMysqlStruct->buffer_type= MysqlTypeId;
             theMysqlStruct->buffer= (char*) &valueM;
+            theMysqlStruct->buffer_length= sizeof(valueM);
             theMysqlStruct->is_null= &isNullM;
         }
 
@@ -62,6 +63,7 @@ namespace Mysql
         my_bool isNullM;
     };
 
+    typedef Number<char,  MYSQL_TYPE_BIT>           BitParam;
     typedef Number<char,  MYSQL_TYPE_TINY>          CharParam;
     typedef Number<short, MYSQL_TYPE_SHORT>         ShortIntParam;
     typedef Number<long,  MYSQL_TYPE_LONG>          LongParam;
@@ -69,6 +71,7 @@ namespace Mysql
     typedef Number<float, MYSQL_TYPE_FLOAT>         FloatParam;
     typedef Number<double, MYSQL_TYPE_DOUBLE>       DoubleParam;
 
+    typedef Number<char,  MYSQL_TYPE_BIT>           BitResult;
     typedef Number<char,  MYSQL_TYPE_TINY>          CharResult;
     typedef Number<short, MYSQL_TYPE_SHORT>         ShortIntResult;
     typedef Number<long,  MYSQL_TYPE_LONG>          LongResult;

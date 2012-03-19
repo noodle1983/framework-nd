@@ -25,6 +25,7 @@ namespace DBI
         DBI::Mysql::StringResult<16> resultSpeciesM;
         DBI::Mysql::StringResult<16> resultSexM;
         DBI::Mysql::LongResult       resultAgeM;
+        DBI::Mysql::BitResult        resultBitM;
     };
 }
 

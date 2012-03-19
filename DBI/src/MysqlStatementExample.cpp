@@ -6,7 +6,7 @@ using namespace DBI;
 //-----------------------------------------------------------------------------
 
 const std::string MysqlStatementExample::sqlM = 
-    "select name, owner, species, sex, age from pet where name = ? and age = ?"; 
+    "select name, owner, species, sex, age, bit from pet where name = ? and age = ?"; 
 
 //-----------------------------------------------------------------------------
 
@@ -33,8 +33,7 @@ int MysqlStatementExample::execute(MYSQL* theMysqlHandler)
         return -1;
     }
 
-    std::string sql = "select name, owner, species, sex, age from pet where name = ? and age = ?"; 
-    if (0 != mysql_stmt_prepare(stmt, sql.c_str(), sql.length()))
+    if (0 != mysql_stmt_prepare(stmt, sqlM.c_str(), sqlM.length()))
     {
         LOG_ERROR("mysql_stmt_prepare failed. errmsg:" << mysql_stmt_error(stmt));
         mysql_stmt_close(stmt);
@@ -46,6 +45,16 @@ int MysqlStatementExample::execute(MYSQL* theMysqlHandler)
     paramNameM.bind(&bindParam[0]);
     paramAgeM.bind(&bindParam[1]);
 
+#ifdef DEBUG
+    if (sizeof(bindParam)/sizeof(MYSQL_BIND) != mysql_stmt_param_count(stmt))
+    {
+        LOG_ERROR("invalid input parameter count. "
+                << "expect:" << sizeof(bindParam)/sizeof(MYSQL_BIND)
+                << ", real:" << mysql_stmt_param_count(stmt));
+        mysql_stmt_close(stmt);
+        return -1;
+    }
+#endif
     if (mysql_stmt_bind_param(stmt, bindParam))
     {
         LOG_ERROR("mysql_stmt_bind_param failed. errmsg:" << mysql_stmt_error(stmt));
@@ -60,13 +69,37 @@ int MysqlStatementExample::execute(MYSQL* theMysqlHandler)
         return -1;
     }
 
-    MYSQL_BIND    bindResult[4];
+    MYSQL_BIND    bindResult[6];
     memset(bindResult, 0, sizeof(bindResult));
     resultNameM.bind(&bindResult[0]);
     resultOwnerM.bind(&bindResult[1]);
     resultSpeciesM.bind(&bindResult[2]);
     resultSexM.bind(&bindResult[3]);
     resultAgeM.bind(&bindResult[4]);
+    resultBitM.bind(&bindResult[5]);
+    
+#ifdef DEBUG
+    /* Fetch result set meta information */
+    MYSQL_RES     *prepareMetaResult;
+    prepareMetaResult = mysql_stmt_result_metadata(stmt);
+    if (!prepareMetaResult)
+    {
+        LOG_ERROR("mysql_stmt_result_metadata failed. errmsg:" << mysql_stmt_error(stmt));
+        mysql_stmt_close(stmt);
+        return -1;
+    }
+    int columnCount= mysql_num_fields(prepareMetaResult);
+    /* Free the prepared result metadata */
+    mysql_free_result(prepareMetaResult);
+    if (sizeof(bindResult)/sizeof(MYSQL_BIND) != columnCount)
+    {
+        LOG_ERROR("invalid output parameter count. "
+                << "expect:" << sizeof(bindResult)/sizeof(MYSQL_BIND)
+                << ", real:" << columnCount);
+        mysql_stmt_close(stmt);
+        return -1;
+    }
+#endif
 
     /* Bind the result buffers */
     if (0 != mysql_stmt_bind_result(stmt, bindResult))
@@ -91,6 +124,7 @@ int MysqlStatementExample::execute(MYSQL* theMysqlHandler)
                          << resultSpeciesM << "\t"
                          << resultSexM << "\t"
                          << resultAgeM << "\t"
+                         << int(resultBitM) << "\t"
                 );
     }
     mysql_stmt_close(stmt);
