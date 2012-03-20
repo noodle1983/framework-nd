@@ -25,6 +25,10 @@ namespace Msg
         void init()
         {
         }
+        operator std::string()
+        { return valueM; }
+        const TlvString& operator =(const std::string& theValue)
+        { valueM = theValue; return *this;}
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
@@ -99,6 +103,10 @@ namespace Msg
         void init()
         {
         }
+        operator std::string()
+        { return valueM; }
+        const PlainString& operator =(const std::string& theValue)
+        { valueM = theValue; return *this;}
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {

@@ -20,6 +20,11 @@ namespace Msg
             valueM = 0;
         }
 
+        operator unsigned char()
+        { return valueM; }
+        const Uint8& operator =(const unsigned char theValue)
+        { valueM = theValue; return *this;}
+
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint8) > theLen)
@@ -66,6 +71,11 @@ namespace Msg
         {
             valueM = 0;
         }
+
+        operator guint16()
+        { return valueM; }
+        const Uint16& operator =(const unsigned short theValue)
+        { valueM = theValue; return *this;}
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
@@ -115,6 +125,11 @@ namespace Msg
         {
             valueM = 0;
         }
+
+        operator guint32()
+        { return valueM; }
+        const Uint32& operator =(const unsigned theValue)
+        { valueM = theValue; return *this;}
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
@@ -166,6 +181,11 @@ namespace Msg
             valueM = 0;
         }
 
+        operator guint32()
+        { return valueM; }
+        const PlainInt32& operator =(const unsigned theValue)
+        { valueM = theValue; return *this;}
+
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + sizeof(guint32) > theLen)
@@ -211,6 +231,11 @@ namespace Msg
         {
             valueM = 0;
         }
+
+        operator guint64()
+        { return valueM; }
+        const Uint48& operator =(const unsigned long long theValue)
+        { valueM = theValue; return *this;}
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
@@ -259,6 +284,11 @@ namespace Msg
         {
             valueM = 0;
         }
+
+        operator guint64()
+        { return valueM; }
+        const Uint64& operator =(const unsigned long long theValue)
+        { valueM = theValue; return *this;}
 
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {

@@ -26,6 +26,11 @@ namespace Msg
         {
         }
 
+        operator guint64()
+        { return valueM; }
+        const BcdString& operator =(const unsigned long long theValue)
+        { valueM = theValue; return *this;}
+
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             if (theIndex + MIN_BYTES > theLen)

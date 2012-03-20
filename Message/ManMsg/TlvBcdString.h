@@ -30,6 +30,11 @@ namespace Msg
         {
         }
 
+        operator guint64()
+        { return valueM; }
+        const Uint64& operator =(const unsigned long long theValue)
+        { valueM = theValue; return *this;}
+
         int decode(const char* theBuffer, const unsigned theLen, unsigned& theIndex)
         {
             int ret = SUCCESS_E;
