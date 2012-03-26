@@ -43,8 +43,6 @@ log4cplus::Logger& Logger::trafficLogger()
             std::string logPattern = ConfigCenter::instance()->
                 get("log.pattern", "%D{%y-%m-%d %H:%M:%S.%q} %-5p [%l] %m%n");
 
-            isTrafficLoggerInited = true;
-
             log4cplus::SharedAppenderPtr append(
                     new log4cplus::RollingFileAppender(logFilename,
                                                        fileSize * 1024 * 1024, // max file size
@@ -56,6 +54,9 @@ log4cplus::Logger& Logger::trafficLogger()
             trafficLoggerM.addAppender(append);
             trafficLoggerM.setLogLevel(logLevel);
             LOG4CPLUS_FATAL(trafficLoggerM, "------------------process start------------------");
+
+            isTrafficLoggerInited = true;
+
         }
     }
     return trafficLoggerM;
@@ -71,7 +72,6 @@ log4cplus::Logger& Logger::configLogger()
         boost::lock_guard<boost::mutex> lock(configLoggerMutexM);
         if (!isConfigLoggerInited)
         {
-            isConfigLoggerInited = true;
             log4cplus::SharedAppenderPtr append(new log4cplus::RollingFileAppender("config.log",
                                                             10 * 1024 * 1024, // max file size
                                                             10               //max backup index
@@ -83,6 +83,7 @@ log4cplus::Logger& Logger::configLogger()
             configLoggerM.addAppender(append);
             configLoggerM.setLogLevel(log4cplus::ALL_LOG_LEVEL);
             LOG4CPLUS_FATAL(configLoggerM, "-----------------process start-------------------");
+            isConfigLoggerInited = true;
         }
     }
     return configLoggerM;

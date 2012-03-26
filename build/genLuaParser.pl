@@ -46,7 +46,7 @@ exit 0;
 ################################################################################
 sub genLuaParser
 {
-    my $protocolName = "Gb";
+    my $protocolName = "Msg";
     my $luaOutFile = "$protocolName.lua";
 
     open LUAPARSER_HANDLE, " > $luaOutFile" or die "failed to open $luaOutFile:$!\n";
