@@ -123,10 +123,11 @@ int TelnetCmdManager::handleCmd(const unsigned theStart, const unsigned theEnd)
             break;
         }
     }
-    while (' ' == cmdBufferM[end - 1] ||
-           '\t' == cmdBufferM[end - 1] ||
-           '\r' == cmdBufferM[end - 1] ||
-           '\n' == cmdBufferM[end - 1])
+    while (end > start  
+	      && ( ' ' == cmdBufferM[end - 1] ||
+		   '\t' == cmdBufferM[end - 1] ||
+		   '\r' == cmdBufferM[end - 1] ||
+		   '\n' == cmdBufferM[end - 1]))
     {
         end--;
         if (end <= start)
