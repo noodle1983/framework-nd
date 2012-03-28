@@ -142,25 +142,41 @@ void FileWriter::switchFile(const time_t& theTime)
         struct tm tmTableTime;
         localtime_r(&tableTimestamp, &tmTableTime);
 
-        char filename[128] = {0};
-        snprintf(filename, sizeof(filename), 
-                "%04d%02d%02d%02d%02d%02d_%02d__%s_%04d%02d%02d%02d",
+        char filenameBuffer[256] = {0};
+
+        memset(filenameBuffer, 0 , sizeof(filenameBuffer));
+        snprintf(filenameBuffer, sizeof(filenameBuffer), 
+                "%04d%02d%02d%02d%02d%02d",
                 tmWriteTime.tm_year + 1900,
                 tmWriteTime.tm_mon + 1,
                 tmWriteTime.tm_mday,
                 tmWriteTime.tm_hour,
                 tmWriteTime.tm_min,
-                tmWriteTime.tm_sec,
-                indexM,
+                tmWriteTime.tm_sec
+                );
+        beginTimeStrM = filenameBuffer;
+
+        memset(filenameBuffer, 0 , sizeof(filenameBuffer));
+        snprintf(filenameBuffer, sizeof(filenameBuffer), 
+                "%s_%04d%02d%02d%02d",
                 modelNameM.c_str(),
                 tmTableTime.tm_year + 1900,
                 tmTableTime.tm_mon + 1,
                 tmTableTime.tm_mday,
                 tmTableTime.tm_hour
                 );
-        curFileNameM = std::string(filename);
-        std::string filePath = outDirM + "/" + curFileNameM + ".txt";
-        fileStreamM.open(filePath.c_str(), std::ios_base::out|std::ios_base::app);
+        dbTableNameM = filenameBuffer;
+
+        memset(filenameBuffer, 0 , sizeof(filenameBuffer));
+        snprintf(filenameBuffer, sizeof(filenameBuffer), 
+                "%s/%s_%02d__%s.txt",
+                outDirM.c_str(),
+                beginTimeStrM.c_str(),
+                indexM,
+                dbTableNameM.c_str()
+                );
+        tmpFilePathM = filenameBuffer;
+        fileStreamM.open(filenameBuffer, std::ios_base::out|std::ios_base::app);
         curSizeM = headerLineM.length();;
         fileStreamM << headerLineM;
     }
@@ -175,9 +191,33 @@ void FileWriter::closeFile()
     {
         fileStreamM.flush();
         fileStreamM.close();
-        std::string fromFilePath = outDirM + "/" + curFileNameM + ".txt";
-        std::string toFilePath = outDirM + "/" + curFileNameM + ".ss7";
-        if(0 != link(fromFilePath.c_str(), toFilePath.c_str()))
+        std::string& fromFilePath = tmpFilePathM;
+
+        time_t now = time((time_t*)NULL);
+        struct tm tmWriteTime;
+        localtime_r(&now, &tmWriteTime);
+        char filenameBuffer[256] = {0};
+        snprintf(filenameBuffer, sizeof(filenameBuffer), 
+                "%04d%02d%02d%02d%02d%02d",
+                tmWriteTime.tm_year + 1900,
+                tmWriteTime.tm_mon + 1,
+                tmWriteTime.tm_mday,
+                tmWriteTime.tm_hour,
+                tmWriteTime.tm_min,
+                tmWriteTime.tm_sec
+                );
+        std::string endTimeStr = filenameBuffer;
+
+        memset(filenameBuffer, 0 , sizeof(filenameBuffer));
+        snprintf(filenameBuffer, sizeof(filenameBuffer), 
+                "%s/%s_%s_%02d__%s.ss7",
+                outDirM.c_str(),
+                beginTimeStrM.c_str(),
+                endTimeStr.c_str(),
+                indexM,
+                dbTableNameM.c_str()
+                );
+        if(0 != link(fromFilePath.c_str(), filenameBuffer))
         {
             LOG_ERROR("fail to rename the file:" << fromFilePath
                     << ", errno:" << errno);

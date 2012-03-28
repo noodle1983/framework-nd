@@ -45,7 +45,9 @@ namespace Utility
         unsigned curWriteTimeM;
         unsigned curTimerTimeM;
         int64_t curSizeM;
-        std::string curFileNameM;
+        std::string tmpFilePathM;
+        std::string beginTimeStrM;
+        std::string dbTableNameM;
         std::string outDirM;
 
         Processor::BoostProcessor* processorM;
