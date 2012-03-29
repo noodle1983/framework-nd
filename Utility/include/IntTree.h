@@ -141,10 +141,17 @@ namespace Utility
 			}
 		}
 
+		//LOG_TRACE("finding in the imeiseg tree");
+
 		if(tmpStruct == NULL)
+        {
+            LOG_TRACE("key: " << theKey << "was not found");
+
 			return false;
+        }
 
 		theReturnInfo = *tmpStruct;
+        LOG_TRACE("found, thekey is: " << theKey);
 		return true;
 	}
 

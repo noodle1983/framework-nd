@@ -36,7 +36,7 @@ void UserAgentParser::initRuleDef(std::vector<RuleDef>& theRuleDefVector)
         assert(attrVector.size() == 12);
 
         RuleDef ruleDef;
-        ruleDef.phoneInfoM.idM = atoi(attrVector[0].c_str());
+  //      ruleDef.phoneInfoM.idM = atoi(attrVector[0].c_str());
         ruleDef.primaryKeyM = boost::to_upper_copy(attrVector[1]);
         boost::trim(ruleDef.primaryKeyM);
         ruleDef.subKeyM = boost::to_upper_copy(attrVector[2]);
