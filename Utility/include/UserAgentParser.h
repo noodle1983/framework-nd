@@ -16,7 +16,7 @@ namespace Utility
         {init();}
         void init()
         {
-            idM = -1;
+   //         idM = -1;
             renderIdM = -1; 
             modelIdM = -1;
             osIdM = -1;
@@ -29,16 +29,16 @@ namespace Utility
         }
         ~PhoneInfo()
         {}
-        int idM;
+  //      int idM;
         int renderIdM; 
         int modelIdM;
         int osIdM;
-        bool supportEdgeM;
-        bool supportTdM;
-        bool supportWcdmaM;
-        bool supportHspaM;
-        bool supportLteM;
-        bool supportCdmaM;
+        int supportEdgeM;
+        int supportTdM;
+        int supportWcdmaM;
+        int supportHspaM;
+        int supportLteM;
+        int supportCdmaM;
     };
 
     class UserAgentParser
