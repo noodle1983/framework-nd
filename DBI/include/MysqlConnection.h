@@ -12,7 +12,7 @@ namespace DBI
     {
     public:
         MysqlLibHandler(){mysql_library_init(-1, NULL, NULL);}
-        ~MysqlLibHandler(){mysql_library_end();}
+        ~MysqlLibHandler(){/*mysql_library_end();*/}
     };
 
     class MysqlConnection
