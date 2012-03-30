@@ -140,13 +140,45 @@ void BoostWorker::cancelLocalTimer(struct event*& theEvent)
 	theEvent = NULL;
 }
 
+//-----------------------------------------------------------------------------
+
+void BoostWorker::initThreadAttr()
+{
+    g_threadGroupTotal.reset(new unsigned(groupTotalM));
+    g_threadGroupIndex.reset(new unsigned(groupIndexM));
+}
+
+//-----------------------------------------------------------------------------
+
+void BoostWorker::handleLocalTimer()
+{
+    if (!min_heap_empty(&timerHeapM))
+    {
+        evutil_gettimeofday(&timeNowM, NULL);
+        while(!min_heap_empty(&timerHeapM)) 
+        {
+            struct event* topEvent = min_heap_top(&timerHeapM);
+            if (evutil_timercmp(&topEvent->ev_timeout, &timeNowM, <=))
+            {
+                min_heap_pop(&timerHeapM);
+                (topEvent->ev_callback)(-1, 0, topEvent->ev_arg);
+                eventPoolM.freeEvent(topEvent);
+            }
+            else
+            {
+                break;
+            }
+        } 
+    }
+
+
+}
 
 //-----------------------------------------------------------------------------
 
 void BoostWorker::run()
 {
-    g_threadGroupTotal.reset(new unsigned(groupTotalM));
-    g_threadGroupIndex.reset(new unsigned(groupIndexM));
+    initThreadAttr();
     IJob* job;
     while (!isToStopM)
     {
@@ -171,24 +203,7 @@ void BoostWorker::run()
         }
 
         //handle timer
-        if (!min_heap_empty(&timerHeapM))
-        {
-            evutil_gettimeofday(&timeNowM, NULL);
-            while(!min_heap_empty(&timerHeapM)) 
-            {
-                struct event* topEvent = min_heap_top(&timerHeapM);
-                if (evutil_timercmp(&topEvent->ev_timeout, &timeNowM, <=))
-                {
-                    min_heap_pop(&timerHeapM);
-                    (topEvent->ev_callback)(-1, 0, topEvent->ev_arg);
-					eventPoolM.freeEvent(topEvent);
-                }
-                else
-                {
-                    break;
-                }
-            } 
-        }
+        handleLocalTimer();
 
 		if (!bufferJobQueueM.empty())
 		{

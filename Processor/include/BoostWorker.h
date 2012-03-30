@@ -39,6 +39,12 @@ namespace Processor
 		void cancelLocalTimer(struct event*& theEvent);
 
         void run();
+
+        //for timer only
+        void initThreadAttr();
+		void handleLocalTimer();
+        // and addLocalTimer cancelLocalTimer
+
     private:
         unsigned groupTotalM;
         unsigned groupIndexM;
