@@ -1,6 +1,6 @@
 #!/bin/bash
 # chkconfig: 2345 80 05
-# description: Blablabla....
+# description: blablabla...
 
 # build target
 BUILD_TARGET_PATH=
@@ -9,6 +9,7 @@ BUILD_TARGET=
 # running target
 RUNNING_TARGET_PATH=
 RUNNING_TARGET=
+SUPERVISOR_PATH=/etc/ProcessorSupervisor
 
 LOCKFILE=.lockserver
 
@@ -54,6 +55,17 @@ function start {
     echo "$RUNNING_TARGET: $PID" >> $LOCKFILE
 
     cat $LOCKFILE
+
+    CTRL_FILE_NAME=`readlink $0`
+    if [ ! -n "$CTRL_FILE_NAME" ]; then
+        CTRL_FILE_NAME=$0;
+    fi
+    cat > $SUPERVISOR_PATH/$RUNNING_TARGET.command.tmp <<END_OF_SUPERVISOR_CMD
+check: `basename $CTRL_FILE_NAME` status
+start: `basename $CTRL_FILE_NAME` start
+END_OF_SUPERVISOR_CMD
+    mv $SUPERVISOR_PATH/$RUNNING_TARGET.command.tmp $SUPERVISOR_PATH/$RUNNING_TARGET.command
+
     echo -e "start ok\n"
     echo "start $RUNNING_TARGET" `date` >> .ctrl_history.log
 }
@@ -71,6 +83,8 @@ function stop {
     fi
 
     rm $LOCKFILE
+
+    rm $SUPERVISOR_PATH/$RUNNING_TARGET.command
     echo -e "stop ok\n"
     echo "stop " `date` >> .ctrl_history.log
 }
@@ -145,9 +159,11 @@ case "$1" in
 'status')
         PID=`ps  -e -af | grep $RUNNING_TARGET | grep -v grep | awk '{print $2}'`
         if [ "$PID" != "" ] ; then
-             echo "$RUNNING_TARGET is working"
+            echo "$RUNNING_TARGET is working"
+	    exit 0
         else
-             echo "$RUNNING_TARGET is down"
+            echo "$RUNNING_TARGET is down"
+	    exit 1 
         fi 
 
         exit 0
