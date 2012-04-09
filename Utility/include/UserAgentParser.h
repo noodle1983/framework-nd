@@ -17,9 +17,9 @@ namespace Utility
         void init()
         {
    //         idM = -1;
-            renderIdM = -1; 
-            modelIdM = -1;
-            osIdM = -1;
+            renderIdM = 0;
+            modelIdM = 0;
+            osIdM = 0;
             supportEdgeM = -1;
             supportTdM = -1;
             supportWcdmaM = -1;
