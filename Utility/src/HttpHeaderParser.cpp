@@ -79,7 +79,8 @@ int HttpHeaderParser::parse(
     int saveStart = -1;
     int keyId = PARSE_STATE_NONE;
     int headerLen = theHeaderStr.length();
-    for (int i = 0; i < headerLen; i++)
+    int i = 0;
+    for (; i < headerLen; i++)
     {
         char ch = theHeaderStr[i];
         if ('\n' == ch)
@@ -199,6 +200,23 @@ int HttpHeaderParser::parse(
         }
          
     }
+    //check if it is end
+    if (PARSE_STATE_SAVE_TO_END == state)
+    {
+        if (PARSE_STATE_METHOD_GET == keyId
+                || PARSE_STATE_METHOD_POST == keyId)
+        {
+            theOutputHeader.protocolM = 
+                theHeaderStr.substr(saveStart, i - saveStart);
+        }
+        else
+        {
+            theOutputHeader.attrVectorM[keyId] = 
+                theHeaderStr.substr(saveStart, i - saveStart);
+        }
+        state = PARSE_STATE_IGNORE_LINE;
+    }
+
     return 0;
 }
 
