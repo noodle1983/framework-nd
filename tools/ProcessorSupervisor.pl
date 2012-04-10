@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 my $supervisor_dir = "/etc/ProcessorSupervisor/";
+my $file_counter = 0;
 
 while (1)
 {
@@ -31,7 +32,7 @@ sub checkProcessor
     if ($result != 0)
     {
         `$startCmd `;
-        print "$proc_name is down, restart it with cmd: $startCmd\n";
+        print "\n$proc_name is down, restart it with cmd: $startCmd\n";
     }
 }
 
@@ -62,6 +63,7 @@ sub parseCommand
     }
     close FILE_HANDLE;
 
-    #print "[file:$file][check:$checkCmd][startCmd:$startCmd]\n";
+    $file_counter++;
+    print "." if ($file_counter % 100 == 0);
     return ($checkCmd, $startCmd);
 }
