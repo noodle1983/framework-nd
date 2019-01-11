@@ -49,8 +49,8 @@ namespace Utility
         char* rawM;
         unsigned sizeM;
         unsigned maskM;
-        mutable unsigned readIndexM;
-        mutable unsigned writeIndexM;
+        volatile unsigned readIndexM;
+        volatile unsigned writeIndexM;
         unsigned highWaterMarkM;
         unsigned lowWaterMarkM;
     };
